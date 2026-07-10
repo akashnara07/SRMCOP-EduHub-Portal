@@ -1,0 +1,6 @@
+{
+  "name": "SRMCOP EduHub",
+  "description": "The Premium Apple-inspired Learning Management System for SRM College of Pharmacy",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
