@@ -1,0 +1,485 @@
+[
+  {
+    "subjectCode": "BP101T",
+    "courseName": "Human Anatomy and Physiology - I Theory",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 1,
+    "semester": 1,
+    "credits": 4,
+    "hours": 45,
+    "subjectType": "Theory",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "This subject is designed to impart fundamental knowledge on the structure and functions of the various systems of the human body. It also helps in understanding both homeostatic mechanisms. The subject provides the basic knowledge required to understand the various disciplines of pharmacy.",
+    "objectives": [
+      "Explain the gross morphology, structure and functions of various organs of the human body.",
+      "Describe the various homeostatic mechanisms and their imbalances.",
+      "Identify the various tissues and organs of different systems of human body.",
+      "Perform the various experiments related to special senses and nervous system.",
+      "Appreciate coordinated working pattern of different organs of each system."
+    ],
+    "courseOutcomes": [
+      "CO1: Connect the anatomy and physiology of the human body with appropriate terminology and relating to cellular level organization along with signaling pathways with its function.",
+      "CO2: Appraise the structure and functions of the skin and other accessory organs, also the skeletal system neuromuscular connections and articulation.",
+      "CO3: Correlate the development and disorders of bodily fluids, blood and lymphatic system in detail.",
+      "CO4: Evaluate the foundations of the neurological system, particularly the peripheral nervous system, as well as special senses.",
+      "CO5: Correlate the physiological functions of Cardiovascular system in normal a diseased state."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Introduction to Human body, Cellular level of organization & Tissue level of organization",
+        "title": "Introduction to Human body, Cellular level of organization & Tissue level of organization",
+        "hours": 10,
+        "description": "Introduction to Human body, Cellular level of organization & Tissue level of organization",
+        "topics": [
+          {
+            "topicCode": "T1.1",
+            "number": "T1.1",
+            "topicName": "Introduction to Human body: Definition and scope of anatomy and physiology, levels of structural organization and body systems, basic life processes, homeostasis, basic anatomical terminology.",
+            "name": "Introduction to Human body: Definition and scope of anatomy and physiology, levels of structural organization and body systems, basic life processes, homeostasis, basic anatomical terminology.",
+            "hours": 4
+          },
+          {
+            "topicCode": "T1.2",
+            "number": "T1.2",
+            "topicName": "Cellular level of organization: Structure and functions of cell, transport across cell membrane, cell division, cell junctions. General principles of cell communication, intracellular signaling pathway activation by extracellular signal molecule, Forms of intracellular signaling: a) Contact-dependent b) Paracrine c) Synaptic d) Endocrine.",
+            "name": "Cellular level of organization: Structure and functions of cell, transport across cell membrane, cell division, cell junctions. General principles of cell communication, intracellular signaling pathway activation by extracellular signal molecule, Forms of intracellular signaling: a) Contact-dependent b) Paracrine c) Synaptic d) Endocrine.",
+            "hours": 3
+          },
+          {
+            "topicCode": "T1.3",
+            "number": "T1.3",
+            "topicName": "Tissue level of organization: Classification of tissues, structure, location and functions of epithelial, muscular and nervous and connective tissues.",
+            "name": "Tissue level of organization: Classification of tissues, structure, location and functions of epithelial, muscular and nervous and connective tissues.",
+            "hours": 3
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit II",
+        "name": "Unit II",
+        "unitName": "Integumentary system, Skeletal system & Joints",
+        "title": "Integumentary system, Skeletal system & Joints",
+        "hours": 10,
+        "description": "Integumentary system, Skeletal system & Joints",
+        "topics": [
+          {
+            "topicCode": "T2.1",
+            "number": "T2.1",
+            "topicName": "Integumentary system: Structure and functions of skin.",
+            "name": "Integumentary system: Structure and functions of skin.",
+            "hours": 3
+          },
+          {
+            "topicCode": "T2.2",
+            "number": "T2.2",
+            "topicName": "Skeletal system: Divisions of skeletal system, types of bone, salient features and functions of bones of axial and appendicular skeletal system. Organization of skeletal muscle, physiology of muscle contraction, neuromuscular junctions.",
+            "name": "Skeletal system: Divisions of skeletal system, types of bone, salient features and functions of bones of axial and appendicular skeletal system. Organization of skeletal muscle, physiology of muscle contraction, neuromuscular junctions.",
+            "hours": 4
+          },
+          {
+            "topicCode": "T2.3",
+            "number": "T2.3",
+            "topicName": "Joints: Structural and functional classification, types of joints movements and its articulation.",
+            "name": "Joints: Structural and functional classification, types of joints movements and its articulation.",
+            "hours": 3
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit III",
+        "name": "Unit III",
+        "unitName": "Body fluids and blood & Lymphatic system",
+        "title": "Body fluids and blood & Lymphatic system",
+        "hours": 10,
+        "description": "Body fluids and blood & Lymphatic system",
+        "topics": [
+          {
+            "topicCode": "T3.1",
+            "number": "T3.1",
+            "topicName": "Body fluids and blood: Body fluids, composition and functions of blood, hemopoeisis, formation of hemoglobin, anemia, mechanisms of coagulation, blood grouping, Rh factors, transfusion, its significance and disorders of blood, Reticulo endothelial system.",
+            "name": "Body fluids and blood: Body fluids, composition and functions of blood, hemopoeisis, formation of hemoglobin, anemia, mechanisms of coagulation, blood grouping, Rh factors, transfusion, its significance and disorders of blood, Reticulo endothelial system.",
+            "hours": 6
+          },
+          {
+            "topicCode": "T3.2",
+            "number": "T3.2",
+            "topicName": "Lymphatic system: Lymphatic organs and tissues, lymphatic vessels, lymph circulation and functions of lymphatic system.",
+            "name": "Lymphatic system: Lymphatic organs and tissues, lymphatic vessels, lymph circulation and functions of lymphatic system.",
+            "hours": 4
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit IV",
+        "name": "Unit IV",
+        "unitName": "Peripheral nervous system & Special senses",
+        "title": "Peripheral nervous system & Special senses",
+        "hours": 8,
+        "description": "Peripheral nervous system & Special senses",
+        "topics": [
+          {
+            "topicCode": "T4.1",
+            "number": "T4.1",
+            "topicName": "Peripheral nervous system: Classification of peripheral nervous system: Structure and functions of sympathetic and parasympathetic nervous system. Origin and functions of spinal and cranial nerves.",
+            "name": "Peripheral nervous system: Classification of peripheral nervous system: Structure and functions of sympathetic and parasympathetic nervous system. Origin and functions of spinal and cranial nerves.",
+            "hours": 4
+          },
+          {
+            "topicCode": "T4.2",
+            "number": "T4.2",
+            "topicName": "Special senses: Structure and functions of eye, ear, nose and tongue and their disorders.",
+            "name": "Special senses: Structure and functions of eye, ear, nose and tongue and their disorders.",
+            "hours": 4
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit V",
+        "name": "Unit V",
+        "unitName": "Cardiovascular system",
+        "title": "Cardiovascular system",
+        "hours": 7,
+        "description": "Cardiovascular system",
+        "topics": [
+          {
+            "topicCode": "T5.1",
+            "number": "T5.1",
+            "topicName": "Cardiovascular system: Heart – anatomy of heart, blood circulation, blood vessels, structure and functions of artery, vein and capillaries, elements of conduction system of heart and heart beat, its regulation by autonomic nervous system, cardiac output, cardiac cycle. Regulation of blood pressure, pulse, electrocardiogram and disorders of heart.",
+            "name": "Cardiovascular system: Heart – anatomy of heart, blood circulation, blood vessels, structure and functions of artery, vein and capillaries, elements of conduction system of heart and heart beat, its regulation by autonomic nervous system, cardiac output, cardiac cycle. Regulation of blood pressure, pulse, electrocardiogram and disorders of heart.",
+            "hours": 7
+          }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "K. Sembulingam and P. Sembulingam", "title": "Essentials of Medical Physiology", "edition": "Latest Edition" },
+      { "author": "Kathleen J.W. Wilson", "title": "Anatomy and Physiology in Health and Illness", "edition": "Latest Edition" },
+      { "author": "Arthur C. Guyton and John E. Hall", "title": "Textbook of Medical Physiology", "edition": "Latest Edition" },
+      { "author": "Tortora Grabowski", "title": "Principles of Anatomy and Physiology", "edition": "Latest Edition" }
+    ],
+    "referenceBooks": [
+      { "author": "Best and Tailor", "title": "Physiological basis of Medical Practice", "edition": "Latest Edition" },
+      { "author": "Dr. C.C. Chatterjee", "title": "Human Physiology (vol 1 and 2)", "edition": "Latest Edition" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 25,
+      "theoryExternal": 75,
+      "practicalInternal": 0,
+      "practicalExternal": 0,
+      "universityExam": 100
+    }
+  },
+  {
+    "subjectCode": "BP107P",
+    "courseName": "Human Anatomy and Physiology - I Practical",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 1,
+    "semester": 1,
+    "credits": 2,
+    "hours": 60,
+    "subjectType": "Practical",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "Practical physiology is complimentary to the theoretical discussions in physiology. Practicals allow the verification of physiological processes discussed in theory classes through experiments on living tissue, intact animals or normal human beings. This is helpful for developing an insight on the subject.",
+    "objectives": [
+      "Understand the basics of use of microscopes.",
+      "Summarizing the anatomical and physiological parts of various bones and tissues.",
+      "To know about quantitative analysis of blood.",
+      "To know about qualitative analysis of blood.",
+      "Understand the measuring of blood pressure."
+    ],
+    "courseOutcomes": [
+      "CO1: Explaining the fundamental knowledge of microscopes, tissues, and bones in the human body.",
+      "CO2: Enumerating the RBC count, WBC count, and hemoglobin estimation.",
+      "CO3: Explaining how to determine the bleeding time, clotting time, blood group and Erythrocyte sedimentation rate.",
+      "CO4: Evaluating the heart rate, pulse rate, and blood pressure and correlating with standard values.",
+      "CO5: Evaluate the fundamental knowledge on bones."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Human Anatomy and Physiology Practical Experiments",
+        "title": "Human Anatomy and Physiology Practical Experiments",
+        "hours": 60,
+        "description": "Human Anatomy and Physiology Practical Experiments",
+        "topics": [
+          { "topicCode": "T1.1", "number": "T1.1", "topicName": "Study of compound microscope.", "name": "Study of compound microscope.", "hours": 4 },
+          { "topicCode": "T1.2", "number": "T1.2", "topicName": "Microscopic study of epithelial and connective tissue.", "name": "Microscopic study of epithelial and connective tissue.", "hours": 4 },
+          { "topicCode": "T1.3", "number": "T1.3", "topicName": "Microscopic study of muscular and nervous tissue.", "name": "Microscopic study of muscular and nervous tissue.", "hours": 4 },
+          { "topicCode": "T1.4", "number": "T1.4", "topicName": "Identification of axial bones.", "name": "Identification of axial bones.", "hours": 4 },
+          { "topicCode": "T1.5", "number": "T1.5", "topicName": "Identification of appendicular bones.", "name": "Identification of appendicular bones.", "hours": 4 },
+          { "topicCode": "T1.6", "number": "T1.6", "topicName": "Introduction to hemocytometry.", "name": "Introduction to hemocytometry.", "hours": 4 },
+          { "topicCode": "T1.7", "number": "T1.7", "topicName": "Enumeration of white blood cell (WBC) count.", "name": "Enumeration of white blood cell (WBC) count.", "hours": 4 },
+          { "topicCode": "T1.8", "number": "T1.8", "topicName": "Enumeration of total red blood corpuscles (RBC) count.", "name": "Enumeration of total red blood corpuscles (RBC) count.", "hours": 4 },
+          { "topicCode": "T1.9", "number": "T1.9", "topicName": "Determination of bleeding time.", "name": "Determination of bleeding time.", "hours": 4 },
+          { "topicCode": "T1.10", "number": "T1.10", "topicName": "Determination of clotting time.", "name": "Determination of clotting time.", "hours": 4 },
+          { "topicCode": "T1.11", "number": "T1.11", "topicName": "Estimation of hemoglobin content.", "name": "Estimation of hemoglobin content.", "hours": 4 },
+          { "topicCode": "T1.12", "number": "T1.12", "topicName": "Determination of blood group.", "name": "Determination of blood group.", "hours": 4 },
+          { "topicCode": "T1.13", "number": "T1.13", "topicName": "Determination of erythrocyte sedimentation rate (ESR).", "name": "Determination of erythrocyte sedimentation rate (ESR).", "hours": 4 },
+          { "topicCode": "T1.14", "number": "T1.14", "topicName": "Determination of heart rate and pulse rate.", "name": "Determination of heart rate and pulse rate.", "hours": 4 },
+          { "topicCode": "T1.15", "number": "T1.15", "topicName": "Recording of blood pressure.", "name": "Recording of blood pressure.", "hours": 4 }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "C.L. Ghai", "title": "Textbook of Practical Physiology", "edition": "Latest Edition" },
+      { "author": "K. Srinageswari and Rajeev Sharma", "title": "Practical workbook of Human Physiology", "edition": "Latest Edition" }
+    ],
+    "referenceBooks": [
+      { "author": "Kathleen J.W. Wilson", "title": "Anatomy and Physiology in Health and Illness", "edition": "Latest Edition" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 0,
+      "theoryExternal": 0,
+      "practicalInternal": 15,
+      "practicalExternal": 35,
+      "universityExam": 50
+    }
+  },
+  {
+    "subjectCode": "BP102T",
+    "courseName": "Pharmaceutical Analysis - I Theory",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 1,
+    "semester": 1,
+    "credits": 4,
+    "hours": 45,
+    "subjectType": "Theory",
+    "status": "Approved",
+    "facultyAssigned": "Dr. Meena Swaminathan, M.Pharm.",
+    "importVersion": "1.0",
+    "scope": "This course deals with the fundamentals of analytical chemistry and principles of electrochemical analysis of drugs.",
+    "objectives": [
+      "Understands the principles of volumetric analysis.",
+      "Understand the principles of Electrochemical analysis.",
+      "Carry out various volumetric analysis.",
+      "Carry out various Electrochemical analysis.",
+      "Develop analytical skills."
+    ],
+    "courseOutcomes": [
+      "CO1: Explain the principles of volumetric analysis, preparation of standard solutions and errors in analysis.",
+      "CO2: Explain the principle, procedure and applications of Acid base and non-aqueous titration.",
+      "CO3: Understand and Perform various titrations employing precipitation, complexometry and gravimetry principles.",
+      "CO4: Understand and Perform various titrations employing Redox titration principles.",
+      "CO5: Explain various Electrochemical methods of analysis."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Pharmaceutical analysis, Errors & Pharmacopoeia",
+        "title": "Pharmaceutical analysis, Errors & Pharmacopoeia",
+        "hours": 10,
+        "description": "Pharmaceutical analysis, Errors & Pharmacopoeia",
+        "topics": [
+          {
+            "topicCode": "T1.1",
+            "number": "T1.1",
+            "topicName": "Pharmaceutical analysis: Definition and scope. i. Different techniques of analysis. ii. Methods of expressing concentration. iii. Primary and secondary standards. iv. Preparation and standardization of various molar and normal solutions: Oxalic acid, sodium hydroxide, hydrochloric acid, sodium thiosulphate, sulphuric acid, potassium permanganate and ceric ammonium sulphate.",
+            "name": "Pharmaceutical analysis: Definition and scope. i. Different techniques of analysis. ii. Methods of expressing concentration. iii. Primary and secondary standards. iv. Preparation and standardization of various molar and normal solutions: Oxalic acid, sodium hydroxide, hydrochloric acid, sodium thiosulphate, sulphuric acid, potassium permanganate and ceric ammonium sulphate.",
+            "hours": 5
+          },
+          {
+            "topicCode": "T1.2",
+            "number": "T1.2",
+            "topicName": "Errors: Sources of errors, types of errors, methods of minimizing errors, accuracy, precision and significant figures.",
+            "name": "Errors: Sources of errors, types of errors, methods of minimizing errors, accuracy, precision and significant figures.",
+            "hours": 3
+          },
+          {
+            "topicCode": "T1.3",
+            "number": "T1.3",
+            "topicName": "Pharmacopoeia, Sources of impurities in medicinal agents, limit tests.",
+            "name": "Pharmacopoeia, Sources of impurities in medicinal agents, limit tests.",
+            "hours": 2
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit II",
+        "name": "Unit II",
+        "unitName": "Acid base titration & Non aqueous titration",
+        "title": "Acid base titration & Non aqueous titration",
+        "hours": 10,
+        "description": "Acid base titration & Non aqueous titration",
+        "topics": [
+          {
+            "topicCode": "T2.1",
+            "number": "T2.1",
+            "topicName": "Acid base titration: Theories of acid base indicators, classification of acid base titrations and theory involved in titrations of strong, weak, and very weak acids and bases, neutralization curves.",
+            "name": "Acid base titration: Theories of acid base indicators, classification of acid base titrations and theory involved in titrations of strong, weak, and very weak acids and bases, neutralization curves.",
+            "hours": 5
+          },
+          {
+            "topicCode": "T2.2",
+            "number": "T2.2",
+            "topicName": "Non aqueous titration: Solvents, acidimetry and alkalimetry titration and estimation of Sodium benzoate and Ephedrine HCl.",
+            "name": "Non aqueous titration: Solvents, acidimetry and alkalimetry titration and estimation of Sodium benzoate and Ephedrine HCl.",
+            "hours": 5
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit III",
+        "name": "Unit III",
+        "unitName": "Precipitation titrations, Complexometric titration & Gravimetry",
+        "title": "Precipitation titrations, Complexometric titration & Gravimetry",
+        "hours": 10,
+        "description": "Precipitation titrations, Complexometric titration & Gravimetry",
+        "topics": [
+          {
+            "topicCode": "T3.1",
+            "number": "T3.1",
+            "topicName": "Precipitation titrations: Mohr's method, Volhard's, Modified Volhard's, Fajans method, estimation of sodium chloride.",
+            "name": "Precipitation titrations: Mohr's method, Volhard's, Modified Volhard's, Fajans method, estimation of sodium chloride.",
+            "hours": 3
+          },
+          {
+            "topicCode": "T3.2",
+            "number": "T3.2",
+            "topicName": "Complexometric titration: Classification, metal ion indicators, masking and demasking reagents, estimation of Magnesium sulphate, and calcium gluconate.",
+            "name": "Complexometric titration: Classification, metal ion indicators, masking and demasking reagents, estimation of Magnesium sulphate, and calcium gluconate.",
+            "hours": 3
+          },
+          {
+            "topicCode": "T3.3",
+            "number": "T3.3",
+            "topicName": "Gravimetry: Principle and steps involved in gravimetric analysis. Purity of the precipitate: co-precipitation and post precipitation, Estimation of barium sulphate. Basic principles, method and applications of Diazotization titrations.",
+            "name": "Gravimetry: Principle and steps involved in gravimetric analysis. Purity of the precipitate: co-precipitation and post precipitation, Estimation of barium sulphate. Basic principles, method and applications of Diazotization titrations.",
+            "hours": 4
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit IV",
+        "name": "Unit IV",
+        "unitName": "Redox titrations",
+        "title": "Redox titrations",
+        "hours": 8,
+        "description": "Redox titrations",
+        "topics": [
+          {
+            "topicCode": "T4.1",
+            "number": "T4.1",
+            "topicName": "Redox titrations: Concepts of oxidation and reduction. a. Types of redox titrations (Principles and applications): Ceriometry, Iodimetry, Iodometry, Bromatometry, Dichrometry, Titration with potassium iodate.",
+            "name": "Redox titrations: Concepts of oxidation and reduction. a. Types of redox titrations (Principles and applications): Ceriometry, Iodimetry, Iodometry, Bromatometry, Dichrometry, Titration with potassium iodate.",
+            "hours": 8
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit V",
+        "name": "Unit V",
+        "unitName": "Electrochemical methods of analysis",
+        "title": "Electrochemical methods of analysis",
+        "hours": 7,
+        "description": "Electrochemical methods of analysis",
+        "topics": [
+          {
+            "topicCode": "T5.1",
+            "number": "T5.1",
+            "topicName": "Conductometry: Introduction, Conductivity cell, Conductometric titrations, applications.",
+            "name": "Conductometry: Introduction, Conductivity cell, Conductometric titrations, applications.",
+            "hours": 2
+          },
+          {
+            "topicCode": "T5.2",
+            "number": "T5.2",
+            "topicName": "Potentiometry: Electrochemical cell, construction and working of reference (Standard hydrogen, silver chloride electrode and calomel electrode) and indicator electrodes (metal electrodes and glass electrode), methods to determine end point of potentiometric titration and applications.",
+            "name": "Potentiometry: Electrochemical cell, construction and working of reference (Standard hydrogen, silver chloride electrode and calomel electrode) and indicator electrodes (metal electrodes and glass electrode), methods to determine end point of potentiometric titration and applications.",
+            "hours": 3
+          },
+          {
+            "topicCode": "T5.3",
+            "number": "T5.3",
+            "topicName": "Polarography: Principle, Ilkovic equation, construction and working of dropping mercury electrode and rotating platinum electrode, applications.",
+            "name": "Polarography: Principle, Ilkovic equation, construction and working of dropping mercury electrode and rotating platinum electrode, applications.",
+            "hours": 2
+          }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "A.H. Beckett & J.B. Stenlake", "title": "Practical Pharmaceutical Chemistry Vol I & II", "edition": "Latest Edition" },
+      { "author": "A.I. Vogel", "title": "Text Book of Quantitative Inorganic analysis", "edition": "Latest Edition" }
+    ],
+    "referenceBooks": [
+      { "author": "P. Gundu Rao", "title": "Inorganic Pharmaceutical Chemistry", "edition": "Latest Edition" },
+      { "author": "Bentley and Driver", "title": "Textbook of Pharmaceutical Chemistry", "edition": "Latest Edition" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 25,
+      "theoryExternal": 75,
+      "practicalInternal": 0,
+      "practicalExternal": 0,
+      "universityExam": 100
+    }
+  },
+  {
+    "subjectCode": "BP108P",
+    "courseName": "Pharmaceutical Analysis - I Practical",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 1,
+    "semester": 1,
+    "credits": 2,
+    "hours": 60,
+    "subjectType": "Practical",
+    "status": "Approved",
+    "facultyAssigned": "Dr. Meena Swaminathan, M.Pharm.",
+    "importVersion": "1.0",
+    "scope": "Practical pharmaceutical analysis represents the experimental application of quantitative and qualitative methods described in theory.",
+    "objectives": [
+      "Understand the principles of volumetric analysis.",
+      "Understand the principles of Electrochemical analysis.",
+      "Carry out various volumetric analysis.",
+      "Carry out various Electrochemical analysis."
+    ],
+    "courseOutcomes": [
+      "CO1: Determine various limit test in various samples.",
+      "CO2: Perform standardization of solutions.",
+      "CO3: Perform various volumetric assays.",
+      "CO4: Perform various Conductometric assays.",
+      "CO5: Perform various Potentiometric assays."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Pharmaceutical Analysis Practical",
+        "title": "Pharmaceutical Analysis Practical",
+        "hours": 60,
+        "description": "Pharmaceutical Analysis Practical",
+        "topics": [
+          { "topicCode": "T1.1", "number": "T1.1", "topicName": "Limit Test of the following: (1) Chloride, (2) Sulphate, (3) Iron, (4) Arsenic.", "name": "Limit Test of the following: (1) Chloride, (2) Sulphate, (3) Iron, (4) Arsenic.", "hours": 12 },
+          { "topicCode": "T1.2", "number": "T1.2", "topicName": "Preparation and standardization of: 1. Sodium hydroxide, 2. Sulphuric acid, 3. Sodium thiosulfate, 4. Potassium permanganate, 5. Ceric ammonium sulphate.", "name": "Preparation and standardization of: 1. Sodium hydroxide, 2. Sulphuric acid, 3. Sodium thiosulfate, 4. Potassium permanganate, 5. Ceric ammonium sulphate.", "hours": 12 },
+          { "topicCode": "T1.3", "number": "T1.3", "topicName": "Assay of the following compounds along with Standardization of Titrant: 1. Ammonium chloride by acid base titration, 2. Ferrous sulphate by Cerimetry, 3. Copper sulphate by Iodometry, 4. Calcium gluconate by complexometry, 5. Hydrogen peroxide by Permanganometry, 6. Sodium benzoate by non-aqueous titration, 7. Sodium Chloride by precipitation titration.", "name": "Assay of the following compounds along with Standardization of Titrant: 1. Ammonium chloride by acid base titration, 2. Ferrous sulphate by Cerimetry, 3. Copper sulphate by Iodometry, 4. Calcium gluconate by complexometry, 5. Hydrogen peroxide by Permanganometry, 6. Sodium benzoate by non-aqueous titration, 7. Sodium Chloride by precipitation titration.", "hours": 20 },
+          { "topicCode": "T1.4", "number": "T1.4", "topicName": "Determination of Normality by electro-analytical methods: 1. Conductometric titration of strong acid against strong base, 2. Conductometric titration of strong acid and weak acid against strong base.", "name": "Determination of Normality by electro-analytical methods: 1. Conductometric titration of strong acid against strong base, 2. Conductometric titration of strong acid and weak acid against strong base.", "hours": 10 },
+          { "topicCode": "T1.5", "number": "T1.5", "topicName": "Potentiometric titration of strong acid against strong base.", "name": "Potentiometric titration of strong acid against strong base.", "hours": 6 }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "A.H. Beckett & J.B. Stenlake", "title": "Practical Pharmaceutical Chemistry Vol I & II", "edition": "Latest Edition" }
+    ],
+    "referenceBooks": [
+      { "author": "A.I. Vogel", "title": "Text Book of Quantitative Inorganic analysis", "edition": "Latest Edition" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 0,
+      "theoryExternal": 0,
+      "practicalInternal": 15,
+      "practicalExternal": 35,
+      "universityExam": 50
+    }
+  }
+]

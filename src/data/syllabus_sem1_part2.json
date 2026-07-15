@@ -1,0 +1,473 @@
+[
+  {
+    "subjectCode": "BP103T",
+    "courseName": "Pharmaceutics - I Theory",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 1,
+    "semester": 1,
+    "credits": 4,
+    "hours": 45,
+    "subjectType": "Theory",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "This course is designed to impart a fundamental knowledge on the preparatory pharmacy with arts and science of preparing the different conventional dosage forms.",
+    "objectives": [
+      "Know the history of profession of pharmacy.",
+      "Understand the basics of different dosage forms, pharmaceutical incompatibilities and pharmaceutical calculations.",
+      "Understand the professional way of handling the prescription.",
+      "Preparation of various conventional dosage forms."
+    ],
+    "courseOutcomes": [
+      "CO1: Trace the history of pharmacy and describe various official pharmacopoeias.",
+      "CO2: Categorize different dosage forms and understand prescription handling and posology.",
+      "CO3: Perform basic pharmaceutical calculations and formulate powders and monophasic liquid dosage forms.",
+      "CO4: Design and evaluate biphasic liquid dosage forms (suspensions, emulsions) and suppositories.",
+      "CO5: Recognize pharmaceutical incompatibilities and design semisolid dosage forms."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Historical background and development of profession of pharmacy, Dosage forms, Prescription & Posology",
+        "title": "Historical background and development of profession of pharmacy, Dosage forms, Prescription & Posology",
+        "hours": 10,
+        "description": "Historical background and development of profession of pharmacy, Dosage forms, Prescription & Posology",
+        "topics": [
+          {
+            "topicCode": "T1.1",
+            "number": "T1.1",
+            "topicName": "Historical background and development of profession of pharmacy: History of profession of Pharmacy in India in relation to pharmacy education, industry and organization, Pharmacy as a career, Pharmacopoeias: Introduction to IP, BP, USP and Extra Pharmacopoeia.",
+            "name": "Historical background and development of profession of pharmacy: History of profession of Pharmacy in India in relation to pharmacy education, industry and organization, Pharmacy as a career, Pharmacopoeias: Introduction to IP, BP, USP and Extra Pharmacopoeia.",
+            "hours": 4
+          },
+          {
+            "topicCode": "T1.2",
+            "number": "T1.2",
+            "topicName": "Dosage forms: Introduction to dosage forms, classification and definitions.",
+            "name": "Dosage forms: Introduction to dosage forms, classification and definitions.",
+            "hours": 2
+          },
+          {
+            "topicCode": "T1.3",
+            "number": "T1.3",
+            "topicName": "Prescription: Definition, Parts of prescription, handling of Prescription and Errors in prescription.",
+            "name": "Prescription: Definition, Parts of prescription, handling of Prescription and Errors in prescription.",
+            "hours": 2
+          },
+          {
+            "topicCode": "T1.4",
+            "number": "T1.4",
+            "topicName": "Posology: Definition, Factors affecting posology. Pediatric dose calculations based on age, body weight and body surface area.",
+            "name": "Posology: Definition, Factors affecting posology. Pediatric dose calculations based on age, body weight and body surface area.",
+            "hours": 2
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit II",
+        "name": "Unit II",
+        "unitName": "Pharmaceutical calculations, Powders & Liquid dosage forms",
+        "title": "Pharmaceutical calculations, Powders & Liquid dosage forms",
+        "hours": 10,
+        "description": "Pharmaceutical calculations, Powders & Liquid dosage forms",
+        "topics": [
+          {
+            "topicCode": "T2.1",
+            "number": "T2.1",
+            "topicName": "Pharmaceutical calculations: Weights and measures – Imperial and Metric system, Calculations involving percentage solutions, alligation, proof spirit and isotonic solutions based on freezing point and molecular weight.",
+            "name": "Pharmaceutical calculations: Weights and measures – Imperial and Metric system, Calculations involving percentage solutions, alligation, proof spirit and isotonic solutions based on freezing point and molecular weight.",
+            "hours": 4
+          },
+          {
+            "topicCode": "T2.2",
+            "number": "T2.2",
+            "topicName": "Powders: Definition, classification, advantages and disadvantages, Simple and compound powders – official preparations, dusting powders, effervescent, efflorescent and hygroscopic powders, eutectic mixtures. Geometric dilutions.",
+            "name": "Powders: Definition, classification, advantages and disadvantages, Simple and compound powders – official preparations, dusting powders, effervescent, efflorescent and hygroscopic powders, eutectic mixtures. Geometric dilutions.",
+            "hours": 4
+          },
+          {
+            "topicCode": "T2.3",
+            "number": "T2.3",
+            "topicName": "Liquid dosage forms: Advantages and disadvantages of liquid dosage forms. Excipients used in formulation of liquid dosage forms. Solubility enhancement techniques.",
+            "name": "Liquid dosage forms: Advantages and disadvantages of liquid dosage forms. Excipients used in formulation of liquid dosage forms. Solubility enhancement techniques.",
+            "hours": 2
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit III",
+        "name": "Unit III",
+        "unitName": "Monophasic liquids & Biphasic liquids",
+        "title": "Monophasic liquids & Biphasic liquids",
+        "hours": 8,
+        "description": "Monophasic liquids & Biphasic liquids",
+        "topics": [
+          {
+            "topicCode": "T3.1",
+            "number": "T3.1",
+            "topicName": "Monophasic liquids: Definitions and preparations of Gargles, Mouthwashes, Throat Paint, Eardrops, Nasal drops, Enemas, Syrups, Elixirs, Liniments and Lotions.",
+            "name": "Monophasic liquids: Definitions and preparations of Gargles, Mouthwashes, Throat Paint, Eardrops, Nasal drops, Enemas, Syrups, Elixirs, Liniments and Lotions.",
+            "hours": 3
+          },
+          {
+            "topicCode": "T3.2",
+            "number": "T3.2",
+            "topicName": "Biphasic liquids (Suspensions): Definition, advantages and disadvantages, classifications, Preparation of suspensions; Flocculated and Deflocculated suspension and stability problems and methods to overcome.",
+            "name": "Biphasic liquids (Suspensions): Definition, advantages and disadvantages, classifications, Preparation of suspensions; Flocculated and Deflocculated suspension and stability problems and methods to overcome.",
+            "hours": 3
+          },
+          {
+            "topicCode": "T3.3",
+            "number": "T3.3",
+            "topicName": "Emulsions: Definition, classification, emulsifying agent, test for the identification of type of Emulsion, Methods of preparation and stability problems and methods to overcome.",
+            "name": "Emulsions: Definition, classification, emulsifying agent, test for the identification of type of Emulsion, Methods of preparation and stability problems and methods to overcome.",
+            "hours": 2
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit IV",
+        "name": "Unit IV",
+        "unitName": "Suppositories & Pharmaceutical incompatibilities",
+        "title": "Suppositories & Pharmaceutical incompatibilities",
+        "hours": 8,
+        "description": "Suppositories & Pharmaceutical incompatibilities",
+        "topics": [
+          {
+            "topicCode": "T4.1",
+            "number": "T4.1",
+            "topicName": "Suppositories: Definition, types, advantages and disadvantages, types of bases, methods of preparations. Displacement value and its calculations, evaluation of suppositories.",
+            "name": "Suppositories: Definition, types, advantages and disadvantages, types of bases, methods of preparations. Displacement value and its calculations, evaluation of suppositories.",
+            "hours": 4
+          },
+          {
+            "topicCode": "T4.2",
+            "number": "T4.2",
+            "topicName": "Pharmaceutical incompatibilities: Definition, classification, physical, chemical and therapeutic incompatibilities with examples.",
+            "name": "Pharmaceutical incompatibilities: Definition, classification, physical, chemical and therapeutic incompatibilities with examples.",
+            "hours": 4
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit V",
+        "name": "Unit V",
+        "unitName": "Semisolid dosage forms",
+        "title": "Semisolid dosage forms",
+        "hours": 7,
+        "description": "Semisolid dosage forms",
+        "topics": [
+          {
+            "topicCode": "T5.1",
+            "number": "T5.1",
+            "topicName": "Semisolid dosage forms: Definitions, classification, mechanisms and factors influencing dermal penetration of drugs. Preparation of ointments, pastes, creams and gels. Excipients used in semi solid dosage forms. Evaluation of semi solid dosages forms.",
+            "name": "Semisolid dosage forms: Definitions, classification, mechanisms and factors influencing dermal penetration of drugs. Preparation of ointments, pastes, creams and gels. Excipients used in semi solid dosage forms. Evaluation of semi solid dosages forms.",
+            "hours": 7
+          }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "H.C. Ansel et al.", "title": "Pharmaceutical Dosage Form and Drug Delivery System", "edition": "Latest Edition" },
+      { "author": "Carter S.J.", "title": "Cooper and Gunn's-Dispensing for Pharmaceutical Students", "edition": "Latest Edition" },
+      { "author": "M.E. Aulton", "title": "Pharmaceutics, The Science and Dosage Form Design", "edition": "Latest Edition" }
+    ],
+    "referenceBooks": [
+      { "author": "Lachmann", "title": "Theory and Practice of Industrial Pharmacy", "edition": "Latest Edition" },
+      { "author": "Alfonso R. Gennaro Remington", "title": "The Science and Practice of Pharmacy", "edition": "Latest Edition" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 25,
+      "theoryExternal": 75,
+      "practicalInternal": 0,
+      "practicalExternal": 0,
+      "universityExam": 100
+    }
+  },
+  {
+    "subjectCode": "BP109P",
+    "courseName": "Pharmaceutics - I Practical",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 1,
+    "semester": 1,
+    "credits": 2,
+    "hours": 60,
+    "subjectType": "Practical",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "Compounding and dispensing of various conventional dosage forms in accordance with official standards.",
+    "objectives": [
+      "Perform simple compounding and dispensing of conventional dosage forms.",
+      "Standardize calculations for syrups, elixirs, linctuses, and emulsions.",
+      "Evaluate physical characteristics of suppositories and semisolid preparations."
+    ],
+    "courseOutcomes": [
+      "CO1: Formulate and dispense syrups, elixirs, and linctuses following standard pharmacopoeias.",
+      "CO2: Prepare and package monophasic solutions and biphasic suspensions/emulsions.",
+      "CO3: Compounding of powders, granules, and effervescent formulations.",
+      "CO4: Prepare, mold, and evaluate suppositories.",
+      "CO5: Formulate semisolid ointments, pastes, gels, and mouthwashes."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Pharmaceutics Practical",
+        "title": "Pharmaceutics Practical",
+        "hours": 60,
+        "description": "Pharmaceutics Practical",
+        "topics": [
+          { "topicCode": "T1.1", "number": "T1.1", "topicName": "Syrups: a) Syrup IP’66 b) Compound syrup of Ferrous Phosphate BPC’68.", "name": "Syrups: a) Syrup IP’66 b) Compound syrup of Ferrous Phosphate BPC’68.", "hours": 6 },
+          { "topicCode": "T1.2", "number": "T1.2", "topicName": "Elixirs: a) Piperazine citrate elixir b) Paracetamol pediatric elixir.", "name": "Elixirs: a) Piperazine citrate elixir b) Paracetamol pediatric elixir.", "hours": 6 },
+          { "topicCode": "T1.3", "number": "T1.3", "topicName": "Linctus: a) Terpin Hydrate Linctus IP’66 b) Iodine Throat Paint (Mandles Paint).", "name": "Linctus: a) Terpin Hydrate Linctus IP’66 b) Iodine Throat Paint (Mandles Paint).", "hours": 6 },
+          { "topicCode": "T1.4", "number": "T1.4", "topicName": "Solutions: a) Strong solution of ammonium acetate b) Cresol with soap solution c) Lugol’s solution.", "name": "Solutions: a) Strong solution of ammonium acetate b) Cresol with soap solution c) Lugol’s solution.", "hours": 8 },
+          { "topicCode": "T1.5", "number": "T1.5", "topicName": "Suspensions: a) Calamine lotion b) Magnesium Hydroxide mixture c) Aluminum Hydroxide Gel.", "name": "Suspensions: a) Calamine lotion b) Magnesium Hydroxide mixture c) Aluminum Hydroxide Gel.", "hours": 8 },
+          { "topicCode": "T1.6", "number": "T1.6", "topicName": "Emulsions: a) Turpentine Liniment b) Liquid paraffin emulsion.", "name": "Emulsions: a) Turpentine Liniment b) Liquid paraffin emulsion.", "hours": 6 },
+          { "topicCode": "T1.7", "number": "T1.7", "topicName": "Powders and Granules: a) ORS powder (WHO) b) Effervescent granules c) Dusting powder d) Divided powders.", "name": "Powders and Granules: a) ORS powder (WHO) b) Effervescent granules c) Dusting powder d) Divided powders.", "hours": 8 },
+          { "topicCode": "T1.8", "number": "T1.8", "topicName": "Suppositories: a) Glycero gelatin suppository b) Cocoa butter suppository c) Zinc Oxide suppository.", "name": "Suppositories: a) Glycero gelatin suppository b) Cocoa butter suppository c) Zinc Oxide suppository.", "hours": 6 },
+          { "topicCode": "T1.9", "number": "T1.9", "topicName": "Semisolids: a) Sulphur ointment b) Non staining iodine ointment with methyl salicylate c) Carbopol gel.", "name": "Semisolids: a) Sulphur ointment b) Non staining iodine ointment with methyl salicylate c) Carbopol gel.", "hours": 4 },
+          { "topicCode": "T1.10", "number": "T1.10", "topicName": "Gargles and Mouthwashes: a) Iodine gargle b) Chlorhexidine mouth wash.", "name": "Gargles and Mouthwashes: a) Iodine gargle b) Chlorhexidine mouth wash.", "hours": 2 }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "Carter S.J.", "title": "Cooper and Gunn's-Dispensing for Pharmaceutical Students", "edition": "Latest Edition" }
+    ],
+    "referenceBooks": [
+      { "author": "Indian Pharmacopoeia", "title": "Official Pharmacopoeia", "edition": "Latest Edition" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 0,
+      "theoryExternal": 0,
+      "practicalInternal": 15,
+      "practicalExternal": 35,
+      "universityExam": 50
+    }
+  },
+  {
+    "subjectCode": "BP104T",
+    "courseName": "Pharmaceutical Inorganic Chemistry - Theory",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 1,
+    "semester": 1,
+    "credits": 4,
+    "hours": 45,
+    "subjectType": "Theory",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "This subject deals with the monographs of inorganic drugs and pharmaceuticals.",
+    "objectives": [
+      "Know the sources of impurities and methods to determine the impurities in inorganic drugs and pharmaceuticals.",
+      "Understand the medicinal and pharmaceutical importance of inorganic compounds."
+    ],
+    "courseOutcomes": [
+      "CO1: Discuss history of pharmacopoeia and perform limit tests for impurities in pharmaceutical compounds.",
+      "CO2: Formulate buffers, evaluate isotonic solutions, and understand the role of dental products.",
+      "CO3: Classify and explain gastrointestinal agents like acidifiers, antacids, and cathartics.",
+      "CO4: Discuss miscellaneous compounds like expectorants, emetics, haematinics, poisons/antidotes, and astringents.",
+      "CO5: Understand radioactivity, measurement of radiation, and applications of radiopharmaceuticals."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Impurities in pharmaceutical substances & General methods of preparation",
+        "title": "Impurities in pharmaceutical substances & General methods of preparation",
+        "hours": 10,
+        "description": "Impurities in pharmaceutical substances & General methods of preparation",
+        "topics": [
+          {
+            "topicCode": "T1.1",
+            "number": "T1.1",
+            "topicName": "Impurities in pharmaceutical substances: History of Pharmacopoeia, Sources and types of impurities, principle involved in the limit test for Chloride, Sulphate, Iron, Arsenic, Lead and Heavy metals, modified limit test for Chloride and Sulphate.",
+            "name": "Impurities in pharmaceutical substances: History of Pharmacopoeia, Sources and types of impurities, principle involved in the limit test for Chloride, Sulphate, Iron, Arsenic, Lead and Heavy metals, modified limit test for Chloride and Sulphate.",
+            "hours": 6
+          },
+          {
+            "topicCode": "T1.2",
+            "number": "T1.2",
+            "topicName": "General methods of preparation, assay for the compounds superscripted with asterisk (*), properties and medicinal uses of inorganic compounds belonging to the classes listed.",
+            "name": "General methods of preparation, assay for the compounds superscripted with asterisk (*), properties and medicinal uses of inorganic compounds belonging to the classes listed.",
+            "hours": 4
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit II",
+        "name": "Unit II",
+        "unitName": "Acids, Bases and Buffers, Major extra & intracellular electrolytes & Dental products",
+        "title": "Acids, Bases and Buffers, Major extra & intracellular electrolytes & Dental products",
+        "hours": 10,
+        "description": "Acids, Bases and Buffers, Major extra & intracellular electrolytes & Dental products",
+        "topics": [
+          {
+            "topicCode": "T2.1",
+            "number": "T2.1",
+            "topicName": "Acids, Bases and Buffers: Buffer equations and buffer capacity in general, buffers in pharmaceutical systems, preparation, stability, buffered isotonic solutions, measurements of tonicity, calculations and methods of adjusting isotonicity.",
+            "name": "Acids, Bases and Buffers: Buffer equations and buffer capacity in general, buffers in pharmaceutical systems, preparation, stability, buffered isotonic solutions, measurements of tonicity, calculations and methods of adjusting isotonicity.",
+            "hours": 4
+          },
+          {
+            "topicCode": "T2.2",
+            "number": "T2.2",
+            "topicName": "Major extra and intracellular electrolytes: Functions of major physiological ions, Electrolytes used in the replacement therapy: Sodium chloride*, Potassium chloride, Calcium gluconate* and Oral Rehydration Salt (ORS), Physiological acid base balance.",
+            "name": "Major extra and intracellular electrolytes: Functions of major physiological ions, Electrolytes used in the replacement therapy: Sodium chloride*, Potassium chloride, Calcium gluconate* and Oral Rehydration Salt (ORS), Physiological acid base balance.",
+            "hours": 3
+          },
+          {
+            "topicCode": "T2.3",
+            "number": "T2.3",
+            "topicName": "Dental products: Dentifrices, role of fluoride in the treatment of dental caries, Desensitizing agents, Calcium carbonate, Sodium fluoride, and Zinc eugenol cement.",
+            "name": "Dental products: Dentifrices, role of fluoride in the treatment of dental caries, Desensitizing agents, Calcium carbonate, Sodium fluoride, and Zinc eugenol cement.",
+            "hours": 3
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit III",
+        "name": "Unit III",
+        "unitName": "Gastrointestinal agents",
+        "title": "Gastrointestinal agents",
+        "hours": 10,
+        "description": "Gastrointestinal agents",
+        "topics": [
+          {
+            "topicCode": "T3.1",
+            "number": "T3.1",
+            "topicName": "Acidifiers: Ammonium chloride* and Dil. HCl.",
+            "name": "Acidifiers: Ammonium chloride* and Dil. HCl.",
+            "hours": 2
+          },
+          {
+            "topicCode": "T3.2",
+            "number": "T3.2",
+            "topicName": "Antacids: Ideal properties of antacids, combinations of antacids, Sodium Bicarbonate*, Aluminum hydroxide gel, Magnesium hydroxide mixture.",
+            "name": "Antacids: Ideal properties of antacids, combinations of antacids, Sodium Bicarbonate*, Aluminum hydroxide gel, Magnesium hydroxide mixture.",
+            "hours": 3
+          },
+          {
+            "topicCode": "T3.3",
+            "number": "T3.3",
+            "topicName": "Cathartics: Magnesium sulphate, Sodium orthophosphate, Kaolin and Bentonite.",
+            "name": "Cathartics: Magnesium sulphate, Sodium orthophosphate, Kaolin and Bentonite.",
+            "hours": 2
+          },
+          {
+            "topicCode": "T3.4",
+            "number": "T3.4",
+            "topicName": "Antimicrobials: Mechanism, classification, Potassium permanganate, Boric acid, Hydrogen peroxide*, Chlorinated lime*, Iodine and its preparations.",
+            "name": "Antimicrobials: Mechanism, classification, Potassium permanganate, Boric acid, Hydrogen peroxide*, Chlorinated lime*, Iodine and its preparations.",
+            "hours": 3
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit IV",
+        "name": "Unit IV",
+        "unitName": "Miscellaneous compounds",
+        "title": "Miscellaneous compounds",
+        "hours": 8,
+        "description": "Miscellaneous compounds",
+        "topics": [
+          { "topicCode": "T4.1", "number": "T4.1", "topicName": "Expectorants: Potassium iodide, Ammonium chloride*.", "name": "Expectorants: Potassium iodide, Ammonium chloride*.", "hours": 2 },
+          { "topicCode": "T4.2", "number": "T4.2", "topicName": "Emetics: Copper sulphate*, Sodium potassium tartarate.", "name": "Emetics: Copper sulphate*, Sodium potassium tartarate.", "hours": 2 },
+          { "topicCode": "T4.3", "number": "T4.3", "topicName": "Haematinics: Ferrous sulphate*, Ferrous gluconate.", "name": "Haematinics: Ferrous sulphate*, Ferrous gluconate.", "hours": 2 },
+          { "topicCode": "T4.4", "number": "T4.4", "topicName": "Poison and Antidote: Sodium thiosulphate*, Activated charcoal, Sodium nitrite.", "name": "Poison and Antidote: Sodium thiosulphate*, Activated charcoal, Sodium nitrite.", "hours": 1 },
+          { "topicCode": "T4.5", "number": "T4.5", "topicName": "Astringents: Zinc Sulphate, Potash Alum.", "name": "Astringents: Zinc Sulphate, Potash Alum.", "hours": 1 }
+        ]
+      },
+      {
+        "unitCode": "Unit V",
+        "name": "Unit V",
+        "unitName": "Radiopharmaceuticals",
+        "title": "Radiopharmaceuticals",
+        "hours": 7,
+        "description": "Radiopharmaceuticals",
+        "topics": [
+          {
+            "topicCode": "T5.1",
+            "number": "T5.1",
+            "topicName": "Radiopharmaceuticals: Radio activity, Measurement of radioactivity, Properties of α, β, γ radiations, Half life, radio isotopes and study of radio isotopes - Sodium iodide I131, Storage conditions, precautions and pharmaceutical application of radioactive substances.",
+            "name": "Radiopharmaceuticals: Radio activity, Measurement of radioactivity, Properties of α, β, γ radiations, Half life, radio isotopes and study of radio isotopes - Sodium iodide I131, Storage conditions, precautions and pharmaceutical application of radioactive substances.",
+            "hours": 7
+          }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "A.H. Beckett and J.B. Stenlake", "title": "Practical Pharmaceutical Chemistry Vol I and II", "edition": "Latest Edition" },
+      { "author": "A.I. Vogel", "title": "Text Book of Quantitative Inorganic analysis", "edition": "Latest Edition" }
+    ],
+    "referenceBooks": [
+      { "author": "P. Gundu Rao", "title": "Inorganic Pharmaceutical Chemistry", "edition": "Latest Edition" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 25,
+      "theoryExternal": 75,
+      "practicalInternal": 0,
+      "practicalExternal": 0,
+      "universityExam": 100
+    }
+  },
+  {
+    "subjectCode": "BP110P",
+    "courseName": "Pharmaceutical Inorganic Chemistry - Practical",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 1,
+    "semester": 1,
+    "credits": 2,
+    "hours": 60,
+    "subjectType": "Practical",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "Experimental methods of performing limit tests, identification tests, purity tests, and inorganic preparation protocols.",
+    "objectives": [
+      "Learn standard limit tests for various ions.",
+      "Gain practical skill in identifying inorganic compounds.",
+      "Test purity and prepare inorganic pharmaceuticals."
+    ],
+    "courseOutcomes": [
+      "CO1: Perform limit tests for chlorides, sulphates, iron, heavy metals, lead, and arsenic.",
+      "CO2: Carry out systematic identification tests for inorganic cations and anions.",
+      "CO3: Test the purity and swelling/neutralizing capacity of bentonite and aluminum hydroxide gel.",
+      "CO4: Compounding and preparation of standard inorganic pharmaceuticals."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Pharmaceutical Inorganic Chemistry Practical",
+        "title": "Pharmaceutical Inorganic Chemistry Practical",
+        "hours": 60,
+        "description": "Pharmaceutical Inorganic Chemistry Practical",
+        "topics": [
+          { "topicCode": "T1.1", "number": "T1.1", "topicName": "Limit tests for following ions: 1. Limit test for Chlorides and Sulphates 2. Modified limit test for Chlorides and Sulphates 3. Limit test for Iron 4. Limit test for Heavy metals 5. Limit test for Lead 6. Limit test for Arsenic.", "name": "Limit tests for following ions: 1. Limit test for Chlorides and Sulphates 2. Modified limit test for Chlorides and Sulphates 3. Limit test for Iron 4. Limit test for Heavy metals 5. Limit test for Lead 6. Limit test for Arsenic.", "hours": 20 },
+          { "topicCode": "T1.2", "number": "T1.2", "topicName": "Identification test: 1. Magnesium hydroxide 2. Ferrous sulphate 3. Sodium bicarbonate 4. Calcium gluconate 5. Copper sulphate.", "name": "Identification test: 1. Magnesium hydroxide 2. Ferrous sulphate 3. Sodium bicarbonate 4. Calcium gluconate 5. Copper sulphate.", "hours": 15 },
+          { "topicCode": "T1.3", "number": "T1.3", "topicName": "Test for purity: 1. Swelling power of Bentonite 2. Neutralizing capacity of aluminum hydroxide gel 3. Determination of potassium iodate and iodine in potassium Iodide.", "name": "Test for purity: 1. Swelling power of Bentonite 2. Neutralizing capacity of aluminum hydroxide gel 3. Determination of potassium iodate and iodine in potassium Iodide.", "hours": 12 },
+          { "topicCode": "T1.4", "number": "T1.4", "topicName": "Preparation of inorganic pharmaceuticals: 1. Boric acid 2. Potash alum 3. Ferrous sulphate.", "name": "Preparation of inorganic pharmaceuticals: 1. Boric acid 2. Potash alum 3. Ferrous sulphate.", "hours": 13 }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "P. Gundu Rao", "title": "Inorganic Pharmaceutical Chemistry", "edition": "Latest Edition" }
+    ],
+    "referenceBooks": [
+      { "author": "Indian Pharmacopoeia", "title": "Official Pharmacopoeia", "edition": "Latest Edition" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 0,
+      "theoryExternal": 0,
+      "practicalInternal": 15,
+      "practicalExternal": 35,
+      "universityExam": 50
+    }
+  }
+]

@@ -1,0 +1,854 @@
+[
+  {
+    "subjectCode": "BP601T",
+    "courseName": "Medicinal Chemistry III",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 3,
+    "semester": 6,
+    "credits": 4,
+    "hours": 45,
+    "subjectType": "Theory",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "This subject is designed to impart fundamental knowledge on the structure, chemistry and therapeutic value of drugs. The subject emphasis on modern techniques of rational drug design like quantitative structure activity relationship (QSAR), Prodrug concept, combinatorial chemistry and Computer aided drug design (CADD). The subject also emphasizes on the chemistry, mechanism of action, metabolism, adverse effects, Structure Activity Relationships (SAR), therapeutic uses and synthesis of important drugs.",
+    "objectives": [
+      "Understand the importance of drug design and different techniques of drug design.",
+      "Understand the chemistry of drugs with respect to their biological activity.",
+      "Know the metabolism, adverse effects and therapeutic value of drugs.",
+      "Know the importance of SAR of drugs."
+    ],
+    "courseOutcomes": [
+      "CO1: Illustrate the history of antibiotics with a detailed study on the nomenclature, stereochemistry, SAR and chemical degradation of beta-lactam, aminoglycosides and tetracycline antibiotics",
+      "CO2: Outline the history, nomenclature, stereochemistry, SAR and chemical degradation of macrolide antibiotics. Categorizing the structure, synthesis, mechanism of action of Antimalarial and Explain the concept and applications of Prodrugs",
+      "CO3: Classify anti-tubercular agents and outline the chemical structure and synthesis of anti-tubercular agents. Discuss the concept of Urinary tract anti-infective agents and antiviral agents with an emphasis on structure, synthesis, mechanism of action and uses.",
+      "CO4: Investigate the fungal, protozoa and helminthic infections and to discuss about the chemical structure and synthesis of anti-fungal, antiprotozoal and anthelmintic agent and categorize the history, development of sulfonamide antibacterial with interpretation on its synthesis.",
+      "CO5: Illustrate the technique of Quantitative Structure Activity Relationship (QSAR) through estimation of physicochemical properties such as partition coefficient, hammed substituent constant and Taft steric factor and outline the application of combinatorial chemistry involved in the synthesis of drugs."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Antibiotics (Beta-lactam, Aminoglycosides & Tetracyclines)",
+        "title": "Antibiotics (Beta-lactam, Aminoglycosides & Tetracyclines)",
+        "hours": 10,
+        "description": "Beta-Lactam antibiotics, Penicillins, Cephalosporins, Aminoglycosides, and Tetracyclines.",
+        "topics": [
+          { "topicCode": "T1.1", "number": "T1.1", "topicName": "Antibiotics: Historical background, Nomenclature, Stereochemistry, Structure activity relationship, Chemical degradation classification and important products of the following classes.", "name": "Antibiotics: Historical background, Nomenclature, Stereochemistry, Structure activity relationship, Chemical degradation classification and important products of the following classes.", "hours": 4 },
+          { "topicCode": "T1.2", "number": "T1.2", "topicName": "beta-Lactam antibiotics: Penicillin, Cepholosporins, beta- Lactamase inhibitors, Monobactams", "name": "beta-Lactam antibiotics: Penicillin, Cepholosporins, beta- Lactamase inhibitors, Monobactams", "hours": 2 },
+          { "topicCode": "T1.3", "number": "T1.3", "topicName": "Aminoglycosides: Streptomycin, Neomycin, Kanamycin", "name": "Aminoglycosides: Streptomycin, Neomycin, Kanamycin", "hours": 2 },
+          { "topicCode": "T1.4", "number": "T1.4", "topicName": "Tetracyclines: Tetracycline, Oxytetracycline, Chlortetracycline, Minocycline, Doxycycline", "name": "Tetracyclines: Tetracycline, Oxytetracycline, Chlortetracycline, Minocycline, Doxycycline", "hours": 2 }
+        ]
+      },
+      {
+        "unitCode": "Unit II",
+        "name": "Unit II",
+        "unitName": "Macrolides, Prodrugs & Antimalarials",
+        "title": "Macrolides, Prodrugs & Antimalarials",
+        "hours": 10,
+        "description": "Macrolides, Prodrug design, and Antimalarials (Quinolines, biguanides).",
+        "topics": [
+          { "topicCode": "T2.1", "number": "T2.1", "topicName": "Macrolide: Erythromycin, Clarithromycin, Azithromycin; Miscellaneous: Chloramphenicol*, Clindamycin.", "name": "Macrolide: Erythromycin, Clarithromycin, Azithromycin; Miscellaneous: Chloramphenicol*, Clindamycin.", "hours": 3 },
+          { "topicCode": "T2.2", "number": "T2.2", "topicName": "Prodrugs: Basic concepts and application of prodrugs design.", "name": "Prodrugs: Basic concepts and application of prodrugs design.", "hours": 2 },
+          { "topicCode": "T2.3", "number": "T2.3", "topicName": "Antimalarials: Etiology of malaria.", "name": "Antimalarials: Etiology of malaria.", "hours": 1 },
+          { "topicCode": "T2.4", "number": "T2.4", "topicName": "Quinolines: SAR, Quinine sulphate, Chloroquine*, Amodiaquine, Primaquine phosphate, Pamaquine*, Quinacrine hydrochloride, Mefloquine.", "name": "Quinolines: SAR, Quinine sulphate, Chloroquine*, Amodiaquine, Primaquine phosphate, Pamaquine*, Quinacrine hydrochloride, Mefloquine.", "hours": 2 },
+          { "topicCode": "T2.5", "number": "T2.5", "topicName": "Biguanides and dihydro triazines: Cycloguanil pamoate, Proguanil; Miscellaneous: Pyrimethamine, Artesunete, Artemether, Atovoquone.", "name": "Biguanides and dihydro triazines: Cycloguanil pamoate, Proguanil; Miscellaneous: Pyrimethamine, Artesunete, Artemether, Atovoquone.", "hours": 2 }
+        ]
+      },
+      {
+        "unitCode": "Unit III",
+        "name": "Unit III",
+        "unitName": "Anti-tubercular, Urinary Tract Anti-infectives & Anti-viral Agents",
+        "title": "Anti-tubercular, Urinary Tract Anti-infectives & Anti-viral Agents",
+        "hours": 10,
+        "description": "Synthetic antituberculars, quinolones, urinary tract anti-infectives, and antivirals.",
+        "topics": [
+          { "topicCode": "T3.1", "number": "T3.1", "topicName": "Anti-tubercular Agents: Synthetic anti tubercular agents: Isoniozid*, Ethionamide, Ethambutol, Pyrazinamide, Para amino salicylic acid.*", "name": "Anti-tubercular Agents: Synthetic anti tubercular agents: Isoniozid*, Ethionamide, Ethambutol, Pyrazinamide, Para amino salicylic acid.*", "hours": 3 },
+          { "topicCode": "T3.2", "number": "T3.2", "topicName": "Anti tubercular antibiotics: Rifampicin, Rifabutin, Cycloserine, Streptomycin, Capreomycin sulphate.", "name": "Anti tubercular antibiotics: Rifampicin, Rifabutin, Cycloserine, Streptomycin, Capreomycin sulphate.", "hours": 2 },
+          { "topicCode": "T3.3", "number": "T3.3", "topicName": "Urinary tract anti-infective agents: Quinolones: SAR of quinolones, Nalidixic Acid, Norfloxacin, Enoxacin, Ciprofloxacin*, Ofloxacin, Lomefloxacin, Sparfloxacin, Gatifloxacin, Moxifloxacin; Miscellaneous: Furazolidine, Nitrofurantoin*, Methanamine.", "name": "Urinary tract anti-infective agents: Quinolones: SAR of quinolones, Nalidixic Acid, Norfloxacin, Enoxacin, Ciprofloxacin*, Ofloxacin, Lomefloxacin, Sparfloxacin, Gatifloxacin, Moxifloxacin; Miscellaneous: Furazolidine, Nitrofurantoin*, Methanamine.", "hours": 3 },
+          { "topicCode": "T3.4", "number": "T3.4", "topicName": "Antiviral agents: Amantadine hydrochloride, Rimantadine hydrochloride, Idoxuridine trifluoride, Acyclovir*, Gancyclovir, Zidovudine, Didanosine, Zalcitabine, Lamivudine, Loviride, Delavirdine, Ribavirin, Saquinavir, Indinavir, Ritonavir.", "name": "Antiviral agents: Amantadine hydrochloride, Rimantadine hydrochloride, Idoxuridine trifluoride, Acyclovir*, Gancyclovir, Zidovudine, Didanosine, Zalcitabine, Lamivudine, Loviride, Delavirdine, Ribavirin, Saquinavir, Indinavir, Ritonavir.", "hours": 2 }
+        ]
+      },
+      {
+        "unitCode": "Unit IV",
+        "name": "Unit IV",
+        "unitName": "Antifungal, Anti-protozoal, Anthelmintics, Sulphonamides & Sulfones",
+        "title": "Antifungal, Anti-protozoal, Anthelmintics, Sulphonamides & Sulfones",
+        "hours": 8,
+        "description": "Antifungal antibiotics, antiprotozoals, anthelmintics, sulfonamides, and dapsone.",
+        "topics": [
+          { "topicCode": "T4.1", "number": "T4.1", "topicName": "Antifungal agents: Antifungal antibiotics: Amphotericin-B, Nystatin, Natamycin, Griseofulvin. Synthetic Antifungal agents: Clotrimazole, Econazole, Butoconazole, Oxiconazole, Tioconozole, Miconazole*, Ketoconazole, Terconazole, Itraconazole, Fluconazole, Naftifine hydrochloride, Tolnaftate*.", "name": "Antifungal agents: Antifungal antibiotics: Amphotericin-B, Nystatin, Natamycin, Griseofulvin. Synthetic Antifungal agents: Clotrimazole, Econazole, Butoconazole, Oxiconazole, Tioconozole, Miconazole*, Ketoconazole, Terconazole, Itraconazole, Fluconazole, Naftifine hydrochloride, Tolnaftate*.", "hours": 3 },
+          { "topicCode": "T4.2", "number": "T4.2", "topicName": "Anti-protozoal Agents: Metronidazole*, Tinidazole, Ornidazole, Diloxanide, Iodoquinol, Pentamidine Isethionate, Atovaquone, Eflornithine.", "name": "Anti-protozoal Agents: Metronidazole*, Tinidazole, Ornidazole, Diloxanide, Iodoquinol, Pentamidine Isethionate, Atovaquone, Eflornithine.", "hours": 2 },
+          { "topicCode": "T4.3", "number": "T4.3", "topicName": "Anthelmintics: Diethylcarbamazine citrate*, Thiabendazole, Mebendazole*, Albendazole, Niclosamide, Oxamniquine, Praziquantal, Ivermectin.", "name": "Anthelmintics: Diethylcarbamazine citrate*, Thiabendazole, Mebendazole*, Albendazole, Niclosamide, Oxamniquine, Praziquantal, Ivermectin.", "hours": 1 },
+          { "topicCode": "T4.4", "number": "T4.4", "topicName": "Sulphonamides and Sulfones: Historical development, chemistry, classification and SAR of Sulfonamides: Sulphamethizole, Sulfisoxazole, Sulphamethizine, Sulfacetamide*, Sulphapyridine, Sulfamethoxaole*, Sulphadiazine, Mefenide acetate, Sulfasalazine. Folate reductase inhibitors: Trimethoprim*, Cotrimoxazole. Sulfones: Dapsone*.", "name": "Sulphonamides and Sulfones: Historical development, chemistry, classification and SAR of Sulfonamides: Sulphamethizole, Sulfisoxazole, Sulphamethizine, Sulfacetamide*, Sulphapyridine, Sulfamethoxaole*, Sulphadiazine, Mefenide acetate, Sulfasalazine. Folate reductase inhibitors: Trimethoprim*, Cotrimoxazole. Sulfones: Dapsone*.", "hours": 2 }
+        ]
+      },
+      {
+        "unitCode": "Unit V",
+        "name": "Unit V",
+        "unitName": "Introduction to Drug Design & Combinatorial Chemistry",
+        "title": "Introduction to Drug Design & Combinatorial Chemistry",
+        "hours": 7,
+        "description": "QSAR parameters, Hansch analysis, pharmacophore modeling, docking, and combinatorial synthesis.",
+        "topics": [
+          { "topicCode": "T5.1", "number": "T5.1", "topicName": "Introduction to Drug Design: Various approaches used in drug design.", "name": "Introduction to Drug Design: Various approaches used in drug design.", "hours": 2 },
+          { "topicCode": "T5.2", "number": "T5.2", "topicName": "Physicochemical parameters used in quantitative structure activity relationship (QSAR) such as partition coefficient, Hammet‘s electronic parameter, Tafts steric parameter and Hansch analysis. Pharmacophore modeling and docking techniques.", "name": "Physicochemical parameters used in quantitative structure activity relationship (QSAR) such as partition coefficient, Hammet‘s electronic parameter, Tafts steric parameter and Hansch analysis. Pharmacophore modeling and docking techniques.", "hours": 3 },
+          { "topicCode": "T5.3", "number": "T5.3", "topicName": "Combinatorial Chemistry: Concept and applications of combinatorial chemistry: solid phase and solution phase synthesis.", "name": "Combinatorial Chemistry: Concept and applications of combinatorial chemistry: solid phase and solution phase synthesis.", "hours": 2 }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "Wilson and Giswold", "title": "Organic medicinal and Pharmaceutical Chemistry", "edition": "Latest" },
+      { "author": "Foye", "title": "Principles of Medicinal Chemistry", "edition": "Latest" }
+    ],
+    "referenceBooks": [
+      { "author": "Martindale", "title": "Extra pharmacopoeia", "edition": "Latest" },
+      { "author": "I.L. Finar", "title": "Organic Chemistry", "edition": "Vol. II" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 25,
+      "theoryExternal": 75,
+      "practicalInternal": 0,
+      "practicalExternal": 0,
+      "universityExam": 100
+    }
+  },
+  {
+    "subjectCode": "BP602T",
+    "courseName": "Pharmacology III",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 3,
+    "semester": 6,
+    "credits": 4,
+    "hours": 45,
+    "subjectType": "Theory",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "This subject is intended to impart the fundamental knowledge on various aspects (classification, mechanism of action, therapeutic effects, clinical uses, side effects and contraindications) of drugs acting on respiratory and gastrointestinal system, infectious diseases, immuno-pharmacology and in addition, emphasis on the principles of toxicology and chronopharmacology.",
+    "objectives": [
+      "understand the mechanism of drug action and its relevance in the treatment of different infectious diseases",
+      "comprehend the principles of toxicology and treatment of various poisonings and",
+      "appreciate correlation of pharmacology with related medical sciences."
+    ],
+    "courseOutcomes": [
+      "CO1: Explain and illustrating the mechanism of drug action of various drugs of the respiratory and GI system along with its side effects, drug interactions for its treatment in GI diseases & Disorders.",
+      "CO2: Describe the various chemotherapeutics agents involved in treatment of infectious diseases along with the utilization of antibiotics.",
+      "CO3: Ascertain the usage of chemotherapeutic agents for treating fungal, leprosy, viral, malarial infections in addition to explaining and illustrating the mechanism of action of chemotherapeutic drugs with its side effects",
+      "CO4: Describe the chemotherapy of cancer and drugs utilized along with summarizing the role of immunotherapy in Pharmacological treatment of cancer",
+      "CO5: Summarise the principles of toxicology and different types of poisoning in addition to comprehending the toxic effects of drugs and its management."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Pharmacology of Respiratory System & GI Tract",
+        "title": "Pharmacology of Respiratory System & GI Tract",
+        "hours": 7,
+        "description": "Anti-asthmatics, COPD management, expectorants, nasal decongestants, antiulcer agents, laxatives, emetics, and anti-emetics.",
+        "topics": [
+          { "topicCode": "T1.1", "number": "T1.1", "topicName": "Pharmacology of drugs acting on Respiratory system: Anti -asthmatic drugs, Drugs used in the management of COPD, Expectorants and antitussives, Nasal decongestants, Respiratory stimulants", "name": "Pharmacology of drugs acting on Respiratory system: Anti -asthmatic drugs, Drugs used in the management of COPD, Expectorants and antitussives, Nasal decongestants, Respiratory stimulants", "hours": 4 },
+          { "topicCode": "T1.2", "number": "T1.2", "topicName": "Pharmacology of drugs acting on the Gastrointestinal Tract: Antiulcer agents, Drugs for constipation and diarrhoea, Appetite stimulants and suppressants, Digestants and carminatives, Emetics and anti-emetics.", "name": "Pharmacology of drugs acting on the Gastrointestinal Tract: Antiulcer agents, Drugs for constipation and diarrhoea, Appetite stimulants and suppressants, Digestants and carminatives, Emetics and anti-emetics.", "hours": 3 }
+        ]
+      },
+      {
+        "unitCode": "Unit II",
+        "name": "Unit II",
+        "unitName": "Chemotherapy (Introduction & Antibiotics)",
+        "title": "Chemotherapy (Introduction & Antibiotics)",
+        "hours": 10,
+        "description": "General principles of chemotherapy, sulfonamides, penicillins, cephalosporins, tetracyclines, and aminoglycosides.",
+        "topics": [
+          { "topicCode": "T2.1", "number": "T2.1", "topicName": "Chemotherapy: General principles of chemotherapy.", "name": "Chemotherapy: General principles of chemotherapy.", "hours": 2 },
+          { "topicCode": "T2.2", "number": "T2.2", "topicName": "Sulfonamides and cotrimoxazole.", "name": "Sulfonamides and cotrimoxazole.", "hours": 3 },
+          { "topicCode": "T2.3", "number": "T2.3", "topicName": "Antibiotics- Penicillins, cephalosporins, chloramphenicol, macrolides, quinolones and fluoroquinolins, tetracycline and aminoglycosides.", "name": "Antibiotics- Penicillins, cephalosporins, chloramphenicol, macrolides, quinolones and fluoroquinolins, tetracycline and aminoglycosides.", "hours": 5 }
+        ]
+      },
+      {
+        "unitCode": "Unit III",
+        "name": "Unit III",
+        "unitName": "Chemotherapy of Specific Diseases",
+        "title": "Chemotherapy of Specific Diseases",
+        "hours": 10,
+        "description": "Antitubercular, antileprotic, antifungal, antiviral, anthelmintics, antimalarials, and antiamoebic agents.",
+        "topics": [
+          { "topicCode": "T3.1", "number": "T3.1", "topicName": "Antitubercular agents, Antileprotic agents, Antifungal agents, Antiviral drugs, Anthelmintics, Antimalarial drugs, Antiamoebic agents", "name": "Antitubercular agents, Antileprotic agents, Antifungal agents, Antiviral drugs, Anthelmintics, Antimalarial drugs, Antiamoebic agents", "hours": 10 }
+        ]
+      },
+      {
+        "unitCode": "Unit IV",
+        "name": "Unit IV",
+        "unitName": "Immunopharmacology & Cancer Chemotherapy",
+        "title": "Immunopharmacology & Cancer Chemotherapy",
+        "hours": 8,
+        "description": "UTI, sexually transmitted diseases, chemotherapy of malignancy, immunostimulants, immunosuppressants, and monoclonal antibodies.",
+        "topics": [
+          { "topicCode": "T4.1", "number": "T4.1", "topicName": "Urinary tract infections and sexually transmitted diseases.", "name": "Urinary tract infections and sexually transmitted diseases.", "hours": 2 },
+          { "topicCode": "T4.2", "number": "T4.2", "topicName": "Chemotherapy of malignancy.", "name": "Chemotherapy of malignancy.", "hours": 2 },
+          { "topicCode": "T4.3", "number": "T4.3", "topicName": "Immunopharmacology: Immunostimulants, Immunosuppressant, Protein drugs, monoclonal antibodies, target drugs to antigen, biosimilars", "name": "Immunopharmacology: Immunostimulants, Immunosuppressant, Protein drugs, monoclonal antibodies, target drugs to antigen, biosimilars", "hours": 4 }
+        ]
+      },
+      {
+        "unitCode": "Unit V",
+        "name": "Unit V",
+        "unitName": "Principles of Toxicology & Chronopharmacology",
+        "title": "Principles of Toxicology & Chronopharmacology",
+        "hours": 7,
+        "description": "Acute, subacute, and chronic toxicity; genotoxicity and carcinogenicity; poisoning management; biological clocks and chronotherapy.",
+        "topics": [
+          { "topicCode": "T5.1", "number": "T5.1", "topicName": "Principles of toxicology: Definition and basic knowledge of acute, subacute and chronic toxicity. Definition and basic knowledge of genotoxicity, carcinogenicity, teratogenicity and mutagenicity.", "name": "Principles of toxicology: Definition and basic knowledge of acute, subacute and chronic toxicity. Definition and basic knowledge of genotoxicity, carcinogenicity, teratogenicity and mutagenicity.", "hours": 3 },
+          { "topicCode": "T5.2", "number": "T5.2", "topicName": "General principles of treatment of poisoning. Clinical symptoms and management of barbiturates, morphine, organophosphophosphorus compound and lead, mercury and arsenic poisoning.", "name": "General principles of treatment of poisoning. Clinical symptoms and management of barbiturates, morphine, organophosphophosphorus compound and lead, mercury and arsenic poisoning.", "hours": 2 },
+          { "topicCode": "T5.3", "number": "T5.3", "topicName": "Chronopharmacology: Definition of rhythm and cycles. Biological clock and their significance leading to chronotherapy", "name": "Chronopharmacology: Definition of rhythm and cycles. Biological clock and their significance leading to chronotherapy", "hours": 2 }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "Rang H. P., Dale M. M., Ritter J. M., Flower R. J.", "title": "Rang and Dale's Pharmacology", "edition": "Latest" }
+    ],
+    "referenceBooks": [
+      { "author": "K.D. Tripathi", "title": "Essentials of Medical Pharmacology", "edition": "Latest" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 25,
+      "theoryExternal": 75,
+      "practicalInternal": 0,
+      "practicalExternal": 0,
+      "universityExam": 100
+    }
+  },
+  {
+    "subjectCode": "BP603T",
+    "courseName": "Herbal Drug Technology",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 3,
+    "semester": 6,
+    "credits": 4,
+    "hours": 45,
+    "subjectType": "Theory",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "This subject gives the student the knowledge of basic understanding of herbal drug industry, the quality of raw material, guidelines for quality of herbal drugs, herbal cosmetics, natural sweeteners, nutraceutical etc. The subject also emphasizes on Good Manufacturing Practices (GMP), patenting and regulatory issues of herbal drugs",
+    "objectives": [
+      "understand raw material as source of herbal drugs from cultivation to herbal drug product",
+      "know the WHO and ICH guidelines for evaluation of herbal drugs",
+      "know the herbal cosmetics, natural sweeteners, nutraceuticals",
+      "appreciate patenting of herbal drugs, GMP."
+    ],
+    "courseOutcomes": [
+      "CO1: Explain the role of herbs as raw materials, G.A.P, organic farming and biodynamic agriculture",
+      "CO2: Describe basic systems of traditional medicine (Ayurveda, Siddha, Unani, Homeopathy) and standardization of formulations",
+      "CO3: Enumerate the market growth, health benefits and herb food interactions of Nutraceuticals",
+      "CO4: Explain raw materials and preparation of herbal cosmetics and formulations",
+      "CO5: Summarize drug evaluation, patenting and regulatory guidelines including GMP and Schedule T"
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Herbs as raw materials & Biodynamic Agriculture",
+        "title": "Herbs as raw materials & Biodynamic Agriculture",
+        "hours": 6,
+        "description": "Source of herbs, processing, G.A.P, pest management and biopesticides.",
+        "topics": [
+          { "topicCode": "T1.1", "number": "T1.1", "topicName": "Herbs as raw materials: Definition of herb, herbal medicine, herbal medicinal product, herbal drug preparation Source of Herbs, Selection, identification and authentication of herbal materials, Processing of herbal raw material.", "name": "Herbs as raw materials: Definition of herb, herbal medicine, herbal medicinal product, herbal drug preparation Source of Herbs, Selection, identification and authentication of herbal materials, Processing of herbal raw material.", "hours": 3 },
+          { "topicCode": "T1.2", "number": "T1.2", "topicName": "Biodynamic Agriculture: Good agricultural practices in cultivation of medicinal plants including Organic farming. Pest and Pest management in medicinal plants: Biopesticides/Bioinsecticides.", "name": "Biodynamic Agriculture: Good agricultural practices in cultivation of medicinal plants including Organic farming. Pest and Pest management in medicinal plants: Biopesticides/Bioinsecticides.", "hours": 3 }
+        ]
+      },
+      {
+        "unitCode": "Unit II",
+        "name": "Unit II",
+        "unitName": "Traditional Systems of Medicine & Standardization",
+        "title": "Traditional Systems of Medicine & Standardization",
+        "hours": 5,
+        "description": "Ayurveda, Siddha, Unani, Homeopathy, and standardization of traditional preparations.",
+        "topics": [
+          { "topicCode": "T2.1", "number": "T2.1", "topicName": "Basic principles involved in Ayurveda, Siddha, Unani and Homeopathy", "name": "Basic principles involved in Ayurveda, Siddha, Unani and Homeopathy", "hours": 2 },
+          { "topicCode": "T2.2", "number": "T2.2", "topicName": "Preparation and standardization of Ayurvedic formulations viz Aristas and Asawas, Ghutika, Churna, Lehya and Bhasma.", "name": "Preparation and standardization of Ayurvedic formulations viz Aristas and Asawas, Ghutika, Churna, Lehya and Bhasma.", "hours": 3 }
+        ]
+      },
+      {
+        "unitCode": "Unit III",
+        "name": "Unit III",
+        "unitName": "Nutraceuticals & Herbal-Drug Interactions",
+        "title": "Nutraceuticals & Herbal-Drug Interactions",
+        "hours": 7,
+        "description": "Nutraceutical market, health foods (Honey, Amla, Ashwagandha), and drug-herb interactions.",
+        "topics": [
+          { "topicCode": "T3.1", "number": "T3.1", "topicName": "Nutraceuticals: General aspects, Market, scope. Health benefits in Diabetes, CVS, Cancer, GI diseases.", "name": "Nutraceuticals: General aspects, Market, scope. Health benefits in Diabetes, CVS, Cancer, GI diseases.", "hours": 3 },
+          { "topicCode": "T3.2", "number": "T3.2", "topicName": "Study of herbs: Alfaalfa, Chicory, Ginger, Fenugreek, Garlic, Honey, Amla, Ginseng, Ashwagandha, Spirulina.", "name": "Study of herbs: Alfaalfa, Chicory, Ginger, Fenugreek, Garlic, Honey, Amla, Ginseng, Ashwagandha, Spirulina.", "hours": 2 },
+          { "topicCode": "T3.3", "number": "T3.3", "topicName": "Herbal-Drug & Herb-Food Interactions: Hypericum, kava-kava, Ginkgo biloba, Ginseng, Garlic, Pepper, Ephedra.", "name": "Herbal-Drug & Herb-Food Interactions: Hypericum, kava-kava, Ginkgo biloba, Ginseng, Garlic, Pepper, Ephedra.", "hours": 2 }
+        ]
+      },
+      {
+        "unitCode": "Unit IV",
+        "name": "Unit IV",
+        "unitName": "Herbal Cosmetics & Formulations",
+        "title": "Herbal Cosmetics & Formulations",
+        "hours": 10,
+        "description": "Raw materials for cosmetics (gums, waxes), natural excipients, conventional formulations, and phytosomes.",
+        "topics": [
+          { "topicCode": "T4.1", "number": "T4.1", "topicName": "Herbal Cosmetics: Sources and description of raw materials of herbal origin used in skin, hair and oral care products.", "name": "Herbal Cosmetics: Sources and description of raw materials of herbal origin used in skin, hair and oral care products.", "hours": 4 },
+          { "topicCode": "T4.2", "number": "T4.2", "topicName": "Herbal excipients: Colorants, sweeteners, binders, diluents, viscosity builders, disintegrants, flavors, perfumes.", "name": "Herbal excipients: Colorants, sweeteners, binders, diluents, viscosity builders, disintegrants, flavors, perfumes.", "hours": 3 },
+          { "topicCode": "T4.3", "number": "T4.3", "topicName": "Herbal formulations: Conventional herbal formulations like syrups, mixtures and tablets and Novel dosage forms like phytosomes", "name": "Herbal formulations: Conventional herbal formulations like syrups, mixtures and tablets and Novel dosage forms like phytosomes", "hours": 3 }
+        ]
+      },
+      {
+        "unitCode": "Unit V",
+        "name": "Unit V",
+        "unitName": "Evaluation of Drugs & Regulatory Guidelines",
+        "title": "Evaluation of Drugs & Regulatory Guidelines",
+        "hours": 10,
+        "description": "WHO and ICH guidelines, patenting, biopiracy, case studies (Neem, Turmeric), and Indian regulations (Schedule Z).",
+        "topics": [
+          { "topicCode": "T5.1", "number": "T5.1", "topicName": "Evaluation of Drugs WHO and ICH guidelines for the assessment of herbal drugs, Stability testing of herbal drugs.", "name": "Evaluation of Drugs WHO and ICH guidelines for the assessment of herbal drugs, Stability testing of herbal drugs.", "hours": 3 },
+          { "topicCode": "T5.2", "number": "T5.2", "topicName": "Patenting and Regulatory requirements of natural products: Patent, IPR, Farmers/Breeder rights, Bioprospecting and Biopiracy. Case study of Curcuma and Neem.", "name": "Patenting and Regulatory requirements of natural products: Patent, IPR, Farmers/Breeder rights, Bioprospecting and Biopiracy. Case study of Curcuma and Neem.", "hours": 4 },
+          { "topicCode": "T5.3", "number": "T5.3", "topicName": "Regulatory Issues - Regulations in India (ASU DTAB, ASU DCC), Regulation of manufacture of ASU drugs - Schedule Z of Drugs and Cosmetics Act for ASU drugs.", "name": "Regulatory Issues - Regulations in India (ASU DTAB, ASU DCC), Regulation of manufacture of ASU drugs - Schedule Z of Drugs and Cosmetics Act for ASU drugs.", "hours": 3 }
+        ]
+      },
+      {
+        "unitCode": "Unit VI",
+        "name": "Unit VI",
+        "unitName": "Herbal Industry & GMP (Schedule T)",
+        "title": "Herbal Industry & GMP (Schedule T)",
+        "hours": 10,
+        "description": "Herbal drug industry scope, map institutions in India, and Good Manufacturing Practices (Schedule T).",
+        "topics": [
+          { "topicCode": "T6.1", "number": "T6.1", "topicName": "General Introduction to Herbal Industry: Herbal drugs industry: Present scope and future prospects. A brief account of plant based industries and institutions involved in work on medicinal and aromatic plants in India.", "name": "General Introduction to Herbal Industry: Herbal drugs industry: Present scope and future prospects. A brief account of plant based industries and institutions involved in work on medicinal and aromatic plants in India.", "hours": 4 },
+          { "topicCode": "T6.2", "number": "T6.2", "topicName": "Schedule T – Good Manufacturing Practice of Indian systems of medicine: Components of GMP (Schedule – T) and its objectives. Infrastructural requirements, standard operating procedures, documentation and records.", "name": "Schedule T – Good Manufacturing Practice of Indian systems of medicine: Components of GMP (Schedule – T) and its objectives. Infrastructural requirements, standard operating procedures, documentation and records.", "hours": 6 }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "Trease and Evans", "title": "Textbook of Pharmacognosy", "edition": "Latest" }
+    ],
+    "referenceBooks": [
+      { "author": "Kokate, Purohit and Gokhale", "title": "Pharmacognosy", "edition": "Latest" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 25,
+      "theoryExternal": 75,
+      "practicalInternal": 0,
+      "practicalExternal": 0,
+      "universityExam": 100
+    }
+  },
+  {
+    "subjectCode": "BP604T",
+    "courseName": "Biopharmaceutics and Pharmacokinetics",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 3,
+    "semester": 6,
+    "credits": 4,
+    "hours": 45,
+    "subjectType": "Theory",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "This subject is designed to impart knowledge and skills necessary for dose calculations, dose adjustments and to apply Biopharmaceutics theories in practical problem solving. Basic theoretical discussions of the principles of Biopharmaceutics and pharmacokinetics are provided to help the students to clarify the concepts.",
+    "objectives": [
+      "Understand the basic concepts in biopharmaceutics and pharmacokinetics.",
+      "Use plasma data and derive the pharmacokinetic parameters to describe the process of drug absorption, distribution, metabolism and elimination.",
+      "Critically evaluate biopharmaceutic studies involving drug product equivalency",
+      "Design and evaluate dosage regimens of the drugs using pharmacokinetic and biopharmaceutic parameters.",
+      "detect potential clinical pharmacokinetic problems and apply basic pharmacokinetic principles to solve them"
+    ],
+    "courseOutcomes": [
+      "CO1: Explain the concept of biopharmaceutics and its applications in product development in relation to Absorption, Distribution and Elimination.",
+      "CO2: Evaluate the pharmacokinetic processes and their relevance in efficacy of dosage form in addition to the concepts of bioavailability and bioequivalence studies.",
+      "CO3: Distinguish the Pharmacokinetic studies and learning various compartmental models.",
+      "CO4: Compare the concept and mechanisms of dissolution, IVIVC correlation and calculation of loading and maintenance doses with their significance in clinical settings.",
+      "CO5: Illustrate the nonlinear Pharmacokinetics and biotransformation of drugs."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Introduction to Biopharmaceutics",
+        "title": "Introduction to Biopharmaceutics",
+        "hours": 10,
+        "description": "Absorption mechanisms, gastrointestinal and non-oral absorption, drug distribution, and protein binding.",
+        "topics": [
+          { "topicCode": "T1.1", "number": "T1.1", "topicName": "Introduction to Biopharmaceutics: Absorption; Mechanisms of drug absorption through GIT, factors influencing drug absorption though GIT, absorption of drug from Non per oral extra-vascular routes", "name": "Introduction to Biopharmaceutics: Absorption; Mechanisms of drug absorption through GIT, factors influencing drug absorption though GIT, absorption of drug from Non per oral extra-vascular routes", "hours": 5 },
+          { "topicCode": "T1.2", "number": "T1.2", "topicName": "Distribution of drugs Tissue permeability of drugs, binding of drugs, apparent, volume of drug distribution, protein binding of drugs, factors affecting protein-drug binding. Kinetics of protein binding, Clinical significance of protein binding of drugs.", "name": "Distribution of drugs Tissue permeability of drugs, binding of drugs, apparent, volume of drug distribution, protein binding of drugs, factors affecting protein-drug binding. Kinetics of protein binding, Clinical significance of protein binding of drugs.", "hours": 5 }
+        ]
+      },
+      {
+        "unitCode": "Unit II",
+        "name": "Unit II",
+        "unitName": "Drug Elimination, Bioavailability & Bioequivalence",
+        "title": "Drug Elimination, Bioavailability & Bioequivalence",
+        "hours": 10,
+        "description": "Renal and non-renal excretion, bioavailability objectives, dissolution models, IVIVC, and enhancement methods.",
+        "topics": [
+          { "topicCode": "T2.1", "number": "T2.1", "topicName": "Drug Elimination renal excretion of drugs, factors affecting renal excretion of drugs, renal clearance, Non renal routes of drug excretion of drugs", "name": "Drug Elimination renal excretion of drugs, factors affecting renal excretion of drugs, renal clearance, Non renal routes of drug excretion of drugs", "hours": 4 },
+          { "topicCode": "T2.2", "number": "T2.2", "topicName": "Bioavailability and Bioequivalence: Objectives of bioavailability studies, absolute and relative bioavailability, measurement of bioavailability, in-vitro drug dissolution models, in-vitro, in-vivo correlations, bioequivalence studies, methods to enhance the dissolution rate and bioavailability of poorly soluble drugs.", "name": "Bioavailability and Bioequivalence: Objectives of bioavailability studies, absolute and relative bioavailability, measurement of bioavailability, in-vitro drug dissolution models, in-vitro, in-vivo correlations, bioequivalence studies, methods to enhance the dissolution rate and bioavailability of poorly soluble drugs.", "hours": 6 }
+        ]
+      },
+      {
+        "unitCode": "Unit III",
+        "name": "Unit III",
+        "unitName": "Pharmacokinetics & Compartment Models",
+        "title": "Pharmacokinetics & Compartment Models",
+        "hours": 8,
+        "description": "Introduction to pharmacokinetics, compartment models, and one-compartment open models.",
+        "topics": [
+          { "topicCode": "T3.1", "number": "T3.1", "topicName": "Pharmacokinetics: Definition and introduction to Pharmacokinetics, Compartment models, Non compartment models, physiological models, One compartment open model.", "name": "Pharmacokinetics: Definition and introduction to Pharmacokinetics, Compartment models, Non compartment models, physiological models, One compartment open model.", "hours": 3 },
+          { "topicCode": "T3.2", "number": "T3.2", "topicName": "Intravenous Injection (Bolus), Intravenous infusion, and Extra vascular administrations.", "name": "Intravenous Injection (Bolus), Intravenous infusion, and Extra vascular administrations.", "hours": 3 },
+          { "topicCode": "T3.3", "number": "T3.3", "topicName": "Pharmacokinetics parameters - KE, t1/2, Vd, AUC, Ka, Clt and CLR- definitions methods of eliminations, understanding of their significance and application", "name": "Pharmacokinetics parameters - KE, t1/2, Vd, AUC, Ka, Clt and CLR- definitions methods of eliminations, understanding of their significance and application", "hours": 2 }
+        ]
+      },
+      {
+        "unitCode": "Unit IV",
+        "name": "Unit IV",
+        "unitName": "Multicompartment Models",
+        "title": "Multicompartment Models",
+        "hours": 8,
+        "description": "Two compartment open model, multiple dosing kinetics, steady state levels, and dosing regimens.",
+        "topics": [
+          { "topicCode": "T4.1", "number": "T4.1", "topicName": "Multicompartment models: Two compartment open model. IV bolus", "name": "Multicompartment models: Two compartment open model. IV bolus", "hours": 4 },
+          { "topicCode": "T4.2", "number": "T4.2", "topicName": "Kinetics of multiple dosing, steady state drug levels, calculation of loading and maintenance doses and their significance in clinical settings.", "name": "Kinetics of multiple dosing, steady state drug levels, calculation of loading and maintenance doses and their significance in clinical settings.", "hours": 4 }
+        ]
+      },
+      {
+        "unitCode": "Unit V",
+        "name": "Unit V",
+        "unitName": "Nonlinear Pharmacokinetics",
+        "title": "Nonlinear Pharmacokinetics",
+        "hours": 7,
+        "description": "Non-linearity causes, Michaelis-Menten parameter estimation, and drug biotransformation.",
+        "topics": [
+          { "topicCode": "T5.1", "number": "T5.1", "topicName": "Nonlinear Pharmacokinetics: Introduction, Factors causing Non-linearity, Michaelis-menton method of estimating parameters, Biotransformation of drugs", "name": "Nonlinear Pharmacokinetics: Introduction, Factors causing Non-linearity, Michaelis-menton method of estimating parameters, Biotransformation of drugs", "hours": 7 }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "Milo Gibaldi", "title": "Biopharmaceutics and Clinical Pharmacokinetics", "edition": "Latest" }
+    ],
+    "referenceBooks": [
+      { "author": "D. M. Brahmankar and Sunil B. Jaiswal", "title": "Bio pharmaceutics and Pharmacokinetics-A Treatise", "edition": "Latest" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 25,
+      "theoryExternal": 75,
+      "practicalInternal": 0,
+      "practicalExternal": 0,
+      "universityExam": 100
+    }
+  },
+  {
+    "subjectCode": "BP605T",
+    "courseName": "Pharmaceutical Biotechnology",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 3,
+    "semester": 6,
+    "credits": 4,
+    "hours": 45,
+    "subjectType": "Theory",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "Biotechnology has a long promise to revolutionize the biological sciences and technology. Scientific application of biotechnology in the field of genetic engineering, medicine and fermentation technology makes the subject interesting. Biotechnology is leading to new biological revolutions in diagnosis, prevention and cure of diseases, new and cheaper pharmaceutical drugs.",
+    "objectives": [
+      "Understanding the importance of Immobilized enzymes in Pharmaceutical Industries",
+      "Genetic engineering applications in relation to production of pharmaceuticals",
+      "Importance of Monoclonal antibodies in Industries",
+      "Appreciate the use of microorganisms in fermentation technology"
+    ],
+    "courseOutcomes": [
+      "CO1: Explain the basic knowledge on the biotechnology related to pharmacy, enzyme immobilization technique and the concept of biosensors in pharmaceutical industries.",
+      "CO2: Summarize the prerequisite of recombinant DNA technology, recombinant technology, polymerase reaction techniques in pharmaceutical product development.",
+      "CO3: Explain the anatomy and role of the immune cells, immune responses, immunological products followed by the manufacturing and utilization of monoclonal antibodies.",
+      "CO4: Illustrate the immune blotting technique in identification of diseases, mutation, microbial transformation process, and uses in the drug production.",
+      "CO5: Evaluate the fermentation process, microbial metabolite, blood products and to compute the fermentation design for the industrial use."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Enzyme Immobilization, Biosensors & Genetic Engineering",
+        "title": "Enzyme Immobilization, Biosensors & Genetic Engineering",
+        "hours": 10,
+        "description": "Enzyme biotechnology, enzyme immobilization, biosensors, protein engineering, and genetic engineering principles.",
+        "topics": [
+          { "topicCode": "T1.1", "number": "T1.1", "topicName": "Brief introduction to Biotechnology with reference to Pharmaceutical Sciences.", "name": "Brief introduction to Biotechnology with reference to Pharmaceutical Sciences.", "hours": 1 },
+          { "topicCode": "T1.2", "number": "T1.2", "topicName": "Enzyme Biotechnology- Methods of enzyme immobilization and applications.", "name": "Enzyme Biotechnology- Methods of enzyme immobilization and applications.", "hours": 2 },
+          { "topicCode": "T1.3", "number": "T1.3", "topicName": "Biosensors- Working and applications of biosensors in Pharmaceutical Industries.", "name": "Biosensors- Working and applications of biosensors in Pharmaceutical Industries.", "hours": 2 },
+          { "topicCode": "T1.4", "number": "T1.4", "topicName": "Brief introduction to Protein Engineering.", "name": "Brief introduction to Protein Engineering.", "hours": 1 },
+          { "topicCode": "T1.5", "number": "T1.5", "topicName": "Use of microbes in industry. Production of Enzymes- General consideration - Amylase, Catalase, Peroxidase, Lipase, Protease, Penicillinase.", "name": "Use of microbes in industry. Production of Enzymes- General consideration - Amylase, Catalase, Peroxidase, Lipase, Protease, Penicillinase.", "hours": 2 },
+          { "topicCode": "T1.6", "number": "T1.6", "topicName": "Basic principles of genetic engineering.", "name": "Basic principles of genetic engineering.", "hours": 2 }
+        ]
+      },
+      {
+        "unitCode": "Unit II",
+        "name": "Unit II",
+        "unitName": "Recombinant DNA Technology & PCR",
+        "title": "Recombinant DNA Technology & PCR",
+        "hours": 10,
+        "description": "Cloning vectors, restriction endonucleases, ligases, applications of rDNA (insulin, interferon), and PCR basics.",
+        "topics": [
+          { "topicCode": "T2.1", "number": "T2.1", "topicName": "Study of cloning vectors, restriction endonucleases and DNA ligase.", "name": "Study of cloning vectors, restriction endonucleases and DNA ligase.", "hours": 2 },
+          { "topicCode": "T2.2", "number": "T2.2", "topicName": "Recombinant DNA technology. Application of genetic engineering in medicine.", "name": "Recombinant DNA technology. Application of genetic engineering in medicine.", "hours": 3 },
+          { "topicCode": "T2.3", "number": "T2.3", "topicName": "Application of r DNA technology and genetic engineering in the products: Interferon, Vaccines- hepatitis- B, Hormones- Insulin.", "name": "Application of r DNA technology and genetic engineering in the products: Interferon, Vaccines- hepatitis- B, Hormones- Insulin.", "hours": 3 },
+          { "topicCode": "T2.4", "number": "T2.4", "topicName": "Brief introduction to PCR", "name": "Brief introduction to PCR", "hours": 2 }
+        ]
+      },
+      {
+        "unitCode": "Unit III",
+        "name": "Unit III",
+        "unitName": "Immunity, Vaccines & Monoclonal Antibodies",
+        "title": "Immunity, Vaccines & Monoclonal Antibodies",
+        "hours": 8,
+        "description": "Humoral and cellular immunity, immunoglobulins, MHC, vaccines, toxoids, storage, hybridoma technology, and blood products.",
+        "topics": [
+          { "topicCode": "T3.1", "number": "T3.1", "topicName": "Types of immunity- humoral immunity, cellular immunity: Structure of Immunoglobulins, Structure and Function of MHC, Hypersensitivity reactions, Immune stimulation and Immune suppressions.", "name": "Types of immunity- humoral immunity, cellular immunity: Structure of Immunoglobulins, Structure and Function of MHC, Hypersensitivity reactions, Immune stimulation and Immune suppressions.", "hours": 3 },
+          { "topicCode": "T3.2", "number": "T3.2", "topicName": "General method of the preparation of bacterial vaccines, toxoids, viral vaccine, antitoxins, serum-immune blood derivatives.", "name": "General method of the preparation of bacterial vaccines, toxoids, viral vaccine, antitoxins, serum-immune blood derivatives.", "hours": 2 },
+          { "topicCode": "T3.3", "number": "T3.3", "topicName": "Storage conditions and stability of official vaccines", "name": "Storage conditions and stability of official vaccines", "hours": 1 },
+          { "topicCode": "T3.4", "number": "T3.4", "topicName": "Hybridoma technology- Production, Purification and Applications. Blood products and Plasma Substitutes.", "name": "Hybridoma technology- Production, Purification and Applications. Blood products and Plasma Substitutes.", "hours": 2 }
+        ]
+      },
+      {
+        "unitCode": "Unit IV",
+        "name": "Unit IV",
+        "unitName": "Blotting Techniques & Microbial Genetics",
+        "title": "Blotting Techniques & Microbial Genetics",
+        "hours": 8,
+        "description": "ELISA, Southern/Western blotting, prokaryote/eukaryote genetics, gene transfer (conjugation, transduction), mutation, and biotransformations.",
+        "topics": [
+          { "topicCode": "T4.1", "number": "T4.1", "topicName": "Immuno blotting techniques- ELISA, Western blotting, Southern blotting.", "name": "Immuno blotting techniques- ELISA, Western blotting, Southern blotting.", "hours": 2 },
+          { "topicCode": "T4.2", "number": "T4.2", "topicName": "Genetic organization of Eukaryotes and Prokaryotes", "name": "Genetic organization of Eukaryotes and Prokaryotes", "hours": 2 },
+          { "topicCode": "T4.3", "number": "T4.3", "topicName": "Microbial genetics including transformation, transduction, conjugation, plasmids and transposons.", "name": "Microbial genetics including transformation, transduction, conjugation, plasmids and transposons.", "hours": 2 },
+          { "topicCode": "T4.4", "number": "T4.4", "topicName": "Introduction to Microbial biotransformation and applications. Mutation. Types of mutation/mutants", "name": "Introduction to Microbial biotransformation and applications. Mutation. Types of mutation/mutants", "hours": 2 }
+        ]
+      },
+      {
+        "unitCode": "Unit V",
+        "name": "Unit V",
+        "unitName": "Fermentation Technology & Blood Products",
+        "title": "Fermentation Technology & Blood Products",
+        "hours": 7,
+        "description": "Fermenter design, media, large-scale control, penicillin/Vit B12 production, and blood collection/storage.",
+        "topics": [
+          { "topicCode": "T5.1", "number": "T5.1", "topicName": "Fermentation methods and general requirements, study of media, equipments, sterilization methods, aeration process, stirring.", "name": "Fermentation methods and general requirements, study of media, equipments, sterilization methods, aeration process, stirring.", "hours": 2 },
+          { "topicCode": "T5.2", "number": "T5.2", "topicName": "Large scale production fermenter design and its various controls.", "name": "Large scale production fermenter design and its various controls.", "hours": 2 },
+          { "topicCode": "T5.3", "number": "T5.3", "topicName": "Study of the production of - penicillins, citric acid, Vitamin B12, Glutamic acid, Griseofulvin", "name": "Study of the production of - penicillins, citric acid, Vitamin B12, Glutamic acid, Griseofulvin", "hours": 2 },
+          { "topicCode": "T5.4", "number": "T5.4", "topicName": "Blood Products: Collection, Processing and Storage of whole human blood, dried human plasma, plasma Substitutes", "name": "Blood Products: Collection, Processing and Storage of whole human blood, dried human plasma, plasma Substitutes", "hours": 1 }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "B.R. Glick and J.J. Pasternak", "title": "Molecular Biotechnology: Principles and Applications of Recombinant DNA", "edition": "ASM Press" }
+    ],
+    "referenceBooks": [
+      { "author": "Stanbury F., P., Whitakar A., and Hall J., S.", "title": "Principles of fermentation technology", "edition": "2nd edition" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 25,
+      "theoryExternal": 75,
+      "practicalInternal": 0,
+      "practicalExternal": 0,
+      "universityExam": 100
+    }
+  },
+  {
+    "subjectCode": "BP606T",
+    "courseName": "Pharmaceutical Quality Assurance",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 3,
+    "semester": 6,
+    "credits": 4,
+    "hours": 45,
+    "subjectType": "Theory",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "This course deals with the various aspects of quality control and quality assurance aspects of pharmaceutical industries. It covers the important aspects like cGMP, QC tests, documentation, quality certifications and regulatory affairs.",
+    "objectives": [
+      "understand the cGMP aspects in a pharmaceutical industry",
+      "appreciate the importance of documentation",
+      "understand the scope of quality certifications applicable to pharmaceutical industries",
+      "understand the responsibilities of QA and QC departments"
+    ],
+    "courseOutcomes": [
+      "CO1: Describe cGMP aspects in a pharmaceutical industry.",
+      "CO2: Explain the importance of documentation.",
+      "CO3: Enumerate the scope of quality certifications applicable to pharmaceutical industries.",
+      "CO4: Describe the responsibilities of QA departments.",
+      "CO5: Describe the responsibilities of QC departments."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Quality Assurance & Management Concepts",
+        "title": "Quality Assurance & Management Concepts",
+        "hours": 10,
+        "description": "Definition of QA, QC, GMP; TQM philosophies; ICH guidelines and stability testing; QbD tools; ISO 9000/14000 and NABL accreditation.",
+        "topics": [
+          { "topicCode": "T1.1", "number": "T1.1", "topicName": "Quality Assurance and Quality Management concepts: Definition and concept of Quality control, Quality assurance and GMP", "name": "Quality Assurance and Quality Management concepts: Definition and concept of Quality control, Quality assurance and GMP", "hours": 2 },
+          { "topicCode": "T1.2", "number": "T1.2", "topicName": "Total Quality Management (TQM): Definition, elements, philosophies", "name": "Total Quality Management (TQM): Definition, elements, philosophies", "hours": 2 },
+          { "topicCode": "T1.3", "number": "T1.3", "topicName": "ICH Guidelines: purpose, brief overview of QSEM, Stability testing", "name": "ICH Guidelines: purpose, brief overview of QSEM, Stability testing", "hours": 2 },
+          { "topicCode": "T1.4", "number": "T1.4", "topicName": "Quality by design (QbD): Definition, overview, tools", "name": "Quality by design (QbD): Definition, overview, tools", "hours": 2 },
+          { "topicCode": "T1.5", "number": "T1.5", "topicName": "ISO 9000 and ISO14000: Overview, elements; NABL accreditation principles.", "name": "ISO 9000 and ISO14000: Overview, elements; NABL accreditation principles.", "hours": 2 }
+        ]
+      },
+      {
+        "unitCode": "Unit II",
+        "name": "Unit II",
+        "unitName": "Organization, Personnel & Premises",
+        "title": "Organization, Personnel & Premises",
+        "hours": 10,
+        "description": "Personnel training and hygiene; construction, layout, and sterile area utilities; equipment specifications.",
+        "topics": [
+          { "topicCode": "T2.1", "number": "T2.1", "topicName": "Organization and personnel: Personnel responsibilities, training, hygiene and personal records.", "name": "Organization and personnel: Personnel responsibilities, training, hygiene and personal records.", "hours": 3 },
+          { "topicCode": "T2.2", "number": "T2.2", "topicName": "Premises: Design, construction and plant layout, maintenance, sanitation, environmental control, sterile areas.", "name": "Premises: Design, construction and plant layout, maintenance, sanitation, environmental control, sterile areas.", "hours": 4 },
+          { "topicCode": "T2.3", "number": "T2.3", "topicName": "Equipments and raw materials: Equipments selection, purchase specifications, maintenance, stores control.", "name": "Equipments and raw materials: Equipments selection, purchase specifications, maintenance, stores control.", "hours": 3 }
+        ]
+      },
+      {
+        "unitCode": "Unit III",
+        "name": "Unit III",
+        "unitName": "Quality Control & GLP",
+        "title": "Quality Control & GLP",
+        "hours": 10,
+        "description": "QC testing of packaging (rubber, glass, cartons); GLP general provisions, protocols, and reports.",
+        "topics": [
+          { "topicCode": "T3.1", "number": "T3.1", "topicName": "Quality Control: Quality control test for containers, rubber closures and secondary packing materials.", "name": "Quality Control: Quality control test for containers, rubber closures and secondary packing materials.", "hours": 5 },
+          { "topicCode": "T3.2", "number": "T3.2", "topicName": "Good Laboratory Practices: General Provisions, testing facilities operation, nonclinical studies, records and reports.", "name": "Good Laboratory Practices: General Provisions, testing facilities operation, nonclinical studies, records and reports.", "hours": 5 }
+        ]
+      },
+      {
+        "unitCode": "Unit IV",
+        "name": "Unit IV",
+        "unitName": "Complaints & Document Maintenance",
+        "title": "Complaints & Document Maintenance",
+        "hours": 8,
+        "description": "Handling complaints, return goods, recalls, waste disposal; SOPs, master formula, batch formula, and quality audits.",
+        "topics": [
+          { "topicCode": "T4.1", "number": "T4.1", "topicName": "Complaints: Complaints and evaluation of complaints, Handling of return good, recalling and waste disposal.", "name": "Complaints: Complaints and evaluation of complaints, Handling of return good, recalling and waste disposal.", "hours": 3 },
+          { "topicCode": "T4.2", "number": "T4.2", "topicName": "Document maintenance: Batch Formula Record, Master Formula Record, SOP, Quality audit, Quality Review.", "name": "Document maintenance: Batch Formula Record, Master Formula Record, SOP, Quality audit, Quality Review.", "hours": 5 }
+        ]
+      },
+      {
+        "unitCode": "Unit V",
+        "name": "Unit V",
+        "unitName": "Calibration, Validation & Warehousing",
+        "title": "Calibration, Validation & Warehousing",
+        "hours": 7,
+        "description": "Validation master plan, pH meter calibration, UV qualification, analytical method validation, and good warehousing practice.",
+        "topics": [
+          { "topicCode": "T5.1", "number": "T5.1", "topicName": "Calibration and Validation: calibration, qualification and validation, scope, types of validation, validation master plan.", "name": "Calibration and Validation: calibration, qualification and validation, scope, types of validation, validation master plan.", "hours": 3 },
+          { "topicCode": "T5.2", "number": "T5.2", "topicName": "Calibration of pH meter, Qualification of UV-Visible spectrophotometer, Analytical method Validation.", "name": "Calibration of pH meter, Qualification of UV-Visible spectrophotometer, Analytical method Validation.", "hours": 2 },
+          { "topicCode": "T5.3", "number": "T5.3", "topicName": "Warehousing: Good warehousing practice, materials management", "name": "Warehousing: Good warehousing practice, materials management", "hours": 2 }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "Organization of Pharmaceutical Products of India", "title": "Quality Assurance Guide", "edition": "Latest" }
+    ],
+    "referenceBooks": [
+      { "author": "Sandy Weinberg", "title": "Good Laboratory Practice Regulations", "edition": "2nd Edition" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 25,
+      "theoryExternal": 75,
+      "practicalInternal": 0,
+      "practicalExternal": 0,
+      "universityExam": 100
+    }
+  },
+  {
+    "subjectCode": "BP607P",
+    "courseName": "Medicinal Chemistry III",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 3,
+    "semester": 6,
+    "credits": 2,
+    "hours": 60,
+    "subjectType": "Practical",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "Practical training in the preparation of medicinally important drugs and intermediates, assaying methods, microwave irradiation techniques, and drug design software tools.",
+    "objectives": [
+      "To carry out the preparation of medicinally important compounds",
+      "To understand the calculation of molecular weight, practical yield and percentage yield",
+      "To learn different types of titrations and carry out assay for medicinally important compounds",
+      "To prepare eco-friendly compounds using microwave irradiation",
+      "To understand drug design using chemical sketching of compounds and calculating its pharmacokinetic properties using online software tool"
+    ],
+    "courseOutcomes": [
+      "CO1: Synthesize and assaying drugs of medicinal use such as sulphanilamide, dapsone, metronidazole, hexamine, benzylpenicillin etc.",
+      "CO2: Examine microwave irradiation technique in the preparation of medicinally important compounds",
+      "CO3: Illustrate and justifying chemical structures using software tools such as chemdraw",
+      "CO4: Identify physicochemical properties such as log P, MW, MR using online software tool such as pkcsm and compare and contrast with experimental data",
+      "CO5: Synthesis of Medicinally important compounds using Microwave irradiation"
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Medicinal Chemistry - III Practicals",
+        "title": "Medicinal Chemistry - III Practicals",
+        "hours": 60,
+        "description": "Drug syntheses, assays of key compounds, microwave-assisted synthesis, structures drawing, and Lipinski's Rule of 5 screening.",
+        "topics": [
+          { "topicCode": "T1.1", "number": "T1.1", "topicName": "Preparation of drugs/intermediates: Sulphanilamide, 7-Hydroxy-4-methyl coumarin, Chlorobutanol, Triphenyl imidazole, Tolbutamide, Hexamine", "name": "Preparation of drugs/intermediates: Sulphanilamide, 7-Hydroxy-4-methyl coumarin, Chlorobutanol, Triphenyl imidazole, Tolbutamide, Hexamine", "hours": 20 },
+          { "topicCode": "T1.2", "number": "T1.2", "topicName": "Assay of drugs: Isonicotinic acid hydrazide, Chloroquine, Metronidazole, Dapsone, Chlorpheniramine maleate, Benzyl penicillin", "name": "Assay of drugs: Isonicotinic acid hydrazide, Chloroquine, Metronidazole, Dapsone, Chlorpheniramine maleate, Benzyl penicillin", "hours": 20 },
+          { "topicCode": "T1.3", "number": "T1.3", "topicName": "Preparation of compounds by Microwave irradiation technique", "name": "Preparation of compounds by Microwave irradiation technique", "hours": 8 },
+          { "topicCode": "T1.4", "number": "T1.4", "topicName": "Drawing structures and reactions using chem draw", "name": "Drawing structures and reactions using chem draw", "hours": 6 },
+          { "topicCode": "T1.5", "number": "T1.5", "topicName": "Determination of properties (logP, MR, MW, H-donors/acceptors) using drug design software; Lipinski Rule of 5 screening", "name": "Determination of properties (logP, MR, MW, H-donors/acceptors) using drug design software; Lipinski Rule of 5 screening", "hours": 6 }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "Wilson and Giswold", "title": "Organic medicinal and Pharmaceutical Chemistry", "edition": "Latest" }
+    ],
+    "referenceBooks": [
+      { "author": "Foye", "title": "Principles of Medicinal Chemistry", "edition": "Latest" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 0,
+      "theoryExternal": 0,
+      "practicalInternal": 15,
+      "practicalExternal": 35,
+      "universityExam": 50
+    }
+  },
+  {
+    "subjectCode": "BP608P",
+    "courseName": "Pharmacology III",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 3,
+    "semester": 6,
+    "credits": 2,
+    "hours": 60,
+    "subjectType": "Practical",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "Practical sessions covering dose calculations, screening models for anti-allergic/anti-ulcer activity, bioassays using guinea pig ileum, acute toxicity testing, and biostatistical analysis.",
+    "objectives": [
+      "To demonstrate the maintenance of laboratory animals, blood collections techniques",
+      "To know about the screening methods of anti-ulcer and anti-allergic activity",
+      "To Understand about various screening methods for toxicity",
+      "To understand isolation of different organs from the laboratory animals by simulated experiments",
+      "To know about biostatistics involved in pharmacology"
+    ],
+    "courseOutcomes": [
+      "CO1: Explain the dose calculations of various drugs used in animal experimentation. Understand and perform the screening models of anti-allergic and anti-ulcer drugs.",
+      "CO2: Determine the various biochemical parameters and perform the bioassay of different agonists and antagonists using guinea pig ileum preparation. Understand and perform the screening models of GI drugs",
+      "CO3: Evaluate the concepts of acute oral toxicity of various substances. Understand and perform the screening models of anti-diabetic drugs and pyrogen testing",
+      "CO4: Explain the of various substances. Understand and calculate various biostatistical methods for use in animal experimentation.",
+      "CO5: Explain the concepts of acute eye irritation studies and skin irritation studies of various drugs used in animal experimentation. Understand and perform the screening models of saline purgatives."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Pharmacology - III Practicals",
+        "title": "Pharmacology - III Practicals",
+        "hours": 60,
+        "description": "Experiments in anti-ulcer, anti-allergic, toxicity evaluations, rabbit pyrogen testing, and biostatistics tools.",
+        "topics": [
+          { "topicCode": "T1.1", "number": "T1.1", "topicName": "Dose calculation in pharmacological experiments", "name": "Dose calculation in pharmacological experiments", "hours": 4 },
+          { "topicCode": "T1.2", "number": "T1.2", "topicName": "Antiallergic activity by mast cell stabilization assay", "name": "Antiallergic activity by mast cell stabilization assay", "hours": 4 },
+          { "topicCode": "T1.3", "number": "T1.3", "topicName": "Study of anti-ulcer activity using pylorus ligand (SHAY) rat and NSAID models.", "name": "Study of anti-ulcer activity using pylorus ligand (SHAY) rat and NSAID models.", "hours": 4 },
+          { "topicCode": "T1.4", "number": "T1.4", "topicName": "Study of effect of drugs on gastrointestinal motility", "name": "Study of effect of drugs on gastrointestinal motility", "hours": 4 },
+          { "topicCode": "T1.5", "number": "T1.5", "topicName": "Effect of agonist and antagonists on guinea pig ileum", "name": "Effect of agonist and antagonists on guinea pig ileum", "hours": 4 },
+          { "topicCode": "T1.6", "number": "T1.6", "topicName": "Estimation of serum biochemical parameters by using semi autoanalyser", "name": "Estimation of serum biochemical parameters by using semi autoanalyser", "hours": 4 },
+          { "topicCode": "T1.7", "number": "T1.7", "topicName": "Effect of saline purgative on frog intestine", "name": "Effect of saline purgative on frog intestine", "hours": 4 },
+          { "topicCode": "T1.8", "number": "T1.8", "topicName": "Insulin hypoglycemic effect in rabbit", "name": "Insulin hypoglycemic effect in rabbit", "hours": 4 },
+          { "topicCode": "T1.9", "number": "T1.9", "topicName": "Test for pyrogens (rabbit method)", "name": "Test for pyrogens (rabbit method)", "hours": 4 },
+          { "topicCode": "T1.10", "number": "T1.10", "topicName": "Determination of acute oral toxicity (LD50) of a drug from a given data", "name": "Determination of acute oral toxicity (LD50) of a drug from a given data", "hours": 4 },
+          { "topicCode": "T1.11", "number": "T1.11", "topicName": "Determination of acute skin irritation / corrosion of a test substance", "name": "Determination of acute skin irritation / corrosion of a test substance", "hours": 4 },
+          { "topicCode": "T1.12", "number": "T1.12", "topicName": "Determination of acute eye irritation / corrosion of a test substance", "name": "Determination of acute eye irritation / corrosion of a test substance", "hours": 4 },
+          { "topicCode": "T1.13", "number": "T1.13", "topicName": "Calculation of pharmacokinetic parameters from a given data", "name": "Calculation of pharmacokinetic parameters from a given data", "hours": 4 },
+          { "topicCode": "T1.14", "number": "T1.14", "topicName": "Biostatistics methods in experimental pharmacology (students t test, ANOVA, Chi-square, Wilcoxon)", "name": "Biostatistics methods in experimental pharmacology (students t test, ANOVA, Chi-square, Wilcoxon)", "hours": 8 }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "Rang H. P., Dale M. M., Ritter J. M., Flower R. J.", "title": "Rang and Dale's Pharmacology", "edition": "Latest" }
+    ],
+    "referenceBooks": [
+      { "author": "K.D. Tripathi", "title": "Essentials of Medical Pharmacology", "edition": "Latest" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 0,
+      "theoryExternal": 0,
+      "practicalInternal": 15,
+      "practicalExternal": 35,
+      "universityExam": 50
+    }
+  },
+  {
+    "subjectCode": "BP609P",
+    "courseName": "Herbal Drug Technology",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 3,
+    "semester": 6,
+    "credits": 2,
+    "hours": 60,
+    "subjectType": "Practical",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "Practical experiments for phytochemical screening of crude drugs, excipient evaluation, cosmetic/herbal formulation and evaluation, and monograph analyses.",
+    "objectives": [
+      "To perform preliminary phytochemical screening of crude drugs",
+      "To carry out determination of alcohol content and total alkaloids",
+      "To formulate and evaluate herbal cosmetics and conventional dosage forms"
+    ],
+    "courseOutcomes": [
+      "CO1: To perform preliminary phytochemical screening of crude drugs.",
+      "CO2: Determination of the alcohol content of Asava and Arista",
+      "CO3: Evaluation of excipients of natural origin",
+      "CO4: Incorporation of prepared and standardized extract in cosmetic formulations like creams, lotions and shampoos and their evaluation.",
+      "CO5: Incorporation of prepared and standardized extract in formulations like syrups, mixtures and tablets and their evaluation as per Pharmacopoeial requirements."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Herbal Drug Technology Practicals",
+        "title": "Herbal Drug Technology Practicals",
+        "hours": 60,
+        "description": "Preliminary screening, alcohol content of Asavas, formulation and evaluation of natural cosmetics (cold cream, hair oils), syrup formulations, and monograph analyses.",
+        "topics": [
+          { "topicCode": "T1.1", "number": "T1.1", "topicName": "To perform preliminary phytochemical screening of crude drugs.", "name": "To perform preliminary phytochemical screening of crude drugs.", "hours": 8 },
+          { "topicCode": "T1.2", "number": "T1.2", "topicName": "Determination of the alcohol content of Asava and Arista", "name": "Determination of the alcohol content of Asava and Arista", "hours": 8 },
+          { "topicCode": "T1.3", "number": "T1.3", "topicName": "Evaluation of excipients of natural origin", "name": "Evaluation of excipients of natural origin", "hours": 6 },
+          { "topicCode": "T1.4", "number": "T1.4", "topicName": "Incorporation of prepared and standardized extract in cosmetic formulations like creams, lotions and shampoos and their evaluation.", "name": "Incorporation of prepared and standardized extract in cosmetic formulations like creams, lotions and shampoos and their evaluation.", "hours": 8 },
+          { "topicCode": "T1.5", "number": "T1.5", "topicName": "Incorporation of prepared and standardized extract in formulations like syrups, mixtures and tablets and their evaluation as per Pharmacopoeial requirements.", "name": "Incorporation of prepared and standardized extract in formulations like syrups, mixtures and tablets and their evaluation as per Pharmacopoeial requirements.", "hours": 8 },
+          { "topicCode": "T1.6", "number": "T1.6", "topicName": "Monograph analysis of herbal drugs from recent Pharmacopoeias", "name": "Monograph analysis of herbal drugs from recent Pharmacopoeias", "hours": 6 },
+          { "topicCode": "T1.7", "number": "T1.7", "topicName": "Determination of Aldehyde content", "name": "Determination of Aldehyde content", "hours": 6 },
+          { "topicCode": "T1.8", "number": "T1.8", "topicName": "Determination of Phenol content", "name": "Determination of Phenol content", "hours": 5 },
+          { "topicCode": "T1.9", "number": "T1.9", "topicName": "Determination of total alkaloids", "name": "Determination of total alkaloids", "hours": 5 }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "Trease and Evans", "title": "Textbook of Pharmacognosy", "edition": "Latest" }
+    ],
+    "referenceBooks": [
+      { "author": "Kokate, Purohit and Gokhale", "title": "Pharmacognosy", "edition": "Latest" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 0,
+      "theoryExternal": 0,
+      "practicalInternal": 15,
+      "practicalExternal": 35,
+      "universityExam": 50
+    }
+  }
+]

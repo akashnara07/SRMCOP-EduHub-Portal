@@ -1,0 +1,719 @@
+[
+  {
+    "subjectCode": "BP301T",
+    "courseName": "Pharmaceutical Organic Chemistry II",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 2,
+    "semester": 3,
+    "credits": 4,
+    "hours": 45,
+    "subjectType": "Theory",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "This subject deals with general methods of preparation and reactions of some organic compounds. Reactivity of organic compounds are also studied here. The syllabus emphasizes on mechanisms and orientation of reactions. Chemistry of fats and oils are also included in the syllabus.",
+    "objectives": [
+      "write the structure, name and the type of isomerism of the organic compound",
+      "write the reaction, name the reaction and orientation of reactions",
+      "account for reactivity/stability of compounds",
+      "prepare organic compounds"
+    ],
+    "courseOutcomes": [
+      "CO1: Explain the structure of benzene, aromaticity and electrophilic substitution reaction of benzene and outline the structure and uses of benzene derivatives",
+      "CO2: Outline the preparation, properties of phenols and aromatic amines, Summarize the acidity of phenols and basicity of aromatic amines and explain the synthetic uses of aryl diazonium salts.",
+      "CO3: Explain the reactions of fatty acids and fats/oils and illustrate the analytical constants of fats and oils",
+      "CO4: Outline the definition and classification of polynuclear hydrocarbons and explain the preparations, reactions and uses of Naphthalene, Phenanthrene, Anthracene, Diphenylmethane, Triphenylmethane and their derivatives.",
+      "CO5: Illustrate the methods of preparations and reactions of cycloalkanes and explain the stability of Cycloalkanes"
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Benzene and its derivatives",
+        "title": "Benzene and its derivatives",
+        "hours": 10,
+        "description": "Benzene and its derivatives",
+        "topics": [
+          { "topicCode": "T1.1", "number": "T1.1", "topicName": "A. Analytical, synthetic and other evidences in the derivation of structure of benzene, Orbital picture, resonance in benzene, aromatic characters, Huckel‘s rule", "name": "A. Analytical, synthetic and other evidences in the derivation of structure of benzene, Orbital picture, resonance in benzene, aromatic characters, Huckel‘s rule", "hours": 4 },
+          { "topicCode": "T1.2", "number": "T1.2", "topicName": "B. Reactions of benzene - nitration, sulphonation, halogenations reactivity, Friedelcrafts alkylation- reactivity, limitations, Friedelcrafts acylation.", "name": "B. Reactions of benzene - nitration, sulphonation, halogenations reactivity, Friedelcrafts alkylation- reactivity, limitations, Friedelcrafts acylation.", "hours": 4 },
+          { "topicCode": "T1.3", "number": "T1.3", "topicName": "C. Substituent‘s, effect of substituent‘s on reactivity and orientation of mono substituted benzene compounds towards electrophilic substitution reaction", "name": "C. Substituent‘s, effect of substituent‘s on reactivity and orientation of mono substituted benzene compounds towards electrophilic substitution reaction", "hours": 3 },
+          { "topicCode": "T1.4", "number": "T1.4", "topicName": "D. Structure and uses of DDT, Saccharin, BHC and Chloramine.", "name": "D. Structure and uses of DDT, Saccharin, BHC and Chloramine.", "hours": 1 }
+        ]
+      },
+      {
+        "unitCode": "Unit II",
+        "name": "Unit II",
+        "unitName": "Phenols & Aromatic Amines",
+        "title": "Phenols & Aromatic Amines",
+        "hours": 10,
+        "description": "Phenols & Aromatic Amines",
+        "topics": [
+          { "topicCode": "T2.1", "number": "T2.1", "topicName": "Phenols* - Acidity of phenols, effect of substituents on acidity, qualitative tests, Structure and uses of phenol, cresols, resorcinol, naphthols", "name": "Phenols* - Acidity of phenols, effect of substituents on acidity, qualitative tests, Structure and uses of phenol, cresols, resorcinol, naphthols", "hours": 5 },
+          { "topicCode": "T2.2", "number": "T2.2", "topicName": "Aromatic Amines* - Basicity of amines, effect of substituents on basicity, and synthetic uses of aryl diazonium salts.", "name": "Aromatic Amines* - Basicity of amines, effect of substituents on basicity, and synthetic uses of aryl diazonium salts.", "hours": 5 }
+        ]
+      },
+      {
+        "unitCode": "Unit III",
+        "name": "Unit III",
+        "unitName": "Fats and Oils",
+        "title": "Fats and Oils",
+        "hours": 10,
+        "description": "Fats and Oils",
+        "topics": [
+          { "topicCode": "T3.1", "number": "T3.1", "topicName": "a. Fatty acids – reactions.", "name": "a. Fatty acids – reactions.", "hours": 3 },
+          { "topicCode": "T3.2", "number": "T3.2", "topicName": "b. Hydrolysis, Hydrogenation, Saponification and Rancidity of oils, Drying oils.", "name": "b. Hydrolysis, Hydrogenation, Saponification and Rancidity of oils, Drying oils.", "hours": 3 },
+          { "topicCode": "T3.3", "number": "T3.3", "topicName": "c. Analytical constants – Acid value, Saponification value, Ester value, Iodine value, Acetyl value, Reichert Meissl (RM) value – significance and principle involved in their determination.", "name": "c. Analytical constants – Acid value, Saponification value, Ester value, Iodine value, Acetyl value, Reichert Meissl (RM) value – significance and principle involved in their determination.", "hours": 4 }
+        ]
+      },
+      {
+        "unitCode": "Unit IV",
+        "name": "Unit IV",
+        "unitName": "Polynuclear hydrocarbons",
+        "title": "Polynuclear hydrocarbons",
+        "hours": 8,
+        "description": "Polynuclear hydrocarbons",
+        "topics": [
+          { "topicCode": "T4.1", "number": "T4.1", "topicName": "Polynuclear hydrocarbons: a. Synthesis, reactions", "name": "Polynuclear hydrocarbons: a. Synthesis, reactions", "hours": 4 },
+          { "topicCode": "T4.2", "number": "T4.2", "topicName": "b. Structure and medicinal uses of Naphthalene, Phenanthrene, Anthracene, Diphenylmethane, Triphenylmethane and their derivatives", "name": "b. Structure and medicinal uses of Naphthalene, Phenanthrene, Anthracene, Diphenylmethane, Triphenylmethane and their derivatives", "hours": 4 }
+        ]
+      },
+      {
+        "unitCode": "Unit V",
+        "name": "Unit V",
+        "unitName": "Cyclo alkanes",
+        "title": "Cyclo alkanes",
+        "hours": 7,
+        "description": "Cyclo alkanes",
+        "topics": [
+          { "topicCode": "T5.1", "number": "T5.1", "topicName": "Cyclo alkanes* Stabilities – Baeyer‘s strain theory, limitation of Baeyer‘s strain theory, Coulson and Moffitt’s modification, Sachse Mohr’s theory (Theory of strainless rings), reactions of cyclopropane and cyclobutane only.", "name": "Cyclo alkanes* Stabilities – Baeyer‘s strain theory, limitation of Baeyer‘s strain theory, Coulson and Moffitt’s modification, Sachse Mohr’s theory (Theory of strainless rings), reactions of cyclopropane and cyclobutane only.", "hours": 7 }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "Morrison and Boyd", "title": "Organic Chemistry", "edition": "Latest Edition" },
+      { "author": "I.L. Finar", "title": "Organic Chemistry", "edition": "Volume-I, Latest Edition" },
+      { "author": "B.S. Bahl and Arun Bahl", "title": "Textbook of Organic Chemistry", "edition": "Latest Edition" },
+      { "author": "P.L.Soni", "title": "Organic Chemistry", "edition": "Latest Edition" }
+    ],
+    "referenceBooks": [
+      { "author": "Mann and Saunders", "title": "Practical Organic Chemistry", "edition": "Latest Edition" },
+      { "author": "Vogel", "title": "Vogel‘s text book of Practical Organic Chemistry", "edition": "Latest Edition" },
+      { "author": "A. H. Beckett, J. B Stenlake", "title": "Practical Pharmaceutical Chemistry", "edition": "IVth edition, Part I" },
+      { "author": "N.K.Vishnoi", "title": "Advanced Practical organic chemistry", "edition": "Latest Edition" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 25,
+      "theoryExternal": 75,
+      "practicalInternal": 0,
+      "practicalExternal": 0,
+      "universityExam": 100
+    }
+  },
+  {
+    "subjectCode": "BP305P",
+    "courseName": "Pharmaceutical Organic Chemistry II",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 2,
+    "semester": 3,
+    "credits": 2,
+    "hours": 60,
+    "subjectType": "Practical",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "Experiments involving laboratory techniques, determination of oil values, and preparation of organic compounds.",
+    "objectives": [
+      "To synthesise medicinal compounds and their intermediates",
+      "To calculate percentage yield",
+      "To find out the melting point"
+    ],
+    "courseOutcomes": [
+      "CO1: Synthesize and recrystallize organic compounds like 2,4,6-tribromo aniline, salicylic acid, and 5-nitro salicylic acid, and find out the percentage purity.",
+      "CO2: Synthesize and recrystallize Benzanilide, 1-Phenyl azo-2-naphthol, dibenzal acetone and determine the percentage purity.",
+      "CO3: Determine the Acid value and Saponification value",
+      "CO4: Synthesize and recrystallize p-bromo acetanilide, benzil, m-dinitro benzene and determine the percentage purity.",
+      "CO5: Synthesize and recrystallize acetanilide and para bromo acetanilide"
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Experiments involving laboratory techniques",
+        "title": "Experiments involving laboratory techniques",
+        "hours": 20,
+        "description": "Experiments involving laboratory techniques",
+        "topics": [
+          { "topicCode": "T1.1", "number": "T1.1", "topicName": "Recrystallization", "name": "Recrystallization", "hours": 10 },
+          { "topicCode": "T1.2", "number": "T1.2", "topicName": "Steam distillation", "name": "Steam distillation", "hours": 10 }
+        ]
+      },
+      {
+        "unitCode": "Unit II",
+        "name": "Unit II",
+        "unitName": "Determination of oil values (including standardization of reagents)",
+        "title": "Determination of oil values (including standardization of reagents)",
+        "hours": 20,
+        "description": "Determination of oil values (including standardization of reagents)",
+        "topics": [
+          { "topicCode": "T2.1", "number": "T2.1", "topicName": "Acid value", "name": "Acid value", "hours": 7 },
+          { "topicCode": "T2.2", "number": "T2.2", "topicName": "Saponification value", "name": "Saponification value", "hours": 7 },
+          { "topicCode": "T2.3", "number": "T2.3", "topicName": "Iodine value", "name": "Iodine value", "hours": 6 }
+        ]
+      },
+      {
+        "unitCode": "Unit III",
+        "name": "Unit III",
+        "unitName": "Preparation of compounds",
+        "title": "Preparation of compounds",
+        "hours": 20,
+        "description": "Preparation of compounds",
+        "topics": [
+          { "topicCode": "T3.1", "number": "T3.1", "topicName": "Benzanilide/Phenylbenzoate/Acetanilide from Aniline/Phenol/Aniline by acylation.", "name": "Benzanilide/Phenylbenzoate/Acetanilide from Aniline/Phenol/Aniline by acylation.", "hours": 3 },
+          { "topicCode": "T3.2", "number": "T3.2", "topicName": "2,4,6-Tribromo aniline/Para bromo acetanilide from Aniline.", "name": "2,4,6-Tribromo aniline/Para bromo acetanilide from Aniline.", "hours": 3 },
+          { "topicCode": "T3.3", "number": "T3.3", "topicName": "Acetanilide by halogenation (Bromination) reaction.", "name": "Acetanilide by halogenation (Bromination) reaction.", "hours": 2 },
+          { "topicCode": "T3.4", "number": "T3.4", "topicName": "5-Nitro salicylic acid/Meta dinitro benzene from Salicylic acid / Nitro benzene by nitration.", "name": "5-Nitro salicylic acid/Meta dinitro benzene from Salicylic acid / Nitro benzene by nitration.", "hours": 2 },
+          { "topicCode": "T3.5", "number": "T3.5", "topicName": "Benzoic acid from Benzyl chloride by oxidation.", "name": "Benzoic acid from Benzyl chloride by oxidation.", "hours": 2 },
+          { "topicCode": "T3.6", "number": "T3.6", "topicName": "Benzoic acid/ Salicylic acid from alkyl benzoate/ alkyl salicylate by hydrolysis.", "name": "Benzoic acid/ Salicylic acid from alkyl benzoate/ alkyl salicylate by hydrolysis.", "hours": 2 },
+          { "topicCode": "T3.7", "number": "T3.7", "topicName": "1-Phenyl azo-2-naphthol from Aniline by diazotization and coupling.", "name": "1-Phenyl azo-2-naphthol from Aniline by diazotization and coupling.", "hours": 2 },
+          { "topicCode": "T3.8", "number": "T3.8", "topicName": "Benzil from Benzoin by oxidation.", "name": "Benzil from Benzoin by oxidation.", "hours": 2 },
+          { "topicCode": "T3.9", "number": "T3.9", "topicName": "Dibenzal acetone from Benzaldehyde by Claisen Schmidt reaction.", "name": "Dibenzal acetone from Benzaldehyde by Claisen Schmidt reaction.", "hours": 1 },
+          { "topicCode": "T3.10", "number": "T3.10", "topicName": "Cinnammic acid from Benzaldehyde by Perkin reaction.", "name": "Cinnammic acid from Benzaldehyde by Perkin reaction.", "hours": 1 }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "Morrison and Boyd", "title": "Organic Chemistry", "edition": "Latest Edition" },
+      { "author": "I.L. Finar", "title": "Organic Chemistry", "edition": "Volume-I, Latest Edition" }
+    ],
+    "referenceBooks": [
+      { "author": "Mann and Saunders", "title": "Practical Organic Chemistry", "edition": "Latest Edition" },
+      { "author": "Vogel", "title": "Vogel‘s text book of Practical Organic Chemistry", "edition": "Latest Edition" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 0,
+      "theoryExternal": 0,
+      "practicalInternal": 15,
+      "practicalExternal": 35,
+      "universityExam": 50
+    }
+  },
+  {
+    "subjectCode": "BP302T",
+    "courseName": "Physical Pharmaceutics I",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 2,
+    "semester": 3,
+    "credits": 4,
+    "hours": 45,
+    "subjectType": "Theory",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "The course deals with the various physical, physicochemical properties and principle involved in dosage forms, formulations. Theory and practical components of the subject help the student to get a better insight in to various areas of formulation research and development and stability studies of pharmaceuticals.",
+    "objectives": [
+      "Understand various physicochemical properties of drug molecules in the designing the dosage form",
+      "Know the principles of chemical kinetics and to use them in assigning expiry date for formulation",
+      "Demonstrate use of physicochemical properties in evaluation of dosage forms",
+      "Appreciate physicochemical properties of drug molecules in formulation research and development"
+    ],
+    "courseOutcomes": [
+      "CO1: Explain and justify the solubility of drugs, diffusion principles, phase rule and applications of distribution law",
+      "CO2: Derive and apply various theories, laws and equations related to different states of matter and to demonstrate the use of physicochemical properties of drugs in the formulation development.",
+      "CO3: Illustrate the knowledge of disperse system, its classification, theories of dispersed system, stability considerations and adsorption isotherms",
+      "CO4: Distinguish the knowledge of complexation, classification, applications in addition to protein binding of drugs",
+      "CO5: Describe the pH, Buffers and Isotonic solutions followed by the application of buffers in Pharmaceutical and biological systems"
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Solubility of drugs",
+        "title": "Solubility of drugs",
+        "hours": 10,
+        "description": "Solubility of drugs",
+        "topics": [
+          { "topicCode": "T1.1", "number": "T1.1", "topicName": "Solubility expressions, mechanisms of solute solvent interactions, ideal solubility parameters, solvation and association, quantitative approach to the factors influencing solubility of drugs, diffusion principles in biological systems. Solubility of gas in liquids, solubility of liquids in liquids, (Binary solutions, ideal solutions) Raoult‘s law, real solutions. partially miscible liquids, Critical solution temperature and applications. Distribution law, its limitations and applications.", "name": "Solubility expressions, mechanisms of solute solvent interactions, ideal solubility parameters, solvation and association, quantitative approach to the factors influencing solubility of drugs, diffusion principles in biological systems. Solubility of gas in liquids, solubility of liquids in liquids, (Binary solutions, ideal solutions) Raoult‘s law, real solutions. partially miscible liquids, Critical solution temperature and applications. Distribution law, its limitations and applications.", "hours": 10 }
+        ]
+      },
+      {
+        "unitCode": "Unit II",
+        "name": "Unit II",
+        "unitName": "States of Matter and properties of matter & Physicochemical properties of drug molecules",
+        "title": "States of Matter and properties of matter & Physicochemical properties of drug molecules",
+        "hours": 10,
+        "description": "States of Matter and properties of matter & Physicochemical properties of drug molecules",
+        "topics": [
+          { "topicCode": "T2.1", "number": "T2.1", "topicName": "States of Matter and properties of matter: State of matter, changes in the state of matter, latent heats, vapour pressure, sublimation critical point, eutectic mixtures, gases, aerosols – inhalers, relative humidity, liquid complexes, liquid crystals, glassy states, solid crystalline, amorphous and polymorphism.", "name": "States of Matter and properties of matter: State of matter, changes in the state of matter, latent heats, vapour pressure, sublimation critical point, eutectic mixtures, gases, aerosols – inhalers, relative humidity, liquid complexes, liquid crystals, glassy states, solid crystalline, amorphous and polymorphism.", "hours": 5 },
+          { "topicCode": "T2.2", "number": "T2.2", "topicName": "Physicochemical properties of drug molecules: Refractive index, optical rotation, dielectric constant, dipole moment, dissociation constant, determinations and applications", "name": "Physicochemical properties of drug molecules: Refractive index, optical rotation, dielectric constant, dipole moment, dissociation constant, determinations and applications", "hours": 5 }
+        ]
+      },
+      {
+        "unitCode": "Unit III",
+        "name": "Unit III",
+        "unitName": "Surface and interfacial phenomenon",
+        "title": "Surface and interfacial phenomenon",
+        "hours": 8,
+        "description": "Surface and interfacial phenomenon",
+        "topics": [
+          { "topicCode": "T3.1", "number": "T3.1", "topicName": "Surface and interfacial phenomenon: Liquid interface, surface and interfacial surface free energy, measurement of surface and interfacial tensions, spreading coefficient, adsorption at liquid interfaces, surface active agents, HLB Scale, solubilisation, detergency, adsorption at solid interface.", "name": "Surface and interfacial phenomenon: Liquid interface, surface and interfacial surface free energy, measurement of surface and interfacial tensions, spreading coefficient, adsorption at liquid interfaces, surface active agents, HLB Scale, solubilisation, detergency, adsorption at solid interface.", "hours": 8 }
+        ]
+      },
+      {
+        "unitCode": "Unit IV",
+        "name": "Unit IV",
+        "unitName": "Complexation and protein binding",
+        "title": "Complexation and protein binding",
+        "hours": 8,
+        "description": "Complexation and protein binding",
+        "topics": [
+          { "topicCode": "T4.1", "number": "T4.1", "topicName": "Complexation and protein binding: Introduction, Classification of Complexation, Applications, methods of analysis, protein binding, Complexation and drug action, crystalline structures of complexes and thermodynamic treatment of stability constants.", "name": "Complexation and protein binding: Introduction, Classification of Complexation, Applications, methods of analysis, protein binding, Complexation and drug action, crystalline structures of complexes and thermodynamic treatment of stability constants.", "hours": 8 }
+        ]
+      },
+      {
+        "unitCode": "Unit V",
+        "name": "Unit V",
+        "unitName": "pH, buffers and Isotonic solutions",
+        "title": "pH, buffers and Isotonic solutions",
+        "hours": 7,
+        "description": "pH, buffers and Isotonic solutions",
+        "topics": [
+          { "topicCode": "T5.1", "number": "T5.1", "topicName": "pH, buffers and Isotonic solutions: Sorensen‘s pH scale, pH determination (electrometric and calorimetric), applications of buffers, buffer equation, buffer capacity, buffers in pharmaceutical and biological systems, buffered isotonic solutions.", "name": "pH, buffers and Isotonic solutions: Sorensen‘s pH scale, pH determination (electrometric and calorimetric), applications of buffers, buffer equation, buffer capacity, buffers in pharmaceutical and biological systems, buffered isotonic solutions.", "hours": 7 }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "Alfred Martin", "title": "Physical pharmacy", "edition": "Latest Edition" },
+      { "author": "Eugene, Parott", "title": "Experimental pharmaceutics", "edition": "Latest Edition" },
+      { "author": "Cooper and Gunn", "title": "Tutorial pharmacy", "edition": "Latest Edition" },
+      { "author": "C.V.S. Subramanyam", "title": "Physical Pharmaceutics", "edition": "Latest Edition" }
+    ],
+    "referenceBooks": [
+      { "author": "Lea andFebiger, Philadelphia", "title": "Stocklosam J. Pharmaceutical calculations", "edition": "Latest Edition" },
+      { "author": "Liberman H.A, Lachman C.", "title": "Pharmaceutical Dosage forms, Tablets, Volume-1 to 3", "edition": "MarcelDekkar Inc." }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 25,
+      "theoryExternal": 75,
+      "practicalInternal": 0,
+      "practicalExternal": 0,
+      "universityExam": 100
+    }
+  },
+  {
+    "subjectCode": "BP306P",
+    "courseName": "Physical Pharmaceutics I",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 2,
+    "semester": 3,
+    "credits": 2,
+    "hours": 60,
+    "subjectType": "Practical",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "Practical experiments for determining solubility, pKa, partition coefficient, surface tension, HLB number, and complexation of drugs.",
+    "objectives": [
+      "Understand various physiochemical properties of drug molecules in designing the dosage form",
+      "Know the principles of Chemical kinetics and to use them in assigning expiry date for formulation",
+      "Demonstrate the use of physiochemical properties in evaluation of dosage form",
+      "Appreciate physiochemical properties of drug molecules in Formulation, Research and Development"
+    ],
+    "courseOutcomes": [
+      "CO1: Apply the knowledge of phase diagram to determine consolute temperatures",
+      "CO2: Analyse the concept of solubility and recognize basic rules and equations regarding physical principles",
+      "CO3: Create the knowledge of CMC and to determine HLB",
+      "CO4: Evaluate the phenomenon of partition coefficient and surface tension",
+      "CO5: Apply the phenomenon of surface tension"
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Physical Pharmaceutics Practical List",
+        "title": "Physical Pharmaceutics Practical List",
+        "hours": 60,
+        "description": "Physical Pharmaceutics Practical List",
+        "topics": [
+          { "topicCode": "T1.1", "number": "T1.1", "topicName": "Determination the solubility of drug at room temperature", "name": "Determination the solubility of drug at room temperature", "hours": 6 },
+          { "topicCode": "T1.2", "number": "T1.2", "topicName": "Determination of pKa value by Half Neutralization/ Henderson Hassel Balch equation.", "name": "Determination of pKa value by Half Neutralization/ Henderson Hassel Balch equation.", "hours": 6 },
+          { "topicCode": "T1.3", "number": "T1.3", "topicName": "Determination of Partition co-efficient of benzoic acid in benzene and water.", "name": "Determination of Partition co-efficient of benzoic acid in benzene and water.", "hours": 6 },
+          { "topicCode": "T1.4", "number": "T1.4", "topicName": "Determination of Partition co-efficient of Iodine in CCl4 and water", "name": "Determination of Partition co-efficient of Iodine in CCl4 and water", "hours": 6 },
+          { "topicCode": "T1.5", "number": "T1.5", "topicName": "Determination of % composition of NaCl in a solution using phenol-water system by CST method", "name": "Determination of % composition of NaCl in a solution using phenol-water system by CST method", "hours": 6 },
+          { "topicCode": "T1.6", "number": "T1.6", "topicName": "Determination of surface tension of given liquids by drop count and drop weight method", "name": "Determination of surface tension of given liquids by drop count and drop weight method", "hours": 6 },
+          { "topicCode": "T1.7", "number": "T1.7", "topicName": "Determination of HLB number of a surfactant by saponification method", "name": "Determination of HLB number of a surfactant by saponification method", "hours": 6 },
+          { "topicCode": "T1.8", "number": "T1.8", "topicName": "Determination of Freundlich and Langmuir constants using activated charcoal.", "name": "Determination of Freundlich and Langmuir constants using activated charcoal.", "hours": 6 },
+          { "topicCode": "T1.9", "number": "T1.9", "topicName": "Determination of critical micellar concentration of surfactants", "name": "Determination of critical micellar concentration of surfactants", "hours": 6 },
+          { "topicCode": "T1.10", "number": "T1.10", "topicName": "Determination of stability constant and donor acceptor ratio of PABA-Caffeine complex by solubility method", "name": "Determination of stability constant and donor acceptor ratio of PABA-Caffeine complex by solubility method", "hours": 6 },
+          { "topicCode": "T1.11", "number": "T1.11", "topicName": "Determination of stability constant and donor acceptor ratio of Cupric-Glycine complex by pH titration method.", "name": "Determination of stability constant and donor acceptor ratio of Cupric-Glycine complex by pH titration method.", "hours": 6 }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "Alfred Martin", "title": "Physical pharmacy", "edition": "Latest Edition" }
+    ],
+    "referenceBooks": [
+      { "author": "Lea andFebiger, Philadelphia", "title": "Stocklosam J. Pharmaceutical calculations", "edition": "Latest Edition" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 0,
+      "theoryExternal": 0,
+      "practicalInternal": 15,
+      "practicalExternal": 35,
+      "universityExam": 50
+    }
+  },
+  {
+    "subjectCode": "BP303T",
+    "courseName": "Pharmaceutical Microbiology",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 2,
+    "semester": 3,
+    "credits": 4,
+    "hours": 45,
+    "subjectType": "Theory",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "In the broadest sense, scope of microbiology is the study of all organisms that are invisible to the naked eye- that is the study of microorganisms. Microorganisms are necessary for the production of bread, cheese, beer, antibiotics, vaccines, vitamins, enzymes etc. Microbiology has an impact on medicine, agriculture, food science, ecology, genetics, biochemistry, immunology etc.",
+    "objectives": [
+      "Understand methods of identification, cultivation and preservation of various microorganisms",
+      "Importance of sterilization in microbiology and pharmaceutical industry",
+      "Learn sterility testing of pharmaceutical products",
+      "Microbiological standardization of Pharmaceuticals",
+      "Understand the cell culture technology and its applications in pharmaceutical industries"
+    ],
+    "courseOutcomes": [
+      "CO1: Describe the morphology, isolation, nutritional requirements and preservation of the microorganism in addition to the cultivation and measurement of microbial growths.",
+      "CO2: Evaluate the various sterilization techniques used in the pharmaceutical and microbiology laboratory followed by the analysis of the efficiency of various sterilization methods using sterility indicators.",
+      "CO3: Explain the different types of disinfectants and antiseptics with its mechanisms followed by the microbial validation of the pharmaceutical products.",
+      "CO4: Evaluate the microbiological assay of pharmaceutical substances, newer antibiotics and comprehending the aseptic areas and equipment’s used in the pharmaceutical industry.",
+      "CO5: Summarise the causes of various microbial contaminants of pharmaceutical products in the industrial areas and further to illustrate the animal cell culture technique in pharmaceutical industrial research."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "History, Morphology, reproduction and nutritional requirement of Bacteria",
+        "title": "History, Morphology, reproduction and nutritional requirement of Bacteria",
+        "hours": 10,
+        "description": "History, Morphology, reproduction and nutritional requirement of Bacteria",
+        "topics": [
+          { "topicCode": "T1.1", "number": "T1.1", "topicName": "Introduction, history of microbiology, its branches, scope and its importance.", "name": "Introduction, history of microbiology, its branches, scope and its importance.", "hours": 2 },
+          { "topicCode": "T1.2", "number": "T1.2", "topicName": "a) Introduction to Prokaryotes and Eukaryotes", "name": "a) Introduction to Prokaryotes and Eukaryotes", "hours": 2 },
+          { "topicCode": "T1.3", "number": "T1.3", "topicName": "b) Study of ultra-structure and morphological classification of bacteria, nutritional requirements, raw materials used for culture media and physical parameters for growth, growth curve, isolation and preservation methods for pure cultures, cultivation of anaerobes, quantitative measurement of bacterial growth (total and viable count).", "name": "b) Study of ultra-structure and morphological classification of bacteria, nutritional requirements, raw materials used for culture media and physical parameters for growth, growth curve, isolation and preservation methods for pure cultures, cultivation of anaerobes, quantitative measurement of bacterial growth (total and viable count).", "hours": 4 },
+          { "topicCode": "T1.4", "number": "T1.4", "topicName": "c) Study of different types of phase contrast microscopy, dark field microscopy and electron microscopy", "name": "c) Study of different types of phase contrast microscopy, dark field microscopy and electron microscopy", "hours": 2 }
+        ]
+      },
+      {
+        "unitCode": "Unit II",
+        "name": "Unit II",
+        "unitName": "Staining techniques, biochemical test and Sterilization process",
+        "title": "Staining techniques, biochemical test and Sterilization process",
+        "hours": 10,
+        "description": "Staining techniques, biochemical test and Sterilization process",
+        "topics": [
+          { "topicCode": "T2.1", "number": "T2.1", "topicName": "Identification of bacteria using staining techniques (simple, Gram‘s and Acid fast staining) and biochemical tests (IMViC).", "name": "Identification of bacteria using staining techniques (simple, Gram‘s and Acid fast staining) and biochemical tests (IMViC).", "hours": 4 },
+          { "topicCode": "T2.2", "number": "T2.2", "topicName": "Study of principle, procedure, merits, demerits and applications of Physical, chemical and mechanical method of sterilization. Evaluation of the efficiency of sterilization methods, Equipments employed in large scale sterilization. Sterility indicators.", "name": "Study of principle, procedure, merits, demerits and applications of Physical, chemical and mechanical method of sterilization. Evaluation of the efficiency of sterilization methods, Equipments employed in large scale sterilization. Sterility indicators.", "hours": 6 }
+        ]
+      },
+      {
+        "unitCode": "Unit III",
+        "name": "Unit III",
+        "unitName": "Study of Morphology, cultivation of Fungi and Virus & Disinfectants",
+        "title": "Study of Morphology, cultivation of Fungi and Virus & Disinfectants",
+        "hours": 10,
+        "description": "Study of Morphology, cultivation of Fungi and Virus & Disinfectants",
+        "topics": [
+          { "topicCode": "T3.1", "number": "T3.1", "topicName": "Study of morphology, classification, reproduction/replication and cultivation of Fungi and Virus.", "name": "Study of morphology, classification, reproduction/replication and cultivation of Fungi and Virus.", "hours": 3 },
+          { "topicCode": "T3.2", "number": "T3.2", "topicName": "Classification and mode of action of disinfectants. Factors influencing disinfection, antiseptics and their evaluation for bacteriostatic and bactericidal actions. Evaluation of bactericidal and bacteriostatic.", "name": "Classification and mode of action of disinfectants. Factors influencing disinfection, antiseptics and their evaluation for bacteriostatic and bactericidal actions. Evaluation of bactericidal and bacteriostatic.", "hours": 4 },
+          { "topicCode": "T3.3", "number": "T3.3", "topicName": "Sterility testing of products (solids, liquids, ophthalmic and other sterile products) according to IP, BP and USP.", "name": "Sterility testing of products (solids, liquids, ophthalmic and other sterile products) according to IP, BP and USP.", "hours": 3 }
+        ]
+      },
+      {
+        "unitCode": "Unit IV",
+        "name": "Unit IV",
+        "unitName": "Designing of aseptic area, Sources of contamination & Assays",
+        "title": "Designing of aseptic area, Sources of contamination & Assays",
+        "hours": 8,
+        "description": "Designing of aseptic area, Sources of contamination & Assays",
+        "topics": [
+          { "topicCode": "T4.1", "number": "T4.1", "topicName": "Designing of aseptic area, laminar flow equipments; study of different sources of contamination in an aseptic area and methods of prevention, clean area classification.", "name": "Designing of aseptic area, laminar flow equipments; study of different sources of contamination in an aseptic area and methods of prevention, clean area classification.", "hours": 4 },
+          { "topicCode": "T4.2", "number": "T4.2", "topicName": "Principles and methods of different microbiological assay. Methods for standardization of antibiotics, vitamins and amino acids. Assessment of a new antibiotic.", "name": "Principles and methods of different microbiological assay. Methods for standardization of antibiotics, vitamins and amino acids. Assessment of a new antibiotic.", "hours": 4 }
+        ]
+      },
+      {
+        "unitCode": "Unit V",
+        "name": "Unit V",
+        "unitName": "Microbial contamination and spoilage & Animal tissue culture",
+        "title": "Microbial contamination and spoilage & Animal tissue culture",
+        "hours": 7,
+        "description": "Microbial contamination and spoilage & Animal tissue culture",
+        "topics": [
+          { "topicCode": "T5.1", "number": "T5.1", "topicName": "Types of spoilage, factors affecting the microbial spoilage of pharmaceutical products, sources and types of microbial contaminants, assessment of microbial contamination and spoilage.", "name": "Types of spoilage, factors affecting the microbial spoilage of pharmaceutical products, sources and types of microbial contaminants, assessment of microbial contamination and spoilage.", "hours": 2 },
+          { "topicCode": "T5.2", "number": "T5.2", "topicName": "Preservation of pharmaceutical products using antimicrobial agents, evaluation of microbial stability of formulations.", "name": "Preservation of pharmaceutical products using antimicrobial agents, evaluation of microbial stability of formulations.", "hours": 2 },
+          { "topicCode": "T5.3", "number": "T5.3", "topicName": "Growth of animal cells in culture, general procedure for cell culture, Primary, established and transformed cell cultures. Application of cell cultures in pharmaceutical industry and research.", "name": "Growth of animal cells in culture, general procedure for cell culture, Primary, established and transformed cell cultures. Application of cell cultures in pharmaceutical industry and research.", "hours": 3 }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "W.B. Hugo and A.D. Russel", "title": "Pharmaceutical Microbiology", "edition": "Blackwell Scientific publications, Oxford London" },
+      { "author": "Prescott and Dunn.", "title": "Industrial Microbiology", "edition": "4th edition, CBS Publishers & Distributors,Delhi" },
+      { "author": "Pelczar, Chan Kreig", "title": "Microbiology", "edition": "Tata McGraw Hill edn." }
+    ],
+    "referenceBooks": [
+      { "author": "Rose", "title": "Industrial Microbiology", "edition": "Latest Edition" },
+      { "author": "Ananthnarayan", "title": "Text Book of Microbiology", "edition": "Orient-Longman, Chennai" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 25,
+      "theoryExternal": 75,
+      "practicalInternal": 0,
+      "practicalExternal": 0,
+      "universityExam": 100
+    }
+  },
+  {
+    "subjectCode": "BP307P",
+    "courseName": "Pharmaceutical Microbiology",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 2,
+    "semester": 3,
+    "credits": 2,
+    "hours": 60,
+    "subjectType": "Practical",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "Practical exercises in equipments, sterilization, subculturing, staining, pure culture isolation, microbiological assay, motility, sterility, and water analysis.",
+    "objectives": [
+      "Explore the equipment used in microbiology laboratory and sterilization methods",
+      "Know the morphological identification methods",
+      "Carry out the isolation of pure culture by using different methods",
+      "Explore the microbial sensitivity of the antibiotics against the microbes",
+      "Know the identification of microbes using biochemical tests"
+    ],
+    "courseOutcomes": [
+      "CO1: Demonstrate the various equipments, processing using in the microbiology laboratory, sterilization process and to sterilize the prepared media",
+      "CO2: Determine the sub culturing methods of growing the bacteria and fungi for nutrient slants preparations and identifying the morphology of the microbes with their categories.",
+      "CO3: Determine the isolation procedure to get the pure culture by using different methods",
+      "CO4: Estimation of antibiotics effect by utilizes various prescribed methods.",
+      "CO5: Analyze the water quality and test the sterility of the pharmaceutical preparations and biochemical tests to identify the specific bacteria."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Pharmaceutical Microbiology Practical List",
+        "title": "Pharmaceutical Microbiology Practical List",
+        "hours": 60,
+        "description": "Pharmaceutical Microbiology Practical List",
+        "topics": [
+          { "topicCode": "T1.1", "number": "T1.1", "topicName": "Introduction and study of different equipments and processing, e.g., B.O.D. incubator, laminar flow, aseptic hood, autoclave, hot air sterilizer, deep freezer, refrigerator, microscopes used in experimental microbiology.", "name": "Introduction and study of different equipments and processing, e.g., B.O.D. incubator, laminar flow, aseptic hood, autoclave, hot air sterilizer, deep freezer, refrigerator, microscopes used in experimental microbiology.", "hours": 6 },
+          { "topicCode": "T1.2", "number": "T1.2", "topicName": "Sterilization of glassware, preparation and sterilization of media.", "name": "Sterilization of glassware, preparation and sterilization of media.", "hours": 6 },
+          { "topicCode": "T1.3", "number": "T1.3", "topicName": "Sub culturing of bacteria and fungus. Nutrient stabs and slants preparations.", "name": "Sub culturing of bacteria and fungus. Nutrient stabs and slants preparations.", "hours": 6 },
+          { "topicCode": "T1.4", "number": "T1.4", "topicName": "Staining methods- Simple, Grams staining and acid fast staining (Demonstration with practical).", "name": "Staining methods- Simple, Grams staining and acid fast staining (Demonstration with practical).", "hours": 6 },
+          { "topicCode": "T1.5", "number": "T1.5", "topicName": "Isolation of pure culture of micro-organisms by multiple streak plate technique and other techniques.", "name": "Isolation of pure culture of micro-organisms by multiple streak plate technique and other techniques.", "hours": 6 },
+          { "topicCode": "T1.6", "number": "T1.6", "topicName": "Microbiological assay of antibiotics by cup plate method and other methods", "name": "Microbiological assay of antibiotics by cup plate method and other methods", "hours": 6 },
+          { "topicCode": "T1.7", "number": "T1.7", "topicName": "Motility determination by Hanging drop method.", "name": "Motility determination by Hanging drop method.", "hours": 6 },
+          { "topicCode": "T1.8", "number": "T1.8", "topicName": "Sterility testing of pharmaceuticals.", "name": "Sterility testing of pharmaceuticals.", "hours": 6 },
+          { "topicCode": "T1.9", "number": "T1.9", "topicName": "Bacteriological analysis of water", "name": "Bacteriological analysis of water", "hours": 6 },
+          { "topicCode": "T1.10", "number": "T1.10", "topicName": "Biochemical test (IMViC reactions)", "name": "Biochemical test (IMViC reactions)", "hours": 6 }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "W.B. Hugo and A.D. Russel", "title": "Pharmaceutical Microbiology", "edition": "Blackwell Scientific publications" }
+    ],
+    "referenceBooks": [
+      { "author": "Rose", "title": "Industrial Microbiology", "edition": "Latest Edition" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 0,
+      "theoryExternal": 0,
+      "practicalInternal": 15,
+      "practicalExternal": 35,
+      "universityExam": 50
+    }
+  },
+  {
+    "subjectCode": "BP304T",
+    "courseName": "Pharmaceutical Engineering",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 2,
+    "semester": 3,
+    "credits": 4,
+    "hours": 45,
+    "subjectType": "Theory",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "This course is designed to impart a fundamental knowledge on the art and science of various unit operations used in pharmaceutical industry.",
+    "objectives": [
+      "To know various unit operations used in Pharmaceutical industries",
+      "To understand the material handling techniques",
+      "To perform various processes involved in pharmaceutical manufacturing process",
+      "To carry out various test to prevent environmental pollution",
+      "To appreciate and comprehend significance of plant layout design for optimum use of resources",
+      "To appreciate the various preventive methods used for corrosion control in Pharmaceutical industries"
+    ],
+    "courseOutcomes": [
+      "CO1: Illustrate the basic concepts of fluid flow, flow meters and explaining about the concepts, laws, working and construction of mills involving size reduction and size separation.",
+      "CO2: Describe the equipment’s related to evaporation, distillation, heat interchangers with its mechanism and applications.",
+      "CO3: Explain the equilibrium moisture content, drying rate from drying curves, theory of mixing in addition to working procedure, art and theory of mixing, solidsolid, solid-liquid and liquid-liquid mixing equipment.",
+      "CO4: Summarise the principle and theory of filtrations and centrifugation in addition to filter aids, filter media, industrial filters, laboratory filtration equipments, centrifugal filters and centrifugal sedimentors.",
+      "CO5: Evaluate the significance of plant layout design for optimum use of resources in pharmaceutical industries followed by the types and various preventive methods used for corrosion control."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Flow of fluids, Size Reduction & Size Separation",
+        "title": "Flow of fluids, Size Reduction & Size Separation",
+        "hours": 10,
+        "description": "Flow of fluids, Size Reduction & Size Separation",
+        "topics": [
+          { "topicCode": "T1.1", "number": "T1.1", "topicName": "Flow of fluids: Types of manometers, Reynolds number and its significance, Bernoulli‘s theorem and its applications, Energy losses, Orifice meter, Venturimeter, Pitot tube and Rotometer.", "name": "Flow of fluids: Types of manometers, Reynolds number and its significance, Bernoulli‘s theorem and its applications, Energy losses, Orifice meter, Venturimeter, Pitot tube and Rotometer.", "hours": 3 },
+          { "topicCode": "T1.2", "number": "T1.2", "topicName": "Size Reduction: Objectives, Mechanisms and Laws governing size reduction, factors affecting size reduction, principles, construction, working, uses, merits and demerits of Hammer mill, ball mill, fluid energy mill, Edge runner mill and end runner mill.", "name": "Size Reduction: Objectives, Mechanisms and Laws governing size reduction, factors affecting size reduction, principles, construction, working, uses, merits and demerits of Hammer mill, ball mill, fluid energy mill, Edge runner mill and end runner mill.", "hours": 4 },
+          { "topicCode": "T1.3", "number": "T1.3", "topicName": "Size Separation: Objectives, applications and mechanism of size separation, official standards of powders, sieves, size separation Principles, construction, working, uses, merits and demerits of Sieve shaker, cyclone separator, Air separator, Bag filter and elutriation tank.", "name": "Size Separation: Objectives, applications and mechanism of size separation, official standards of powders, sieves, size separation Principles, construction, working, uses, merits and demerits of Sieve shaker, cyclone separator, Air separator, Bag filter and elutriation tank.", "hours": 3 }
+        ]
+      },
+      {
+        "unitCode": "Unit II",
+        "name": "Unit II",
+        "unitName": "Heat Transfer, Evaporation & Distillation",
+        "title": "Heat Transfer, Evaporation & Distillation",
+        "hours": 10,
+        "description": "Heat Transfer, Evaporation & Distillation",
+        "topics": [
+          { "topicCode": "T2.1", "number": "T2.1", "topicName": "Heat Transfer: Objectives, applications and Heat transfer mechanisms. Fourier‘s law, Heat transfer by conduction, convection and radiation. Heat interchangers and heat exchangers.", "name": "Heat Transfer: Objectives, applications and Heat transfer mechanisms. Fourier‘s law, Heat transfer by conduction, convection and radiation. Heat interchangers and heat exchangers.", "hours": 3 },
+          { "topicCode": "T2.2", "number": "T2.2", "topicName": "Evaporation: Objectives, applications and factors influencing evaporation, differences between evaporation and other heat process. principles, construction, working, uses, merits and demerits of Steam jacketed kettle, horizontal tube evaporator, climbing film evaporator, forced circulation evaporator, multiple effect evaporator and Economy of multiple effect evaporator.", "name": "Evaporation: Objectives, applications and factors influencing evaporation, differences between evaporation and other heat process. principles, construction, working, uses, merits and demerits of Steam jacketed kettle, horizontal tube evaporator, climbing film evaporator, forced circulation evaporator, multiple effect evaporator and Economy of multiple effect evaporator.", "hours": 4 },
+          { "topicCode": "T2.3", "number": "T2.3", "topicName": "Distillation: Basic principles and methodology of simple distillation, flash distillation, fractional distillation, distillation under reduced pressure, steam distillation and molecular distillation", "name": "Distillation: Basic principles and methodology of simple distillation, flash distillation, fractional distillation, distillation under reduced pressure, steam distillation and molecular distillation", "hours": 3 }
+        ]
+      },
+      {
+        "unitCode": "Unit III",
+        "name": "Unit III",
+        "unitName": "Drying & Mixing",
+        "title": "Drying & Mixing",
+        "hours": 10,
+        "description": "Drying & Mixing",
+        "topics": [
+          { "topicCode": "T3.1", "number": "T3.1", "topicName": "Drying: Objectives, applications and mechanism of drying process, measurements and applications of Equilibrium Moisture content, rate of drying curve. principles, construction, working, uses, merits and demerits of Tray dryer, drum dryer spray dryer, fluidized bed dryer, vacuum dryer, freeze dryer.", "name": "Drying: Objectives, applications and mechanism of drying process, measurements and applications of Equilibrium Moisture content, rate of drying curve. principles, construction, working, uses, merits and demerits of Tray dryer, drum dryer spray dryer, fluidized bed dryer, vacuum dryer, freeze dryer.", "hours": 5 },
+          { "topicCode": "T3.2", "number": "T3.2", "topicName": "Mixing: Objectives, applications and factors affecting mixing, Difference between solid and liquid mixing, mechanism of solid mixing, liquids mixing and semisolids mixing. Principles, Construction, Working, uses, Merits and Demerits of Double cone blender, twin shell blender, ribbon blender, Sigma blade mixer, planetary mixers, Propellers, Turbines, Paddles and Silverson Emulsifier.", "name": "Mixing: Objectives, applications and factors affecting mixing, Difference between solid and liquid mixing, mechanism of solid mixing, liquids mixing and semisolids mixing. Principles, Construction, Working, uses, Merits and Demerits of Double cone blender, twin shell blender, ribbon blender, Sigma blade mixer, planetary mixers, Propellers, Turbines, Paddles and Silverson Emulsifier.", "hours": 5 }
+        ]
+      },
+      {
+        "unitCode": "Unit IV",
+        "name": "Unit IV",
+        "unitName": "Filtration & Centrifugation",
+        "title": "Filtration & Centrifugation",
+        "hours": 8,
+        "description": "Filtration & Centrifugation",
+        "topics": [
+          { "topicCode": "T4.1", "number": "T4.1", "topicName": "Filtration: Objectives, applications, Theories and Factors influencing filtration, filter aids, filter medias. Principle, Construction, Working, Uses, Merits and demerits of plate and frame filter, filter leaf, rotary drum filter, Meta filter and Cartridge filter, membrane filters and Seidtz filter.", "name": "Filtration: Objectives, applications, Theories and Factors influencing filtration, filter aids, filter medias. Principle, Construction, Working, Uses, Merits and demerits of plate and frame filter, filter leaf, rotary drum filter, Meta filter and Cartridge filter, membrane filters and Seidtz filter.", "hours": 4 },
+          { "topicCode": "T4.2", "number": "T4.2", "topicName": "Centrifugation: Objectives, principle and applications of Centrifugation, principles, construction, working, uses, merits and demerits of Perforated basket centrifuge, Non-perforated basket centrifuge, semi continuous centrifuge and super centrifuge.", "name": "Centrifugation: Objectives, principle and applications of Centrifugation, principles, construction, working, uses, merits and demerits of Perforated basket centrifuge, Non-perforated basket centrifuge, semi continuous centrifuge and super centrifuge.", "hours": 4 }
+        ]
+      },
+      {
+        "unitCode": "Unit V",
+        "name": "Unit V",
+        "unitName": "Materials of pharmaceutical plant construction, Corrosion and its prevention",
+        "title": "Materials of pharmaceutical plant construction, Corrosion and its prevention",
+        "hours": 7,
+        "description": "Materials of pharmaceutical plant construction, Corrosion and its prevention",
+        "topics": [
+          { "topicCode": "T5.1", "number": "T5.1", "topicName": "Materials of pharmaceutical plant construction, Corrosion and its prevention: Factors affecting during materials selected for Pharmaceutical plant construction, Theories of corrosion, types of corrosion and their prevention. Ferrous and nonferrous metals, inorganic and organic non metals.basic of material handling system.", "name": "Materials of pharmaceutical plant construction, Corrosion and its prevention: Factors affecting during materials selected for Pharmaceutical plant construction, Theories of corrosion, types of corrosion and their prevention. Ferrous and nonferrous metals, inorganic and organic non metals.basic of material handling system.", "hours": 7 }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "Walter L Badger and Julius Banchero", "title": "Introduction to chemical engineering", "edition": "Latest edition" },
+      { "author": "Mcabe Smith", "title": "Unit operation of chemical engineering", "edition": "Latest edition" },
+      { "author": "C.V.S Subrahmanyam et al.", "title": "Pharmaceutical engineering principles and practices", "edition": "Latest edition" }
+    ],
+    "referenceBooks": [
+      { "author": "Martin", "title": "Remington practice of pharmacy", "edition": "Latest edition" },
+      { "author": "Lachmann", "title": "Theory and practice of industrial pharmacy", "edition": "Latest edition" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 25,
+      "theoryExternal": 75,
+      "practicalInternal": 0,
+      "practicalExternal": 0,
+      "universityExam": 100
+    }
+  },
+  {
+    "subjectCode": "BP308P",
+    "courseName": "Pharmaceutical Engineering",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 2,
+    "semester": 3,
+    "credits": 2,
+    "hours": 60,
+    "subjectType": "Practical",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "Experiments in heat transfer, filtration, drying curves, crystallization, humidity, tablet machinery, size analysis, size reduction and mixing.",
+    "objectives": [
+      "To evaluate the equipment related to heat transfer, milling, filtration, drying, crystallization, evaporation, extraction and its working",
+      "To determine wet bulb and dry bulb temperatures and to plot the humidity charts. To evaluate the factors affecting the rate of filtration and to calculate the radiation constant",
+      "To determine the rate of evaporation and crystallization and to find the factors affecting the centrifugation",
+      "To evaluate the moisture content, drying rate from the drying curves",
+      "To evaluate the size separation by sieving method and determination of particle size done by size reduction by ball mill using Rittinger’s law"
+    ],
+    "courseOutcomes": [
+      "CO1: Finding the equipment related to heat transfer, milling, filtration, drying, crystallization, evaporation and extraction and its working.",
+      "CO2: Determining the wet bulb and dry bulb temperatures and to plot the humidity charts and the factors affecting the rate of filtration and to calculate the radiation constant.",
+      "CO3: Determining the rate of evaporation, crystallization and the factors affecting the centrifugation.",
+      "CO4: Evaluating the moisture content, drying rate from the drying curves.",
+      "CO5: Determining the size separation by sieving method and particle size done by size reduction using Rittinger’s law."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Pharmaceutical Engineering Practical List",
+        "title": "Pharmaceutical Engineering Practical List",
+        "hours": 60,
+        "description": "Pharmaceutical Engineering Practical List",
+        "topics": [
+          { "topicCode": "T1.1", "number": "T1.1", "topicName": "Determination of radiation constant of brass, iron, unpainted and painted glass.", "name": "Determination of radiation constant of brass, iron, unpainted and painted glass.", "hours": 5 },
+          { "topicCode": "T1.2", "number": "T1.2", "topicName": "Steam distillation – To calculate the efficiency of steam distillation.", "name": "Steam distillation – To calculate the efficiency of steam distillation.", "hours": 5 },
+          { "topicCode": "T1.3", "number": "T1.3", "topicName": "To determine the overall heat transfer coefficient by heat exchanger.", "name": "To determine the overall heat transfer coefficient by heat exchanger.", "hours": 5 },
+          { "topicCode": "T1.4", "number": "T1.4", "topicName": "Construction of drying curves (for calcium carbonate and starch).", "name": "Construction of drying curves (for calcium carbonate and starch).", "hours": 5 },
+          { "topicCode": "T1.5", "number": "T1.5", "topicName": "Determination of moisture content and loss on drying.", "name": "Determination of moisture content and loss on drying.", "hours": 5 },
+          { "topicCode": "T1.6", "number": "T1.6", "topicName": "Determination of humidity of air – i) From wet and dry bulb temperatures – use of Dew point method.", "name": "Determination of humidity of air – i) From wet and dry bulb temperatures – use of Dew point method.", "hours": 5 },
+          { "topicCode": "T1.7", "number": "T1.7", "topicName": "Description of Construction working and application of Pharmaceutical Machinery such as rotary tablet machine, fluidized bed coater, fluid energy mill, de humidifier.", "name": "Description of Construction working and application of Pharmaceutical Machinery such as rotary tablet machine, fluidized bed coater, fluid energy mill, de humidifier.", "hours": 5 },
+          { "topicCode": "T1.8", "number": "T1.8", "topicName": "Size analysis by sieving – To evaluate size distribution of tablet granulations – Construction of various size frequency curves including arithmetic and logarithmic probability plots.", "name": "Size analysis by sieving – To evaluate size distribution of tablet granulations – Construction of various size frequency curves including arithmetic and logarithmic probability plots.", "hours": 5 },
+          { "topicCode": "T1.9", "number": "T1.9", "topicName": "Size reduction: To verify the laws of size reduction using ball mill and determining Kicks, Rittinger‘s, Bond‘s coefficients, power requirement and critical speed of Ball Mill.", "name": "Size reduction: To verify the laws of size reduction using ball mill and determining Kicks, Rittinger‘s, Bond‘s coefficients, power requirement and critical speed of Ball Mill.", "hours": 5 },
+          { "topicCode": "T1.10", "number": "T1.10", "topicName": "Demonstration of colloid mill, planetary mixer, fluidized bed dryer, freeze dryer and such other major equipment.", "name": "Demonstration of colloid mill, planetary mixer, fluidized bed dryer, freeze dryer and such other major equipment.", "hours": 5 },
+          { "topicCode": "T1.11", "number": "T1.11", "topicName": "Factors affecting Rate of Filtration and Evaporation (Surface area, Concentration and Thickness/ viscosity XII. To study the effect of time on the Rate of Crystallization.", "name": "Factors affecting Rate of Filtration and Evaporation (Surface area, Concentration and Thickness/ viscosity XII. To study the effect of time on the Rate of Crystallization.", "hours": 5 },
+          { "topicCode": "T1.12", "number": "T1.12", "topicName": "To calculate the uniformity Index for given sample by using Double Cone Blender.", "name": "To calculate the uniformity Index for given sample by using Double Cone Blender.", "hours": 5 }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "Walter L Badger and Julius Banchero", "title": "Introduction to chemical engineering", "edition": "Latest edition" }
+    ],
+    "referenceBooks": [
+      { "author": "Martin", "title": "Remington practice of pharmacy", "edition": "Latest edition" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 0,
+      "theoryExternal": 0,
+      "practicalInternal": 15,
+      "practicalExternal": 35,
+      "universityExam": 50
+    }
+  }
+]

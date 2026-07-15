@@ -1,0 +1,547 @@
+[
+  {
+    "subjectCode": "BP105T",
+    "courseName": "Communication Skills - Theory",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 1,
+    "semester": 1,
+    "credits": 2,
+    "hours": 30,
+    "subjectType": "Theory",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "This course will prepare the young pharmacy student to interact effectively with doctors, nurses, dentists, physiotherapists and other health workers. At the end of this course the student will get the soft skills set to work cohesively with the team as a team player and will add value to the pharmaceutical business.",
+    "objectives": [
+      "Understand the behavioral needs for a Pharmacist to function effectively in the areas of pharmaceutical operation.",
+      "Communicate effectively (Verbal and Non Verbal).",
+      "Effectively manage the team as a team player.",
+      "Develop interview skills.",
+      "Develop Leadership qualities and essentials."
+    ],
+    "courseOutcomes": [
+      "CO1: Understand communication process, barriers, and perspectives.",
+      "CO2: Master elements of face-to-face communication and communication styles.",
+      "CO3: Demonstrate basic listening skills and effective written communication.",
+      "CO4: Develop interview skills and presentation delivery.",
+      "CO5: Participate effectively in group discussions."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Communication Skills, Barriers to communication & Perspectives in Communication",
+        "title": "Communication Skills, Barriers to communication & Perspectives in Communication",
+        "hours": 7,
+        "description": "Communication Skills, Barriers to communication & Perspectives in Communication",
+        "topics": [
+          {
+            "topicCode": "T1.1",
+            "number": "T1.1",
+            "topicName": "Communication Skills: Introduction, Definition, The Importance of Communication, The Communication Process – Source, Message, Encoding, Channel, Decoding, Receiver, Feedback, Context.",
+            "name": "Communication Skills: Introduction, Definition, The Importance of Communication, The Communication Process – Source, Message, Encoding, Channel, Decoding, Receiver, Feedback, Context.",
+            "hours": 3
+          },
+          {
+            "topicCode": "T1.2",
+            "number": "T1.2",
+            "topicName": "Barriers to communication: Physiological Barriers, Physical Barriers, Cultural Barriers, Language Barriers, Gender Barriers, Interpersonal Barriers, Psychological Barriers, Emotional barriers.",
+            "name": "Barriers to communication: Physiological Barriers, Physical Barriers, Cultural Barriers, Language Barriers, Gender Barriers, Interpersonal Barriers, Psychological Barriers, Emotional barriers.",
+            "hours": 2
+          },
+          {
+            "topicCode": "T1.3",
+            "number": "T1.3",
+            "topicName": "Perspectives in Communication: Introduction, Visual Perception, Language, Other factors affecting our perspective - Past Experiences, Prejudices, Feelings, Environment.",
+            "name": "Perspectives in Communication: Introduction, Visual Perception, Language, Other factors affecting our perspective - Past Experiences, Prejudices, Feelings, Environment.",
+            "hours": 2
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit II",
+        "name": "Unit II",
+        "unitName": "Elements of Communication & Communication Styles",
+        "title": "Elements of Communication & Communication Styles",
+        "hours": 7,
+        "description": "Elements of Communication & Communication Styles",
+        "topics": [
+          {
+            "topicCode": "T2.1",
+            "number": "T2.1",
+            "topicName": "Elements of Communication: Introduction, Face to Face Communication - Tone of Voice, Body Language (Non-verbal communication), Verbal Communication, Physical Communication.",
+            "name": "Elements of Communication: Introduction, Face to Face Communication - Tone of Voice, Body Language (Non-verbal communication), Verbal Communication, Physical Communication.",
+            "hours": 4
+          },
+          {
+            "topicCode": "T2.2",
+            "number": "T2.2",
+            "topicName": "Communication Styles: Introduction, The Communication Styles Matrix with example for each - Direct Communication Style, Spirited Communication Style, Systematic Communication Style, Considerate Communication Style.",
+            "name": "Communication Styles: Introduction, The Communication Styles Matrix with example for each - Direct Communication Style, Spirited Communication Style, Systematic Communication Style, Considerate Communication Style.",
+            "hours": 3
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit III",
+        "name": "Unit III",
+        "unitName": "Basic Listening Skills, Effective Written Communication & Writing Effectively",
+        "title": "Basic Listening Skills, Effective Written Communication & Writing Effectively",
+        "hours": 7,
+        "description": "Basic Listening Skills, Effective Written Communication & Writing Effectively",
+        "topics": [
+          {
+            "topicCode": "T3.1",
+            "number": "T3.1",
+            "topicName": "Basic Listening Skills: Introduction, Self-Awareness, Active Listening, Becoming an Active Listener, Listening in Difficult Situations.",
+            "name": "Basic Listening Skills: Introduction, Self-Awareness, Active Listening, Becoming an Active Listener, Listening in Difficult Situations.",
+            "hours": 2
+          },
+          {
+            "topicCode": "T3.2",
+            "number": "T3.2",
+            "topicName": "Effective Written Communication: Introduction, When and When Not to Use Written Communication - Complexity of the Topic, Amount of Discussion Required, Shades of Meaning, Formal Communication.",
+            "name": "Effective Written Communication: Introduction, When and When Not to Use Written Communication - Complexity of the Topic, Amount of Discussion Required, Shades of Meaning, Formal Communication.",
+            "hours": 3
+          },
+          {
+            "topicCode": "T3.3",
+            "number": "T3.3",
+            "topicName": "Writing Effectively: Subject Lines, Put the Main Point First, Know Your Audience, Organization of the Message.",
+            "name": "Writing Effectively: Subject Lines, Put the Main Point First, Know Your Audience, Organization of the Message.",
+            "hours": 2
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit IV",
+        "name": "Unit IV",
+        "unitName": "Interview Skills & Giving Presentations",
+        "title": "Interview Skills & Giving Presentations",
+        "hours": 5,
+        "description": "Interview Skills & Giving Presentations",
+        "topics": [
+          { "topicCode": "T4.1", "number": "T4.1", "topicName": "Interview Skills: Purpose of an interview, Do‘s and Dont‘s of an interview.", "name": "Interview Skills: Purpose of an interview, Do‘s and Dont‘s of an interview.", "hours": 2 },
+          { "topicCode": "T4.2", "number": "T4.2", "topicName": "Giving Presentations: Dealing with Fears, Planning your Presentation, Structuring Your Presentation, Delivering Your Presentation, Techniques of Delivery.", "name": "Giving Presentations: Dealing with Fears, Planning your Presentation, Structuring Your Presentation, Delivering Your Presentation, Techniques of Delivery.", "hours": 3 }
+        ]
+      },
+      {
+        "unitCode": "Unit V",
+        "name": "Unit V",
+        "unitName": "Group Discussion",
+        "title": "Group Discussion",
+        "hours": 4,
+        "description": "Group Discussion",
+        "topics": [
+          {
+            "topicCode": "T5.1",
+            "number": "T5.1",
+            "topicName": "Group Discussion: Introduction, Communication skills in group discussion, Do‘s and Dont‘s of group discussion.",
+            "name": "Group Discussion: Introduction, Communication skills in group discussion, Do‘s and Dont‘s of group discussion.",
+            "hours": 4
+          }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "Andreja J. Ruther Ford", "title": "Basic communication skills for Technology", "edition": "2nd Edition" },
+      { "author": "Sanjay Kumar, Pushpalata", "title": "Communication skills", "edition": "1st Edition" }
+    ],
+    "referenceBooks": [
+      { "author": "Gill Hasson", "title": "Brilliant- Communication skills", "edition": "1st Edition" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 25,
+      "theoryExternal": 75,
+      "practicalInternal": 0,
+      "practicalExternal": 0,
+      "universityExam": 100
+    }
+  },
+  {
+    "subjectCode": "BP111P",
+    "courseName": "Communication Skills - Practical",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 1,
+    "semester": 1,
+    "credits": 1,
+    "hours": 30,
+    "subjectType": "Practical",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "The learning modules are to be conducted using wordsworth® English language lab software.",
+    "objectives": [
+      "Develop phonetics and English pronunciation.",
+      "Gain practical experience in presentation, interview and group discussion."
+    ],
+    "courseOutcomes": [
+      "CO1: Express basic communication topics such as meeting people, asking questions, making friends.",
+      "CO2: Pronounce consonant sounds, vowels, and nouns in English accurately.",
+      "CO3: Demonstrate advanced comprehension, figures of speech and listening skills.",
+      "CO4: Illustrate effective writing and email etiquette.",
+      "CO5: Execute structured presentations, interview handling and interview skills."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Communication Skills Practical",
+        "title": "Communication Skills Practical",
+        "hours": 30,
+        "description": "Communication Skills Practical",
+        "topics": [
+          { "topicCode": "T1.1", "number": "T1.1", "topicName": "Basic communication covering the following topics: Meeting People, Asking Questions, Making Friends, What did you do?, Do‘s and Dont‘s.", "name": "Basic communication covering the following topics: Meeting People, Asking Questions, Making Friends, What did you do?, Do‘s and Dont‘s.", "hours": 8 },
+          { "topicCode": "T1.2", "number": "T1.2", "topicName": "Pronunciations covering the following topics: Pronunciation (Consonant Sounds), Pronunciation and Nouns, Pronunciation (Vowel Sounds).", "name": "Pronunciations covering the following topics: Pronunciation (Consonant Sounds), Pronunciation and Nouns, Pronunciation (Vowel Sounds).", "hours": 6 },
+          { "topicCode": "T1.3", "number": "T1.3", "topicName": "Advanced Learning: Listening Comprehension / Direct and Indirect Speech, Figures of Speech, Effective Communication, Writing Skills, Effective Writing.", "name": "Advanced Learning: Listening Comprehension / Direct and Indirect Speech, Figures of Speech, Effective Communication, Writing Skills, Effective Writing.", "hours": 8 },
+          { "topicCode": "T1.4", "number": "T1.4", "topicName": "Interview Handling Skills, E-Mail etiquette, Presentation Skills.", "name": "Interview Handling Skills, E-Mail etiquette, Presentation Skills.", "hours": 8 }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "Gopala Swamy Ramesh", "title": "The Ace of Soft Skills: Attitude, Communication and Etiquette for success", "edition": "5th Edition" }
+    ],
+    "referenceBooks": [
+      { "author": "Barun K Mitra", "title": "Personality development and soft skills", "edition": "1st Edition" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 0,
+      "theoryExternal": 0,
+      "practicalInternal": 15,
+      "practicalExternal": 35,
+      "universityExam": 50
+    }
+  },
+  {
+    "subjectCode": "BP106RBT",
+    "courseName": "Remedial Biology - Theory",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 1,
+    "semester": 1,
+    "credits": 2,
+    "hours": 30,
+    "subjectType": "Theory",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "To learn and understand the components of living world, structure and functional system of plant and animal kingdom.",
+    "objectives": [
+      "Know the classification and salient features of five kingdoms of life.",
+      "Understand the basic components of anatomy and physiology of plant.",
+      "Know and understand the basic components of anatomy and physiology animal with special reference to human."
+    ],
+    "courseOutcomes": [
+      "CO1: Classify the living world, name organisms, and understand morphology/anatomy of flowering plants.",
+      "CO2: Discuss body fluids, human circulatory system, digestion, and absorption mechanisms.",
+      "CO3: Explain breathing, respiration, excretion, neural coordination, chemical regulation, and reproduction.",
+      "CO4: Understand plant nutrition, nitrogen metabolism, and photosynthesis.",
+      "CO5: Discuss plant respiration, growth regulators, cell structures, and animal/plant tissues."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Living world & Morphology of Flowering plants",
+        "title": "Living world & Morphology of Flowering plants",
+        "hours": 7,
+        "description": "Living world & Morphology of Flowering plants",
+        "topics": [
+          {
+            "topicCode": "T1.1",
+            "number": "T1.1",
+            "topicName": "Living world: Definition and characters of living organisms, Diversity in the living world, Binomial nomenclature, Five kingdoms of life and basis of classification. Salient features of Monera, Potista, Fungi, Animalia and Plantae, Virus.",
+            "name": "Living world: Definition and characters of living organisms, Diversity in the living world, Binomial nomenclature, Five kingdoms of life and basis of classification. Salient features of Monera, Potista, Fungi, Animalia and Plantae, Virus.",
+            "hours": 4
+          },
+          {
+            "topicCode": "T1.2",
+            "number": "T1.2",
+            "topicName": "Morphology of Flowering plants: Morphology of different parts of flowering plants – Root, stem, inflorescence, flower, leaf, fruit, seed. General Anatomy of Root, stem, leaf of monocotyledons and Dicotylidones.",
+            "name": "Morphology of Flowering plants: Morphology of different parts of flowering plants – Root, stem, inflorescence, flower, leaf, fruit, seed. General Anatomy of Root, stem, leaf of monocotyledons and Dicotylidones.",
+            "hours": 3
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit II",
+        "name": "Unit II",
+        "unitName": "Body fluids and circulation & Digestion and Absorption",
+        "title": "Body fluids and circulation & Digestion and Absorption",
+        "hours": 7,
+        "description": "Body fluids and circulation & Digestion and Absorption",
+        "topics": [
+          {
+            "topicCode": "T2.1",
+            "number": "T2.1",
+            "topicName": "Body fluids and circulation: Composition of blood, blood groups, coagulation of blood, Composition and functions of lymph, Human circulatory system, Structure of human heart and blood vessels, Cardiac cycle, cardiac output and ECG.",
+            "name": "Body fluids and circulation: Composition of blood, blood groups, coagulation of blood, Composition and functions of lymph, Human circulatory system, Structure of human heart and blood vessels, Cardiac cycle, cardiac output and ECG.",
+            "hours": 4
+          },
+          {
+            "topicCode": "T2.2",
+            "number": "T2.2",
+            "topicName": "Digestion and Absorption: Human alimentary canal and digestive glands, Role of digestive enzymes, Digestion, absorption and assimilation of digested food.",
+            "name": "Digestion and Absorption: Human alimentary canal and digestive glands, Role of digestive enzymes, Digestion, absorption and assimilation of digested food.",
+            "hours": 3
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit III",
+        "name": "Unit III",
+        "unitName": "Breathing and respiration, Excretory products, Neural control, Chemical coordination & Human reproduction",
+        "title": "Breathing and respiration, Excretory products, Neural control, Chemical coordination & Human reproduction",
+        "hours": 7,
+        "description": "Breathing and respiration, Excretory products, Neural control, Chemical coordination & Human reproduction",
+        "topics": [
+          { "topicCode": "T3.1", "number": "T3.1", "topicName": "Breathing and respiration: Human respiratory system, Mechanism of breathing and its regulation, Exchange of gases, transport of gases and regulation of respiration, Respiratory volumes.", "name": "Breathing and respiration: Human respiratory system, Mechanism of breathing and its regulation, Exchange of gases, transport of gases and regulation of respiration, Respiratory volumes.", "hours": 2 },
+          { "topicCode": "T3.2", "number": "T3.2", "topicName": "Excretory products and their elimination: Modes of excretion, Human excretory system- structure and function, Urine formation, Rennin angiotensin system.", "name": "Excretory products and their elimination: Modes of excretion, Human excretory system- structure and function, Urine formation, Rennin angiotensin system.", "hours": 1.5 },
+          { "topicCode": "T3.3", "number": "T3.3", "topicName": "Neural control and coordination: Definition and classification of nervous system, Structure of a neuron, Generation and conduction of nerve impulse, Structure of brain and spinal cord, Functions of cerebrum, cerebellum, hypothalamus and medulla oblangata.", "name": "Neural control and coordination: Definition and classification of nervous system, Structure of a neuron, Generation and conduction of nerve impulse, Structure of brain and spinal cord, Functions of cerebrum, cerebellum, hypothalamus and medulla oblangata.", "hours": 1.5 },
+          { "topicCode": "T3.4", "number": "T3.4", "topicName": "Chemical coordination and regulation: Endocrine glands and their secretions, Functions of hormones secreted by endocrine glands.", "name": "Chemical coordination and regulation: Endocrine glands and their secretions, Functions of hormones secreted by endocrine glands.", "hours": 1 },
+          { "topicCode": "T3.5", "number": "T3.5", "topicName": "Human reproduction: Parts of female reproductive system, Parts of male reproductive system, Spermatogenesis and Oogenesis, Menstrual cycle.", "name": "Human reproduction: Parts of female reproductive system, Parts of male reproductive system, Spermatogenesis and Oogenesis, Menstrual cycle.", "hours": 1 }
+        ]
+      },
+      {
+        "unitCode": "Unit IV",
+        "name": "Unit IV",
+        "unitName": "Plants and mineral nutrition & Photosynthesis",
+        "title": "Plants and mineral nutrition & Photosynthesis",
+        "hours": 5,
+        "description": "Plants and mineral nutrition & Photosynthesis",
+        "topics": [
+          { "topicCode": "T4.1", "number": "T4.1", "topicName": "Plants and mineral nutrition: Essential mineral, macro and micronutrients, Nitrogen metabolism, Nitrogen cycle, biological nitrogen fixation.", "name": "Plants and mineral nutrition: Essential mineral, macro and micronutrients, Nitrogen metabolism, Nitrogen cycle, biological nitrogen fixation.", "hours": 2.5 },
+          { "topicCode": "T4.2", "number": "T4.2", "topicName": "Photosynthesis: Autotrophic nutrition, photosynthesis, Photosynthetic pigments, Factors affecting photosynthesis.", "name": "Photosynthesis: Autotrophic nutrition, photosynthesis, Photosynthetic pigments, Factors affecting photosynthesis.", "hours": 2.5 }
+        ]
+      },
+      {
+        "unitCode": "Unit V",
+        "name": "Unit V",
+        "unitName": "Plant respiration, Plant growth, Cell & Tissues",
+        "title": "Plant respiration, Plant growth, Cell & Tissues",
+        "hours": 4,
+        "description": "Plant respiration, Plant growth, Cell & Tissues",
+        "topics": [
+          { "topicCode": "T5.1", "number": "T5.1", "topicName": "Plant respiration: Respiration, glycolysis, fermentation (anaerobic).", "name": "Plant respiration: Respiration, glycolysis, fermentation (anaerobic).", "hours": 1 },
+          { "topicCode": "T5.2", "number": "T5.2", "topicName": "Plant growth and development: Phases and rate of plant growth, Condition of growth, Introduction to plant growth Regulators.", "name": "Plant growth and development: Phases and rate of plant growth, Condition of growth, Introduction to plant growth Regulators.", "hours": 1 },
+          { "topicCode": "T5.3", "number": "T5.3", "topicName": "Cell - The unit of life: Structure and functions of cell and cell organelles. Cell division.", "name": "Cell - The unit of life: Structure and functions of cell and cell organelles. Cell division.", "hours": 1 },
+          { "topicCode": "T5.4", "number": "T5.4", "topicName": "Tissues: Definition, types of tissues, location and functions.", "name": "Tissues: Definition, types of tissues, location and functions.", "hours": 1 }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "S. B. Gokhale", "title": "Text book of Biology", "edition": "Latest Edition" },
+      { "author": "Dr. Thulajappa and Dr. Seetaram", "title": "A Text book of Biology", "edition": "Latest Edition" }
+    ],
+    "referenceBooks": [
+      { "author": "A.C.Dutta", "title": "Botany for Degree students", "edition": "Latest Edition" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 25,
+      "theoryExternal": 75,
+      "practicalInternal": 0,
+      "practicalExternal": 0,
+      "universityExam": 100
+    }
+  },
+  {
+    "subjectCode": "BP112RBP",
+    "courseName": "Remedial Biology - Practical",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 1,
+    "semester": 1,
+    "credits": 1,
+    "hours": 30,
+    "subjectType": "Practical",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "Compounding and identification tests using computer models, histological slides, and physiological measurements.",
+    "objectives": [
+      "Conduct basic biological experiments.",
+      "Examine microstructures and slide preparations under a microscope."
+    ],
+    "courseOutcomes": [
+      "CO1: Use microscope and perform section cutting, mounting, staining, and permanent slide preparation.",
+      "CO2: Study cell structure and its inclusions.",
+      "CO3: Study stem, root, leaf structures and their modifications.",
+      "CO4: Understand the structure and identification of bones and tissues.",
+      "CO5: Determine blood group, blood pressure, and tidal volume."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Remedial Biology Practical",
+        "title": "Remedial Biology Practical",
+        "hours": 30,
+        "description": "Remedial Biology Practical",
+        "topics": [
+          { "topicCode": "T1.1", "number": "T1.1", "topicName": "Introduction to experiments in biology: a) Study of Microscope b) Section cutting techniques c) Mounting and staining d) Permanent slide preparation.", "name": "Introduction to experiments in biology: a) Study of Microscope b) Section cutting techniques c) Mounting and staining d) Permanent slide preparation.", "hours": 6 },
+          { "topicCode": "T1.2", "number": "T1.2", "topicName": "Study of cell and its inclusions.", "name": "Study of cell and its inclusions.", "hours": 3 },
+          { "topicCode": "T1.3", "number": "T1.3", "topicName": "Study of Stem, Root, Leaf and its modifications.", "name": "Study of Stem, Root, Leaf and its modifications.", "hours": 4 },
+          { "topicCode": "T1.4", "number": "T1.4", "topicName": "Detailed study of frog by using computer models.", "name": "Detailed study of frog by using computer models.", "hours": 4 },
+          { "topicCode": "T1.5", "number": "T1.5", "topicName": "Microscopic study and identification of tissues.", "name": "Microscopic study and identification of tissues.", "hours": 3 },
+          { "topicCode": "T1.6", "number": "T1.6", "topicName": "Identification of bones.", "name": "Identification of bones.", "hours": 3 },
+          { "topicCode": "T1.7", "number": "T1.7", "topicName": "Determination of blood group.", "name": "Determination of blood group.", "hours": 3 },
+          { "topicCode": "T1.8", "number": "T1.8", "topicName": "Determination of blood pressure.", "name": "Determination of blood pressure.", "hours": 2 },
+          { "topicCode": "T1.9", "number": "T1.9", "topicName": "Determination of tidal volume.", "name": "Determination of tidal volume.", "hours": 2 }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "S.B.Gokhale, C.K.Kokate and S.P.Shriwastava", "title": "A Manual of pharmaceutical biology practical", "edition": "Latest Edition" }
+    ],
+    "referenceBooks": [
+      { "author": "S.R.Kale and R.R.Kale", "title": "Practical human anatomy and physiology", "edition": "Latest Edition" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 0,
+      "theoryExternal": 0,
+      "practicalInternal": 15,
+      "practicalExternal": 35,
+      "universityExam": 50
+    }
+  },
+  {
+    "subjectCode": "BP106RMT",
+    "courseName": "Remedial Mathematics - Theory",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 1,
+    "semester": 1,
+    "credits": 2,
+    "hours": 30,
+    "subjectType": "Theory",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "This is an introductory course in mathematics. This subject deals with the introduction to Partial fraction, Logarithm, matrices and Determinant, Analytical geometry, Calculus, differential equation and Laplace transform.",
+    "objectives": [
+      "Know the theory and their application in Pharmacy.",
+      "Solve the different types of problems by applying theory.",
+      "Appreciate the important application of mathematics in Pharmacy."
+    ],
+    "courseOutcomes": [
+      "CO1: Resolve algebraic expressions using partial fractions and logarithms.",
+      "CO2: Define, classify, and solve functions, limits, and continuity equations.",
+      "CO3: Solve systems of linear equations using matrices and determinants.",
+      "CO4: Apply differential and integral calculus equations to pharmaceutical kinetics.",
+      "CO5: Formulate and solve differential equations and Laplace transforms."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Partial fraction, Logarithms, Function & Limits and continuity",
+        "title": "Partial fraction, Logarithms, Function & Limits and continuity",
+        "hours": 6,
+        "description": "Partial fraction, Logarithms, Function & Limits and continuity",
+        "topics": [
+          {
+            "topicCode": "T1.1",
+            "number": "T1.1",
+            "topicName": "Partial fraction: Introduction, Polynomial, Rational fractions, Proper and Improper fractions, Partial fraction, Resolving into Partial fraction, Application of Partial Fraction in Chemical Kinetics and Pharmacokinetics.",
+            "name": "Partial fraction: Introduction, Polynomial, Rational fractions, Proper and Improper fractions, Partial fraction, Resolving into Partial fraction, Application of Partial Fraction in Chemical Kinetics and Pharmacokinetics.",
+            "hours": 2
+          },
+          {
+            "topicCode": "T1.2",
+            "number": "T1.2",
+            "topicName": "Logarithms: Introduction, Definition, Theorems/Properties of logarithms, Common logarithms, Characteristic and Mantissa, worked examples, application of logarithm to solve pharmaceutical problems.",
+            "name": "Logarithms: Introduction, Definition, Theorems/Properties of logarithms, Common logarithms, Characteristic and Mantissa, worked examples, application of logarithm to solve pharmaceutical problems.",
+            "hours": 2
+          },
+          {
+            "topicCode": "T1.3",
+            "number": "T1.3",
+            "topicName": "Function: Real Valued function, Classification of real valued functions.",
+            "name": "Function: Real Valued function, Classification of real valued functions.",
+            "hours": 1
+          },
+          {
+            "topicCode": "T1.4",
+            "number": "T1.4",
+            "topicName": "Limits and continuity: Introduction, Limit of a function, Definition of limit of a function (ε - δ definition), standard limits and limit properties.",
+            "name": "Limits and continuity: Introduction, Limit of a function, Definition of limit of a function (ε - δ definition), standard limits and limit properties.",
+            "hours": 1
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit II",
+        "name": "Unit II",
+        "unitName": "Matrices and Determinant",
+        "title": "Matrices and Determinant",
+        "hours": 6,
+        "description": "Matrices and Determinant",
+        "topics": [
+          {
+            "topicCode": "T2.1",
+            "number": "T2.1",
+            "topicName": "Matrices and Determinant: Introduction matrices, Types of matrices, Operation on matrices, Transpose of a matrix, Matrix Multiplication, Determinants, Properties of determinants, Product of determinants, Minors and co-Factors, Adjoint or adjugate of a square matrix, Singular and non-singular matrices, Inverse of a matrix, Solution of system of linear of equations using matrix method, Cramer‘s rule, Characteristic equation and roots of a square matrix, Cayley–Hamilton theorem, Application of Matrices in solving Pharmacokinetic equations.",
+            "name": "Matrices and Determinant: Introduction matrices, Types of matrices, Operation on matrices, Transpose of a matrix, Matrix Multiplication, Determinants, Properties of determinants, Product of determinants, Minors and co-Factors, Adjoint or adjugate of a square matrix, Singular and non-singular matrices, Inverse of a matrix, Solution of system of linear of equations using matrix method, Cramer‘s rule, Characteristic equation and roots of a square matrix, Cayley–Hamilton theorem, Application of Matrices in solving Pharmacokinetic equations.",
+            "hours": 6
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit III",
+        "name": "Unit III",
+        "unitName": "Calculus",
+        "title": "Calculus",
+        "hours": 6,
+        "description": "Calculus",
+        "topics": [
+          {
+            "topicCode": "T3.1",
+            "number": "T3.1",
+            "topicName": "Calculus: Differentiation: Introductions, Derivative of a function, Derivative of a constant, Derivative of a product of a constant and a function, Derivative of the sum or difference of two functions, Derivative of the product of two functions (product formula), Derivative of the quotient of two functions (Quotient formula) – Without Proof, Derivative of x^n w.r.t x, where n is any rational number, Derivative of e^x, Derivative of log_e x, Derivative of a^x, Derivative of trigonometric functions from first principles (without Proof), Successive Differentiation, Conditions for a function to be a maximum or a minimum at a point. Application.",
+            "name": "Calculus: Differentiation: Introductions, Derivative of a function, Derivative of a constant, Derivative of a product of a constant and a function, Derivative of the sum or difference of two functions, Derivative of the product of two functions (product formula), Derivative of the quotient of two functions (Quotient formula) – Without Proof, Derivative of x^n w.r.t x, where n is any rational number, Derivative of e^x, Derivative of log_e x, Derivative of a^x, Derivative of trigonometric functions from first principles (without Proof), Successive Differentiation, Conditions for a function to be a maximum or a minimum at a point. Application.",
+            "hours": 6
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit IV",
+        "name": "Unit IV",
+        "unitName": "Analytical Geometry & Integration",
+        "title": "Analytical Geometry & Integration",
+        "hours": 6,
+        "description": "Analytical Geometry & Integration",
+        "topics": [
+          { "topicCode": "T4.1", "number": "T4.1", "topicName": "Analytical Geometry: Introduction: Signs of the Coordinates, Distance formula. Straight Line: Slope or gradient of a straight line, Conditions for Parallelism and perpendicularity of two lines, Slope of a line joining two Points, Slope – intercept form of a straight line.", "name": "Analytical Geometry: Introduction: Signs of the Coordinates, Distance formula. Straight Line: Slope or gradient of a straight line, Conditions for Parallelism and perpendicularity of two lines, Slope of a line joining two Points, Slope – intercept form of a straight line.", "hours": 3 },
+          { "topicCode": "T4.2", "number": "T4.2", "topicName": "Integration: Introduction, Definition, Standard formulae, Rules of integration, Method of substitution, Method of Partial fractions, Integration by parts, definite integrals, application.", "name": "Integration: Introduction, Definition, Standard formulae, Rules of integration, Method of substitution, Method of Partial fractions, Integration by parts, definite integrals, application.", "hours": 3 }
+        ]
+      },
+      {
+        "unitCode": "Unit V",
+        "name": "Unit V",
+        "unitName": "Differential Equations & Laplace Transform",
+        "title": "Differential Equations & Laplace Transform",
+        "hours": 6,
+        "description": "Differential Equations & Laplace Transform",
+        "topics": [
+          { "topicCode": "T5.1", "number": "T5.1", "topicName": "Differential Equations: Some basic definitions, Order and degree, Equations in separable form, Homogeneous equations, Linear Differential equations, Exact equations, Application in solving Pharmacokinetic equations.", "name": "Differential Equations: Some basic definitions, Order and degree, Equations in separable form, Homogeneous equations, Linear Differential equations, Exact equations, Application in solving Pharmacokinetic equations.", "hours": 3 },
+          { "topicCode": "T5.2", "number": "T5.2", "topicName": "Laplace Transform: Introduction, Definition, Properties of Laplace transform, Laplace Transforms of elementary functions, Inverse Laplace transforms, Laplace transform of derivatives, Application to solve Linear differential equations, application in solving Chemical kinetics and Pharmacokinetics equations.", "name": "Laplace Transform: Introduction, Definition, Properties of Laplace transform, Laplace Transforms of elementary functions, Inverse Laplace transforms, Laplace transform of derivatives, Application to solve Linear differential equations, application in solving Chemical kinetics and Pharmacokinetics equations.", "hours": 3 }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "Panchaksharappa, Gowda D.H.", "title": "Pharmaceutical Mathematics with application to Pharmacy", "edition": "Latest Edition" }
+    ],
+    "referenceBooks": [
+      { "author": "Dr.B.S.Grewal", "title": "Higher Engineering Mathematics", "edition": "Latest Edition" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 25,
+      "theoryExternal": 75,
+      "practicalInternal": 0,
+      "practicalExternal": 0,
+      "universityExam": 100
+    }
+  }
+]

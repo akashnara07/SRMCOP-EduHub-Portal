@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Search, Bell, Bookmark, ShieldCheck, ChevronRight, HelpCircle } from 'lucide-react';
+import { Search, Bell, ShieldCheck, ChevronRight, HelpCircle } from 'lucide-react';
 import GlassCard from './GlassCard';
 import { mockAnnouncements } from '../data/mockData';
 
@@ -100,16 +100,6 @@ export default function Header({
                   3
                 </span>
               </div>
-            </div>
-          </GlassCard>
-
-          {/* Quick Support / Bookmarks bar */}
-          <GlassCard 
-            onClick={() => onGoToScreen(currentRole === 'Student' ? 'student-library' : 'faculty-dashboard')}
-            className="w-14 h-14 cursor-pointer hover:bg-white/85"
-          >
-            <div className="flex items-center justify-center h-full w-full">
-              <Bookmark className="w-5 h-5 text-gray-700" />
             </div>
           </GlassCard>
 

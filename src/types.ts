@@ -1,4 +1,4 @@
-export type ProgrammeType = 'B.Pharm' | 'Pharm.D' | 'M.Pharm' | 'Ph.D.' | 'Certificate';
+export type ProgrammeType = 'B.Pharm' | 'Pharm.D' | 'M.Pharm';
 
 export interface Resource {
   id: string;
@@ -29,6 +29,7 @@ export interface Subject {
   color: string; // Tailwind gradient/color class
   resources: Resource[];
   academicYear?: string; // e.g., "2025-2026"
+  regulation?: string;
 }
 
 export interface Announcement {

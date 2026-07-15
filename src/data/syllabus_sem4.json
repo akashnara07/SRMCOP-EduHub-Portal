@@ -1,0 +1,825 @@
+[
+  {
+    "subjectCode": "BP401T",
+    "courseName": "Pharmaceutical Organic Chemistry III",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 2,
+    "semester": 4,
+    "credits": 4,
+    "hours": 45,
+    "subjectType": "Theory",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "This subject imparts knowledge on stereo-chemical aspects of organic compounds and organic reactions, important named reactions, chemistry of important heterocyclic compounds. It also emphasizes on medicinal and other uses of organic compounds.",
+    "objectives": [
+      "understand the methods of preparation and properties of organic compounds",
+      "explain the stereo chemical aspects of organic compounds and stereo chemical reactions",
+      "know the medicinal uses and other applications of organic compounds"
+    ],
+    "courseOutcomes": [
+      "CO1: Discuss the different types of isomerism and explaining the stereochemical reactions in organic compounds with their importance",
+      "CO2: Outline methods for the determination of the configuration of geometric isomers and discussing stereoselective and stereospecific reactions in organic molecules",
+      "CO3: Sketch about important heterocyclic compounds with a 5-membered and 6-membered ring system and explaining the reactions and aromaticity in 5-membered heterocyclic ring compounds",
+      "CO4: Explain the method of preparation and reactions of some important fused heterocyclics and outlining the Medicinal uses and applications of some important derivatives in heterocyclics",
+      "CO5: Sketch different organic reactions in the organic compounds and discussing the vital application of reagents in organic reactions"
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Stereo isomerism: Optical isomerism",
+        "title": "Stereo isomerism: Optical isomerism",
+        "hours": 10,
+        "description": "Stereo isomerism: Optical isomerism",
+        "topics": [
+          { "topicCode": "T1.1", "number": "T1.1", "topicName": "Optical isomerism – Optical activity, enantiomerism, diastereoisomerism, meso compounds", "name": "Optical isomerism – Optical activity, enantiomerism, diastereoisomerism, meso compounds", "hours": 3 },
+          { "topicCode": "T1.2", "number": "T1.2", "topicName": "Elements of symmetry, chiral and achiral molecules", "name": "Elements of symmetry, chiral and achiral molecules", "hours": 2 },
+          { "topicCode": "T1.3", "number": "T1.3", "topicName": "DL system of nomenclature of optical isomers, sequence rules, RS system of nomenclature of optical isomers", "name": "DL system of nomenclature of optical isomers, sequence rules, RS system of nomenclature of optical isomers", "hours": 2 },
+          { "topicCode": "T1.4", "number": "T1.4", "topicName": "Reactions of chiral molecules, Racemic modification and resolution of racemic mixture, Asymmetric synthesis: partial and absolute", "name": "Reactions of chiral molecules, Racemic modification and resolution of racemic mixture, Asymmetric synthesis: partial and absolute", "hours": 3 }
+        ]
+      },
+      {
+        "unitCode": "Unit II",
+        "name": "Unit II",
+        "unitName": "Geometrical isomerism",
+        "title": "Geometrical isomerism",
+        "hours": 10,
+        "description": "Geometrical isomerism",
+        "topics": [
+          { "topicCode": "T2.1", "number": "T2.1", "topicName": "Geometrical isomerism: Nomenclature of geometrical isomers (Cis Trans, EZ, Syn Anti systems)", "name": "Geometrical isomerism: Nomenclature of geometrical isomers (Cis Trans, EZ, Syn Anti systems)", "hours": 3 },
+          { "topicCode": "T2.2", "number": "T2.2", "topicName": "Methods of determination of configuration of geometrical isomers.", "name": "Methods of determination of configuration of geometrical isomers.", "hours": 2 },
+          { "topicCode": "T2.3", "number": "T2.3", "topicName": "Conformational isomerism in Ethane, n-Butane and Cyclohexane.", "name": "Conformational isomerism in Ethane, n-Butane and Cyclohexane.", "hours": 2 },
+          { "topicCode": "T2.4", "number": "T2.4", "topicName": "Stereo isomerism in biphenyl compounds (Atropisomerism) and conditions for optical activity. Stereospecific and stereoselective reactions", "name": "Stereo isomerism in biphenyl compounds (Atropisomerism) and conditions for optical activity. Stereospecific and stereoselective reactions", "hours": 3 }
+        ]
+      },
+      {
+        "unitCode": "Unit III",
+        "name": "Unit III",
+        "unitName": "Heterocyclic compounds",
+        "title": "Heterocyclic compounds",
+        "hours": 10,
+        "description": "Heterocyclic compounds",
+        "topics": [
+          { "topicCode": "T3.1", "number": "T3.1", "topicName": "Heterocyclic compounds: Nomenclature and classification", "name": "Heterocyclic compounds: Nomenclature and classification", "hours": 3 },
+          { "topicCode": "T3.2", "number": "T3.2", "topicName": "Synthesis, reactions and medicinal uses of following compounds/derivatives: Pyrrole, Furan, and Thiophene", "name": "Synthesis, reactions and medicinal uses of following compounds/derivatives: Pyrrole, Furan, and Thiophene", "hours": 4 },
+          { "topicCode": "T3.3", "number": "T3.3", "topicName": "Relative aromaticity and reactivity of pyrrole, furan and thiophene.", "name": "Relative aromaticity and reactivity of pyrrole, furan and thiophene.", "hours": 3 }
+        ]
+      },
+      {
+        "unitCode": "Unit IV",
+        "name": "Unit IV",
+        "unitName": "Synthesis, reactions and medicinal uses of following compounds/derivatives",
+        "title": "Synthesis, reactions and medicinal uses of following compounds/derivatives",
+        "hours": 8,
+        "description": "Synthesis, reactions and medicinal uses of following compounds/derivatives",
+        "topics": [
+          { "topicCode": "T4.1", "number": "T4.1", "topicName": "Pyrazole, Imidazole, Oxazole and Thiazole.", "name": "Pyrazole, Imidazole, Oxazole and Thiazole.", "hours": 3 },
+          { "topicCode": "T4.2", "number": "T4.2", "topicName": "Pyridine, Quinoline, Isoquinoline, Acridine and Indole. Basicity of pyridine", "name": "Pyridine, Quinoline, Isoquinoline, Acridine and Indole. Basicity of pyridine", "hours": 3 },
+          { "topicCode": "T4.3", "number": "T4.3", "topicName": "Synthesis and medicinal uses of Pyrimidine, Purine, azepines and their derivatives", "name": "Synthesis and medicinal uses of Pyrimidine, Purine, azepines and their derivatives", "hours": 2 }
+        ]
+      },
+      {
+        "unitCode": "Unit V",
+        "name": "Unit V",
+        "unitName": "Reactions of synthetic importance",
+        "title": "Reactions of synthetic importance",
+        "hours": 7,
+        "description": "Reactions of synthetic importance",
+        "topics": [
+          { "topicCode": "T5.1", "number": "T5.1", "topicName": "Metal hydride reduction (NaBH4 and LiAlH4), Clemmensen reduction, Birch reduction, Wolff Kishner reduction.", "name": "Metal hydride reduction (NaBH4 and LiAlH4), Clemmensen reduction, Birch reduction, Wolff Kishner reduction.", "hours": 3 },
+          { "topicCode": "T5.2", "number": "T5.2", "topicName": "Oppenauer - oxidation and Dakin reaction.", "name": "Oppenauer - oxidation and Dakin reaction.", "hours": 2 },
+          { "topicCode": "T5.3", "number": "T5.3", "topicName": "Beckmanns rearrangement and Schmidt rearrangement. Claisen – Schmidt condensation.", "name": "Beckmanns rearrangement and Schmidt rearrangement. Claisen – Schmidt condensation.", "hours": 2 }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "I. L. Finar", "title": "Organic Chemistry Volume I", "edition": "Pearson Education" },
+      { "author": "I. L. Finar", "title": "Organic Chemistry Volume II", "edition": "Pearson Education" }
+    ],
+    "referenceBooks": [
+      { "author": "Raj K. Bansal", "title": "Heterocyclic Chemistry", "edition": "New Age International Publishers" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 25,
+      "theoryExternal": 75,
+      "practicalInternal": 0,
+      "practicalExternal": 0,
+      "universityExam": 100
+    }
+  },
+  {
+    "subjectCode": "BP402T",
+    "courseName": "Medicinal Chemistry I",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 2,
+    "semester": 4,
+    "credits": 4,
+    "hours": 45,
+    "subjectType": "Theory",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "This subject is designed to impart fundamental knowledge on the structure, chemistry and therapeutic value of drugs. The subject emphasizes on structure activity relationships of drugs, importance of physicochemical properties and metabolism of drugs. The syllabus also emphasizes on chemical synthesis of important drugs under each class.",
+    "objectives": [
+      "understand the chemistry of drugs with respect to their pharmacological activity",
+      "understand the drug metabolic pathways, adverse effect and therapeutic value of drugs",
+      "know the Structural Activity Relationship (SAR) of different class of drugs",
+      "write the chemical synthesis of some drugs"
+    ],
+    "courseOutcomes": [
+      "CO1: Outline the history and development of medicinal chemistry and summarizing the physicochemical properties in relation to pharmacological activity, Explain the drug metabolisms process Phase I and Phase II.",
+      "CO2: Outline the biosynthesis and catabolism of catecholamines and explain the Structure, uses, Mechanism of action, synthesis and SAR of drugs acting on autonomic nervous system",
+      "CO3: Outline the biosynthesis and metabolism of acetylcholine and explain the Structure, MOA, uses, important synthesis and SAR of drugs acting on Cholinergic nervous system.",
+      "CO4: Illustrate the Structure, uses, synthesis, MOA and SAR of barbiturates, Benzodiazepines and phenothiazines derivatives, Discussing the SAR, MOA and synthesis of anticonvulsants",
+      "CO5: Discuss the Structure and synthesis of general anaesthetics. Identify the MOA, SAR and synthesis of narcotic and non-narcotic analgesics."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Introduction to Medicinal Chemistry & Drug metabolism",
+        "title": "Introduction to Medicinal Chemistry & Drug metabolism",
+        "hours": 10,
+        "description": "Introduction to Medicinal Chemistry & Drug metabolism",
+        "topics": [
+          { "topicCode": "T1.1", "number": "T1.1", "topicName": "Introduction to Medicinal Chemistry, History and development of medicinal chemistry.", "name": "Introduction to Medicinal Chemistry, History and development of medicinal chemistry.", "hours": 2 },
+          { "topicCode": "T1.2", "number": "T1.2", "topicName": "Physicochemical properties in relation to biological action : Ionization, Solubility, Partition Coefficient, Hydrogen bonding, Protein binding, Chelation, Bioisosterism, Optical and Geometrical isomerism.", "name": "Physicochemical properties in relation to biological action : Ionization, Solubility, Partition Coefficient, Hydrogen bonding, Protein binding, Chelation, Bioisosterism, Optical and Geometrical isomerism.", "hours": 4 },
+          { "topicCode": "T1.3", "number": "T1.3", "topicName": "Drug metabolism: drug metabolism principles - Phase I and Phase II. Factors affecting drug metabolism including stereo chemical aspects.", "name": "Drug metabolism: drug metabolism principles - Phase I and Phase II. Factors affecting drug metabolism including stereo chemical aspects.", "hours": 4 }
+        ]
+      },
+      {
+        "unitCode": "Unit II",
+        "name": "Unit II",
+        "unitName": "Drugs acting on Autonomic Nervous System",
+        "title": "Drugs acting on Autonomic Nervous System",
+        "hours": 10,
+        "description": "Drugs acting on Autonomic Nervous System",
+        "topics": [
+          { "topicCode": "T2.1", "number": "T2.1", "topicName": "Adrenergic Neurotransmitters: Biosynthesis and catabolism of catecholamine. Adrenergic receptors (Alpha and Beta) and their distribution.", "name": "Adrenergic Neurotransmitters: Biosynthesis and catabolism of catecholamine. Adrenergic receptors (Alpha and Beta) and their distribution.", "hours": 2 },
+          { "topicCode": "T2.2", "number": "T2.2", "topicName": "Sympathomimetic agents: SAR of Sympathomimetic agents. Direct acting: Nor-epinephrine, Epinephrine, Phenylephrine*, Dopamine, Methyldopa, Clonidine, Dobutamine, Isoproterenol, Terbutaline, Salbutamol*, Bitolterol, Naphazoline, Oxymetazoline and Xylometazoline. Indirect acting agents: Hydroxyamphetamine, Pseudoephedrine, Propylhexedrine. Agents with mixed mechanism: Ephedrine, Metaraminol.", "name": "Sympathomimetic agents: SAR of Sympathomimetic agents. Direct acting: Nor-epinephrine, Epinephrine, Phenylephrine*, Dopamine, Methyldopa, Clonidine, Dobutamine, Isoproterenol, Terbutaline, Salbutamol*, Bitolterol, Naphazoline, Oxymetazoline and Xylometazoline. Indirect acting agents: Hydroxyamphetamine, Pseudoephedrine, Propylhexedrine. Agents with mixed mechanism: Ephedrine, Metaraminol.", "hours": 5 },
+          { "topicCode": "T2.3", "number": "T2.3", "topicName": "Adrenergic Antagonists: Alpha adrenergic blockers: Tolazoline*, Phentolamine, Phenoxybenzamine, Prazosin, Dihydroergotamine, Methysergide. Beta adrenergic blockers: SAR of beta blockers, Propranolol*, Metibranolol, Atenolol, Betazolol, Bisoprolol, Esmolol, Metoprolol, Labetolol, Carvedilol.", "name": "Adrenergic Antagonists: Alpha adrenergic blockers: Tolazoline*, Phentolamine, Phenoxybenzamine, Prazosin, Dihydroergotamine, Methysergide. Beta adrenergic blockers: SAR of beta blockers, Propranolol*, Metibranolol, Atenolol, Betazolol, Bisoprolol, Esmolol, Metoprolol, Labetolol, Carvedilol.", "hours": 3 }
+        ]
+      },
+      {
+        "unitCode": "Unit III",
+        "name": "Unit III",
+        "unitName": "Cholinergic neurotransmitters & agents",
+        "title": "Cholinergic neurotransmitters & agents",
+        "hours": 10,
+        "description": "Cholinergic neurotransmitters & agents",
+        "topics": [
+          { "topicCode": "T3.1", "number": "T3.1", "topicName": "Cholinergic neurotransmitters: Biosynthesis and catabolism of acetylcholine. Cholinergic receptors (Muscarinic and Nicotinic) and their distribution.", "name": "Cholinergic neurotransmitters: Biosynthesis and catabolism of acetylcholine. Cholinergic receptors (Muscarinic and Nicotinic) and their distribution.", "hours": 2 },
+          { "topicCode": "T3.2", "number": "T3.2", "topicName": "Parasympathomimetic agents: SAR of Parasympathomimetic agents. Direct acting agents: Acetylcholine, Carbachol*, Bethanechol, Methacholine, Pilocarpine.", "name": "Parasympathomimetic agents: SAR of Parasympathomimetic agents. Direct acting agents: Acetylcholine, Carbachol*, Bethanechol, Methacholine, Pilocarpine.", "hours": 3 },
+          { "topicCode": "T3.3", "number": "T3.3", "topicName": "Indirect acting/ Cholinesterase inhibitors (Reversible and Irreversible): Physostigmine, Neostigmine*, Pyridostigmine, Edrophonium chloride, Tacrine hydrochloride, Ambenonium chloride, Isofluorphate, Echothiophate iodide, Parathione, Malathion. Cholinesterase reactivator: Pralidoxime chloride.", "name": "Indirect acting/ Cholinesterase inhibitors (Reversible and Irreversible): Physostigmine, Neostigmine*, Pyridostigmine, Edrophonium chloride, Tacrine hydrochloride, Ambenonium chloride, Isofluorphate, Echothiophate iodide, Parathione, Malathion. Cholinesterase reactivator: Pralidoxime chloride.", "hours": 3 },
+          { "topicCode": "T3.4", "number": "T3.4", "topicName": "Cholinergic Blocking agents: SAR of cholinolytic agents. Solanaceous alkaloids and analogues: Atropine sulphate, Hyoscyamine sulphate, Scopolamine hydrobromide, Homatropine hydrobromide, Ipratropium bromide*. Synthetic cholinergic blocking agents: Tropicamide, Cyclopentolate hydrochloride, Clidinium bromide, Dicyclomine hydrochloride*, Glycopyrrolate, Methantheline bromide, Propantheline bromide, Benztropine mesylate, Orphenadrine citrate, Biperidine hydrochloride, Procyclidine hydrochloride*, Tridihexethyl chloride, Isopropamide iodide, Ethopropazine hydrochloride.", "name": "Cholinergic Blocking agents: SAR of cholinolytic agents. Solanaceous alkaloids and analogues: Atropine sulphate, Hyoscyamine sulphate, Scopolamine hydrobromide, Homatropine hydrobromide, Ipratropium bromide*. Synthetic cholinergic blocking agents: Tropicamide, Cyclopentolate hydrochloride, Clidinium bromide, Dicyclomine hydrochloride*, Glycopyrrolate, Methantheline bromide, Propantheline bromide, Benztropine mesylate, Orphenadrine citrate, Biperidine hydrochloride, Procyclidine hydrochloride*, Tridihexethyl chloride, Isopropamide iodide, Ethopropazine hydrochloride.", "hours": 2 }
+        ]
+      },
+      {
+        "unitCode": "Unit IV",
+        "name": "Unit IV",
+        "unitName": "Drugs acting on Central Nervous System",
+        "title": "Drugs acting on Central Nervous System",
+        "hours": 8,
+        "description": "Drugs acting on Central Nervous System",
+        "topics": [
+          { "topicCode": "T4.1", "number": "T4.1", "topicName": "Sedatives and Hypnotics: Benzodiazepines: SAR of Benzodiazepines, Chlordiazepoxide, Diazepam*, Oxazepam, Chlorazepate, Lorazepam, Alprazolam, Zolpidem. Barbiturtes: SAR of barbiturates, Barbital*, Phenobarbital, Mephobarbital, Amobarbital, Butabarbital, Pentobarbital, Secobarbital. Miscellaneous: Amides and imides: Glutethmide. Alcohol and their carbamate derivatives: Meprobomate, Ethchlorvynol. Aldehyde and their derivatives: Triclofos sodium, Paraldehyde.", "name": "Sedatives and Hypnotics: Benzodiazepines: SAR of Benzodiazepines, Chlordiazepoxide, Diazepam*, Oxazepam, Chlorazepate, Lorazepam, Alprazolam, Zolpidem. Barbiturtes: SAR of barbiturates, Barbital*, Phenobarbital, Mephobarbital, Amobarbital, Butabarbital, Pentobarbital, Secobarbital. Miscellaneous: Amides and imides: Glutethmide. Alcohol and their carbamate derivatives: Meprobomate, Ethchlorvynol. Aldehyde and their derivatives: Triclofos sodium, Paraldehyde.", "hours": 3 },
+          { "topicCode": "T4.2", "number": "T4.2", "topicName": "Antipsychotics: Phenothiazeines: SAR of Phenothiazeines - Promazine hydrochloride, Chlorpromazine hydrochloride*, Triflupromazine, Thioridazine hydrochloride, Piperacetazine hydrochloride, Prochlorperazine maleate, Trifluoperazine hydrochloride. Ring Analogues of Phenothiazeines: Chlorprothixene, Thiothixene, Loxapine succinate, Clozapine. Fluro buterophenones: Haloperidol, Droperidol, Risperidone. Beta amino ketones: Molindone hydrochloride. Benzamides: Sulpieride.", "name": "Antipsychotics: Phenothiazeines: SAR of Phenothiazeines - Promazine hydrochloride, Chlorpromazine hydrochloride*, Triflupromazine, Thioridazine hydrochloride, Piperacetazine hydrochloride, Prochlorperazine maleate, Trifluoperazine hydrochloride. Ring Analogues of Phenothiazeines: Chlorprothixene, Thiothixene, Loxapine succinate, Clozapine. Fluro buterophenones: Haloperidol, Droperidol, Risperidone. Beta amino ketones: Molindone hydrochloride. Benzamides: Sulpieride.", "hours": 3 },
+          { "topicCode": "T4.3", "number": "T4.3", "topicName": "Anticonvulsants: SAR of Anticonvulsants, mechanism of anticonvulsant action. Barbiturates: Phenobarbitone, Methabarbital. Hydantoins: Phenytoin*, Mephenytoin, Ethotoin. Oxazolidine diones: Trimethadione, Paramethadione. Succinimides: Phensuximide, Methsuximide, Ethosuximide*. Urea and monoacylureas: Phenacemide, Carbamazepine*. Benzodiazepines: Clonazepam. Miscellaneous: Primidone, Valproic acid, Gabapentin, Felbamate.", "name": "Anticonvulsants: SAR of Anticonvulsants, mechanism of anticonvulsant action. Barbiturates: Phenobarbitone, Methabarbital. Hydantoins: Phenytoin*, Mephenytoin, Ethotoin. Oxazolidine diones: Trimethadione, Paramethadione. Succinimides: Phensuximide, Methsuximide, Ethosuximide*. Urea and monoacylureas: Phenacemide, Carbamazepine*. Benzodiazepines: Clonazepam. Miscellaneous: Primidone, Valproic acid, Gabapentin, Felbamate.", "hours": 2 }
+        ]
+      },
+      {
+        "unitCode": "Unit V",
+        "name": "Unit V",
+        "unitName": "General anesthetics, Narcotic & non-narcotic analgesics",
+        "title": "General anesthetics, Narcotic & non-narcotic analgesics",
+        "hours": 7,
+        "description": "General anesthetics, Narcotic & non-narcotic analgesics",
+        "topics": [
+          { "topicCode": "T5.1", "number": "T5.1", "topicName": "General anesthetics: Inhalation anesthetics: Halothane*, Methoxyflurane, Enflurane, Sevoflurane, Isoflurane, Desflurane. Ultra short acting barbiturates: Methohexital sodium*, Thiamylal sodium, Thiopental sodium. Dissociative anesthetics: Ketamine hydrochloride.*", "name": "General anesthetics: Inhalation anesthetics: Halothane*, Methoxyflurane, Enflurane, Sevoflurane, Isoflurane, Desflurane. Ultra short acting barbiturates: Methohexital sodium*, Thiamylal sodium, Thiopental sodium. Dissociative anesthetics: Ketamine hydrochloride.*", "hours": 2 },
+          { "topicCode": "T5.2", "number": "T5.2", "topicName": "Narcotic and non-narcotic analgesics: Morphine and related drugs: SAR of Morphine analogues, Morphine sulphate, Codeine, Meperidine hydrochloride, Anilerdine hydrochloride, Diphenoxylate hydrochloride, Loperamide hydrochloride, Fentanyl citrate*, Methadone hydrochloride*, Propoxyphene hydrochloride, Pentazocine, Levorphanol tartarate. Narcotic antagonists: Nalorphine hydrochloride, Levallorphan tartarate, Naloxone hydrochloride.", "name": "Narcotic and non-narcotic analgesics: Morphine and related drugs: SAR of Morphine analogues, Morphine sulphate, Codeine, Meperidine hydrochloride, Anilerdine hydrochloride, Diphenoxylate hydrochloride, Loperamide hydrochloride, Fentanyl citrate*, Methadone hydrochloride*, Propoxyphene hydrochloride, Pentazocine, Levorphanol tartarate. Narcotic antagonists: Nalorphine hydrochloride, Levallorphan tartarate, Naloxone hydrochloride.", "hours": 3 },
+          { "topicCode": "T5.3", "number": "T5.3", "topicName": "Anti-inflammatory agents: Sodium salicylate, Aspirin, Mefenamic acid*, Meclofenamate, Indomethacin, Sulindac, Tolmetin, Zomepriac, Diclofenac, Ketorolac, Ibuprofen*, Naproxen, Piroxicam, Phenacetin, Acetaminophen, Antipyrine, Phenylbutazone.", "name": "Anti-inflammatory agents: Sodium salicylate, Aspirin, Mefenamic acid*, Meclofenamate, Indomethacin, Sulindac, Tolmetin, Zomepriac, Diclofenac, Ketorolac, Ibuprofen*, Naproxen, Piroxicam, Phenacetin, Acetaminophen, Antipyrine, Phenylbutazone.", "hours": 2 }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "Wilson and Giswold", "title": "Organic medicinal and Pharmaceutical Chemistry", "edition": "Latest Edition" },
+      { "author": "Foye", "title": "Principles of Medicinal Chemistry", "edition": "Latest Edition" }
+    ],
+    "referenceBooks": [
+      { "author": "Martindale", "title": "Martindale‘s extra pharmacopoeia", "edition": "Latest Edition" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 25,
+      "theoryExternal": 75,
+      "practicalInternal": 0,
+      "practicalExternal": 0,
+      "universityExam": 100
+    }
+  },
+  {
+    "subjectCode": "BP406P",
+    "courseName": "Medicinal Chemistry I",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 2,
+    "semester": 4,
+    "credits": 2,
+    "hours": 60,
+    "subjectType": "Practical",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "Preparation of drugs/intermediates (1,3-pyrazole, 1,3-oxazole, Benzimidazole, Benztriazole, 2,3-diphenyl quinoxaline, Benzocaine, Phenytoin, Phenothiazine, Barbiturate), Assay of drugs, and determination of Partition coefficient.",
+    "objectives": [
+      "Understand the synthesis of some important heterocyclic compounds like benzimidazole, benzotriazole and 3-Methyl-1-phenyl pyrazol-5-one.",
+      "Know the assay of Aspirin and Ibuprofen tablets.",
+      "Examine the percentage purity of furosemide tablets and determine the partition coefficient of drugs",
+      "Understand the synthesis of medicinal compounds like Phenytoin and Benzocaine.",
+      "Understand the synthesis of medicinal compounds like 2,3-diphenyl quinoxaline and 4-Benzylidene-2-phenyl oxazol-5-one."
+    ],
+    "courseOutcomes": [
+      "CO1: Synthesize some important heterocyclic compounds like benzimidazole, benzotriazole and 3-Methyl-1-phenyl pyrazol-5-one",
+      "CO2: Determine the percentage purity of medicinal compounds like Aspirin and Ibuprofen tablets",
+      "CO3: Determine the percentage purity of furosemide tablets and partition coefficient of drugs",
+      "CO4: Synthesize some medicinal compounds like Phenytoin and Benzocaine",
+      "CO5: Synthesize medicinal compounds like 2,3-diphenyl quinoxaline and 4-Benzylidene-2-phenyl oxazol-5-one"
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Preparation of drugs/ intermediates",
+        "title": "Preparation of drugs/ intermediates",
+        "hours": 30,
+        "description": "Preparation of drugs/ intermediates",
+        "topics": [
+          { "topicCode": "T1.1", "number": "T1.1", "topicName": "1,3-pyrazole", "name": "1,3-pyrazole", "hours": 3 },
+          { "topicCode": "T1.2", "number": "T1.2", "topicName": "1,3-oxazole", "name": "1,3-oxazole", "hours": 3 },
+          { "topicCode": "T1.3", "number": "T1.3", "topicName": "Benzimidazole", "name": "Benzimidazole", "hours": 4 },
+          { "topicCode": "T1.4", "number": "T1.4", "topicName": "Benztriazole", "name": "Benztriazole", "hours": 4 },
+          { "topicCode": "T1.5", "number": "T1.5", "topicName": "2,3- diphenyl quinoxaline", "name": "2,3- diphenyl quinoxaline", "hours": 4 },
+          { "topicCode": "T1.6", "number": "T1.6", "topicName": "Benzocaine", "name": "Benzocaine", "hours": 4 },
+          { "topicCode": "T1.7", "number": "T1.7", "topicName": "Phenytoin", "name": "Phenytoin", "hours": 4 },
+          { "topicCode": "T1.8", "number": "T1.8", "topicName": "Phenothiazine", "name": "Phenothiazine", "hours": 2 },
+          { "topicCode": "T1.9", "number": "T1.9", "topicName": "Barbiturate", "name": "Barbiturate", "hours": 2 }
+        ]
+      },
+      {
+        "unitCode": "Unit II",
+        "name": "Unit II",
+        "unitName": "Assay of drugs",
+        "title": "Assay of drugs",
+        "hours": 20,
+        "description": "Assay of drugs",
+        "topics": [
+          { "topicCode": "T2.1", "number": "T2.1", "topicName": "Chlorpromazine", "name": "Chlorpromazine", "hours": 3 },
+          { "topicCode": "T2.2", "number": "T2.2", "topicName": "Phenobarbitone", "name": "Phenobarbitone", "hours": 3 },
+          { "topicCode": "T2.3", "number": "T2.3", "topicName": "Atropine", "name": "Atropine", "hours": 3 },
+          { "topicCode": "T2.4", "number": "T2.4", "topicName": "Ibuprofen", "name": "Ibuprofen", "hours": 3 },
+          { "topicCode": "T2.5", "number": "T2.5", "topicName": "Aspirin", "name": "Aspirin", "hours": 4 },
+          { "topicCode": "T2.6", "number": "T2.6", "topicName": "Furosemide", "name": "Furosemide", "hours": 4 }
+        ]
+      },
+      {
+        "unitCode": "Unit III",
+        "name": "Unit III",
+        "unitName": "Determination of Partition coefficient",
+        "title": "Determination of Partition coefficient",
+        "hours": 10,
+        "description": "Determination of Partition coefficient",
+        "topics": [
+          { "topicCode": "T3.1", "number": "T3.1", "topicName": "Determination of Partition coefficient for any two drugs", "name": "Determination of Partition coefficient for any two drugs", "hours": 10 }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "Indian Pharmacopoeia", "title": "Indian Pharmacopoeia", "edition": "Latest Edition" }
+    ],
+    "referenceBooks": [
+      { "author": "A.I. Vogel", "title": "Text book of practical organic chemistry", "edition": "Latest Edition" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 0,
+      "theoryExternal": 0,
+      "practicalInternal": 15,
+      "practicalExternal": 35,
+      "universityExam": 50
+    }
+  },
+  {
+    "subjectCode": "BP403T",
+    "courseName": "Physical Pharmaceutics II",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 2,
+    "semester": 4,
+    "credits": 4,
+    "hours": 45,
+    "subjectType": "Theory",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "The course deals with the various physical, physicochemical properties and principle involved in dosage forms, formulations. Theory and practical components of the subject help the student to get a better insight in to various areas of formulation research and development and stability studies of pharmaceuticals.",
+    "objectives": [
+      "Understand various physicochemical properties of drug molecules in the designing the dosage form",
+      "Know the principles of chemical kinetics and to use them in assigning expiry date for Formulation",
+      "Demonstrate use of physicochemical properties in evaluation of dosage forms.",
+      "Appreciate physicochemical properties of drug molecules in formulation research and Development"
+    ],
+    "courseOutcomes": [
+      "CO1: Explain the classification of dispersed systems, general characteristics of colloidal particles and their general properties.",
+      "CO2: Summarise the various theories of Rheological systems, laws, equations related to different Rheological systems with use of deformation of solids",
+      "CO3: Illustrate the knowledge of disperse system, classification, theory of emulsification, HLB value in addition to formulation and evaluation of emulsions.",
+      "CO4: Evaluate particle size analysis and surface area determination methods.",
+      "CO5: Distinguish the principles of chemical kinetics, stability testing and determination of expiry date of formulations."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Colloidal dispersions",
+        "title": "Colloidal dispersions",
+        "hours": 7,
+        "description": "Colloidal dispersions",
+        "topics": [
+          { "topicCode": "T1.1", "number": "T1.1", "topicName": "Colloidal dispersions: Classification of dispersed systems and their general characteristics, size and shapes of colloidal particles, classification of colloids and comparative account of their general properties. Optical, kinetic and electrical properties. Effect of electrolytes, coacervation, peptization and protective action.", "name": "Colloidal dispersions: Classification of dispersed systems and their general characteristics, size and shapes of colloidal particles, classification of colloids and comparative account of their general properties. Optical, kinetic and electrical properties. Effect of electrolytes, coacervation, peptization and protective action.", "hours": 7 }
+        ]
+      },
+      {
+        "unitCode": "Unit II",
+        "name": "Unit II",
+        "unitName": "Rheology & Deformation of solids",
+        "title": "Rheology & Deformation of solids",
+        "hours": 10,
+        "description": "Rheology & Deformation of solids",
+        "topics": [
+          { "topicCode": "T2.1", "number": "T2.1", "topicName": "Rheology: Newtonian systems, law of flow, kinematic viscosity, effect of temperature, non-Newtonian systems, pseudoplastic, dilatants, plastic, thixotropy, thixotropy in formulation, determination of viscosity, capillary, falling Sphere, rotational viscometers", "name": "Rheology: Newtonian systems, law of flow, kinematic viscosity, effect of temperature, non-Newtonian systems, pseudoplastic, dilatants, plastic, thixotropy, thixotropy in formulation, determination of viscosity, capillary, falling Sphere, rotational viscometers", "hours": 6 },
+          { "topicCode": "T2.2", "number": "T2.2", "topicName": "Deformation of solids: Plastic and elastic deformation, Heckel equation, Stress, Strain, Elastic Modulus.", "name": "Deformation of solids: Plastic and elastic deformation, Heckel equation, Stress, Strain, Elastic Modulus.", "hours": 4 }
+        ]
+      },
+      {
+        "unitCode": "Unit III",
+        "name": "Unit III",
+        "unitName": "Coarse dispersion",
+        "title": "Coarse dispersion",
+        "hours": 10,
+        "description": "Coarse dispersion",
+        "topics": [
+          { "topicCode": "T3.1", "number": "T3.1", "topicName": "Coarse dispersion: Suspension, interfacial properties of suspended particles, settling in suspensions, formulation of flocculated and deflocculated suspensions.", "name": "Coarse dispersion: Suspension, interfacial properties of suspended particles, settling in suspensions, formulation of flocculated and deflocculated suspensions.", "hours": 5 },
+          { "topicCode": "T3.2", "number": "T3.2", "topicName": "Emulsions and theories of emulsification, microemulsion and multiple emulsions; Stability of emulsions, preservation of emulsions, rheological properties of emulsions and emulsion formulation by HLB method.", "name": "Emulsions and theories of emulsification, microemulsion and multiple emulsions; Stability of emulsions, preservation of emulsions, rheological properties of emulsions and emulsion formulation by HLB method.", "hours": 5 }
+        ]
+      },
+      {
+        "unitCode": "Unit IV",
+        "name": "Unit IV",
+        "unitName": "Micromeretics",
+        "title": "Micromeretics",
+        "hours": 10,
+        "description": "Micromeretics",
+        "topics": [
+          { "topicCode": "T4.1", "number": "T4.1", "topicName": "Micromeretics: Particle size and distribution, mean particle size, number and weight distribution, particle number, methods for determining particle size by different methods, counting and separation method, particle shape, specific surface, methods for determining surface area, permeability, adsorption, derived properties of powders, porosity, packing arrangement, densities, bulkiness and flow properties.", "name": "Micromeretics: Particle size and distribution, mean particle size, number and weight distribution, particle number, methods for determining particle size by different methods, counting and separation method, particle shape, specific surface, methods for determining surface area, permeability, adsorption, derived properties of powders, porosity, packing arrangement, densities, bulkiness and flow properties.", "hours": 10 }
+        ]
+      },
+      {
+        "unitCode": "Unit V",
+        "name": "Unit V",
+        "unitName": "Drug stability",
+        "title": "Drug stability",
+        "hours": 10,
+        "description": "Drug stability",
+        "topics": [
+          { "topicCode": "T5.1", "number": "T5.1", "topicName": "Drug stability: Reaction kinetics: zero, pseudo-zero, first and second order, units of basic rate constants, determination of reaction order. Physical and chemical factors influencing the chemical degradation of pharmaceutical product: temperature, solvent, ionic strength, dielectric constant, specific and general acid base catalysis, Simple numerical problems. Stabilization of medicinal agents against common reactions like hydrolysis and oxidation. Accelerated stability testing in expiration dating of pharmaceutical dosage forms. Photolytic degradation and its prevention.", "name": "Drug stability: Reaction kinetics: zero, pseudo-zero, first and second order, units of basic rate constants, determination of reaction order. Physical and chemical factors influencing the chemical degradation of pharmaceutical product: temperature, solvent, ionic strength, dielectric constant, specific and general acid base catalysis, Simple numerical problems. Stabilization of medicinal agents against common reactions like hydrolysis and oxidation. Accelerated stability testing in expiration dating of pharmaceutical dosage forms. Photolytic degradation and its prevention.", "hours": 10 }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "Alfred Martin", "title": "Physical Pharmacy", "edition": "Sixth edition" },
+      { "author": "Eugene, Parott", "title": "Experimental pharmaceutics", "edition": "Latest edition" }
+    ],
+    "referenceBooks": [
+      { "author": "Ramasamy C, and Manavalan R.", "title": "Physical Pharmaceutics", "edition": "Latest edition" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 25,
+      "theoryExternal": 75,
+      "practicalInternal": 0,
+      "practicalExternal": 0,
+      "universityExam": 100
+    }
+  },
+  {
+    "subjectCode": "BP407P",
+    "courseName": "Physical Pharmaceutics II",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 2,
+    "semester": 4,
+    "credits": 2,
+    "hours": 45,
+    "subjectType": "Practical",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "Practical experiments for determining particle size, bulk density, angle of repose, viscosity, sedimentation volume, reaction rate constants, and stability studies.",
+    "objectives": [
+      "Understand various physiochemical properties of drug molecules in evaluation of the dosage form",
+      "Know the principles of Chemical kinetics and to use them in assigning expiry date for formulation",
+      "Demonstrate the use of physiochemical properties in evaluation of dosage form",
+      "Appreciate physiochemical properties of drug molecules in Formulation, Research and Development"
+    ],
+    "courseOutcomes": [
+      "CO1: Evaluate the various physicochemical properties of drug and excipient molecules in designing the dosage forms.",
+      "CO2: Distinguish the principles of Physicochemical properties of drug and excipient molecules in designing the dosage forms.",
+      "CO3: Demonstrate use of physicochemical chemical kinetics & to use them for stability testing and determination of expiry date of formulations",
+      "CO4: Understand physicochemical properties of drug molecules in formulation research and development.",
+      "CO5: Determine the physicochemical properties of drug molecules in formulation research."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Physical Pharmaceutics II Practical List",
+        "title": "Physical Pharmaceutics II Practical List",
+        "hours": 45,
+        "description": "Physical Pharmaceutics II Practical List",
+        "topics": [
+          { "topicCode": "T1.1", "number": "T1.1", "topicName": "Determination of particle size, particle size distribution using sieving method", "name": "Determination of particle size, particle size distribution using sieving method", "hours": 4 },
+          { "topicCode": "T1.2", "number": "T1.2", "topicName": "Determination of particle size, particle size distribution using Microscopic method", "name": "Determination of particle size, particle size distribution using Microscopic method", "hours": 4 },
+          { "topicCode": "T1.3", "number": "T1.3", "topicName": "Determination of bulk density, true density and porosity", "name": "Determination of bulk density, true density and porosity", "hours": 4 },
+          { "topicCode": "T1.4", "number": "T1.4", "topicName": "Determine the angle of repose and influence of lubricant on angle of repose", "name": "Determine the angle of repose and influence of lubricant on angle of repose", "hours": 4 },
+          { "topicCode": "T1.5", "number": "T1.5", "topicName": "Determination of viscosity of liquid using Ostwald‘s viscometer", "name": "Determination of viscosity of liquid using Ostwald‘s viscometer", "hours": 4 },
+          { "topicCode": "T1.6", "number": "T1.6", "topicName": "Determination sedimentation volume with effect of different suspending agent", "name": "Determination sedimentation volume with effect of different suspending agent", "hours": 4 },
+          { "topicCode": "T1.7", "number": "T1.7", "topicName": "Determination sedimentation volume with effect of different concentration of single suspending agent", "name": "Determination sedimentation volume with effect of different concentration of single suspending agent", "hours": 4 },
+          { "topicCode": "T1.8", "number": "T1.8", "topicName": "Determination of viscosity of semisolid by using Brookfield viscometer", "name": "Determination of viscosity of semisolid by using Brookfield viscometer", "hours": 4 },
+          { "topicCode": "T1.9", "number": "T1.9", "topicName": "Determination of reaction rate constant first order.", "name": "Determination of reaction rate constant first order.", "hours": 4 },
+          { "topicCode": "T1.10", "number": "T1.10", "topicName": "Determination of reaction rate constant second order", "name": "Determination of reaction rate constant second order", "hours": 4 },
+          { "topicCode": "T1.11", "number": "T1.11", "topicName": "Accelerated stability studies", "name": "Accelerated stability studies", "hours": 5 }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "Alfred Martin", "title": "Physical Pharmacy", "edition": "Sixth edition" }
+    ],
+    "referenceBooks": [
+      { "author": "Ramasamy C, and Manavalan R.", "title": "Physical Pharmaceutics", "edition": "Latest edition" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 0,
+      "theoryExternal": 0,
+      "practicalInternal": 15,
+      "practicalExternal": 35,
+      "universityExam": 50
+    }
+  },
+  {
+    "subjectCode": "BP404T",
+    "courseName": "Pharmacology I",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 2,
+    "semester": 4,
+    "credits": 4,
+    "hours": 45,
+    "subjectType": "Theory",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "The main purpose of the subject is to understand what drugs do to the living organisms and how their effects can be applied to therapeutics. The subject covers the information about the drugs like, mechanism of action, physiological and biochemical effects (pharmacodynamics) as well as absorption, distribution, metabolism and excretion (pharmacokinetics) along with the adverse effects, Clinical uses, interactions, doses, contraindications and routes of administration of different classes of drugs.",
+    "objectives": [
+      "Understand the pharmacological actions of different categories of drugs",
+      "Explain the mechanism of drug action at organ system/sub cellular/macromolecular levels.",
+      "Apply the basic pharmacological knowledge in the prevention and treatment of various diseases.",
+      "Observe the effect of drugs on animals by simulated experiments",
+      "Appreciate correlation of pharmacology with other bio medical sciences"
+    ],
+    "courseOutcomes": [
+      "CO1: Explain the scope of general pharmacology, as well as the various routes of drug administration and the concept of pharmacokinetics.",
+      "CO2: Analyze the fundamentals of pharmacodynamics, the mechanism of action, types of receptors factors that influence drug action and drug interactions.",
+      "CO3: Investigate neurohumoral transmission in PNS and the classification of neurotransmitters and drugs that act on the parasympathetic and sympathetic nervous system.",
+      "CO4: Investigate neurohumoral transmission in the ANS, with a focus on the pharmacology of CNS acting drugs.",
+      "CO5: Describe the mechanism of action, pharmacological action, side effects, and therapeutic applications of Psychopharmacological drugs"
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "General Pharmacology",
+        "title": "General Pharmacology",
+        "hours": 8,
+        "description": "General Pharmacology",
+        "topics": [
+          { "topicCode": "T1.1", "number": "T1.1", "topicName": "a. Introduction to Pharmacology- Definition, historical landmarks and scope of pharmacology, nature and source of drugs, essential drugs concept and routes of drug administration, Agonists, antagonists( competitive and non competitive), spare receptors, addiction, tolerance, dependence, tachyphylaxis, idiosyncrasy, allergy.", "name": "a. Introduction to Pharmacology- Definition, historical landmarks and scope of pharmacology, nature and source of drugs, essential drugs concept and routes of drug administration, Agonists, antagonists( competitive and non competitive), spare receptors, addiction, tolerance, dependence, tachyphylaxis, idiosyncrasy, allergy.", "hours": 4 },
+          { "topicCode": "T1.2", "number": "T1.2", "topicName": "b. Pharmacokinetics- Membrane transport, absorption, distribution, metabolism and excretion of drugs. Enzyme induction, enzyme inhibition, kinetics of elimination", "name": "b. Pharmacokinetics- Membrane transport, absorption, distribution, metabolism and excretion of drugs. Enzyme induction, enzyme inhibition, kinetics of elimination", "hours": 4 }
+        ]
+      },
+      {
+        "unitCode": "Unit II",
+        "name": "Unit II",
+        "unitName": "Pharmacodynamics",
+        "title": "Pharmacodynamics",
+        "hours": 12,
+        "description": "Pharmacodynamics",
+        "topics": [
+          { "topicCode": "T2.1", "number": "T2.1", "topicName": "a. Pharmacodynamics- Principles and mechanisms of drug action. Receptor theories and classification of receptors, regulation of receptors. drug receptors interactions signal transduction mechanisms, G-protein–coupled receptors, ion channel receptor, transmembrane enzyme linked receptors, transmembrane JAK-STAT binding receptor and receptors that regulate transcription factors, dose response relationship, therapeutic index, combined effects of drugs and factors modifying drug action.", "name": "a. Pharmacodynamics- Principles and mechanisms of drug action. Receptor theories and classification of receptors, regulation of receptors. drug receptors interactions signal transduction mechanisms, G-protein–coupled receptors, ion channel receptor, transmembrane enzyme linked receptors, transmembrane JAK-STAT binding receptor and receptors that regulate transcription factors, dose response relationship, therapeutic index, combined effects of drugs and factors modifying drug action.", "hours": 6 },
+          { "topicCode": "T2.2", "number": "T2.2", "topicName": "b. Adverse drug reactions. c. Drug interactions (pharmacokinetic and pharmacodynamic)", "name": "b. Adverse drug reactions. c. Drug interactions (pharmacokinetic and pharmacodynamic)", "hours": 3 },
+          { "topicCode": "T2.3", "number": "T2.3", "topicName": "d. Drug discovery and clinical evaluation of new drugs -Drug discovery phase, preclinical evaluation phase, clinical trial phase, phases of clinical trials and pharmacovigilance.", "name": "d. Drug discovery and clinical evaluation of new drugs -Drug discovery phase, preclinical evaluation phase, clinical trial phase, phases of clinical trials and pharmacovigilance.", "hours": 3 }
+        ]
+      },
+      {
+        "unitCode": "Unit III",
+        "name": "Unit III",
+        "unitName": "Pharmacology of peripheral nervous system",
+        "title": "Pharmacology of peripheral nervous system",
+        "hours": 10,
+        "description": "Pharmacology of peripheral nervous system",
+        "topics": [
+          { "topicCode": "T3.1", "number": "T3.1", "topicName": "a. Organization and function of ANS.", "name": "a. Organization and function of ANS.", "hours": 2 },
+          { "topicCode": "T3.2", "number": "T3.2", "topicName": "b. Neurohumoral transmission, co-transmission and classification of neurotransmitters.", "name": "b. Neurohumoral transmission, co-transmission and classification of neurotransmitters.", "hours": 2 },
+          { "topicCode": "T3.3", "number": "T3.3", "topicName": "c. Parasympathomimetics, Parasympatholytics, Sympathomimetics, sympatholytics.", "name": "c. Parasympathomimetics, Parasympatholytics, Sympathomimetics, sympatholytics.", "hours": 2 },
+          { "topicCode": "T3.4", "number": "T3.4", "topicName": "d. Neuromuscular blocking agents and skeletal muscle relaxants (peripheral).", "name": "d. Neuromuscular blocking agents and skeletal muscle relaxants (peripheral).", "hours": 1 },
+          { "topicCode": "T3.5", "number": "T3.5", "topicName": "e. Local anesthetic agents. f. Drugs used in myasthenia gravis and glaucoma", "name": "e. Local anesthetic agents. f. Drugs used in myasthenia gravis and glaucoma", "hours": 3 }
+        ]
+      },
+      {
+        "unitCode": "Unit IV",
+        "name": "Unit IV",
+        "unitName": "Pharmacology of central nervous system - I",
+        "title": "Pharmacology of central nervous system - I",
+        "hours": 8,
+        "description": "Pharmacology of central nervous system - I",
+        "topics": [
+          { "topicCode": "T4.1", "number": "T4.1", "topicName": "a. Neurohumoral transmission in the C.N.S. special emphasis on importance of various neurotransmitters like with GABA, Glutamate, Glycine, serotonin, dopamine.", "name": "a. Neurohumoral transmission in the C.N.S. special emphasis on importance of various neurotransmitters like with GABA, Glutamate, Glycine, serotonin, dopamine.", "hours": 2 },
+          { "topicCode": "T4.2", "number": "T4.2", "topicName": "b. General anesthetics and pre-anesthetics.", "name": "b. General anesthetics and pre-anesthetics.", "hours": 2 },
+          { "topicCode": "T4.3", "number": "T4.3", "topicName": "c. Sedatives, hypnotics and centrally acting muscle relaxants.", "name": "c. Sedatives, hypnotics and centrally acting muscle relaxants.", "hours": 2 },
+          { "topicCode": "T4.4", "number": "T4.4", "topicName": "d. Anti-epileptics. e. Alcohols and disulfiram", "name": "d. Anti-epileptics. e. Alcohols and disulfiram", "hours": 2 }
+        ]
+      },
+      {
+        "unitCode": "Unit V",
+        "name": "Unit V",
+        "unitName": "Pharmacology of central nervous system - II",
+        "title": "Pharmacology of central nervous system - II",
+        "hours": 7,
+        "description": "Pharmacology of central nervous system - II",
+        "topics": [
+          { "topicCode": "T5.1", "number": "T5.1", "topicName": "a. Psychopharmacological agents: Antipsychotics, antidepressants, anti-anxiety agents, anti-manics and hallucinogens.", "name": "a. Psychopharmacological agents: Antipsychotics, antidepressants, anti-anxiety agents, anti-manics and hallucinogens.", "hours": 2 },
+          { "topicCode": "T5.2", "number": "T5.2", "topicName": "b. Drugs used in Parkinsons disease and Alzheimer‘s disease.", "name": "b. Drugs used in Parkinsons disease and Alzheimer‘s disease.", "hours": 2 },
+          { "topicCode": "T5.3", "number": "T5.3", "topicName": "c. CNS stimulants and nootropics. d. Opioid analgesics and antagonists. e. Drug addiction, drug abuse, tolerance and dependence.", "name": "c. CNS stimulants and nootropics. d. Opioid analgesics and antagonists. e. Drug addiction, drug abuse, tolerance and dependence.", "hours": 3 }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "KD Tripati", "title": "Essentials of Medical Pharmacology", "edition": "Latest Edition" }
+    ],
+    "referenceBooks": [
+      { "author": "Rang and Dale", "title": "Rang and Dale's Pharmacology", "edition": "Elsevier" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 25,
+      "theoryExternal": 75,
+      "practicalInternal": 0,
+      "practicalExternal": 0,
+      "universityExam": 100
+    }
+  },
+  {
+    "subjectCode": "BP408P",
+    "courseName": "Pharmacology I",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 2,
+    "semester": 4,
+    "credits": 2,
+    "hours": 60,
+    "subjectType": "Practical",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "Practical exercises in experimental pharmacology, laboratory animals, routes of administration, blood withdrawal, anesthetics, skeletal muscle relaxants, anticonvulsant MES & PTZ screening, and rabbit eye experiments.",
+    "objectives": [
+      "To demonstrate the maintenance of laboratory animals, blood collections techniques",
+      "Know about the routes of administration and evaluate the effect of drugs on rabbit eye",
+      "To evaluate the skeletal muscle relaxants, locomotor activity and anticatatonic activity.",
+      "To learn the screening methods for anxiolytic and local anesthetics",
+      "To demonstrate the ciliary motility of frog’s esophagus"
+    ],
+    "courseOutcomes": [
+      "CO1: Discuss about experimental pharmacology tools, and laboratory animals as well as the CPCSEA guidelines.",
+      "CO2: Demonstrate the common laboratory techniques like routes of administration, blood withdrawal, anesthetics and euthanasia used for animal studies.",
+      "CO3: Analyze the screening of skeletal muscle relaxants, locomotor activity and anticatatonic activity in laboratory animals",
+      "CO4: Evaluate the various screening models for anticonvulsant and anxiolytic activity.",
+      "CO5: Interpret the effects of various drugs on rabbit eye and demonstrating the ciliary motility of frog oesophagus."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Pharmacology I Practical List",
+        "title": "Pharmacology I Practical List",
+        "hours": 60,
+        "description": "Pharmacology I Practical List",
+        "topics": [
+          { "topicCode": "T1.1", "number": "T1.1", "topicName": "Introduction to experimental pharmacology.", "name": "Introduction to experimental pharmacology.", "hours": 4 },
+          { "topicCode": "T1.2", "number": "T1.2", "topicName": "Commonly used instruments in experimental pharmacology.", "name": "Commonly used instruments in experimental pharmacology.", "hours": 4 },
+          { "topicCode": "T1.3", "number": "T1.3", "topicName": "Study of common laboratory animals.", "name": "Study of common laboratory animals.", "hours": 4 },
+          { "topicCode": "T1.4", "number": "T1.4", "topicName": "Maintenance of laboratory animals as per CPCSEA guidelines.", "name": "Maintenance of laboratory animals as per CPCSEA guidelines.", "hours": 4 },
+          { "topicCode": "T1.5", "number": "T1.5", "topicName": "Common laboratory techniques. Blood withdrawal, serum and plasma separation, anesthetics and euthanasia used for animal studies.", "name": "Common laboratory techniques. Blood withdrawal, serum and plasma separation, anesthetics and euthanasia used for animal studies.", "hours": 4 },
+          { "topicCode": "T1.6", "number": "T1.6", "topicName": "Study of different routes of drugs administration in mice/rats.", "name": "Study of different routes of drugs administration in mice/rats.", "hours": 4 },
+          { "topicCode": "T1.7", "number": "T1.7", "topicName": "Study of effect of hepatic microsomal enzyme inducers on the phenobarbitone sleeping time in mice.", "name": "Study of effect of hepatic microsomal enzyme inducers on the phenobarbitone sleeping time in mice.", "hours": 4 },
+          { "topicCode": "T1.8", "number": "T1.8", "topicName": "Effect of drugs on ciliary motility of frog oesophagus", "name": "Effect of drugs on ciliary motility of frog oesophagus", "hours": 4 },
+          { "topicCode": "T1.9", "number": "T1.9", "topicName": "Effect of drugs on rabbit eye.", "name": "Effect of drugs on rabbit eye.", "hours": 4 },
+          { "topicCode": "T1.10", "number": "T1.10", "topicName": "Effects of skeletal muscle relaxants using rota-rod apparatus.", "name": "Effects of skeletal muscle relaxants using rota-rod apparatus.", "hours": 4 },
+          { "topicCode": "T1.11", "number": "T1.11", "topicName": "Effect of drugs on locomotor activity using actophotometer.", "name": "Effect of drugs on locomotor activity using actophotometer.", "hours": 4 },
+          { "topicCode": "T1.12", "number": "T1.12", "topicName": "Anticonvulsant effect of drugs by MES and PTZ method.", "name": "Anticonvulsant effect of drugs by MES and PTZ method.", "hours": 4 },
+          { "topicCode": "T1.13", "number": "T1.13", "topicName": "Study of stereotype and anti-catatonic activity of drugs on rats/mice.", "name": "Study of stereotype and anti-catatonic activity of drugs on rats/mice.", "hours": 4 },
+          { "topicCode": "T1.14", "number": "T1.14", "topicName": "Study of anxiolytic activity of drugs using rats/mice.", "name": "Study of anxiolytic activity of drugs using rats/mice.", "hours": 4 },
+          { "topicCode": "T1.15", "number": "T1.15", "topicName": "Study of local anesthetics by different methods", "name": "Study of local anesthetics by different methods", "hours": 4 }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "KD Tripati", "title": "Essentials of Medical Pharmacology", "edition": "Latest Edition" }
+    ],
+    "referenceBooks": [
+      { "author": "Rang and Dale", "title": "Rang and Dale's Pharmacology", "edition": "Elsevier" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 0,
+      "theoryExternal": 0,
+      "practicalInternal": 15,
+      "practicalExternal": 35,
+      "universityExam": 50
+    }
+  },
+  {
+    "subjectCode": "BP405T",
+    "courseName": "Pharmacognosy and Phytochemistry I",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 2,
+    "semester": 4,
+    "credits": 4,
+    "hours": 45,
+    "subjectType": "Theory",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "The subject involves the fundamentals of Pharmacognosy like scope, classification of crude drugs, their identification and evaluation, phytochemicals present in them and their medicinal properties.",
+    "objectives": [
+      "to know the techniques in the cultivation and production of crude drugs",
+      "to know the crude drugs, their uses and chemical nature",
+      "know the evaluation techniques for the herbal drugs",
+      "to carry out the microscopic and morphological evaluation of crude drugs"
+    ],
+    "courseOutcomes": [
+      "CO1: Understand the introduction, history, scope, and development of Pharmacognosy and the classification systems of crude drugs.",
+      "CO2: Understand the quality control parameters, adulteration, and evaluation of drugs of natural origin using quantitative microscopy.",
+      "CO3: Understand the factors influencing the cultivation, collection, processing, and storage of natural drugs including plant hormones, polyploidy, and conservation.",
+      "CO4: Discuss plant tissue culture development, nutritional requirements, and applications in pharmacognosy including edible vaccines.",
+      "CO5: Classify and study primary metabolites (carbohydrates, proteins, enzymes, lipids) and marine novel medicinal agents."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Introduction to Pharmacognosy, Classification & Quality control",
+        "title": "Introduction to Pharmacognosy, Classification & Quality control",
+        "hours": 10,
+        "description": "Introduction to Pharmacognosy, Classification & Quality control",
+        "topics": [
+          { "topicCode": "T1.1", "number": "T1.1", "topicName": "Introduction to Pharmacognosy: (a) Definition, history, scope and development of Pharmacognosy. (b) Sources of Drugs – Plants, Animals, Marine and Tissue culture. (c) Organized drugs, unorganized drugs (dried latex, dried juices, dried extracts, gums and mucilages, oleoresins and oleo- gum -resins).", "name": "Introduction to Pharmacognosy: (a) Definition, history, scope and development of Pharmacognosy. (b) Sources of Drugs – Plants, Animals, Marine and Tissue culture. (c) Organized drugs, unorganized drugs (dried latex, dried juices, dried extracts, gums and mucilages, oleoresins and oleo- gum -resins).", "hours": 3 },
+          { "topicCode": "T1.2", "number": "T1.2", "topicName": "Classification of drugs: Alphabetical, morphological, taxonomical, chemical, pharmacological, chemo and sero taxonomical classification of drugs", "name": "Classification of drugs: Alphabetical, morphological, taxonomical, chemical, pharmacological, chemo and sero taxonomical classification of drugs", "hours": 3 },
+          { "topicCode": "T1.3", "number": "T1.3", "topicName": "Quality control of Drugs of Natural Origin: Adulteration of drugs of natural origin. Evaluation by organoleptic, microscopic, physical, chemical and biological methods and properties. Quantitative microscopy of crude drugs including lycopodium spore method, leaf constants, camera lucida and diagrams of microscopic objects to scale.", "name": "Quality control of Drugs of Natural Origin: Adulteration of drugs of natural origin. Evaluation by organoleptic, microscopic, physical, chemical and biological methods and properties. Quantitative microscopy of crude drugs including lycopodium spore method, leaf constants, camera lucida and diagrams of microscopic objects to scale.", "hours": 4 }
+        ]
+      },
+      {
+        "unitCode": "Unit II",
+        "name": "Unit II",
+        "unitName": "Cultivation, Collection, Processing and storage of drugs of natural origin",
+        "title": "Cultivation, Collection, Processing and storage of drugs of natural origin",
+        "hours": 10,
+        "description": "Cultivation, Collection, Processing and storage of drugs of natural origin",
+        "topics": [
+          { "topicCode": "T2.1", "number": "T2.1", "topicName": "Cultivation and Collection of drugs of natural origin. Factors influencing cultivation of medicinal plants.", "name": "Cultivation and Collection of drugs of natural origin. Factors influencing cultivation of medicinal plants.", "hours": 3 },
+          { "topicCode": "T2.2", "number": "T2.2", "topicName": "Plant hormones and their applications. Polyploidy, mutation and hybridization with reference to medicinal plants", "name": "Plant hormones and their applications. Polyploidy, mutation and hybridization with reference to medicinal plants", "hours": 4 },
+          { "topicCode": "T2.3", "number": "T2.3", "topicName": "Conservation of medicinal plants", "name": "Conservation of medicinal plants", "hours": 3 }
+        ]
+      },
+      {
+        "unitCode": "Unit III",
+        "name": "Unit III",
+        "unitName": "Plant tissue culture",
+        "title": "Plant tissue culture",
+        "hours": 7,
+        "description": "Plant tissue culture",
+        "topics": [
+          { "topicCode": "T3.1", "number": "T3.1", "topicName": "Plant tissue culture: Historical development of plant tissue culture, types of cultures, Nutritional requirements, growth and their maintenance. Applications of plant tissue culture in pharmacognosy. Edible vaccines", "name": "Plant tissue culture: Historical development of plant tissue culture, types of cultures, Nutritional requirements, growth and their maintenance. Applications of plant tissue culture in pharmacognosy. Edible vaccines", "hours": 7 }
+        ]
+      },
+      {
+        "unitCode": "Unit IV",
+        "name": "Unit IV",
+        "unitName": "Pharmacognosy in various systems of medicine & secondary metabolites",
+        "title": "Pharmacognosy in various systems of medicine & secondary metabolites",
+        "hours": 10,
+        "description": "Pharmacognosy in various systems of medicine & secondary metabolites",
+        "topics": [
+          { "topicCode": "T4.1", "number": "T4.1", "topicName": "Pharmacognosy in various systems of medicine: Role of Pharmacognosy in allopathy and traditional systems of medicine namely, Ayurveda, Unani, Siddha, Homeopathy and Chinese systems of medicine.", "name": "Pharmacognosy in various systems of medicine: Role of Pharmacognosy in allopathy and traditional systems of medicine namely, Ayurveda, Unani, Siddha, Homeopathy and Chinese systems of medicine.", "hours": 5 },
+          { "topicCode": "T4.2", "number": "T4.2", "topicName": "Introduction to secondary metabolites: Definition, classification, properties and test for identification of Alkaloids, Glycosides, Flavonoids, Tannins, Volatile oil and Resins.", "name": "Introduction to secondary metabolites: Definition, classification, properties and test for identification of Alkaloids, Glycosides, Flavonoids, Tannins, Volatile oil and Resins.", "hours": 5 }
+        ]
+      },
+      {
+        "unitCode": "Unit V",
+        "name": "Unit V",
+        "unitName": "Primary metabolites & Marine Drugs",
+        "title": "Primary metabolites & Marine Drugs",
+        "hours": 8,
+        "description": "Primary metabolites & Marine Drugs",
+        "topics": [
+          { "topicCode": "T5.1", "number": "T5.1", "topicName": "Study of biological source, chemical nature and uses of drugs of natural origin containing following drugs. Plant Products: Fibers - Cotton, Jute, Hemp. Hallucinogens, Teratogens, Natural allergens.", "name": "Study of biological source, chemical nature and uses of drugs of natural origin containing following drugs. Plant Products: Fibers - Cotton, Jute, Hemp. Hallucinogens, Teratogens, Natural allergens.", "hours": 2 },
+          { "topicCode": "T5.2", "number": "T5.2", "topicName": "Primary metabolites: General introduction, detailed study with respect to chemistry, sources, preparation, evaluation, preservation, storage, therapeutic used and commercial utility as Pharmaceutical Aids and/or Medicines for the following Primary metabolites: Carbohydrates: Acacia, Agar, Tragacanth, Honey. Proteins and Enzymes : Gelatin, casein, proteolytic enzymes (Papain, bromelain, serratiopeptidase, urokinase, streptokinase, pepsin). Lipids(Waxes, fats, fixed oils) : Castor oil, Chaulmoogra oil, Wool Fat, Bees Wax.", "name": "Primary metabolites: General introduction, detailed study with respect to chemistry, sources, preparation, evaluation, preservation, storage, therapeutic used and commercial utility as Pharmaceutical Aids and/or Medicines for the following Primary metabolites: Carbohydrates: Acacia, Agar, Tragacanth, Honey. Proteins and Enzymes : Gelatin, casein, proteolytic enzymes (Papain, bromelain, serratiopeptidase, urokinase, streptokinase, pepsin). Lipids(Waxes, fats, fixed oils) : Castor oil, Chaulmoogra oil, Wool Fat, Bees Wax.", "hours": 4 },
+          { "topicCode": "T5.3", "number": "T5.3", "topicName": "Marine Drugs: Novel medicinal agents from marine sources", "name": "Marine Drugs: Novel medicinal agents from marine sources", "hours": 2 }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "W.C.Evans", "title": "Trease and Evans Pharmacognosy", "edition": "16th edition" }
+    ],
+    "referenceBooks": [
+      { "author": "C.K. Kokate", "title": "Text book of Pharmacognosy", "edition": "37th Edition" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 25,
+      "theoryExternal": 75,
+      "practicalInternal": 0,
+      "practicalExternal": 0,
+      "universityExam": 100
+    }
+  },
+  {
+    "subjectCode": "BP409P",
+    "courseName": "Pharmacognosy and Phytochemistry I",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 2,
+    "semester": 4,
+    "credits": 2,
+    "hours": 60,
+    "subjectType": "Practical",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "Practical exercises in analysis of crude drugs by chemical tests, determination of stomatal number/index, vein islet number/termination, paliside ratio, starch grain sizes, fiber length/width, Lycopodium spore method, ash value, extractive value, moisture content, swelling/foaming index.",
+    "objectives": [
+      "to know the techniques in the cultivation and production of crude drugs",
+      "to know the crude drugs, their uses and chemical nature",
+      "know the evaluation techniques for the herbal drugs",
+      "to carry out the microscopic and morphological evaluation of crude drugs"
+    ],
+    "courseOutcomes": [
+      "CO1: Perform qualitative chemical tests for carbohydrates, proteins, enzymes, and lipids on crude drugs.",
+      "CO2: Determine quantitative microscopy constants including stomatal index, vein-islet number, and palisade ratio.",
+      "CO3: Conduct microscopic measurements of starch grains and calcium oxalate crystals using eye-piece micrometer.",
+      "CO4: Determine physical evaluation constants of natural drugs including ash values, extractive values, moisture content, swelling and foaming index.",
+      "CO5: Conduct fiber measurements and Lycopodium spore quantitative evaluations."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Pharmacognosy and Phytochemistry I Practical List",
+        "title": "Pharmacognosy and Phytochemistry I Practical List",
+        "hours": 60,
+        "description": "Pharmacognosy and Phytochemistry I Practical List",
+        "topics": [
+          { "topicCode": "T1.1", "number": "T1.1", "topicName": "Analysis of crude drugs by chemical tests: (i)Tragaccanth (ii) Acacia (iii)Agar (iv) Gelatin (v) starch (vi) Honey (vii) Castor oil", "name": "Analysis of crude drugs by chemical tests: (i)Tragaccanth (ii) Acacia (iii)Agar (iv) Gelatin (v) starch (vi) Honey (vii) Castor oil", "hours": 6 },
+          { "topicCode": "T1.2", "number": "T1.2", "topicName": "Determination of stomatal number and index", "name": "Determination of stomatal number and index", "hours": 6 },
+          { "topicCode": "T1.3", "number": "T1.3", "topicName": "Determination of vein islet number, vein islet termination and paliside ratio.", "name": "Determination of vein islet number, vein islet termination and paliside ratio.", "hours": 6 },
+          { "topicCode": "T1.4", "number": "T1.4", "topicName": "Determination of size of starch grains, calcium oxalate crystals by eye piece micrometer", "name": "Determination of size of starch grains, calcium oxalate crystals by eye piece micrometer", "hours": 6 },
+          { "topicCode": "T1.5", "number": "T1.5", "topicName": "Determination of Fiber length and width", "name": "Determination of Fiber length and width", "hours": 6 },
+          { "topicCode": "T1.6", "number": "T1.6", "topicName": "Determination of number of starch grains by Lycopodium spore method", "name": "Determination of number of starch grains by Lycopodium spore method", "hours": 6 },
+          { "topicCode": "T1.7", "number": "T1.7", "topicName": "Determination of Ash value", "name": "Determination of Ash value", "hours": 6 },
+          { "topicCode": "T1.8", "number": "T1.8", "topicName": "Determination of Extractive values of crude drugs", "name": "Determination of Extractive values of crude drugs", "hours": 6 },
+          { "topicCode": "T1.9", "number": "T1.9", "topicName": "Determination of moisture content of crude drugs", "name": "Determination of moisture content of crude drugs", "hours": 6 },
+          { "topicCode": "T1.10", "number": "T1.10", "topicName": "Determination of swelling index and foaming", "name": "Determination of swelling index and foaming", "hours": 6 }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "W.C.Evans", "title": "Trease and Evans Pharmacognosy", "edition": "16th edition" }
+    ],
+    "referenceBooks": [
+      { "author": "C.K. Kokate", "title": "Text book of Pharmacognosy", "edition": "Latest" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 0,
+      "theoryExternal": 0,
+      "practicalInternal": 15,
+      "practicalExternal": 35,
+      "universityExam": 50
+    }
+  }
+]

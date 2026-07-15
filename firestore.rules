@@ -1,0 +1,67 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Default deny catch-all safety net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // Course Validation
+    function isValidCourse(data) {
+      return data.subjectCode is string && data.subjectCode.size() <= 32
+          && data.courseName is string && data.courseName.size() <= 256
+          && (data.programme == 'B.Pharm' || data.programme == 'Pharm.D' || data.programme == 'M.Pharm')
+          && (data.regulation == 'PCI 2008' || data.regulation == 'PCI 2017' || data.regulation == 'PCI 2026')
+          && data.year is int
+          && data.semester is int
+          && data.credits is int
+          && data.hours is int
+          && (data.subjectType == 'Theory' || data.subjectType == 'Practical')
+          && (data.status == 'Active' || data.status == 'Draft' || data.status == 'Approved' || data.status == 'Archived');
+    }
+
+    // Resource Validation
+    function isValidResource(data) {
+      return data.id is string && data.id.size() <= 128
+          && data.subjectCode is string && data.subjectCode.size() <= 32
+          && (data.type == 'Video' || data.type == 'PDF' || data.type == 'Slides' || data.type == 'Notes' || data.type == 'Quiz' || data.type == 'Assignment')
+          && data.title is string && data.title.size() <= 256
+          && data.status is string;
+    }
+
+    // Rules for Courses
+    match /courses/{courseId} {
+      allow read: if true;
+      allow create: if isValidId(courseId) && isValidCourse(incoming());
+      allow update: if isValidId(courseId) && isValidCourse(incoming());
+      allow delete: if isValidId(courseId);
+    }
+
+    // Rules for Teaching Resources
+    match /teaching_resources/{resourceId} {
+      allow read: if true;
+      allow create: if isValidId(resourceId) && isValidResource(incoming());
+      allow update: if isValidId(resourceId) && isValidResource(incoming());
+      allow delete: if isValidId(resourceId);
+    }
+
+    // Rules for Curriculum
+    match /curriculum/{document=**} {
+      allow read, write: if true;
+    }
+  }
+}

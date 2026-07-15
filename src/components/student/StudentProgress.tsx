@@ -1,21 +1,33 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Award, Clock, TrendingUp, BarChart3, Star, ChevronRight } from 'lucide-react';
 import GlassCard from '../GlassCard';
 
-export default function StudentProgress() {
+interface StudentProgressProps {
+  selectedProgramme?: 'B.Pharm' | 'Pharm.D';
+}
+
+export default function StudentProgress({ selectedProgramme }: StudentProgressProps) {
+  const [programme, setProgramme] = useState<'B.Pharm' | 'Pharm.D'>(selectedProgramme || 'B.Pharm');
   const [selectedSemester, setSelectedSemester] = useState<number>(1);
 
+  useEffect(() => {
+    if (selectedProgramme) {
+      setProgramme(selectedProgramme);
+    }
+  }, [selectedProgramme]);
+
   const getSemesterData = (semesterNum: number) => {
+    const isPharmD = programme === 'Pharm.D';
     // Exact original Semester 1 data
     if (semesterNum === 1) {
       return [
         {
-          code: 'BP101T',
+          code: isPharmD ? 'PD101T' : 'BP101T',
           name: 'Human Anatomy and Physiology I',
           sessionalI: 26,
           sessionalII: 28,
           sessionalIII: 27,
-          bestOf2Sessional: 27.5,
+          bestOf2Sessional: isPharmD ? 27.5 : 27.0,
           internals: 21,
           semesterExam: 64,
           totalMarks: 85,
@@ -31,12 +43,12 @@ export default function StudentProgress() {
           ]
         },
         {
-          code: 'BP102T',
+          code: isPharmD ? 'PD102T' : 'BP102T',
           name: 'Pharmaceutical Analysis I',
           sessionalI: 24,
           sessionalII: 25,
           sessionalIII: 22,
-          bestOf2Sessional: 24.5,
+          bestOf2Sessional: isPharmD ? 24.5 : 24.5,
           internals: 19,
           semesterExam: 59,
           totalMarks: 78,
@@ -51,12 +63,12 @@ export default function StudentProgress() {
           ]
         },
         {
-          code: 'BP103T',
+          code: isPharmD ? 'PD103T' : 'BP103T',
           name: 'Pharmaceutical Inorganic Chemistry',
           sessionalI: 28,
           sessionalII: 29,
           sessionalIII: 26,
-          bestOf2Sessional: 28.5,
+          bestOf2Sessional: isPharmD ? 28.5 : 28.5,
           internals: 23,
           semesterExam: 68,
           totalMarks: 91,
@@ -71,12 +83,12 @@ export default function StudentProgress() {
           ]
         },
         {
-          code: 'BP105T',
+          code: isPharmD ? 'PD105T' : 'BP105T',
           name: 'Communication Skills',
           sessionalI: 29,
           sessionalII: 28,
           sessionalIII: 30,
-          bestOf2Sessional: 29.5,
+          bestOf2Sessional: isPharmD ? 29.5 : 28.5,
           internals: 24,
           semesterExam: 71,
           totalMarks: 95,
@@ -94,46 +106,46 @@ export default function StudentProgress() {
 
     const semesterSubjects: Record<number, { code: string; name: string }[]> = {
       2: [
-        { code: 'BP201T', name: 'Human Anatomy and Physiology II' },
-        { code: 'BP202T', name: 'Pharmaceutical Organic Chemistry I' },
-        { code: 'BP203T', name: 'Biochemistry' },
-        { code: 'BP204T', name: 'Pathophysiology' },
+        { code: isPharmD ? 'PD201T' : 'BP201T', name: 'Human Anatomy and Physiology II' },
+        { code: isPharmD ? 'PD202T' : 'BP202T', name: 'Pharmaceutical Organic Chemistry I' },
+        { code: isPharmD ? 'PD203T' : 'BP203T', name: 'Biochemistry' },
+        { code: isPharmD ? 'PD204T' : 'BP204T', name: 'Pathophysiology' },
       ],
       3: [
-        { code: 'BP301T', name: 'Pharmaceutical Organic Chemistry II' },
-        { code: 'BP302T', name: 'Physical Pharmaceutics I' },
-        { code: 'BP303T', name: 'Pharmaceutical Microbiology' },
-        { code: 'BP304T', name: 'Pharmaceutical Engineering' },
+        { code: isPharmD ? 'PD301T' : 'BP301T', name: 'Pharmaceutical Organic Chemistry II' },
+        { code: isPharmD ? 'PD302T' : 'BP302T', name: 'Physical Pharmaceutics I' },
+        { code: isPharmD ? 'PD303T' : 'BP303T', name: 'Pharmaceutical Microbiology' },
+        { code: isPharmD ? 'PD304T' : 'BP304T', name: 'Pharmaceutical Engineering' },
       ],
       4: [
-        { code: 'BP401T', name: 'Pharmaceutical Organic Chemistry III' },
-        { code: 'BP402T', name: 'Physical Pharmaceutics II' },
-        { code: 'BP403T', name: 'Pharmacology I' },
-        { code: 'BP404T', name: 'Pharmacognosy and Phytochemistry I' },
+        { code: isPharmD ? 'PD401T' : 'BP401T', name: 'Pharmaceutical Organic Chemistry III' },
+        { code: isPharmD ? 'PD402T' : 'BP402T', name: 'Physical Pharmaceutics II' },
+        { code: isPharmD ? 'PD403T' : 'BP403T', name: 'Pharmacology I' },
+        { code: isPharmD ? 'PD404T' : 'BP404T', name: 'Pharmacognosy and Phytochemistry I' },
       ],
       5: [
-        { code: 'BP501T', name: 'Medicinal Chemistry II' },
-        { code: 'BP502T', name: 'Industrial Pharmacy I' },
-        { code: 'BP503T', name: 'Pharmacology II' },
-        { code: 'BP504T', name: 'Pharmacognosy and Phytochemistry II' },
+        { code: isPharmD ? 'PD501T' : 'BP501T', name: 'Medicinal Chemistry II' },
+        { code: isPharmD ? 'PD502T' : 'BP502T', name: 'Industrial Pharmacy I' },
+        { code: isPharmD ? 'PD503T' : 'BP503T', name: 'Pharmacology II' },
+        { code: isPharmD ? 'PD504T' : 'BP504T', name: 'Pharmacognosy and Phytochemistry II' },
       ],
       6: [
-        { code: 'BP601T', name: 'Medicinal Chemistry III' },
-        { code: 'BP602T', name: 'Pharmacology III' },
-        { code: 'BP603T', name: 'Herbal Drug Technology' },
-        { code: 'BP604T', name: 'Biopharmaceutics and Pharmacokinetics' },
+        { code: isPharmD ? 'PD601T' : 'BP601T', name: 'Medicinal Chemistry III' },
+        { code: isPharmD ? 'PD602T' : 'BP602T', name: 'Pharmacology III' },
+        { code: isPharmD ? 'PD603T' : 'BP603T', name: 'Herbal Drug Technology' },
+        { code: isPharmD ? 'PD604T' : 'BP604T', name: 'Biopharmaceutics and Pharmacokinetics' },
       ],
       7: [
-        { code: 'BP701T', name: 'Instrumental Methods of Analysis' },
-        { code: 'BP702T', name: 'Industrial Pharmacy II' },
-        { code: 'BP703T', name: 'Pharmacy Practice' },
-        { code: 'BP704T', name: 'Novel Drug Delivery System' },
+        { code: isPharmD ? 'PD701T' : 'BP701T', name: 'Instrumental Methods of Analysis' },
+        { code: isPharmD ? 'PD702T' : 'BP702T', name: 'Industrial Pharmacy II' },
+        { code: isPharmD ? 'PD703T' : 'BP703T', name: 'Pharmacy Practice' },
+        { code: isPharmD ? 'PD704T' : 'BP704T', name: 'Novel Drug Delivery System' },
       ],
       8: [
-        { code: 'BP801T', name: 'Biostatistics and Research Methodology' },
-        { code: 'BP802T', name: 'Social and Preventive Pharmacy' },
-        { code: 'BP803T', name: 'Pharma Marketing Management' },
-        { code: 'BP804T', name: 'Quality Control and Standardization' },
+        { code: isPharmD ? 'PD801T' : 'BP801T', name: 'Biostatistics and Research Methodology' },
+        { code: isPharmD ? 'PD802T' : 'BP802T', name: 'Social and Preventive Pharmacy' },
+        { code: isPharmD ? 'PD803T' : 'BP803T', name: 'Pharma Marketing Management' },
+        { code: isPharmD ? 'PD804T' : 'BP804T', name: 'Quality Control and Standardization' },
       ],
     };
 
@@ -146,8 +158,12 @@ export default function StudentProgress() {
       const s2 = 21 + ((seed + 2) % 9);
       const s3 = 20 + ((seed + 4) % 10);
       
-      const sMarksSorted = [s1, s2, s3].sort((a, b) => b - a);
-      const bestOf2 = (sMarksSorted[0] + sMarksSorted[1]) / 2;
+      const bestOf2 = isPharmD 
+        ? (() => {
+            const sMarksSorted = [s1, s2, s3].sort((a, b) => b - a);
+            return (sMarksSorted[0] + sMarksSorted[1]) / 2;
+          })()
+        : (s1 + s2) / 2;
 
       const internals = Math.round(18 + (seed % 7));
       const semExam = Math.round(52 + (seed * 1.5) % 20);
@@ -199,23 +215,48 @@ export default function StudentProgress() {
           <p className="text-xs text-gray-500 font-medium">Verify your registered sessional marks, semester performance sheets, and PCI course outcomes attainment</p>
         </div>
 
-        {/* Semester Selector Options */}
-        <div className="flex items-center justify-center flex-nowrap gap-1 p-1 bg-gray-200/50 backdrop-blur-md rounded-2xl border border-white/40 shadow-inner overflow-x-auto max-w-full mx-auto">
-          {Array.from({ length: 8 }, (_, i) => i + 1).map((sem) => (
+        {/* Dynamic Programme Toggle and Semester Selector Options */}
+        <div className="flex flex-col sm:flex-row gap-3 items-center justify-between w-full max-w-2xl bg-white p-3 rounded-2xl border border-gray-150 shadow-sm">
+          <div className="flex items-center gap-1.5 p-1 bg-gray-100 rounded-xl">
             <button
-              key={sem}
-              onClick={() => setSelectedSemester(sem)}
-              className={`
-                px-3 py-1.5 rounded-xl text-[11px] font-bold transition-all duration-300 whitespace-nowrap
-                ${selectedSemester === sem
-                  ? 'bg-gradient-to-r from-[#8B1E3F] to-[#CD4368] text-white shadow-sm font-black'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-white/50'
-                }
-              `}
+              onClick={() => setProgramme('B.Pharm')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-black transition-all ${
+                programme === 'B.Pharm'
+                  ? 'bg-white text-[#8B1E3F] shadow-sm'
+                  : 'text-gray-500 hover:text-gray-800'
+              }`}
             >
-              Sem {sem}
+              B.Pharm (2 Sessionals)
             </button>
-          ))}
+            <button
+              onClick={() => setProgramme('Pharm.D')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-black transition-all ${
+                programme === 'Pharm.D'
+                  ? 'bg-white text-[#8B1E3F] shadow-sm'
+                  : 'text-gray-500 hover:text-gray-800'
+              }`}
+            >
+              Pharm.D (3 Sessionals)
+            </button>
+          </div>
+
+          <div className="flex items-center gap-1 overflow-x-auto max-w-full">
+            {Array.from({ length: 8 }, (_, i) => i + 1).map((sem) => (
+              <button
+                key={sem}
+                onClick={() => setSelectedSemester(sem)}
+                className={`
+                  px-2.5 py-1.5 rounded-lg text-[10px] font-extrabold transition-all duration-300 whitespace-nowrap
+                  ${selectedSemester === sem
+                    ? 'bg-[#8B1E3F] text-white shadow-sm'
+                    : 'text-gray-500 hover:text-gray-800 hover:bg-gray-100'
+                  }
+                `}
+              >
+                Sem {sem}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -233,7 +274,9 @@ export default function StudentProgress() {
               <TrendingUp className="w-3.5 h-3.5" /> High Standing
             </span>
           </div>
-          <p className="text-[10px] text-gray-400 mt-2 font-semibold">Best-of-two sessional score average</p>
+          <p className="text-[10px] text-gray-400 mt-2 font-semibold">
+            {programme === 'Pharm.D' ? 'Best-of-two' : 'Regular average'} sessional score rating
+          </p>
         </GlassCard>
 
         {/* Semester Marks Average */}
@@ -269,7 +312,9 @@ export default function StudentProgress() {
           <h2 className="font-display font-bold text-sm text-[#8B1E3F] uppercase tracking-wider flex items-center gap-1.5">
             <BarChart3 className="w-4 h-4" /> 1. Sessional Marks Breakdown (Semester {selectedSemester})
           </h2>
-          <p className="text-[11px] text-gray-500">Continuous internal sessional scores (Best-of-two determines sessional grade contribution)</p>
+          <p className="text-[11px] text-gray-500">
+            Continuous internal sessional scores ({programme === 'Pharm.D' ? 'Best of 2 determines sessional average' : 'Sessional 1 & 2 determines average'})
+          </p>
         </div>
 
         <div className="bg-white border border-gray-150/40 rounded-3xl overflow-hidden shadow-sm">
@@ -281,8 +326,8 @@ export default function StudentProgress() {
                   <th className="p-4">Subject Title</th>
                   <th className="p-4 text-center">Sessional I (30)</th>
                   <th className="p-4 text-center">Sessional II (30)</th>
-                  <th className="p-4 text-center">Sessional III (30)</th>
-                  <th className="p-4 text-center bg-[#8B1E3F]/5 text-[#8B1E3F]">Best of 2 (Avg)</th>
+                  {programme === 'Pharm.D' && <th className="p-4 text-center">Sessional III (30)</th>}
+                  <th className="p-4 text-center bg-[#8B1E3F]/5 text-[#8B1E3F]">Sessional Avg (30)</th>
                 </tr>
               </thead>
               <tbody>
@@ -292,7 +337,7 @@ export default function StudentProgress() {
                     <td className="p-4 text-gray-900 font-extrabold">{sub.name}</td>
                     <td className="p-4 text-center font-mono font-bold text-gray-500">{sub.sessionalI}</td>
                     <td className="p-4 text-center font-mono font-bold text-gray-500">{sub.sessionalII}</td>
-                    <td className="p-4 text-center font-mono font-bold text-gray-500">{sub.sessionalIII}</td>
+                    {programme === 'Pharm.D' && <td className="p-4 text-center font-mono font-bold text-gray-500">{sub.sessionalIII}</td>}
                     <td className="p-4 text-center font-mono font-black bg-[#8B1E3F]/5 text-[#8B1E3F] text-sm">{sub.bestOf2Sessional.toFixed(1)}</td>
                   </tr>
                 ))}

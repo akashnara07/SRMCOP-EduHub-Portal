@@ -79,13 +79,6 @@ export default function PdfReader({
             </button>
           </GlassCard>
 
-          <GlassCard 
-            onClick={() => setIsBookmarked(!isBookmarked)}
-            className="w-12 h-12 flex items-center justify-center cursor-pointer hover:bg-white/80"
-          >
-            <Bookmark className={`w-4.5 h-4.5 transition-colors ${isBookmarked ? 'text-[#8B1E3F] fill-current' : 'text-gray-500'}`} />
-          </GlassCard>
-
           <GlassCard className="w-12 h-12 flex items-center justify-center cursor-pointer hover:bg-white/80">
             <a href="https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" download referrerPolicy="no-referrer" target="_blank" className="text-gray-500 hover:text-gray-900">
               <Download className="w-4.5 h-4.5" />

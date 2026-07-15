@@ -70,7 +70,7 @@ export default function FacultyDashboard({
           <div className="border-t border-white/20 pt-4 flex items-center gap-2">
             <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
             <span className="text-xs font-black uppercase tracking-wider text-pink-100">
-              Department of Pharmaceutics
+              {facultyProfile.department || 'Department of Pharmacology'}
             </span>
           </div>
         </div>
@@ -330,7 +330,7 @@ export default function FacultyDashboard({
             </div>
 
             <div>
-              <label className="text-[9px] font-bold text-gray-400 uppercase tracking-widest block mb-1">Bulletin Content</label>
+              <label className="text-[9px] font-bold text-gray-400 uppercase tracking-widest block mb-1">Announcement Content</label>
               <textarea
                 placeholder="Ex. All physical copies of laboratory folders must be signed by..."
                 value={announcementContent}
@@ -350,7 +350,7 @@ export default function FacultyDashboard({
                     onClick={() => setAnnouncementCat(cat)}
                     className={`
                       text-[9px] font-bold px-2 py-1 rounded-full border transition-all capitalize
-                      ${announcementCat === cat 
+                      \${announcementCat === cat 
                         ? 'bg-gray-900 text-white border-gray-900 shadow-sm' 
                         : 'bg-white/40 border-gray-200 text-gray-500'
                       }
@@ -366,7 +366,7 @@ export default function FacultyDashboard({
                 disabled={!announcementTitle.trim() || !announcementContent.trim()}
                 className="px-4 py-2 bg-[#8B1E3F] hover:bg-[#b32a4e] text-white text-[11px] font-bold rounded-full transition-all shadow-md shadow-maroon-900/10 disabled:opacity-50"
               >
-                Post Bulletin
+                Post Announcement
               </button>
             </div>
           </form>

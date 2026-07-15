@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import * as XLSX from 'xlsx';
+import { db } from '../../lib/firebase';
+import { collection, onSnapshot, query, collectionGroup, doc, setDoc, deleteDoc } from 'firebase/firestore';
 import { 
   getCurriculumDb, 
   saveCurriculumDb, 
@@ -8,16 +10,20 @@ import {
   validateWorkbookFull,
   EXPECTED_SHEETS_CONFIG,
   compareCurriculumVersions, 
-  MasterCurriculumDb 
+  MasterCurriculumDb,
+  deleteCourseFromDb
 } from '../../data/curriculumDb';
 import { 
   Calendar, BookOpen, Sliders, ArrowRight, Library, Info, ShieldCheck, 
   Upload, FileSpreadsheet, Download, Check, AlertCircle, ArrowLeft, 
-  Trash2, Copy, Archive, Layers, HelpCircle, Eye, ChevronDown, ChevronRight,
-  Clock, Award, History, CheckCircle2, ChevronRightCircle, RefreshCcw
+  Trash2, Copy, Archive, FileText, Layers, HelpCircle, Eye, ChevronDown, ChevronRight, Edit,
+  Clock, Award, History, CheckCircle2, ChevronRightCircle, RefreshCcw,
+  Plus, Search, MoreVertical, Home, ChevronLeft
 } from 'lucide-react';
 import GlassCard from '../GlassCard';
 import { Subject, FacultyProfile } from '../../types';
+import CurriculumExplorer from './CurriculumExplorer';
+import CourseListTable from './CourseListTable';
 
 interface CourseDesignerHubProps {
   facultyProfile: FacultyProfile;
@@ -26,6 +32,7 @@ interface CourseDesignerHubProps {
   onGoToScreen: (screenId: string) => void;
   readOnly?: boolean;
   onRefreshSubjects?: () => void;
+  isAdmin?: boolean;
 }
 
 // Full, rich mock curriculum database matching all subjects
@@ -250,11 +257,11 @@ const mockCurriculums: Record<string, CurriculumData> = {
   }
 };
 
-const defaultCurriculum = (code: string, name: string, programme: string, sem: number): CurriculumData => ({
+const defaultCurriculum = (code: string, name: string, programme: string, sem: number, reg?: string): CurriculumData => ({
   courseCode: code,
   courseName: name,
   programme: programme as any,
-  regulation: 'PCI Regulation 2020',
+  regulation: reg || (programme === 'Pharm.D' ? 'PCI 2008' : 'PCI 2017'),
   semester: sem,
   credits: 4,
   hours: 45,
@@ -339,6 +346,20 @@ const defaultCurriculum = (code: string, name: string, programme: string, sem: n
   }
 });
 
+const getRomanSemester = (sem: number): string => {
+  const romanMap: Record<number, string> = {
+    1: 'Semester I',
+    2: 'Semester II',
+    3: 'Semester III',
+    4: 'Semester IV',
+    5: 'Semester V',
+    6: 'Semester VI',
+    7: 'Semester VII',
+    8: 'Semester VIII',
+  };
+  return romanMap[sem] || `Semester ${sem}`;
+};
+
 export default function CourseDesignerHub({
   facultyProfile,
   subjects,
@@ -346,17 +367,135 @@ export default function CourseDesignerHub({
   onGoToScreen,
   readOnly = false,
   onRefreshSubjects,
+  isAdmin = false,
 }: CourseDesignerHubProps) {
-  // Configured Academic Years
-  const academicYears = ['2024-2025', '2025-2026', '2026-2027'];
+  // Configured Academic Years and Regulation
+  const [academicYears, setAcademicYears] = useState<string[]>(['2024-2025', '2025-2026', '2026-2027', '2027-2028']);
   const [selectedYear, setSelectedYear] = useState<string>('2025-2026');
+  const [selectedRegulation, setSelectedRegulation] = useState<string>('PCI 2017');
+  const [statusFilter, setStatusFilter] = useState<'All' | 'Published' | 'Draft'>('All');
+  const [programmeFilter, setProgrammeFilter] = useState<'B.Pharm' | 'Pharm.D'>('B.Pharm');
+
+  // Semester and Year Level selection filters
+  const [selectedSemesterFilter, setSelectedSemesterFilter] = useState<number | 'All'>('All');
+  const [selectedYearLevelFilter, setSelectedYearLevelFilter] = useState<number | 'All'>('All');
+
+  // Redesigned Curriculum Manager state variables
+  const [courseSearchQuery, setCourseSearchQuery] = useState('');
+  const [expandedNodes, setExpandedNodes] = useState<Record<string, boolean>>({
+    'B.Pharm': true,
+    'B.Pharm-PCI 2017': true,
+    'B.Pharm-PCI 2017-AY 2025-2026': true,
+    'Pharm.D': true,
+    'Pharm.D-PCI 2008': true,
+    'Pharm.D-PCI 2008-AY 2025-2026': true
+  });
+  const [showAddCourseModal, setShowAddCourseModal] = useState(false);
+  
+  // Add course form states
+  const [addCode, setAddCode] = useState('');
+  const [addName, setAddName] = useState('');
+  const [addSemester, setAddSemester] = useState<number>(3);
+  const [addYearLevel, setAddYearLevel] = useState<number>(3);
+  const [addCredits, setAddCredits] = useState<number>(4);
+  const [addHours, setAddHours] = useState<number>(45);
+  const [addFacultyName, setAddFacultyName] = useState('Dr. V. Chitra');
+  
+  // Pagination
+  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [activeDropdownRowId, setActiveDropdownRowId] = useState<string | null>(null);
+
+  // Active Regulations list based on selected program
+  const regulationsList = programmeFilter === 'B.Pharm'
+    ? ['PCI 2017', 'PCI 2026']
+    : ['PCI 2008'];
+
+  // Filter shown academic years: if PCI 2026 regulation is chosen, restrict selector to 2026-2027 alone
+  const displayedYears = programmeFilter === 'B.Pharm'
+    ? (selectedRegulation === 'PCI 2026' ? ['2026-2027'] : ['2024-2025', '2025-2026', '2026-2027'])
+    : ['2024-2025', '2025-2026', '2026-2027'];
+
+  const getStatusColor = (status: string) => {
+    if (status === 'Published') return 'bg-emerald-500';
+    if (status === 'Draft') return 'bg-amber-500';
+    return 'bg-gray-400';
+  };
+
+  // Sync / validate state parameters when program or regulation changes
+  useEffect(() => {
+    if (programmeFilter === 'B.Pharm') {
+      if (selectedRegulation !== 'PCI 2017' && selectedRegulation !== 'PCI 2026') {
+        setSelectedRegulation('PCI 2017');
+        setSelectedYear('2025-2026');
+      } else if (selectedRegulation === 'PCI 2017') {
+        if (selectedYear !== '2024-2025' && selectedYear !== '2025-2026' && selectedYear !== '2026-2027') {
+          setSelectedYear('2025-2026');
+        }
+      } else if (selectedRegulation === 'PCI 2026') {
+        if (selectedYear !== '2026-2027') {
+          setSelectedYear('2026-2027');
+        }
+      }
+    } else {
+      // Pharm.D
+      if (selectedRegulation !== 'PCI 2008') {
+        setSelectedRegulation('PCI 2008');
+        setSelectedYear('2025-2026');
+      } else {
+        if (selectedYear !== '2024-2025' && selectedYear !== '2025-2026' && selectedYear !== '2026-2027') {
+          setSelectedYear('2025-2026');
+        }
+      }
+    }
+  }, [programmeFilter, selectedRegulation]);
+
+
+
+  // CO-PO mapping state for CourseDesignerHub
+  const [coPoMapping, setCoPoMapping] = useState<Record<string, Record<string, number>>>({
+    'CO1': { 'PO1': 3, 'PO2': 2, 'PO3': 1, 'PO4': 3, 'PO5': 2, 'PO6': 0, 'PO7': 1, 'PO8': 2, 'PO9': 1, 'PO10': 3, 'PO11': 0, 'PO12': 2 },
+    'CO2': { 'PO1': 2, 'PO2': 3, 'PO3': 2, 'PO4': 1, 'PO5': 3, 'PO6': 1, 'PO7': 2, 'PO8': 0, 'PO9': 2, 'PO10': 1, 'PO11': 3, 'PO12': 1 },
+    'CO3': { 'PO1': 3, 'PO2': 2, 'PO3': 3, 'PO4': 2, 'PO5': 1, 'PO6': 2, 'PO7': 1, 'PO8': 3, 'PO9': 0, 'PO10': 2, 'PO11': 1, 'PO12': 3 },
+    'CO4': { 'PO1': 1, 'PO2': 1, 'PO3': 2, 'PO4': 3, 'PO5': 2, 'PO6': 3, 'PO7': 0, 'PO8': 1, 'PO9': 3, 'PO10': 2, 'PO11': 2, 'PO12': 1 },
+    'CO5': { 'PO1': 2, 'PO2': 2, 'PO3': 1, 'PO4': 2, 'PO5': 3, 'PO6': 0, 'PO7': 3, 'PO8': 2, 'PO9': 1, 'PO10': 3, 'PO11': 1, 'PO12': 2 }
+  });
+
+  const handleCoPoCellClick = (coCode: string, po: string) => {
+    setCoPoMapping(prev => {
+      const currentVal = prev[coCode]?.[po] || 0;
+      const newVal = (currentVal + 1) % 4; // Cycles through 0, 1, 2, 3
+      return {
+        ...prev,
+        [coCode]: {
+          ...(prev[coCode] || {}),
+          [po]: newVal
+        }
+      };
+    });
+    triggerToast(`Updated alignment of ${coCode} - ${po} index.`);
+  };
+
+  // Edit Course State Engine
+  const [editingCourse, setEditingCourse] = useState<Subject | null>(null);
+  const [editName, setEditName] = useState('');
+  const [editCode, setEditCode] = useState('');
+  const [editSemester, setEditSemester] = useState<number>(1);
+  const [editYear, setEditYear] = useState<number>(1);
+  const [editRegulation, setEditRegulation] = useState('PCI 2017');
+  const [editAcademicYear, setEditAcademicYear] = useState('2025-2026');
+  const [editCredits, setEditCredits] = useState<number>(4);
+  const [editHours, setEditHours] = useState<number>(45);
+  const [editFacultyName, setEditFacultyName] = useState('Dr. V. Chitra');
 
   // Interactive views inside CourseDesignerHub:
   // - "list": Shows the Course Cards
   // - "designer": Shows the Curriculum Designer Page for the selected Course ID
   const [viewMode, setViewMode] = useState<'list' | 'designer'>('list');
   const [hubTab, setHubTab] = useState<'courses' | 'settings'>('courses');
+  const [layoutMode, setLayoutMode] = useState<'grid' | 'table'>('table');
   const [selectedSubjectId, setSelectedSubjectId] = useState<string | null>(null);
+  const [isExplorerMinimized, setIsExplorerMinimized] = useState<boolean>(true);
 
   // Excel Workbook Import Modal States
   const [showImportModal, setShowImportModal] = useState(false);
@@ -369,11 +508,330 @@ export default function CourseDesignerHub({
   const [showSuccessToast, setShowSuccessToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
   const [isImportSuccess, setIsImportSuccess] = useState(false);
-  const [programmeFilter, setProgrammeFilter] = useState<'B.Pharm' | 'Pharm.D'>('B.Pharm');
-  const [publishedSubjectIds, setPublishedSubjectIds] = useState<string[]>(['BP101T', 'PD101', 'BP201T', 'BP103T']);
+  const [publishedSubjectIds, setPublishedSubjectIds] = useState<string[]>(() => {
+    const saved = localStorage.getItem('srmcop_published_subject_ids');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        // Fallback
+      }
+    }
+    return ['BP101T', 'PD101', 'BP201T', 'BP103T'];
+  });
+
+  useEffect(() => {
+    localStorage.setItem('srmcop_published_subject_ids', JSON.stringify(publishedSubjectIds));
+  }, [publishedSubjectIds]);
 
   // Dynamic syllabus draft states inside Curriculum Designer
   const [activeSubjectCurriculum, setActiveSubjectCurriculum] = useState<CurriculumData | null>(null);
+
+  // Curriculum Section-wise editing states
+  const [editingSection, setEditingSection] = useState<string | null>(null);
+  const [savingSection, setSavingSection] = useState<string | null>(null);
+  const [savedSection, setSavedSection] = useState<string | null>(null);
+
+  // 1. Course Information States
+  const [editInfoCode, setEditInfoCode] = useState('');
+  const [editInfoName, setEditInfoName] = useState('');
+  const [editInfoProgramme, setEditInfoProgramme] = useState('');
+  const [editInfoRegulation, setEditInfoRegulation] = useState('');
+  const [editInfoSemester, setEditInfoSemester] = useState<number>(3);
+  const [editInfoCredits, setEditInfoCredits] = useState<number>(4);
+  const [editInfoHours, setEditInfoHours] = useState<number>(45);
+  const [editInfoType, setEditInfoType] = useState('Theory');
+
+  // 2. Scope State
+  const [editScopeStatement, setEditScopeStatement] = useState('');
+
+  // 3. Objectives State
+  const [editObjectivesList, setEditObjectivesList] = useState<string[]>([]);
+
+  // 4. Outcomes State
+  const [editOutcomesList, setEditOutcomesList] = useState<string[]>([]);
+
+  // 5. CO-PO Mapping State
+  const [editCoPoMapping, setEditCoPoMapping] = useState<Record<string, Record<string, number>>>({});
+
+  // 6. Units & Topics State
+  const [editUnitsList, setEditUnitsList] = useState<any[]>([]);
+
+  // 7 & 8. Recommended & Reference Books
+  const [editRecBooksList, setEditRecBooksList] = useState<{ author: string; title: string; edition: string }[]>([]);
+  const [editRefBooksList, setEditRefBooksList] = useState<{ author: string; title: string; edition: string }[]>([]);
+
+  // 9. Assessment Pattern States
+  const [editTheoryInternal, setEditTheoryInternal] = useState<number>(25);
+  const [editTheoryExternal, setEditTheoryExternal] = useState<number>(75);
+  const [editPracticalInternal, setEditPracticalInternal] = useState<number>(15);
+  const [editPracticalExternal, setEditPracticalExternal] = useState<number>(35);
+  const [editUniversityExam, setEditUniversityExam] = useState<number>(100);
+
+  const handleStartEdit = (section: string) => {
+    if (!activeSubjectCurriculum) return;
+    setEditingSection(section);
+    
+    if (section === 'info') {
+      setEditInfoCode(activeSubjectCurriculum.courseCode || '');
+      setEditInfoName(activeSubjectCurriculum.courseName || '');
+      setEditInfoProgramme(activeSubjectCurriculum.programme || programmeFilter);
+      setEditInfoRegulation(activeSubjectCurriculum.regulation || selectedRegulation);
+      setEditInfoSemester(activeSubjectCurriculum.semester || 3);
+      setEditInfoCredits(activeSubjectCurriculum.credits || 4);
+      setEditInfoHours(activeSubjectCurriculum.hours || 45);
+      setEditInfoType(activeSubjectCurriculum.type || 'Theory');
+    } else if (section === 'scope') {
+      setEditScopeStatement(activeSubjectCurriculum.scope || '');
+    } else if (section === 'objectives') {
+      setEditObjectivesList([...(activeSubjectCurriculum.objectives || [])]);
+    } else if (section === 'outcomes') {
+      setEditOutcomesList([...(activeSubjectCurriculum.courseOutcomes || [])]);
+    } else if (section === 'matrix') {
+      setEditCoPoMapping(JSON.parse(JSON.stringify(activeSubjectCurriculum.coPoMapping || coPoMapping)));
+    } else if (section === 'units') {
+      setEditUnitsList(JSON.parse(JSON.stringify(activeSubjectCurriculum.units || [])));
+    } else if (section === 'recommendedBooks') {
+      setEditRecBooksList(JSON.parse(JSON.stringify(activeSubjectCurriculum.recommendedBooks || [])));
+    } else if (section === 'referenceBooks') {
+      setEditRefBooksList(JSON.parse(JSON.stringify(activeSubjectCurriculum.referenceBooks || [])));
+    } else if (section === 'assessment') {
+      const pattern = activeSubjectCurriculum.assessmentPattern || {
+        theoryInternal: 25,
+        theoryExternal: 75,
+        practicalInternal: 15,
+        practicalExternal: 35,
+        universityExam: 100
+      };
+      setEditTheoryInternal(pattern.theoryInternal);
+      setEditTheoryExternal(pattern.theoryExternal);
+      setEditPracticalInternal(pattern.practicalInternal);
+      setEditPracticalExternal(pattern.practicalExternal);
+      setEditUniversityExam(pattern.universityExam || 100);
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setEditingSection(null);
+  };
+
+  const getRomanSemester = (sem: number): string => {
+    const romans = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
+    return `Semester ${romans[sem - 1] || sem}`;
+  };
+
+  const handleSaveSection = async (section: string) => {
+    if (!activeSubjectCurriculum) return;
+    setSavingSection(section);
+
+    try {
+      const currentSemStr = getRomanSemester(activeSubjectCurriculum.semester);
+      const currentCode = activeSubjectCurriculum.courseCode;
+      const currentProg = activeSubjectCurriculum.programme;
+      const currentReg = activeSubjectCurriculum.regulation;
+
+      const docRefCurrent = doc(
+        db,
+        'curriculum',
+        currentProg,
+        currentReg,
+        selectedYear,
+        currentSemStr,
+        currentCode
+      );
+
+      let updateData: any = {};
+      let isKeyChanged = false;
+      let docRefTarget = docRefCurrent;
+
+      if (section === 'info') {
+        const targetSemStr = getRomanSemester(editInfoSemester);
+        if (
+          currentSemStr !== targetSemStr ||
+          currentCode !== editInfoCode ||
+          currentProg !== editInfoProgramme ||
+          currentReg !== editInfoRegulation
+        ) {
+          isKeyChanged = true;
+          docRefTarget = doc(
+            db,
+            'curriculum',
+            editInfoProgramme,
+            editInfoRegulation,
+            selectedYear,
+            targetSemStr,
+            editInfoCode
+          );
+        }
+
+        updateData = {
+          courseCode: editInfoCode,
+          courseName: editInfoName,
+          programme: editInfoProgramme,
+          regulation: editInfoRegulation,
+          semester: editInfoSemester,
+          credits: Number(editInfoCredits),
+          hours: Number(editInfoHours),
+          type: editInfoType
+        };
+      } else if (section === 'scope') {
+        updateData = { scope: editScopeStatement };
+      } else if (section === 'objectives') {
+        updateData = { objectives: editObjectivesList };
+      } else if (section === 'outcomes') {
+        updateData = { courseOutcomes: editOutcomesList };
+      } else if (section === 'matrix') {
+        updateData = { coPoMapping: editCoPoMapping };
+      } else if (section === 'units') {
+        updateData = { units: editUnitsList };
+      } else if (section === 'recommendedBooks') {
+        updateData = { recommendedBooks: editRecBooksList };
+      } else if (section === 'referenceBooks') {
+        updateData = { referenceBooks: editRefBooksList };
+      } else if (section === 'assessment') {
+        updateData = {
+          assessmentPattern: {
+            theoryInternal: Number(editTheoryInternal),
+            theoryExternal: Number(editTheoryExternal),
+            practicalInternal: Number(editPracticalInternal),
+            practicalExternal: Number(editPracticalExternal),
+            universityExam: Number(editUniversityExam)
+          }
+        };
+      }
+
+      if (isKeyChanged) {
+        // Prepare the complete copied curriculum data
+        const completeData = {
+          ...activeSubjectCurriculum,
+          ...updateData
+        };
+        await setDoc(docRefTarget, completeData);
+        await deleteDoc(docRefCurrent);
+        setSelectedCourseCode(editInfoCode);
+      } else {
+        await setDoc(docRefTarget, updateData, { merge: true });
+      }
+
+      setSavedSection(section);
+      setTimeout(() => setSavedSection(null), 3000);
+      setEditingSection(null);
+      triggerToast(`Successfully saved section: ${section}`);
+    } catch (error: any) {
+      console.error("Error saving section:", error);
+      triggerToast(`Failed to save: ${error.message}`);
+    } finally {
+      setSavingSection(null);
+    }
+  };
+
+  // Real-time Firestore courses list listener
+  const [allFetchedCourses, setAllFetchedCourses] = useState<CurriculumData[]>([]);
+  const [selectedCourseCode, setSelectedCourseCode] = useState<string>('');
+
+  useEffect(() => {
+    const semestersToQuery = ['Semester I', 'Semester II', 'Semester III', 'Semester IV', 'Semester V', 'Semester VI', 'Semester VII', 'Semester VIII'];
+    const results: Record<string, CurriculumData[]> = {};
+    const unsubscribes: (() => void)[] = [];
+
+    semestersToQuery.forEach((semStr) => {
+      const q = query(collectionGroup(db, semStr));
+      const unsub = onSnapshot(q, (snapshot) => {
+        const semesterCourses: CurriculumData[] = [];
+        snapshot.forEach((docSnap) => {
+          const rawData = docSnap.data();
+          const pathParts = docSnap.ref.path.split('/');
+          // Path format: curriculum/{programme}/{regulation}/{year}/{semester}/{courseCode}
+          if (pathParts.length >= 6) {
+            const prog = pathParts[1];
+            const reg = pathParts[2];
+            const yr = pathParts[3];
+            const semName = pathParts[4];
+            
+            // Convert semName (e.g. 'Semester III') to numeric semester
+            let semNum = 3;
+            if (semName === 'Semester I') semNum = 1;
+            else if (semName === 'Semester II') semNum = 2;
+            else if (semName === 'Semester III') semNum = 3;
+            else if (semName === 'Semester IV') semNum = 4;
+            else if (semName === 'Semester V') semNum = 5;
+            else if (semName === 'Semester VI') semNum = 6;
+            else if (semName === 'Semester VII') semNum = 7;
+            else if (semName === 'Semester VIII') semNum = 8;
+
+            const code = rawData.courseCode || rawData.subjectCode || docSnap.id;
+            semesterCourses.push({
+              ...rawData,
+              courseCode: code,
+              subjectCode: code,
+              programme: prog,
+              regulation: reg,
+              academicYear: yr,
+              semester: semNum,
+            } as unknown as CurriculumData);
+          }
+        });
+        results[semStr] = semesterCourses;
+
+        // Flatten all current results
+        const allFetched: CurriculumData[] = [];
+        semestersToQuery.forEach(s => {
+          if (results[s]) {
+            allFetched.push(...results[s]);
+          }
+        });
+        setAllFetchedCourses(allFetched);
+      }, (error) => {
+        console.warn(`Firestore collectionGroup onSnapshot error for ${semStr}:`, error.message);
+      });
+      unsubscribes.push(unsub);
+    });
+
+    return () => {
+      unsubscribes.forEach(unsub => unsub());
+    };
+  }, []);
+
+  const fetchedCourses = allFetchedCourses.filter(c => 
+    c.programme === programmeFilter &&
+    c.regulation === selectedRegulation &&
+    c.academicYear === selectedYear
+  );
+
+  // Keep activeSubjectCurriculum in sync with fetchedCourses changes safely without triggering loops
+  useEffect(() => {
+    if (activeSubjectCurriculum) {
+      const activeCode = activeSubjectCurriculum.courseCode || (activeSubjectCurriculum as any).subjectCode;
+      const matchingDoc = fetchedCourses.find(c => c.courseCode === activeCode);
+      if (matchingDoc) {
+        if (JSON.stringify(matchingDoc) !== JSON.stringify(activeSubjectCurriculum)) {
+          setActiveSubjectCurriculum(matchingDoc);
+        }
+      }
+    }
+  }, [fetchedCourses, activeSubjectCurriculum]);
+
+  const handleCourseDropdownChange = (code: string) => {
+    setSelectedCourseCode(code);
+    if (!code) {
+      setActiveSubjectCurriculum(null);
+      setViewMode('list');
+      return;
+    }
+    const matched = fetchedCourses.find(c => c.courseCode === code);
+    if (matched) {
+      setActiveSubjectCurriculum(matched);
+      const isLegacy = (matched.courseCode === 'BP101T' && matched.regulation === 'PCI 2017') ||
+                       (matched.courseCode === 'PD101' && matched.regulation === 'PCI 2008') ||
+                       (matched.courseCode === 'BP201T' && matched.regulation === 'PCI 2017') ||
+                       (matched.courseCode === 'BP103T' && matched.regulation === 'PCI 2026');
+      const standardId = isLegacy
+        ? (selectedYear === '2025-2026' ? matched.courseCode : `${matched.courseCode}-${selectedYear}`)
+        : `${matched.courseCode}-${matched.regulation}-${selectedYear || '2025-2026'}`;
+      setSelectedSubjectId(standardId);
+      setViewMode('designer');
+    }
+  };
   const [collapsedSections, setCollapsedSections] = useState<Record<string, boolean>>({
     'info': false,
     'scope': false,
@@ -403,15 +861,134 @@ export default function CourseDesignerHub({
     assessmentPattern: 'pending'
   });
 
-  // Filter subjects allotted to this faculty AND matching the selected academic year and programme
-  const mySubjects = subjects.filter(
-    (s) => facultyProfile.subjects.includes(s.id) && s.academicYear === selectedYear && s.programme === programmeFilter
-  );
+  // Filter subjects allotted to this faculty (or all subjects if Admin) AND matching the selected academic year, programme, regulation and status
+  const isPCI2026 = programmeFilter === 'B.Pharm' && selectedRegulation === 'PCI 2026';
+
+  // Convert fetchedCourses to Subject list
+  const fetchedSubjects: Subject[] = fetchedCourses.map((c, idx) => {
+    const code = c.courseCode;
+    const reg = c.regulation || selectedRegulation;
+    const isLegacy = (code === 'BP101T' && reg === 'PCI 2017') ||
+                     (code === 'PD101' && reg === 'PCI 2008') ||
+                     (code === 'BP201T' && reg === 'PCI 2017') ||
+                     (code === 'BP103T' && reg === 'PCI 2026');
+    
+    const standardId = isLegacy
+      ? (selectedYear === '2025-2026' ? code : `${code}-${selectedYear}`)
+      : `${code}-${reg}-${selectedYear || '2025-2026'}`;
+
+    const matchingSub = subjects.find(s => s.id === standardId) || subjects.find(s => s.code === code && s.academicYear === selectedYear);
+    const finalId = matchingSub ? matchingSub.id : standardId;
+
+    return {
+      id: finalId,
+      code: c.courseCode,
+      name: c.courseName,
+      programme: c.programme as any,
+      year: Math.ceil(c.semester / 2),
+      semester: c.semester,
+      academicYear: selectedYear,
+      regulation: c.regulation || selectedRegulation,
+      facultyName: c.importedBy || 'Dr. V. Chitra',
+      progress: matchingSub ? matchingSub.progress : 0,
+      color: ['bg-rose-500', 'bg-blue-500', 'bg-amber-500', 'bg-emerald-500'][idx % 4],
+      resources: matchingSub ? matchingSub.resources : []
+    };
+  });
+
+  // Convert allFetchedCourses to Subject list for counts in CurriculumExplorer
+  const allFetchedSubjects: Subject[] = allFetchedCourses.map((c, idx) => {
+    const code = c.courseCode;
+    const reg = c.regulation || selectedRegulation;
+    const isLegacy = (code === 'BP101T' && reg === 'PCI 2017') ||
+                     (code === 'PD101' && reg === 'PCI 2008') ||
+                     (code === 'BP201T' && reg === 'PCI 2017') ||
+                     (code === 'BP103T' && reg === 'PCI 2026');
+    
+    const yr = c.academicYear || selectedYear;
+    const standardId = isLegacy
+      ? (yr === '2025-2026' ? code : `${code}-${yr}`)
+      : `${code}-${reg}-${yr}`;
+
+    const matchingSub = subjects.find(s => s.id === standardId) || subjects.find(s => s.code === code && s.academicYear === yr);
+    const finalId = matchingSub ? matchingSub.id : standardId;
+
+    return {
+      id: finalId,
+      code: c.courseCode,
+      name: c.courseName,
+      programme: c.programme as any,
+      year: Math.ceil(c.semester / 2),
+      semester: c.semester,
+      academicYear: yr,
+      regulation: c.regulation || selectedRegulation,
+      facultyName: c.importedBy || 'Dr. V. Chitra',
+      progress: matchingSub ? matchingSub.progress : 0,
+      color: ['bg-rose-500', 'bg-blue-500', 'bg-amber-500', 'bg-emerald-500'][idx % 4],
+      resources: matchingSub ? matchingSub.resources : []
+    };
+  });
+
+  const explorerSubjects = allFetchedSubjects.length > 0 ? allFetchedSubjects : subjects;
+
+  const mySubjects = fetchedSubjects.length > 0 ? fetchedSubjects.filter((s) => {
+    const isPublished = publishedSubjectIds.includes(s.id);
+    const statusValue = isPublished ? 'Published' : 'Draft';
+    const isStatusMatch = statusFilter === 'All' || statusValue === statusFilter;
+    
+    let isSemOrYearMatch = true;
+    if (programmeFilter === 'B.Pharm') {
+      isSemOrYearMatch = selectedSemesterFilter === 'All' || s.semester === selectedSemesterFilter;
+    } else {
+      isSemOrYearMatch = selectedYearLevelFilter === 'All' || s.year === selectedYearLevelFilter;
+    }
+    return isStatusMatch && isSemOrYearMatch;
+  }) : subjects.filter((s) => {
+    const isAllotted = true; // Let both faculty and admin view all curriculum courses in the hub
+    const isYearMatch = s.academicYear === selectedYear;
+    const isProgMatch = s.programme === programmeFilter;
+    
+    let isRegMatch = false;
+    if (programmeFilter === 'B.Pharm') {
+      isRegMatch = s.regulation === selectedRegulation || (!s.regulation && selectedRegulation === 'PCI 2017');
+    } else {
+      isRegMatch = s.regulation === 'PCI 2008' || (!s.regulation); // Fallback to match existing Pharm.D courses
+    }
+    
+    const isPublished = publishedSubjectIds.includes(s.id);
+    const statusValue = isPublished ? 'Published' : 'Draft';
+    const isStatusMatch = statusFilter === 'All' || statusValue === statusFilter;
+    
+    // Filter by selected Semester (for B.Pharm) or Year Level (for Pharm.D)
+    let isSemOrYearMatch = true;
+    if (programmeFilter === 'B.Pharm') {
+      isSemOrYearMatch = selectedSemesterFilter === 'All' || s.semester === selectedSemesterFilter;
+    } else {
+      isSemOrYearMatch = selectedYearLevelFilter === 'All' || s.year === selectedYearLevelFilter;
+    }
+    
+    return isAllotted && isYearMatch && isProgMatch && isRegMatch && isStatusMatch && isSemOrYearMatch;
+  });
 
   const triggerToast = (msg: string) => {
     setToastMessage(msg);
     setShowSuccessToast(true);
     setTimeout(() => setShowSuccessToast(false), 4500);
+  };
+
+  const getSubjectCountInTree = (prog: 'B.Pharm' | 'Pharm.D', reg: string, year: string, levelNum: number) => {
+    return explorerSubjects.filter(s => {
+      const isProgMatch = s.programme === prog;
+      const isYearMatch = s.academicYear === year;
+      let isRegMatch = false;
+      if (prog === 'B.Pharm') {
+        isRegMatch = s.regulation === reg || (!s.regulation && reg === 'PCI 2017');
+      } else {
+        isRegMatch = s.regulation === reg || (!s.regulation && reg === 'PCI 2008');
+      }
+      const isLevelMatch = prog === 'B.Pharm' ? s.semester === levelNum : s.year === levelNum;
+      return isProgMatch && isYearMatch && isRegMatch && isLevelMatch;
+    }).length;
   };
 
   // Duplicate course card simulation
@@ -420,17 +997,172 @@ export default function CourseDesignerHub({
     triggerToast(`Successfully duplicated curriculum for ${sub.code} - Draft Copy created.`);
   };
 
-  // Archive course card simulation
+  // Move course to draft state simulation
   const handleArchiveCourse = (e: React.MouseEvent, sub: Subject) => {
     e.stopPropagation();
-    triggerToast(`Archived ${sub.code} course shell. Active student logins will be locked.`);
+    setPublishedSubjectIds(publishedSubjectIds.filter(id => id !== sub.id));
+    triggerToast(`Moved ${sub.code} to Draft status. The Admin can now review it.`);
+  };
+
+  // Custom Delete Modal State
+  const [courseToDelete, setCourseToDelete] = useState<Subject | null>(null);
+
+  // Delete course card permanently from database
+  const handleDeleteCourse = (e: React.MouseEvent, sub: Subject) => {
+    e.stopPropagation();
+    setCourseToDelete(sub);
+  };
+
+  const confirmDeleteCourse = () => {
+    if (!courseToDelete) return;
+    deleteCourseFromDb(courseToDelete.code);
+
+    if (onRefreshSubjects) {
+      onRefreshSubjects();
+    }
+    
+    triggerToast(`Permanently deleted ${courseToDelete.code} course shell and all compliance configurations.`);
+    setCourseToDelete(null);
+  };
+
+  // Open course editor modal
+  const handleEditCourse = (e: React.MouseEvent, sub: Subject) => {
+    e.stopPropagation();
+    setEditingCourse(sub);
+    setEditName(sub.name);
+    setEditCode(sub.code);
+    setEditSemester(sub.semester);
+    setEditYear(sub.year);
+    setEditRegulation(sub.regulation || 'PCI 2017');
+    setEditAcademicYear(sub.academicYear || '2025-2026');
+    setEditFacultyName(sub.facultyName || 'Dr. V. Chitra');
+    
+    // Retrieve credits & hours from master database
+    const db = getCurriculumDb();
+    const info = db.courseInformation.find(c => c.subjectCode === sub.code);
+    setEditCredits(info ? info.credits : ((sub.code && sub.code.endsWith('P')) ? 2 : 4));
+    setEditHours(info ? info.hours : ((sub.code && sub.code.endsWith('P')) ? 30 : 45));
+  };
+
+  const handleSaveCourseEdit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingCourse) return;
+
+    const db = getCurriculumDb();
+    // Update CourseInformation
+    db.courseInformation = db.courseInformation.map(c => {
+      if (c.subjectCode === editingCourse.code) {
+        return {
+          ...c,
+          subjectCode: editCode,
+          courseName: editName,
+          semester: editSemester,
+          year: editYear,
+          regulation: editRegulation,
+          academicYear: editAcademicYear,
+          credits: editCredits,
+          hours: editHours,
+          facultyAssigned: editFacultyName,
+        };
+      }
+      return c;
+    });
+
+    // If the subjectCode (code) was changed, we must also update the subjectCode key in all other sheets
+    if (editCode !== editingCourse.code) {
+      const oldCode = editingCourse.code;
+      const updateCode = <T extends { subjectCode: string }>(arr: T[]): T[] => {
+        return arr.map(item => item.subjectCode === oldCode ? { ...item, subjectCode: editCode } : item);
+      };
+
+      db.scope = updateCode(db.scope);
+      db.objectives = updateCode(db.objectives);
+      db.courseOutcomes = updateCode(db.courseOutcomes);
+      db.units = updateCode(db.units);
+      db.curriculumTopics = updateCode(db.curriculumTopics);
+      db.recommendedBooks = updateCode(db.recommendedBooks);
+      db.referenceBooks = updateCode(db.referenceBooks);
+      db.assessmentPattern = updateCode(db.assessmentPattern);
+
+      // Move teaching resources
+      const oldRes = localStorage.getItem(`srmcop_teaching_res_${oldCode}`);
+      if (oldRes) {
+        localStorage.setItem(`srmcop_teaching_res_${editCode}`, oldRes);
+        localStorage.removeItem(`srmcop_teaching_res_${oldCode}`);
+      }
+    }
+
+    saveCurriculumDb(db);
+    setEditingCourse(null);
+    if (onRefreshSubjects) {
+      onRefreshSubjects();
+    }
+    triggerToast(`Successfully updated course shell details for ${editCode}.`);
+  };
+
+  const handleSaveCourseAdd = (e: React.FormEvent) => {
+    e.preventDefault();
+    const db = getCurriculumDb();
+    
+    // Check duplicate
+    if (db.courseInformation.some(c => c.subjectCode === addCode)) {
+      alert(`A course with code ${addCode} already exists in the curriculum database.`);
+      return;
+    }
+    
+    // Append to CourseInformation
+    db.courseInformation.push({
+      subjectCode: addCode,
+      courseName: addName,
+      programme: programmeFilter,
+      year: programmeFilter === 'B.Pharm' ? Math.ceil(addSemester / 2) : addYearLevel,
+      semester: programmeFilter === 'B.Pharm' ? addSemester : 1,
+      credits: addCredits,
+      hours: addHours,
+      subjectType: (addCode && addCode.endsWith('P')) ? 'Practical' : 'Theory',
+      facultyAssigned: addFacultyName,
+      importVersion: '1.0',
+      academicYear: selectedYear,
+      regulation: selectedRegulation,
+      status: 'Approved'
+    });
+    
+    // Initialize other sheets
+    db.scope.push({ subjectCode: addCode, scopeStatement: `This course is designed to provide comprehensive training in ${addName}.` });
+    db.objectives.push({ subjectCode: addCode, objectiveText: `Describe the fundamental theories and techniques in ${addName}.`, order: 1 });
+    db.courseOutcomes.push({ subjectCode: addCode, coCode: 'CO1', coText: `Define and explain key methodologies of ${addName}.`, attainmentTarget: 2.5 });
+    db.units.push({ subjectCode: addCode, unitCode: 'Unit I', unitName: 'General Foundations', hours: 9 });
+    db.curriculumTopics.push({ subjectCode: addCode, unitCode: 'Unit I', topicCode: 'T1', topicName: 'Introduction & Core Terminology', hours: 1 });
+    db.referenceBooks.push({ subjectCode: addCode, title: 'A Text Book of ' + addName, author: 'Standard Authors', edition: 'Latest' });
+    db.assessmentPattern.push({
+      subjectCode: addCode,
+      theoryInternal: 25,
+      theoryExternal: 75,
+      practicalInternal: 15,
+      practicalExternal: 35,
+      universityExam: 100
+    });
+    
+    saveCurriculumDb(db);
+    setShowAddCourseModal(false);
+    
+    // Reset form
+    setAddCode('');
+    setAddName('');
+    
+    if (onRefreshSubjects) {
+      onRefreshSubjects();
+    }
+    triggerToast(`Successfully added course shell ${addCode} - ${addName} to the database.`);
   };
 
   // Open curriculum designer sub-view
   const handleOpenCurriculumDesigner = (sub: Subject) => {
-    const cur = mockCurriculums[sub.code] || defaultCurriculum(sub.code, sub.name, sub.programme, sub.semester);
+    const matched = fetchedCourses.find(c => c.courseCode === sub.code);
+    const cur = matched || defaultCurriculum(sub.code, sub.name, sub.programme, sub.semester, sub.regulation);
     setActiveSubjectCurriculum(cur);
     setSelectedSubjectId(sub.id);
+    setSelectedCourseCode(sub.code);
     setViewMode('designer');
   };
 
@@ -673,6 +1405,16 @@ export default function CourseDesignerHub({
 
         // Parse with default academic year set to currently selected
         const parsedData = parseCurriculumWorkbook(workbook, selectedYear);
+
+        // Ensure imported courses ALWAYS match the currently selected filters so they show up instantly in the active view in Draft state
+        parsedData.courseInformation = parsedData.courseInformation.map(info => ({
+          ...info,
+          academicYear: selectedYear,
+          programme: programmeFilter,
+          regulation: selectedRegulation,
+          status: 'Draft' as any // Ensure it is in Draft state
+        }));
+
         const currentDb = getCurriculumDb();
         const diffs = compareCurriculumVersions(currentDb, parsedData);
 
@@ -681,6 +1423,16 @@ export default function CourseDesignerHub({
         logs.push(`[VALIDATOR] Found ${diffs.subjectsAdded.length} new course(s), ${diffs.subjectsUpdated.length} modified course(s).`);
         setImportLog(logs);
 
+        setValidationChecklist({
+          courseInfo: 'success',
+          scope: 'success',
+          objectives: 'success',
+          courseOutcomes: 'success',
+          units: 'success',
+          curriculumTopics: 'success',
+          referenceBooks: 'success',
+          assessmentPattern: 'success'
+        });
         setValidationProgress(90);
 
         setTimeout(() => {
@@ -741,6 +1493,7 @@ export default function CourseDesignerHub({
           setIsImportSuccess(true);
 
           const matchedYear = academicYearsFound[0] || selectedYear;
+          const importedSubjectCodes = parsedData.courseInformation.map(c => c.subjectCode);
 
           if (activeSubjectCurriculum) {
             const enrichedCurriculum = {
@@ -758,12 +1511,18 @@ export default function CourseDesignerHub({
             setPublishedSubjectIds(prev => prev.filter(id => id !== activeSubjectCurriculum.courseCode));
             triggerToast(`Workbook imported successfully! ${activeSubjectCurriculum.courseCode} refreshed and set to Draft. Click 'Publish' to publish.`);
           } else {
-            setPublishedSubjectIds(prev => prev.filter(id => id !== 'BP101T' && id !== 'PD101'));
-            triggerToast(`Master Workbook for Academic Year ${matchedYear} imported successfully! Active courses refreshed and set to Draft. Please publish to make active.`);
+            setPublishedSubjectIds(prev => prev.filter(id => !importedSubjectCodes.includes(id)));
+            triggerToast(`Master Workbook for Academic Year ${matchedYear} imported successfully with ${parsedData.courseInformation.length} courses! All imported courses are refreshed and placed in Draft state. Please review and publish them.`);
           }
 
-          // Auto-switch selectedYear so that imported courses appear instantly!
-          if (matchedYear && academicYears.includes(matchedYear)) {
+          // Auto-switch selectedYear and dynamically append it if new, so that imported courses appear instantly!
+          if (matchedYear) {
+            setAcademicYears(prev => {
+              if (!prev.includes(matchedYear)) {
+                return [...prev, matchedYear];
+              }
+              return prev;
+            });
             setSelectedYear(matchedYear);
           }
 
@@ -808,96 +1567,307 @@ export default function CourseDesignerHub({
       {/* VIEW 1: COURSE LIST PAGE */}
       {viewMode === 'list' && (
         <>
-          {/* Intro Banner */}
-          <div className="relative overflow-hidden rounded-[24px] bg-gradient-to-br from-gray-950 via-[#19191e] to-gray-950 p-6 md:p-8 lg:p-10 text-white shadow-2xl border border-white/5">
-            <div className="absolute -right-16 -bottom-16 w-96 h-96 bg-[#8B1E3F]/20 rounded-full blur-3xl pointer-events-none" />
-            <div className="absolute -left-16 -top-16 w-96 h-96 bg-rose-500/10 rounded-full blur-3xl pointer-events-none" />
-
-            <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-              <div className="flex flex-col gap-1 w-full">
-                <span className="text-[9px] md:text-[10px] font-black uppercase tracking-widest text-[#CD4368] bg-[#CD4368]/15 border border-[#CD4368]/20 px-3 py-1 rounded-full w-max">
-                  my teaching portfolio
-                </span>
-                <h1 className="font-display font-black text-xl md:text-2xl lg:text-3xl tracking-tight mt-2.5 leading-tight bg-gradient-to-r from-white via-gray-100 to-gray-300 bg-clip-text text-transparent">
-                  {readOnly ? 'Assigned Teaching Subjects' : 'Curriculum & Course Manager'}
-                </h1>
-                <p className="text-xs text-gray-300 max-w-2xl leading-relaxed mt-2.5 font-medium">
-                  {readOnly 
-                    ? 'Browse the subjects assigned to you. Review curriculum details, monitor teaching readiness and continue creating learning resources through the Course Manager.'
-                    : 'Configure PCI academic syllabus layouts, add Course Objectives (CO), map Program Outcomes (PO), and manage lecture-by-lecture lesson plans.'}
-                </p>
-              </div>
+          {/* Page Title & Breadcrumbs */}
+          <div className="flex flex-col gap-1.5 pl-1 mb-2 mt-4">
+            <h1 className="font-sans font-black text-2xl md:text-3xl text-gray-950 tracking-tight leading-none">
+              Curriculum Manager
+            </h1>
+            <div className="flex items-center gap-1.5 text-[11px] font-bold text-gray-400">
+              <span className="cursor-pointer hover:text-gray-700 transition-colors flex items-center gap-1" onClick={() => {
+                setSelectedSemesterFilter('All');
+                setSelectedYearLevelFilter('All');
+              }}>
+                <Home className="w-3.5 h-3.5" />
+              </span>
+              <ChevronRight className="w-3 h-3 text-gray-300 shrink-0" />
+              <span className="cursor-pointer hover:text-gray-700 transition-colors" onClick={() => {
+                setSelectedSemesterFilter('All');
+                setSelectedYearLevelFilter('All');
+              }}>
+                {programmeFilter}
+              </span>
+              <ChevronRight className="w-3 h-3 text-gray-300 shrink-0" />
+              <span className="cursor-pointer hover:text-gray-700 transition-colors">
+                {selectedRegulation}
+              </span>
+              <ChevronRight className="w-3 h-3 text-gray-300 shrink-0" />
+              <span className="cursor-pointer hover:text-gray-700 transition-colors">
+                AY {selectedYear}
+              </span>
+              <ChevronRight className="w-3 h-3 text-gray-300 shrink-0" />
+              <span className="text-gray-800 font-extrabold">
+                {programmeFilter === 'B.Pharm'
+                  ? selectedSemesterFilter === 'All' ? 'All Semesters' : `Semester ${selectedSemesterFilter}`
+                  : selectedYearLevelFilter === 'All' ? 'All Years' : `Year ${selectedYearLevelFilter}`
+                }
+              </span>
             </div>
           </div>
 
-          {/* Academic Session Selector & Template Download */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div className="flex flex-col gap-2">
-              <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest pl-1">
-                1. SELECT ALLOTTED ACADEMIC YEAR
-              </label>
-              
-              {/* Apple Segmented Control */}
-              <GlassCard className="p-1 flex gap-1 items-center max-w-sm h-11">
-                {academicYears.map((year) => (
-                  <button
-                    key={year}
-                    onClick={() => setSelectedYear(year)}
-                    className={`
-                      flex-1 h-full rounded-full text-[11px] font-bold transition-all duration-300 whitespace-nowrap px-4
-                      ${selectedYear === year
-                        ? 'bg-[#8B1E3F] text-white shadow-md shadow-maroon-900/15'
-                        : 'text-gray-600 hover:text-gray-900 hover:bg-white/40'
-                      }
-                    `}
-                  >
-                    Year {year}
-                  </button>
-                ))}
-              </GlassCard>
+          {/* CURRICULUM CONTEXT CARD (Matches Screenshot perfectly, redesigned for perfect spacing) */}
+          <div className="bg-white px-4 md:px-5 py-6 rounded-[24px] border border-gray-150/50 shadow-sm flex flex-col gap-6">
+            {/* Header */}
+            <div className="flex items-center gap-2 border-b border-gray-100 pb-3">
+              <BookOpen className="w-5 h-5 text-[#8B1E3F]" />
+              <h3 className="font-display font-black text-sm text-gray-950 uppercase tracking-wider">
+                Curriculum Context
+              </h3>
             </div>
 
-            {!readOnly && (
-              <div className="flex flex-col gap-2 shrink-0 self-end sm:self-auto">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest text-left sm:text-right">
-                  {selectedYear} Workbook Operations
+            {/* Row 1: Filters Area (Responsive grid of selectors) */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-5 w-full">
+              
+              {/* 1. Program Selector */}
+              <div className="flex flex-col flex-1" style={{ minWidth: '180px' }}>
+                <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1.5 pl-0.5 block whitespace-nowrap leading-none">
+                  Program
                 </label>
-                <div className="flex flex-col sm:flex-row gap-2">
-                  <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleDownloadTemplate();
+                <div className="relative w-full h-11">
+                  <div className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 flex items-center justify-center">
+                    <BookOpen className="w-4 h-4" />
+                  </div>
+                  <select
+                    value={programmeFilter}
+                    onChange={(e) => {
+                      const prog = e.target.value as 'B.Pharm' | 'Pharm.D';
+                      setProgrammeFilter(prog);
+                      if (prog === 'B.Pharm') {
+                        setSelectedRegulation('PCI 2017');
+                        setSelectedYear('2025-2026');
+                      } else {
+                        setSelectedRegulation('PCI 2008');
+                        setSelectedYear('2025-2026');
+                      }
                     }}
-                    className="px-4 py-2.5 bg-white border border-gray-200/80 hover:bg-gray-50 text-gray-750 text-xs font-bold rounded-full transition-all flex items-center gap-2 shadow-sm animate-pulse"
-                    title={`Download Excel Template for Year ${selectedYear}`}
+                    title={programmeFilter}
+                    className="pl-10 pr-10 w-full h-11 bg-gray-50/60 hover:bg-gray-100/40 hover:border-gray-300 border border-gray-200 rounded-xl text-xs font-bold text-gray-800 appearance-none focus:outline-none focus:ring-1 focus:ring-[#8B1E3F] focus:border-[#8B1E3F] cursor-pointer transition-all leading-normal"
                   >
-                    <Download className="w-3.5 h-3.5 text-[#8B1E3F]" />
-                    Download {selectedYear} Template
-                  </button>
+                    <option value="B.Pharm">B.Pharm</option>
+                    <option value="Pharm.D">Pharm.D</option>
+                  </select>
+                  <div className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 flex items-center justify-center">
+                    <ChevronDown className="w-3.5 h-3.5" />
+                  </div>
                 </div>
               </div>
-            )}
+
+              {/* 2. Regulation Selector */}
+              <div className="flex flex-col flex-1" style={{ minWidth: '170px' }}>
+                <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1.5 pl-0.5 block whitespace-nowrap leading-none">
+                  Regulation
+                </label>
+                <div className="relative w-full h-11">
+                  <div className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 flex items-center justify-center">
+                    <ShieldCheck className="w-4 h-4" />
+                  </div>
+                  <select
+                    value={selectedRegulation}
+                    onChange={(e) => {
+                      const reg = e.target.value;
+                      setSelectedRegulation(reg);
+                      if (reg === 'PCI 2026') {
+                        setSelectedYear('2026-2027');
+                      } else {
+                        setSelectedYear('2025-2026');
+                      }
+                    }}
+                    title={selectedRegulation}
+                    className="pl-10 pr-10 w-full h-11 bg-gray-50/60 hover:bg-gray-100/40 hover:border-gray-300 border border-gray-200 rounded-xl text-xs font-bold text-gray-800 appearance-none focus:outline-none focus:ring-1 focus:ring-[#8B1E3F] focus:border-[#8B1E3F] cursor-pointer transition-all leading-normal"
+                  >
+                    {regulationsList.map(reg => (
+                      <option key={reg} value={reg}>{reg}</option>
+                    ))}
+                  </select>
+                  <div className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 flex items-center justify-center">
+                    <ChevronDown className="w-3.5 h-3.5" />
+                  </div>
+                </div>
+              </div>
+
+              {/* 3. Academic Year Selector */}
+              <div className="flex flex-col flex-1" style={{ minWidth: '190px' }}>
+                <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1.5 pl-0.5 block whitespace-nowrap leading-none">
+                  Academic Year
+                </label>
+                <div className="relative w-full h-11">
+                  <div className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 flex items-center justify-center">
+                    <Calendar className="w-4 h-4" />
+                  </div>
+                  <select
+                    value={selectedYear}
+                    onChange={(e) => setSelectedYear(e.target.value)}
+                    title={`AY ${selectedYear}`}
+                    className="pl-10 pr-10 w-full h-11 bg-gray-50/60 hover:bg-gray-100/40 hover:border-gray-300 border border-gray-200 rounded-xl text-xs font-bold text-gray-800 appearance-none focus:outline-none focus:ring-1 focus:ring-[#8B1E3F] focus:border-[#8B1E3F] cursor-pointer transition-all leading-normal"
+                  >
+                    {displayedYears.map(year => (
+                      <option key={year} value={year}>AY {year}</option>
+                    ))}
+                  </select>
+                  <div className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 flex items-center justify-center">
+                    <ChevronDown className="w-3.5 h-3.5" />
+                  </div>
+                </div>
+              </div>
+
+              {/* 4. Semester / Year Selector */}
+              <div className="flex flex-col flex-1" style={{ minWidth: '170px' }}>
+                <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1.5 pl-0.5 block whitespace-nowrap leading-none">
+                  {programmeFilter === 'B.Pharm' ? 'Semester' : 'Year Level'}
+                </label>
+                <div className="relative w-full h-11">
+                  <div className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 flex items-center justify-center">
+                    <Layers className="w-4 h-4" />
+                  </div>
+                  <select
+                    value={programmeFilter === 'B.Pharm' 
+                      ? (selectedSemesterFilter === 'All' ? 'All' : selectedSemesterFilter)
+                      : (selectedYearLevelFilter === 'All' ? 'All' : selectedYearLevelFilter)
+                    }
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      if (programmeFilter === 'B.Pharm') {
+                        setSelectedSemesterFilter(val === 'All' ? 'All' : Number(val));
+                      } else {
+                        setSelectedYearLevelFilter(val === 'All' ? 'All' : Number(val));
+                      }
+                    }}
+                    title={
+                      programmeFilter === 'B.Pharm' 
+                        ? (selectedSemesterFilter === 'All' ? 'All Semesters' : getRomanSemester(Number(selectedSemesterFilter)))
+                        : (selectedYearLevelFilter === 'All' ? 'All Years' : `Year ${selectedYearLevelFilter}`)
+                    }
+                    className="pl-10 pr-10 w-full h-11 bg-gray-50/60 hover:bg-gray-100/40 hover:border-gray-300 border border-gray-200 rounded-xl text-xs font-bold text-gray-800 appearance-none focus:outline-none focus:ring-1 focus:ring-[#8B1E3F] focus:border-[#8B1E3F] cursor-pointer transition-all leading-normal"
+                  >
+                    {programmeFilter === 'B.Pharm' ? (
+                      <>
+                        <option value="All">All Semesters</option>
+                        {[1, 2, 3, 4, 5, 6, 7, 8].map(s => (
+                          <option key={s} value={s}>{getRomanSemester(s)}</option>
+                        ))}
+                      </>
+                    ) : (
+                      <>
+                        <option value="All">All Years</option>
+                        {[1, 2, 3, 4, 5, 6].map(y => (
+                          <option key={y} value={y}>Year {y}</option>
+                        ))}
+                      </>
+                    )}
+                  </select>
+                  <div className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 flex items-center justify-center">
+                    <ChevronDown className="w-3.5 h-3.5" />
+                  </div>
+                </div>
+              </div>
+
+              {/* 5. Status Selector */}
+              <div className="flex flex-col flex-1" style={{ minWidth: '150px' }}>
+                <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1.5 pl-0.5 block whitespace-nowrap leading-none">
+                  Status
+                </label>
+                <div className="relative w-full h-11">
+                  <div className={`absolute left-3.5 top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full ${getStatusColor(statusFilter)} border border-white shadow-sm`} />
+                  <select
+                    value={statusFilter}
+                    onChange={(e) => setStatusFilter(e.target.value as any)}
+                    title={statusFilter === 'All' ? 'All Statuses' : (statusFilter === 'Published' ? 'Active' : 'Draft')}
+                    className="pl-10 pr-10 w-full h-11 bg-gray-50/60 hover:bg-gray-100/40 hover:border-gray-300 border border-gray-200 rounded-xl text-xs font-bold text-gray-800 appearance-none focus:outline-none focus:ring-1 focus:ring-[#8B1E3F] focus:border-[#8B1E3F] cursor-pointer transition-all leading-normal"
+                  >
+                    <option value="All">All Statuses</option>
+                    <option value="Published">Active</option>
+                    <option value="Draft">Draft</option>
+                  </select>
+                  <div className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 flex items-center justify-center">
+                    <ChevronDown className="w-3.5 h-3.5" />
+                  </div>
+                </div>
+              </div>
+
+              {/* 6. Course Selector (Direct from Firestore) */}
+              <div className="flex flex-col flex-1" style={{ minWidth: '280px' }}>
+                <label className="text-[11px] font-bold text-[#8B1E3F] uppercase tracking-wider mb-1.5 pl-0.5 block whitespace-nowrap leading-none flex items-center gap-1">
+                  <Award className="w-3.5 h-3.5 text-[#8B1E3F] shrink-0" /> <span>Course</span>
+                </label>
+                <div className="relative w-full h-11">
+                  <div className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 flex items-center justify-center">
+                    <Library className="w-4 h-4" />
+                  </div>
+                  <select
+                    value={selectedCourseCode}
+                    onChange={(e) => handleCourseDropdownChange(e.target.value)}
+                    title={(() => {
+                      const current = fetchedCourses.find(c => c.courseCode === selectedCourseCode);
+                      return current ? `${current.courseCode} – ${current.courseName}` : "Select a Course...";
+                    })()}
+                    className="pl-10 pr-10 w-full h-11 bg-gray-50/60 hover:bg-gray-100/40 hover:border-gray-[#8B1E3F]/30 border border-gray-200 rounded-xl text-xs font-bold text-gray-800 appearance-none focus:outline-none focus:ring-1 focus:ring-[#8B1E3F] focus:border-[#8B1E3F] cursor-pointer transition-all leading-normal"
+                  >
+                    <option value="">Select a Course...</option>
+                    {fetchedCourses.map((c, idx) => (
+                      <option key={`${c.courseCode || 'course'}-${idx}`} value={c.courseCode}>
+                        {c.courseCode} – {c.courseName}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 flex items-center justify-center">
+                    <ChevronDown className="w-3.5 h-3.5" />
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            {/* Row 2: Actions Bar */}
+            <div className="flex flex-wrap gap-3 items-center justify-end border-t border-gray-100 pt-4 mt-1">
+              {!readOnly && (
+                <button
+                  onClick={() => setShowImportModal(true)}
+                  className="h-11 px-4 border border-dashed border-[#8B1E3F]/40 bg-[#8B1E3F]/5 hover:bg-[#8B1E3F]/10 text-[#8B1E3F] text-xs font-bold rounded-xl transition-all flex items-center gap-2 cursor-pointer"
+                >
+                  <Upload className="w-4 h-4" /> Import Excel
+                </button>
+              )}
+
+              <button
+                onClick={() => triggerToast("Master syllabus structure compiled into .xlsx export docket.")}
+                className="h-11 px-4 border border-solid border-gray-200 bg-white hover:bg-gray-50 text-gray-700 hover:text-gray-900 text-xs font-bold rounded-xl transition-all flex items-center gap-2 shadow-sm cursor-pointer"
+              >
+                <FileSpreadsheet className="w-4 h-4" /> Export Excel
+              </button>
+
+              {!readOnly && (
+                <button
+                  onClick={handleDownloadTemplate}
+                  className="h-11 px-4 border border-solid border-transparent bg-[#8B1E3F]/10 hover:bg-[#8B1E3F]/15 text-[#8B1E3F] text-xs font-black rounded-xl transition-all flex items-center gap-2 shadow-sm cursor-pointer"
+                >
+                  <Download className="w-4 h-4" /> Download Template
+                </button>
+              )}
+            </div>
           </div>
 
           {/* Main Course Manager Tab Navigation */}
           {!readOnly && (
-            <div className="flex border-b border-gray-150/60 pb-1.5 gap-2 mt-4">
+            <div className="flex border-b border-gray-150/40 pb-2.5 gap-2 mt-4">
               <button
                 onClick={() => setHubTab('courses')}
-                className={`px-5 py-2.5 rounded-xl text-xs font-bold flex items-center gap-2 transition-all ${
+                className={`px-5 py-2.5 rounded-xl text-xs font-extrabold flex items-center gap-2 transition-all border ${
                   hubTab === 'courses'
-                    ? 'bg-white text-[#8B1E3F] shadow-sm font-black border border-gray-150/40'
-                    : 'text-gray-500 hover:text-gray-800 hover:bg-white/50'
+                    ? programmeFilter === 'B.Pharm'
+                      ? 'bg-pink-50/50 border-pink-200 text-[#8B1E3F]'
+                      : 'bg-teal-50/50 border-teal-200 text-[#0F766E]'
+                    : 'border-transparent text-gray-500 hover:text-gray-800 hover:bg-gray-50'
                 }`}
               >
                 <BookOpen className="w-3.5 h-3.5" /> Allotted Course List
               </button>
               <button
                 onClick={() => setHubTab('settings')}
-                className={`px-5 py-2.5 rounded-xl text-xs font-bold flex items-center gap-2 transition-all ${
+                className={`px-5 py-2.5 rounded-xl text-xs font-extrabold flex items-center gap-2 transition-all border ${
                   hubTab === 'settings'
-                    ? 'bg-white text-[#8B1E3F] shadow-sm font-black border border-gray-150/40'
-                    : 'text-gray-500 hover:text-gray-800 hover:bg-white/50'
+                    ? programmeFilter === 'B.Pharm'
+                      ? 'bg-pink-50/50 border-pink-200 text-[#8B1E3F]'
+                      : 'bg-teal-50/50 border-teal-200 text-[#0F766E]'
+                    : 'border-transparent text-gray-500 hover:text-gray-800 hover:bg-gray-50'
                 }`}
               >
                 <Sliders className="w-3.5 h-3.5" /> Syllabus Master Settings
@@ -930,7 +1900,7 @@ export default function CourseDesignerHub({
                 <GlassCard className="p-6 border border-gray-150/50 bg-emerald-50/5">
                   <h4 className="text-xs font-black uppercase text-gray-900 flex items-center gap-2">
                     <Check className="w-4 h-4 text-emerald-600" />
-                    Active Year Syllabus Integrity Status
+                    Active Year Syllabus Status (Draft/Published)
                   </h4>
                   <p className="text-[11px] text-gray-500 mt-1 leading-relaxed">
                     Active schemas are 100% compliant with PCI guidelines for the sessional year <span className="font-bold text-gray-700">{selectedYear}</span>. Last verified on {new Date().toLocaleDateString()}.
@@ -1016,190 +1986,327 @@ export default function CourseDesignerHub({
               </div>
             </div>
           ) : (
-            <div className="flex flex-col gap-3 mt-2">
-            <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-2 pl-1 mb-1">
-              <div className="flex flex-wrap items-center gap-3">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-                  2. ACTIVE SUBJECT SHELLS ({mySubjects.length} Found)
-                </label>
-                
-                {/* B.Pharm / Pharm.D Toggle Filter */}
-                <div className="flex items-center gap-1 bg-gray-100 p-0.5 rounded-full border border-gray-200/50">
-                  <button
-                    onClick={() => setProgrammeFilter('B.Pharm')}
-                    className={`px-3 py-0.5 text-[9px] font-black uppercase rounded-full transition-all duration-200 ${
-                      programmeFilter === 'B.Pharm' 
-                        ? 'bg-[#8B1E3F] text-white shadow-sm' 
-                        : 'text-gray-500 hover:text-gray-800'
-                    }`}
-                  >
-                    B.Pharm
-                  </button>
-                  <button
-                    onClick={() => setProgrammeFilter('Pharm.D')}
-                    className={`px-3 py-0.5 text-[9px] font-black uppercase rounded-full transition-all duration-200 ${
-                      programmeFilter === 'Pharm.D' 
-                        ? 'bg-[#8B1E3F] text-white shadow-sm' 
-                        : 'text-gray-500 hover:text-gray-800'
-                    }`}
-                  >
-                    Pharm.D
-                  </button>
-                </div>
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start mt-6">
+              {/* Left Column: Curriculum Explorer Sidebar */}
+              <div className="lg:col-span-1 animate-fadeIn">
+                <CurriculumExplorer
+                  programmeFilter={programmeFilter}
+                  selectedRegulation={selectedRegulation}
+                  selectedYear={selectedYear}
+                  selectedSemesterFilter={selectedSemesterFilter}
+                  selectedYearLevelFilter={selectedYearLevelFilter}
+                  subjects={explorerSubjects}
+                  isMinimized={isExplorerMinimized}
+                  onToggleMinimize={() => setIsExplorerMinimized(!isExplorerMinimized)}
+                  onSelectNode={(node) => {
+                    setProgrammeFilter(node.programme);
+                    setSelectedRegulation(node.regulation);
+                    setSelectedYear(node.year);
+                    if (node.programme === 'B.Pharm') {
+                      setSelectedSemesterFilter(node.semester);
+                    } else {
+                      setSelectedYearLevelFilter(node.yearLevel === 'All' ? 'All' : Number(node.yearLevel));
+                    }
+                  }}
+                />
               </div>
-              <span className="text-[10px] text-gray-400 font-semibold bg-gray-100 px-2.5 py-0.5 rounded-full w-max">
-                Active PCI Compliance Checklist
-              </span>
-            </div>
 
-            {mySubjects.length > 0 ? (
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                 {mySubjects.map((sub) => {
-                  // Fallbacks for missing info to preserve robust UI
-                  const credits = sub.code.endsWith('P') ? 2 : 4;
-                  const hours = sub.code.endsWith('P') ? 30 : 45;
-                  const regulation = 'PCI Regulation 2020';
-                  const unitsCount = 5;
-                  const isPublished = publishedSubjectIds.includes(sub.id);
-                  const status = isPublished ? 'Published' : 'Draft';
-                  const lastUpdated = '2026-07-08';
-                  const curriculumImported = true; // Mark as imported by admin default workflow
+              {/* Right Column: Active Workspace */}
+              <div className="lg:col-span-3 flex flex-col gap-6">
+                
+                {/* Active Courses Header with Grid/Table layout toggles */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-150 pb-3">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-black text-gray-400 uppercase tracking-widest pl-1">
+                      Active Courses ({mySubjects.length} Found)
+                    </span>
+                  </div>
 
-                  return (
-                    <GlassCard
-                      key={sub.id}
-                      hoverLift
-                      className="p-6 relative flex flex-col justify-between border border-gray-150/50 hover:shadow-xl transition-all duration-300 rounded-[24px]"
+                  <div className="flex items-center gap-1.5 bg-gray-100 p-1 rounded-xl">
+                    <button
+                      type="button"
+                      onClick={() => setLayoutMode('grid')}
+                      className={`px-3 py-1.5 rounded-lg text-[10px] font-extrabold uppercase tracking-wider transition-all cursor-pointer ${
+                        layoutMode === 'grid'
+                          ? 'bg-white text-gray-950 shadow-sm'
+                          : 'text-gray-500 hover:text-gray-800'
+                      }`}
                     >
-                      {/* Course Card Top Metadata block */}
-                      <div>
-                        <div className="flex justify-between items-start mb-3">
-                          <div className="flex flex-col gap-0.5">
-                            <span className="text-[10px] font-mono font-bold text-gray-400 uppercase tracking-wider">{sub.code}</span>
-                            <span className="text-[9px] font-black uppercase text-[#8B1E3F] mt-0.5">{regulation}</span>
+                      Grid View
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setLayoutMode('table')}
+                      className={`px-3 py-1.5 rounded-lg text-[10px] font-extrabold uppercase tracking-wider transition-all cursor-pointer ${
+                        layoutMode === 'table'
+                          ? 'bg-white text-gray-950 shadow-sm'
+                          : 'text-gray-500 hover:text-gray-800'
+                      }`}
+                    >
+                      Table View
+                    </button>
+                  </div>
+                </div>
+
+              {layoutMode === 'table' ? (
+                <CourseListTable
+                  programmeFilter={programmeFilter}
+                  selectedSemesterFilter={selectedSemesterFilter}
+                  selectedYearLevelFilter={selectedYearLevelFilter}
+                  selectedRegulation={selectedRegulation}
+                  selectedYear={selectedYear}
+                  mySubjects={mySubjects}
+                  publishedSubjectIds={publishedSubjectIds}
+                  readOnly={readOnly}
+                  onGoToSubject={onGoToSubject}
+                  onOpenCurriculumDesigner={handleOpenCurriculumDesigner}
+                  onEditCourse={handleEditCourse}
+                  onDuplicateCourse={handleDuplicateCourse}
+                  onArchiveCourse={handleArchiveCourse}
+                  onDeleteCourse={handleDeleteCourse}
+                  onPublishCourse={(id) => {
+                    if (publishedSubjectIds.includes(id)) {
+                      setPublishedSubjectIds(publishedSubjectIds.filter(x => x !== id));
+                      triggerToast(`Moved course status to Draft.`);
+                    } else {
+                      setPublishedSubjectIds([...publishedSubjectIds, id]);
+                      triggerToast(`Course has been published successfully!`);
+                    }
+                  }}
+                  onAddCourseClick={() => setShowAddCourseModal(true)}
+                  isPCI2026={isPCI2026}
+                />
+              ) : mySubjects.length > 0 ? (
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  {mySubjects.map((sub) => {
+                    // Fallbacks for missing info to preserve robust UI
+                    const credits = (sub.code && sub.code.endsWith('P')) ? 2 : 4;
+                    const hours = (sub.code && sub.code.endsWith('P')) ? 30 : 45;
+                    const regulation = 'PCI Regulation 2020';
+                    const unitsCount = 5;
+                    const isPublished = publishedSubjectIds.includes(sub.id);
+                    const status = isPublished ? 'Published' : 'Draft';
+                    const lastUpdated = '2026-07-08';
+
+                    // Premium Accent Color based on programme Filter
+                    const activeAccent = programmeFilter === 'B.Pharm' ? 'border-maroon-100 hover:border-[#8B1E3F]/30 hover:shadow-maroon-900/10' : 'border-teal-100 hover:border-[#0F766E]/30 hover:shadow-teal-900/10';
+                    const progBadgeStyle = programmeFilter === 'B.Pharm' 
+                      ? 'bg-maroon-50 text-[#8B1E3F] border-maroon-100/40' 
+                      : 'bg-teal-50 text-[#0F766E] border-teal-100/40';
+
+                    return (
+                      <GlassCard
+                        key={sub.id}
+                        hoverLift
+                        className={`p-6 relative flex flex-col justify-between border-2 ${activeAccent} hover:shadow-2xl transition-all duration-300 rounded-[32px] overflow-hidden group bg-white`}
+                      >
+                        {/* Decorative background gradient */}
+                        <div className={`absolute top-0 right-0 w-32 h-32 rounded-full blur-3xl opacity-20 -mr-10 -mt-10 transition-colors duration-500 ${
+                          programmeFilter === 'B.Pharm' ? 'bg-[#8B1E3F]' : 'bg-[#0F766E]'
+                        }`} />
+
+                        <div>
+                          {/* Top Tag Row */}
+                          <div className="flex justify-between items-center mb-4">
+                            <div className="flex items-center gap-2">
+                              <span className={`px-2.5 py-1 text-[10px] font-mono font-extrabold tracking-wider rounded-lg ${
+                                programmeFilter === 'B.Pharm'
+                                  ? 'bg-[#8B1E3F]/5 text-[#8B1E3F]'
+                                  : 'bg-[#0F766E]/5 text-[#0F766E]'
+                              }`}>
+                                {sub.code}
+                              </span>
+                              <span className="text-[9px] font-bold uppercase text-gray-400">
+                                {sub.regulation || regulation}
+                              </span>
+                            </div>
+
+                            <div className="flex items-center gap-1.5">
+                              <span className={`text-[9px] font-black px-2.5 py-1 rounded-full uppercase border ${progBadgeStyle}`}>
+                                {sub.programme} • {sub.semester ? `Sem ${sub.semester}` : `Year ${sub.year}`}
+                              </span>
+                            </div>
                           </div>
-                          <div className="flex items-center gap-2">
-                            <span className={`text-[9px] font-bold px-2.5 py-0.5 rounded-full uppercase ${status === 'Published' ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-600'}`}>
-                              {status}
-                            </span>
-                            <span className="text-[9px] font-bold bg-[#8B1E3F]/5 text-[#8B1E3F] px-2.5 py-0.5 rounded-full uppercase">
-                              {sub.programme} • Sem {sub.semester}
-                            </span>
+
+                          {/* Subject Title */}
+                          <h3 className="font-display font-black text-xl text-gray-900 leading-snug tracking-tight mb-4 pr-6 transition-colors duration-300 group-hover:text-[#8B1E3F]">
+                            {sub.name}
+                          </h3>
+
+                          {/* Quick Stats Grid */}
+                          <div className="grid grid-cols-3 gap-3 py-3.5 border-y border-gray-100 my-4 text-[10px] font-semibold text-gray-500 bg-gray-50/50 rounded-2xl px-4">
+                            <div className="flex flex-col gap-1 border-r border-gray-150/40 pr-1">
+                              <span className="text-gray-400 text-[8px] uppercase font-black tracking-wider flex items-center gap-1">
+                                <Award className="w-3 h-3 text-amber-500" />
+                                Credits
+                              </span>
+                              <span className="font-extrabold text-gray-800 text-xs">{credits} Credits</span>
+                            </div>
+                            <div className="flex flex-col gap-1 border-r border-gray-150/40 pr-1">
+                              <span className="text-gray-400 text-[8px] uppercase font-black tracking-wider flex items-center gap-1">
+                                <Clock className="w-3 h-3 text-indigo-500" />
+                                Hours
+                              </span>
+                              <span className="font-extrabold text-gray-800 text-xs">{hours} Hrs Required</span>
+                            </div>
+                            <div className="flex flex-col gap-1">
+                              <span className="text-gray-400 text-[8px] uppercase font-black tracking-wider flex items-center gap-1">
+                                <Layers className="w-3 h-3 text-rose-500" />
+                                Regulation
+                              </span>
+                              <span className="font-extrabold text-gray-800 text-xs">{sub.regulation || 'PCI 2017'}</span>
+                            </div>
+                          </div>
+
+                          {/* Secondary Metadata Info */}
+                          <div className="space-y-2 text-[10px] font-bold text-gray-500 mt-2 pl-1 bg-gray-50/30 p-3 rounded-2xl border border-gray-100">
+                            <div className="flex justify-between items-center">
+                              <span className="text-gray-400 font-extrabold uppercase text-[8px]">Faculty Assigned:</span>
+                              <span className="text-gray-800 font-black">{sub.facultyName || 'Dr. V. Chitra'}</span>
+                            </div>
+
                           </div>
                         </div>
 
-                        {/* Title and credits metrics */}
-                        <h3 className="font-display font-bold text-base text-gray-950 leading-tight mb-2 pr-16 line-clamp-1">
-                          {sub.name}
-                        </h3>
+                        {/* Redesigned Card Footer Workspace */}
+                        <div className="border-t border-gray-150/40 pt-4 mt-5 flex flex-col gap-3">
+                          {/* Secondary actions row */}
+                          <div className="flex items-center justify-between gap-1.5 flex-wrap">
+                            {/* Left: Preview & Download */}
+                            <div className="flex items-center gap-1.5">
+                              <button
+                                onClick={() => handleOpenCurriculumDesigner(sub)}
+                                className="h-8 px-2 border border-gray-200 hover:bg-gray-50 text-gray-700 rounded-lg text-[10px] font-extrabold uppercase tracking-wider flex items-center gap-1 transition-all bg-white"
+                                title="Preview Curriculum"
+                              >
+                                <Eye className="w-3.5 h-3.5 text-gray-400" /> PREVIEW
+                              </button>
 
-                        {/* Compact statistics row */}
-                        <div className="grid grid-cols-3 gap-2 py-3 border-y border-gray-100 my-3 text-[10px] font-semibold text-gray-500 bg-gray-50/50 rounded-xl px-3">
-                          <div className="flex flex-col gap-0.5">
-                            <span className="text-gray-400 text-[8px] uppercase font-bold tracking-wider">Credits</span>
-                            <span className="font-extrabold text-gray-800 text-[11px]">{credits} Credits</span>
-                          </div>
-                          <div className="flex flex-col gap-0.5">
-                            <span className="text-gray-400 text-[8px] uppercase font-bold tracking-wider">L/T Hours</span>
-                            <span className="font-extrabold text-gray-800 text-[11px]">{hours} Hours</span>
-                          </div>
-                          <div className="flex flex-col gap-0.5">
-                            <span className="text-gray-400 text-[8px] uppercase font-bold tracking-wider">Syllabus Structure</span>
-                            <span className="font-extrabold text-gray-800 text-[11px]">{unitsCount} Units Mapped</span>
-                          </div>
-                        </div>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  triggerToast(`Successfully downloaded PCI Curriculum Syllabus for ${sub.code} (${sub.name}).xlsx`);
+                                }}
+                                className={`h-8 px-2 border rounded-lg text-[10px] font-extrabold uppercase tracking-wider flex items-center gap-1 transition-all ${
+                                  programmeFilter === 'B.Pharm'
+                                    ? 'border-pink-200 bg-pink-50/50 hover:bg-pink-50 text-[#8B1E3F]'
+                                    : 'border-teal-200 bg-teal-50/50 hover:bg-teal-50 text-[#0F766E]'
+                                }`}
+                                title="Download Syllabus Workbook"
+                              >
+                                <Download className="w-3.5 h-3.5" /> DOWNLOAD
+                              </button>
+                            </div>
 
-                        {/* Extra metadata block */}
-                        <div className="flex flex-col gap-1.5 text-[10px] font-semibold text-gray-500 mt-2 pl-1">
-                          <div className="flex justify-between">
-                            <span>Faculty In Charge:</span>
-                            <span className="text-gray-800 font-bold">{sub.facultyName || 'Dr. V. Chitra'}</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span>Syllabus Imported:</span>
-                            <span className="text-emerald-600 font-black flex items-center gap-1 uppercase text-[9px]">
-                              ✓ Master Workbook
-                            </span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span>Last Updated:</span>
-                            <span className="text-gray-750">{lastUpdated}</span>
-                          </div>
-                        </div>
-                      </div>
-
-                        <div className="flex flex-wrap items-center justify-between gap-2 border-t border-gray-100 pt-4 mt-4">
-                          <div className="flex items-center gap-1.5">
-                            <button
-                              onClick={() => handleOpenCurriculumDesigner(sub)}
-                              className="px-3 py-1.5 hover:bg-gray-100 rounded-full text-gray-600 hover:text-[#8B1E3F] text-[10px] font-black uppercase tracking-wider flex items-center gap-1 transition-all"
-                              title="Preview Curriculum"
-                            >
-                              <Eye className="w-3.5 h-3.5" /> Preview Curriculum
-                            </button>
-
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                triggerToast(`Successfully downloaded PCI Curriculum Syllabus for ${sub.code} (${sub.name}).xlsx`);
-                              }}
-                              className="px-3 py-1.5 bg-[#8B1E3F]/5 hover:bg-[#8B1E3F]/10 text-[#8B1E3F] hover:text-[#a12349] rounded-full text-[10px] font-black uppercase tracking-wider flex items-center gap-1 transition-all border border-[#8B1E3F]/10"
-                              title="Download Syllabus Workbook"
-                            >
-                              <Download className="w-3.5 h-3.5" /> Download
-                            </button>
-                          </div>
-
-                          <div className="flex items-center gap-1.5">
+                            {/* Right: Edit, Publish, Delete (Admin/Author only) */}
                             {!readOnly && (
-                              <>
-                                {!isPublished && (
+                              <div className="flex items-center gap-1.5">
+                                <button
+                                  onClick={(e) => handleEditCourse(e, sub)}
+                                  className="h-8 w-8 flex items-center justify-center border border-gray-200 hover:bg-gray-50 text-gray-400 hover:text-gray-600 rounded-lg bg-white transition-all"
+                                  title="Edit Course Details"
+                                >
+                                  <Edit className="w-3.5 h-3.5" />
+                                </button>
+
+                                {!isPublished ? (
                                   <button
                                     onClick={(e) => {
                                       e.stopPropagation();
                                       setPublishedSubjectIds([...publishedSubjectIds, sub.id]);
                                       triggerToast(`${sub.code} has been published successfully!`);
                                     }}
-                                    className="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-full text-[9px] font-bold uppercase tracking-wider flex items-center gap-1 transition-all shadow-sm"
+                                    className="h-8 px-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-[10px] font-extrabold uppercase tracking-wider flex items-center gap-1 transition-all"
                                     title="Publish Course"
                                   >
-                                    <Check className="w-3 h-3" /> Publish
+                                    <Check className="w-3.5 h-3.5" /> PUBLISH
                                   </button>
+                                ) : null}
+
+                                {isPublished ? (
+                                  <button
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setPublishedSubjectIds(publishedSubjectIds.filter(id => id !== sub.id));
+                                      triggerToast(`Moved ${sub.code} to Draft status. The Admin can now review and correct it.`);
+                                    }}
+                                    className="h-8 px-2.5 border border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-100 rounded-lg text-[10px] font-extrabold uppercase tracking-wider flex items-center gap-1 transition-all"
+                                    title="Revert to Draft"
+                                  >
+                                    <FileText className="w-3.5 h-3.5 text-amber-500" /> DRAFT
+                                  </button>
+                                ) : (
+                                  <div className="h-8 px-2.5 border border-gray-200 bg-gray-50 text-gray-400 rounded-lg text-[10px] font-extrabold uppercase tracking-wider flex items-center gap-1">
+                                    <FileText className="w-3.5 h-3.5 text-gray-400" /> DRAFT STATE
+                                  </div>
                                 )}
+
                                 <button
-                                  onClick={(e) => handleArchiveCourse(e, sub)}
-                                  className="p-1.5 text-gray-400 hover:text-red-600 bg-gray-50 hover:bg-gray-100 rounded-full transition-all"
-                                  title="Archive Subject"
+                                  onClick={(e) => handleDeleteCourse(e, sub)}
+                                  className="h-8 w-8 flex items-center justify-center border border-red-200 hover:bg-red-50 text-red-500 rounded-lg bg-white transition-all"
+                                  title="Delete Course Shell Permanently"
                                 >
-                                  <Archive className="w-3.5 h-3.5" />
+                                  <Trash2 className="w-3.5 h-3.5" />
                                 </button>
-                              </>
+                              </div>
                             )}
-                            <button
-                              onClick={() => onGoToSubject(sub.id)}
-                              className="px-4 py-1.5 bg-[#8B1E3F] hover:bg-[#a12349] text-white text-[11px] font-bold rounded-full transition-all flex items-center gap-1 shadow-sm shadow-maroon-900/10"
-                            >
-                              Open Course Workspace <ArrowRight className="w-3 h-3 ml-0.5" />
-                            </button>
                           </div>
+
+                          {/* Primary full-width button row: Open Workspace */}
+                          <button
+                            onClick={() => onGoToSubject(sub.id)}
+                            className={`w-full h-10 text-white text-[10px] font-black uppercase tracking-widest rounded-lg transition-all flex items-center justify-center gap-1.5 shadow-sm group/btn ${
+                              programmeFilter === 'B.Pharm'
+                                ? 'bg-[#8B1E3F] hover:bg-[#721833]'
+                                : 'bg-[#0F766E] hover:bg-[#0C5F58]'
+                            }`}
+                          >
+                            <span>Open Teaching Workspace</span>
+                            <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+                          </button>
                         </div>
-                    </GlassCard>
-                  );
-                })}
-              </div>
+                      </GlassCard>
+                    );
+                  })}
+                </div>
             ) : (
               <GlassCard className="p-12 flex flex-col items-center justify-center text-center gap-4 border border-dashed border-gray-200">
-                <div className="w-14 h-14 rounded-full bg-gray-50 flex items-center justify-center border border-gray-100 shadow-sm text-gray-400">
-                  <BookOpen className="w-6 h-6" />
-                </div>
-                <div>
-                  <h4 className="font-display font-bold text-base text-gray-800">No Allotted Subjects Found</h4>
-                  <p className="text-xs text-gray-500 max-w-sm leading-relaxed mt-1">
-                    You do not have any courses assigned under the <span className="font-bold text-gray-700">{selectedYear}</span> session.
-                  </p>
-                </div>
+                {isPCI2026 ? (
+                  <>
+                    <div className="w-14 h-14 rounded-full bg-pink-50 flex items-center justify-center border border-pink-100 shadow-sm text-[#8B1E3F]">
+                      <Layers className="w-6 h-6 animate-pulse" />
+                    </div>
+                    <div>
+                      <h4 className="font-display font-extrabold text-base text-[#8B1E3F]">PCI 2026 Regulation Schema</h4>
+                      <p className="text-xs text-gray-500 max-w-md leading-relaxed mt-2 mx-auto">
+                        This regulation is reserved for future curriculum entry. Existing PCI 2017 course data is not copied or displayed.
+                      </p>
+                      <div className="mt-4 flex flex-col sm:flex-row gap-3 justify-center items-center">
+                        <div className="px-4 py-2 bg-pink-50 border border-pink-100/60 rounded-xl text-xs font-bold text-[#8B1E3F]">
+                          No semesters configured.
+                        </div>
+                        <div className="px-4 py-2 bg-gray-50 border border-gray-150 rounded-xl text-xs font-bold text-gray-500">
+                          No courses configured.
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="w-14 h-14 rounded-full bg-gray-50 flex items-center justify-center border border-gray-100 shadow-sm text-gray-400">
+                      <BookOpen className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <h4 className="font-display font-bold text-base text-gray-800">No Allotted Subjects Found</h4>
+                      <p className="text-xs text-gray-500 max-w-sm leading-relaxed mt-1">
+                        You do not have any courses assigned under the <span className="font-bold text-gray-700">{selectedYear}</span> session.
+                      </p>
+                    </div>
+                  </>
+                )}
               </GlassCard>
             )}
+          </div>
           </div>
           )}
         </>
@@ -1211,7 +2318,11 @@ export default function CourseDesignerHub({
           
           {/* Back Button */}
           <button
-            onClick={() => setViewMode('list')}
+            onClick={() => {
+              setViewMode('list');
+              setSelectedCourseCode('');
+              setActiveSubjectCurriculum(null);
+            }}
             className="flex items-center gap-2 text-xs font-bold text-[#8B1E3F] hover:underline self-start bg-white px-3.5 py-1.5 rounded-full border border-gray-100 shadow-sm"
           >
             <ArrowLeft className="w-3.5 h-3.5" /> Back to allotted courses list
@@ -1254,7 +2365,11 @@ export default function CourseDesignerHub({
                 <FileSpreadsheet className="w-4 h-4" />
               </button>
               <button
-                onClick={() => setViewMode('list')}
+                onClick={() => {
+                  setViewMode('list');
+                  setSelectedCourseCode('');
+                  setActiveSubjectCurriculum(null);
+                }}
                 className="p-2.5 bg-gray-50 hover:bg-gray-100 border border-gray-200 text-gray-700 rounded-full transition-all flex items-center justify-center"
                 title="Historical import journals logs"
               >
@@ -1266,41 +2381,162 @@ export default function CourseDesignerHub({
           {/* Curriculum Workspace Layout (Main Content Left 2/3, Sidebar Right 1/3) */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
             
-            {/* LEFT 2 COLUMNS: SYLLABUS DOCK DETAILS (ALL READ-ONLY AS SPECIFIED) */}
+            {/* LEFT 2 COLUMNS: SYLLABUS DOCK DETAILS */}
             <div className="lg:col-span-2 flex flex-col gap-6">
 
               {/* 1. Course Information Section */}
               <div className="rounded-[24px] bg-white border border-gray-150/50 shadow-sm overflow-hidden">
                 <div 
-                  onClick={() => toggleSection('info')}
+                  onClick={() => { if (editingSection !== 'info') toggleSection('info'); }}
                   className="p-4 bg-gray-50/50 hover:bg-gray-50/80 cursor-pointer flex justify-between items-center border-b border-gray-100"
                 >
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-full bg-[#8B1E3F]/10 text-[#8B1E3F] flex items-center justify-center">
-                      <Library className="w-4 h-4" />
+                  <div className="flex justify-between items-center w-full">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-full bg-[#8B1E3F]/10 text-[#8B1E3F] flex items-center justify-center">
+                        <Library className="w-4 h-4" />
+                      </div>
+                      <h3 className="font-display font-extrabold text-sm text-gray-900 uppercase tracking-wide">1. Course Information Specifications</h3>
                     </div>
-                    <h3 className="font-display font-extrabold text-sm text-gray-900 uppercase tracking-wide">1. Course Information Specifications</h3>
+                    {!readOnly && (
+                      editingSection === 'info' ? (
+                        <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
+                          <button 
+                            onClick={() => handleSaveSection('info')}
+                            disabled={savingSection === 'info'}
+                            className="px-3 py-1 text-[11px] font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg transition-all flex items-center gap-1 shadow-sm disabled:opacity-50"
+                          >
+                            {savingSection === 'info' ? 'Saving...' : 'Save'}
+                          </button>
+                          <button 
+                            onClick={handleCancelEdit}
+                            className="px-3 py-1 text-[11px] font-bold text-gray-500 bg-gray-100 hover:bg-gray-200 rounded-lg transition-all"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      ) : (
+                        <button 
+                          onClick={(e) => { e.stopPropagation(); handleStartEdit('info'); }}
+                          className="px-3 py-1 text-[11px] font-bold text-[#8B1E3F] bg-pink-50 hover:bg-pink-100 rounded-lg transition-all flex items-center gap-1 border border-pink-100"
+                        >
+                          <Edit className="w-3 h-3" /> Edit Section
+                        </button>
+                      )
+                    )}
                   </div>
-                  {collapsedSections.info ? <ChevronRight className="w-4 h-4 text-gray-400" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
                 </div>
 
                 {!collapsedSections.info && (
-                  <div className="p-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 bg-white">
-                    {[
-                      { label: 'Subject Code', value: activeSubjectCurriculum.courseCode },
-                      { label: 'Syllabus Title', value: activeSubjectCurriculum.courseName },
-                      { label: 'Core Programme', value: activeSubjectCurriculum.programme },
-                      { label: 'Syllabus Regulation', value: activeSubjectCurriculum.regulation },
-                      { label: 'Allotted Semester', value: `Semester ${activeSubjectCurriculum.semester}` },
-                      { label: 'Classroom Credits', value: `${activeSubjectCurriculum.credits} Credits` },
-                      { label: 'Lecture Hours', value: `${activeSubjectCurriculum.hours} Hours` },
-                      { label: 'Curricular Modality', value: `${activeSubjectCurriculum.type} Instruction` }
-                    ].map((spec, sIdx) => (
-                      <div key={sIdx} className="p-3 bg-gray-50/60 border border-gray-100 rounded-xl">
-                        <span className="text-[8px] font-black uppercase tracking-wider text-gray-400 block mb-0.5">{spec.label}</span>
-                        <p className="text-xs font-bold text-gray-800 leading-tight">{spec.value}</p>
+                  <div className="p-5 bg-white">
+                    {editingSection === 'info' ? (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                        <div className="flex flex-col gap-1">
+                          <label className="text-[10px] font-black uppercase text-gray-400">Subject Code</label>
+                          <input 
+                            type="text" 
+                            value={editInfoCode} 
+                            onChange={(e) => setEditInfoCode(e.target.value)} 
+                            className="p-2 border border-gray-200 rounded-xl text-xs font-bold text-gray-800 focus:outline-none focus:ring-2 focus:ring-pink-900/10 focus:border-[#8B1E3F]"
+                          />
+                        </div>
+                        <div className="flex flex-col gap-1">
+                          <label className="text-[10px] font-black uppercase text-gray-400">Syllabus Title</label>
+                          <input 
+                            type="text" 
+                            value={editInfoName} 
+                            onChange={(e) => setEditInfoName(e.target.value)} 
+                            className="p-2 border border-gray-200 rounded-xl text-xs font-bold text-gray-800 focus:outline-none focus:ring-2 focus:ring-pink-900/10 focus:border-[#8B1E3F]"
+                          />
+                        </div>
+                        <div className="flex flex-col gap-1">
+                          <label className="text-[10px] font-black uppercase text-gray-400">Programme</label>
+                          <select 
+                            value={editInfoProgramme} 
+                            onChange={(e) => setEditInfoProgramme(e.target.value)} 
+                            className="p-2 border border-gray-200 rounded-xl text-xs font-bold text-gray-800 bg-white focus:outline-none focus:ring-2 focus:ring-pink-900/10"
+                          >
+                            <option value="B.Pharm">B.Pharm</option>
+                            <option value="M.Pharm">M.Pharm</option>
+                            <option value="Pharm.D">Pharm.D</option>
+                          </select>
+                        </div>
+                        <div className="flex flex-col gap-1">
+                          <label className="text-[10px] font-black uppercase text-gray-400">Syllabus Regulation</label>
+                          <select 
+                            value={editInfoRegulation} 
+                            onChange={(e) => setEditInfoRegulation(e.target.value)} 
+                            className="p-2 border border-gray-200 rounded-xl text-xs font-bold text-gray-800 bg-white focus:outline-none focus:ring-2 focus:ring-pink-900/10"
+                          >
+                            <option value="PCI 2017">PCI 2017</option>
+                            <option value="PCI 2026">PCI 2026</option>
+                            <option value="PCI 2020">PCI 2020</option>
+                            <option value="PCI 2008">PCI 2008</option>
+                          </select>
+                        </div>
+                        <div className="flex flex-col gap-1">
+                          <label className="text-[10px] font-black uppercase text-gray-400">Semester</label>
+                          <input 
+                            type="number" 
+                            min={1} 
+                            max={10} 
+                            value={editInfoSemester} 
+                            onChange={(e) => setEditInfoSemester(Number(e.target.value))} 
+                            className="p-2 border border-gray-200 rounded-xl text-xs font-bold text-gray-800 focus:outline-none focus:ring-2 focus:ring-pink-900/10"
+                          />
+                        </div>
+                        <div className="flex flex-col gap-1">
+                          <label className="text-[10px] font-black uppercase text-gray-400">Credits</label>
+                          <input 
+                            type="number" 
+                            min={1} 
+                            max={20} 
+                            value={editInfoCredits} 
+                            onChange={(e) => setEditInfoCredits(Number(e.target.value))} 
+                            className="p-2 border border-gray-200 rounded-xl text-xs font-bold text-gray-800 focus:outline-none focus:ring-2 focus:ring-pink-900/10"
+                          />
+                        </div>
+                        <div className="flex flex-col gap-1">
+                          <label className="text-[10px] font-black uppercase text-gray-400">Lecture Hours</label>
+                          <input 
+                            type="number" 
+                            min={1} 
+                            max={100} 
+                            value={editInfoHours} 
+                            onChange={(e) => setEditInfoHours(Number(e.target.value))} 
+                            className="p-2 border border-gray-200 rounded-xl text-xs font-bold text-gray-800 focus:outline-none focus:ring-2 focus:ring-pink-900/10"
+                          />
+                        </div>
+                        <div className="flex flex-col gap-1">
+                          <label className="text-[10px] font-black uppercase text-gray-400">Instruction Modality</label>
+                          <select 
+                            value={editInfoType} 
+                            onChange={(e) => setEditInfoType(e.target.value)} 
+                            className="p-2 border border-gray-200 rounded-xl text-xs font-bold text-gray-800 bg-white focus:outline-none focus:ring-2 focus:ring-pink-900/10"
+                          >
+                            <option value="Theory">Theory</option>
+                            <option value="Practical">Practical</option>
+                          </select>
+                        </div>
                       </div>
-                    ))}
+                    ) : (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                        {[
+                          { label: 'Subject Code', value: activeSubjectCurriculum.courseCode },
+                          { label: 'Syllabus Title', value: activeSubjectCurriculum.courseName },
+                          { label: 'Core Programme', value: activeSubjectCurriculum.programme },
+                          { label: 'Syllabus Regulation', value: activeSubjectCurriculum.regulation },
+                          { label: 'Allotted Semester', value: `Semester ${activeSubjectCurriculum.semester}` },
+                          { label: 'Classroom Credits', value: `${activeSubjectCurriculum.credits} Credits` },
+                          { label: 'Lecture Hours', value: `${activeSubjectCurriculum.hours} Hours` },
+                          { label: 'Curricular Modality', value: `${activeSubjectCurriculum.type} Instruction` }
+                        ].map((spec, sIdx) => (
+                          <div key={sIdx} className="p-3 bg-gray-50/60 border border-gray-100 rounded-xl">
+                            <span className="text-[8px] font-black uppercase tracking-wider text-gray-400 block mb-0.5">{spec.label}</span>
+                            <p className="text-xs font-bold text-gray-800 leading-tight">{spec.value}</p>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
@@ -1308,23 +2544,60 @@ export default function CourseDesignerHub({
               {/* 2. Course Scope Section */}
               <div className="rounded-[24px] bg-white border border-gray-150/50 shadow-sm overflow-hidden">
                 <div 
-                  onClick={() => toggleSection('scope')}
+                  onClick={() => { if (editingSection !== 'scope') toggleSection('scope'); }}
                   className="p-4 bg-gray-50/50 hover:bg-gray-50/80 cursor-pointer flex justify-between items-center border-b border-gray-100"
                 >
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-full bg-[#8B1E3F]/10 text-[#8B1E3F] flex items-center justify-center">
-                      <Sliders className="w-4 h-4" />
+                  <div className="flex justify-between items-center w-full">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-full bg-[#8B1E3F]/10 text-[#8B1E3F] flex items-center justify-center">
+                        <Sliders className="w-4 h-4" />
+                      </div>
+                      <h3 className="font-display font-extrabold text-sm text-gray-900 uppercase tracking-wide">2. Course Scope & Compliance Statement</h3>
                     </div>
-                    <h3 className="font-display font-extrabold text-sm text-gray-900 uppercase tracking-wide">2. Course Scope & Compliance Statement</h3>
+                    {!readOnly && (
+                      editingSection === 'scope' ? (
+                        <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
+                          <button 
+                            onClick={() => handleSaveSection('scope')}
+                            disabled={savingSection === 'scope'}
+                            className="px-3 py-1 text-[11px] font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg transition-all flex items-center gap-1 shadow-sm disabled:opacity-50"
+                          >
+                            {savingSection === 'scope' ? 'Saving...' : 'Save'}
+                          </button>
+                          <button 
+                            onClick={handleCancelEdit}
+                            className="px-3 py-1 text-[11px] font-bold text-gray-500 bg-gray-100 hover:bg-gray-200 rounded-lg transition-all"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      ) : (
+                        <button 
+                          onClick={(e) => { e.stopPropagation(); handleStartEdit('scope'); }}
+                          className="px-3 py-1 text-[11px] font-bold text-[#8B1E3F] bg-pink-50 hover:bg-pink-100 rounded-lg transition-all flex items-center gap-1 border border-pink-100"
+                        >
+                          <Edit className="w-3 h-3" /> Edit Section
+                        </button>
+                      )
+                    )}
                   </div>
-                  {collapsedSections.scope ? <ChevronRight className="w-4 h-4 text-gray-400" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
                 </div>
 
                 {!collapsedSections.scope && (
                   <div className="p-5 bg-white text-xs text-gray-600 leading-relaxed font-medium">
-                    <div className="p-4 bg-gray-50/60 border border-gray-100 rounded-2xl italic">
-                      "{activeSubjectCurriculum.scope}"
-                    </div>
+                    {editingSection === 'scope' ? (
+                      <textarea 
+                        value={editScopeStatement}
+                        onChange={(e) => setEditScopeStatement(e.target.value)}
+                        rows={5}
+                        className="w-full p-4 border border-gray-200 rounded-2xl text-xs font-bold text-gray-800 focus:outline-none focus:ring-2 focus:ring-pink-900/10 focus:border-[#8B1E3F]"
+                        placeholder="Enter Course Scope Statement..."
+                      />
+                    ) : (
+                      <div className="p-4 bg-gray-50/60 border border-gray-100 rounded-2xl italic">
+                        "{activeSubjectCurriculum.scope}"
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
@@ -1332,28 +2605,98 @@ export default function CourseDesignerHub({
               {/* 3. Objectives Section */}
               <div className="rounded-[24px] bg-white border border-gray-150/50 shadow-sm overflow-hidden">
                 <div 
-                  onClick={() => toggleSection('objectives')}
+                  onClick={() => { if (editingSection !== 'objectives') toggleSection('objectives'); }}
                   className="p-4 bg-gray-50/50 hover:bg-gray-50/80 cursor-pointer flex justify-between items-center border-b border-gray-100"
                 >
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-full bg-[#8B1E3F]/10 text-[#8B1E3F] flex items-center justify-center">
-                      <ShieldCheck className="w-4 h-4" />
+                  <div className="flex justify-between items-center w-full">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-full bg-[#8B1E3F]/10 text-[#8B1E3F] flex items-center justify-center">
+                        <ShieldCheck className="w-4 h-4" />
+                      </div>
+                      <h3 className="font-display font-extrabold text-sm text-gray-900 uppercase tracking-wide">3. Syllabus Learning Objectives</h3>
                     </div>
-                    <h3 className="font-display font-extrabold text-sm text-gray-900 uppercase tracking-wide">3. Syllabus Learning Objectives</h3>
+                    {!readOnly && (
+                      editingSection === 'objectives' ? (
+                        <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
+                          <button 
+                            onClick={() => handleSaveSection('objectives')}
+                            disabled={savingSection === 'objectives'}
+                            className="px-3 py-1 text-[11px] font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg transition-all flex items-center gap-1 shadow-sm disabled:opacity-50"
+                          >
+                            {savingSection === 'objectives' ? 'Saving...' : 'Save'}
+                          </button>
+                          <button 
+                            onClick={handleCancelEdit}
+                            className="px-3 py-1 text-[11px] font-bold text-gray-500 bg-gray-100 hover:bg-gray-200 rounded-lg transition-all"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      ) : (
+                        <button 
+                          onClick={(e) => { e.stopPropagation(); handleStartEdit('objectives'); }}
+                          className="px-3 py-1 text-[11px] font-bold text-[#8B1E3F] bg-pink-50 hover:bg-pink-100 rounded-lg transition-all flex items-center gap-1 border border-pink-100"
+                        >
+                          <Edit className="w-3 h-3" /> Edit Section
+                        </button>
+                      )
+                    )}
                   </div>
-                  {collapsedSections.objectives ? <ChevronRight className="w-4 h-4 text-gray-400" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
                 </div>
 
                 {!collapsedSections.objectives && (
                   <div className="p-5 flex flex-col gap-3 bg-white">
-                    {activeSubjectCurriculum.objectives.map((obj, oIdx) => (
-                      <div key={oIdx} className="p-3 bg-gray-50/40 border border-gray-100 rounded-xl flex items-start gap-3">
-                        <span className="w-6 h-6 rounded-full bg-[#8B1E3F]/10 text-[#8B1E3F] font-mono text-[10px] font-black flex items-center justify-center shrink-0 mt-0.5">
-                          {oIdx + 1}
-                        </span>
-                        <p className="text-xs font-semibold text-gray-700 leading-relaxed pt-0.5">{obj}</p>
+                    {editingSection === 'objectives' ? (
+                      <div className="flex flex-col gap-3">
+                        {editObjectivesList.map((obj, oIdx) => (
+                          <div key={oIdx} className="flex items-center gap-3">
+                            <span className="w-6 h-6 rounded-full bg-pink-50 text-[#8B1E3F] font-mono text-[10px] font-black flex items-center justify-center shrink-0">
+                              {oIdx + 1}
+                            </span>
+                            <input 
+                              type="text"
+                              value={obj}
+                              onChange={(e) => {
+                                const newList = [...editObjectivesList];
+                                newList[oIdx] = e.target.value;
+                                setEditObjectivesList(newList);
+                              }}
+                              className="flex-1 p-2 border border-gray-200 rounded-xl text-xs font-bold text-gray-800 focus:outline-none focus:ring-2 focus:ring-pink-900/10 focus:border-[#8B1E3F]"
+                            />
+                            <button 
+                              onClick={() => {
+                                setEditObjectivesList(editObjectivesList.filter((_, idx) => idx !== oIdx));
+                              }}
+                              className="p-2 border border-red-200 text-red-500 hover:bg-red-50 rounded-xl transition-all"
+                              title="Delete Objective"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        ))}
+                        <button 
+                          onClick={() => setEditObjectivesList([...editObjectivesList, ''])}
+                          className="mt-2 py-2 border border-dashed border-gray-200 hover:border-[#8B1E3F]/30 text-[#8B1E3F] hover:bg-pink-50/30 text-xs font-bold rounded-xl transition-all"
+                        >
+                          + Add Syllabus Objective
+                        </button>
                       </div>
-                    ))}
+                    ) : (
+                      activeSubjectCurriculum.objectives && activeSubjectCurriculum.objectives.length > 0 ? (
+                        activeSubjectCurriculum.objectives.map((obj, oIdx) => (
+                          <div key={oIdx} className="p-3 bg-gray-50/40 border border-gray-100 rounded-xl flex items-start gap-3">
+                            <span className="w-6 h-6 rounded-full bg-[#8B1E3F]/10 text-[#8B1E3F] font-mono text-[10px] font-black flex items-center justify-center shrink-0 mt-0.5">
+                              {oIdx + 1}
+                            </span>
+                            <p className="text-xs font-semibold text-gray-700 leading-relaxed pt-0.5">{obj}</p>
+                          </div>
+                        ))
+                      ) : (
+                        <div className="p-6 text-center text-xs text-gray-400 font-semibold italic border border-dashed border-gray-200 rounded-2xl">
+                          "No objectives mapped"
+                        </div>
+                      )
+                    )}
                   </div>
                 )}
               </div>
@@ -1361,149 +2704,660 @@ export default function CourseDesignerHub({
               {/* 4. Course Outcomes Section */}
               <div className="rounded-[24px] bg-white border border-gray-150/50 shadow-sm overflow-hidden">
                 <div 
-                  onClick={() => toggleSection('outcomes')}
+                  onClick={() => { if (editingSection !== 'outcomes') toggleSection('outcomes'); }}
                   className="p-4 bg-gray-50/50 hover:bg-gray-50/80 cursor-pointer flex justify-between items-center border-b border-gray-100"
                 >
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-full bg-[#8B1E3F]/10 text-[#8B1E3F] flex items-center justify-center">
-                      <Award className="w-4 h-4" />
+                  <div className="flex justify-between items-center w-full">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-full bg-[#8B1E3F]/10 text-[#8B1E3F] flex items-center justify-center">
+                        <Award className="w-4 h-4" />
+                      </div>
+                      <h3 className="font-display font-extrabold text-sm text-gray-900 uppercase tracking-wide">4. Course Outcomes (CO) Map</h3>
                     </div>
-                    <h3 className="font-display font-extrabold text-sm text-gray-900 uppercase tracking-wide">4. Course Outcomes (CO) Map</h3>
+                    {!readOnly && (
+                      editingSection === 'outcomes' ? (
+                        <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
+                          <button 
+                            onClick={() => handleSaveSection('outcomes')}
+                            disabled={savingSection === 'outcomes'}
+                            className="px-3 py-1 text-[11px] font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg transition-all flex items-center gap-1 shadow-sm disabled:opacity-50"
+                          >
+                            {savingSection === 'outcomes' ? 'Saving...' : 'Save'}
+                          </button>
+                          <button 
+                            onClick={handleCancelEdit}
+                            className="px-3 py-1 text-[11px] font-bold text-gray-500 bg-gray-100 hover:bg-gray-200 rounded-lg transition-all"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      ) : (
+                        <button 
+                          onClick={(e) => { e.stopPropagation(); handleStartEdit('outcomes'); }}
+                          className="px-3 py-1 text-[11px] font-bold text-[#8B1E3F] bg-pink-50 hover:bg-pink-100 rounded-lg transition-all flex items-center gap-1 border border-pink-100"
+                        >
+                          <Edit className="w-3 h-3" /> Edit Section
+                        </button>
+                      )
+                    )}
                   </div>
-                  {collapsedSections.outcomes ? <ChevronRight className="w-4 h-4 text-gray-400" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
                 </div>
 
                 {!collapsedSections.outcomes && (
                   <div className="p-5 flex flex-col gap-3 bg-white">
-                    {activeSubjectCurriculum.courseOutcomes && activeSubjectCurriculum.courseOutcomes.length > 0 ? (
-                      activeSubjectCurriculum.courseOutcomes.map((co, cIdx) => (
-                        <div key={cIdx} className="p-3 bg-gray-50/40 border border-gray-100 rounded-xl">
-                          <p className="text-xs font-semibold text-gray-700 leading-relaxed">{co}</p>
-                        </div>
-                      ))
-                    ) : (
-                      <div className="p-6 text-center text-xs text-gray-400 font-semibold italic border border-dashed border-gray-200 rounded-2xl">
-                        "No Course Outcomes Imported"
+                    {editingSection === 'outcomes' ? (
+                      <div className="flex flex-col gap-3">
+                        {editOutcomesList.map((co, cIdx) => (
+                          <div key={cIdx} className="flex items-center gap-3">
+                            <span className="w-8 h-8 rounded-lg bg-pink-50 text-[#8B1E3F] font-mono text-[10px] font-black flex items-center justify-center shrink-0">
+                              CO{cIdx + 1}
+                            </span>
+                            <input 
+                              type="text"
+                              value={co}
+                              onChange={(e) => {
+                                const newList = [...editOutcomesList];
+                                newList[cIdx] = e.target.value;
+                                setEditOutcomesList(newList);
+                              }}
+                              className="flex-1 p-2 border border-gray-200 rounded-xl text-xs font-bold text-gray-800 focus:outline-none focus:ring-2 focus:ring-pink-900/10 focus:border-[#8B1E3F]"
+                            />
+                            <button 
+                              onClick={() => {
+                                setEditOutcomesList(editOutcomesList.filter((_, idx) => idx !== cIdx));
+                              }}
+                              className="p-2 border border-red-200 text-red-500 hover:bg-red-50 rounded-xl transition-all"
+                              title="Delete Outcome"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        ))}
+                        <button 
+                          onClick={() => setEditOutcomesList([...editOutcomesList, ''])}
+                          className="mt-2 py-2 border border-dashed border-gray-200 hover:border-[#8B1E3F]/30 text-[#8B1E3F] hover:bg-pink-50/30 text-xs font-bold rounded-xl transition-all"
+                        >
+                          + Add Course Outcome
+                        </button>
                       </div>
+                    ) : (
+                      activeSubjectCurriculum.courseOutcomes && activeSubjectCurriculum.courseOutcomes.length > 0 ? (
+                        activeSubjectCurriculum.courseOutcomes.map((co, cIdx) => (
+                          <div key={cIdx} className="p-3 bg-gray-50/40 border border-gray-100 rounded-xl flex items-start gap-3">
+                            <span className="w-8 h-8 rounded-lg bg-[#8B1E3F]/10 text-[#8B1E3F] font-mono text-[10px] font-black flex items-center justify-center shrink-0 mt-0.5">
+                              CO{cIdx + 1}
+                            </span>
+                            <p className="text-xs font-semibold text-gray-700 leading-relaxed pt-0.5">{co}</p>
+                          </div>
+                        ))
+                      ) : (
+                        <div className="p-6 text-center text-xs text-gray-400 font-semibold italic border border-dashed border-gray-200 rounded-2xl">
+                          "No Course Outcomes Mapped"
+                        </div>
+                      )
                     )}
                   </div>
                 )}
               </div>
 
+              {/* Separate CO-PO Alignment Mapping Matrix Section */}
+              <div className="rounded-[24px] bg-white border border-gray-150/50 shadow-sm p-6 flex flex-col gap-4">
+                <div className="flex items-center justify-between border-b border-gray-100 pb-3">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-full bg-indigo-50/10 text-indigo-600 flex items-center justify-center">
+                      <Sliders className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h3 className="font-display font-extrabold text-sm text-gray-900 uppercase tracking-wide">CO-PO Alignment Mapping Matrix</h3>
+                      <p className="text-[10px] text-gray-400 font-semibold mt-0.5">Levels: 1 = Low Alignment, 2 = Medium Alignment, 3 = High Alignment</p>
+                    </div>
+                  </div>
+                  {!readOnly && (
+                    editingSection === 'matrix' ? (
+                      <div className="flex items-center gap-2">
+                        <button 
+                          onClick={() => handleSaveSection('matrix')}
+                          disabled={savingSection === 'matrix'}
+                          className="px-3 py-1 text-[11px] font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg transition-all flex items-center gap-1 shadow-sm disabled:opacity-50"
+                        >
+                          {savingSection === 'matrix' ? 'Saving...' : 'Save'}
+                        </button>
+                        <button 
+                          onClick={handleCancelEdit}
+                          className="px-3 py-1 text-[11px] font-bold text-gray-500 bg-gray-100 hover:bg-gray-200 rounded-lg transition-all"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    ) : (
+                      <button 
+                        onClick={() => handleStartEdit('matrix')}
+                        className="px-3 py-1 text-[11px] font-bold text-[#8B1E3F] bg-pink-50 hover:bg-pink-100 rounded-lg transition-all flex items-center gap-1 border border-pink-100"
+                      >
+                        <Edit className="w-3 h-3" /> Edit Alignment
+                      </button>
+                    )
+                  )}
+                </div>
+
+                <div className="w-full overflow-x-auto lg:overflow-x-visible">
+                  <table className="w-full text-left border-collapse text-xs">
+                    <thead>
+                      <tr className="border-b border-gray-150/50">
+                        <th className="py-2.5 pr-4 font-black text-gray-400 uppercase text-[9px] tracking-wider">Course Outcomes</th>
+                        {['PO1', 'PO2', 'PO3', 'PO4', 'PO5', 'PO6', 'PO7', 'PO8', 'PO9', 'PO10', 'PO11', 'PO12'].map(po => (
+                          <th key={po} className="py-2.5 px-0.5 text-center font-black text-gray-400 uppercase text-[9px] tracking-wider min-w-[32px]">{po}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {['CO1', 'CO2', 'CO3', 'CO4', 'CO5'].map((coCode) => {
+                        const isEditing = editingSection === 'matrix';
+                        const currentMapping = isEditing ? editCoPoMapping : (activeSubjectCurriculum.coPoMapping || coPoMapping);
+                        const mapping = currentMapping[coCode] || {};
+                        
+                        return (
+                          <tr key={coCode} className="border-b border-gray-50 hover:bg-gray-50/40 transition-colors">
+                            <td className="py-2 pr-4 font-black text-gray-900">{coCode}</td>
+                            {['PO1', 'PO2', 'PO3', 'PO4', 'PO5', 'PO6', 'PO7', 'PO8', 'PO9', 'PO10', 'PO11', 'PO12'].map(po => {
+                              const value = mapping[po] || 0;
+                              return (
+                                <td 
+                                  key={po} 
+                                  onClick={() => {
+                                    if (!isEditing) {
+                                      triggerToast("Please click 'Edit Alignment' to change mapping values.");
+                                      return;
+                                    }
+                                    const currentVal = editCoPoMapping[coCode]?.[po] || 0;
+                                    const newVal = (currentVal + 1) % 4;
+                                    setEditCoPoMapping(prev => ({
+                                      ...prev,
+                                      [coCode]: {
+                                        ...(prev[coCode] || {}),
+                                        [po]: newVal
+                                      }
+                                    }));
+                                  }}
+                                  className={`py-2 px-0.5 text-center font-bold font-mono select-none group ${isEditing ? 'cursor-pointer hover:bg-pink-50/20' : ''}`}
+                                  title={isEditing ? `Click to toggle ${coCode} - ${po} alignment index` : `${coCode} - ${po}: Level ${value}`}
+                                >
+                                  {value > 0 ? (
+                                    <span className={`inline-flex items-center justify-center w-6 h-6 rounded-md text-[10px] transition-all duration-150 ${isEditing ? 'group-hover:scale-110' : ''} ${
+                                      value === 3 ? 'bg-[#8B1E3F] text-white font-black' :
+                                      value === 2 ? 'bg-pink-200 text-[#8B1E3F]' :
+                                      'bg-pink-50 text-pink-700'
+                                    }`}>
+                                      {value}
+                                    </span>
+                                  ) : (
+                                    <span className="text-gray-300 font-extrabold group-hover:text-pink-400 transition-colors duration-200">-</span>
+                                  )}
+                                </td>
+                              );
+                            })}
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
               {/* 5 & 6. Unit Management & Topics Section */}
               <div className="rounded-[24px] bg-white border border-gray-150/50 shadow-sm overflow-hidden">
                 <div 
-                  onClick={() => toggleSection('units')}
+                  onClick={() => { if (editingSection !== 'units') toggleSection('units'); }}
                   className="p-4 bg-gray-50/50 hover:bg-gray-50/80 cursor-pointer flex justify-between items-center border-b border-gray-100"
                 >
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-full bg-[#8B1E3F]/10 text-[#8B1E3F] flex items-center justify-center">
-                      <Layers className="w-4 h-4" />
+                  <div className="flex justify-between items-center w-full">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-full bg-[#8B1E3F]/10 text-[#8B1E3F] flex items-center justify-center">
+                        <Layers className="w-4 h-4" />
+                      </div>
+                      <h3 className="font-display font-extrabold text-sm text-gray-900 uppercase tracking-wide">5 & 6. PCI Unit & Topic Syllabus Matrix</h3>
                     </div>
-                    <h3 className="font-display font-extrabold text-sm text-gray-900 uppercase tracking-wide">5 & 6. PCI Unit & Topic Syllabus Matrix</h3>
+                    {!readOnly && (
+                      editingSection === 'units' ? (
+                        <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
+                          <button 
+                            onClick={() => handleSaveSection('units')}
+                            disabled={savingSection === 'units'}
+                            className="px-3 py-1 text-[11px] font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg transition-all flex items-center gap-1 shadow-sm disabled:opacity-50"
+                          >
+                            {savingSection === 'units' ? 'Saving...' : 'Save'}
+                          </button>
+                          <button 
+                            onClick={handleCancelEdit}
+                            className="px-3 py-1 text-[11px] font-bold text-gray-500 bg-gray-100 hover:bg-gray-200 rounded-lg transition-all"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      ) : (
+                        <button 
+                          onClick={(e) => { e.stopPropagation(); handleStartEdit('units'); }}
+                          className="px-3 py-1 text-[11px] font-bold text-[#8B1E3F] bg-pink-50 hover:bg-pink-100 rounded-lg transition-all flex items-center gap-1 border border-pink-100"
+                        >
+                          <Edit className="w-3 h-3" /> Edit Section
+                        </button>
+                      )
+                    )}
                   </div>
-                  {collapsedSections.units ? <ChevronRight className="w-4 h-4 text-gray-400" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
                 </div>
 
                 {!collapsedSections.units && (
                   <div className="p-5 flex flex-col gap-4 bg-white">
-                    {activeSubjectCurriculum.units.map((unit) => {
-                      const isUnitExpanded = expandedCurriculumUnits[unit.name];
-                      return (
-                        <div 
-                          key={unit.name}
-                          className={`border rounded-2xl p-4 transition-all duration-300 ${isUnitExpanded ? 'bg-gray-50/40 border-[#8B1E3F]/25 shadow-sm' : 'border-gray-100 hover:bg-gray-50/40'}`}
-                        >
-                          <div 
-                            onClick={() => setExpandedCurriculumUnits(prev => ({ ...prev, [unit.name]: !prev[unit.name] }))}
-                            className="flex justify-between items-center cursor-pointer select-none group"
-                          >
-                            <div className="flex items-center gap-3">
-                              {isUnitExpanded ? <ChevronDown className="w-4 h-4 text-[#8B1E3F]" /> : <ChevronRight className="w-4 h-4 text-gray-400" />}
-                              <div>
-                                <h4 className="text-xs font-black text-gray-900 uppercase tracking-wider">{unit.name}: {unit.title}</h4>
-                                <span className="text-[9px] font-bold text-[#8B1E3F]/80 uppercase mt-0.5 block">{unit.hours} Syllabic Lecture Hours</span>
+                    {editingSection === 'units' ? (
+                      <div className="flex flex-col gap-4">
+                        {editUnitsList.map((unit, uIdx) => (
+                          <div key={uIdx} className="border border-pink-100 rounded-2xl p-4 bg-pink-50/5 flex flex-col gap-3">
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                              <div className="flex flex-col gap-1 sm:col-span-2">
+                                <label className="text-[10px] font-black uppercase text-[#8B1E3F]">Unit ID & Title</label>
+                                <input 
+                                  type="text"
+                                  value={unit.title}
+                                  onChange={(e) => {
+                                    const newList = [...editUnitsList];
+                                    newList[uIdx].title = e.target.value;
+                                    setEditUnitsList(newList);
+                                  }}
+                                  className="p-2 border border-gray-200 rounded-xl text-xs font-bold text-gray-800"
+                                  placeholder="e.g. Unit I: General Pharmacology"
+                                />
+                              </div>
+                              <div className="flex flex-col gap-1">
+                                <label className="text-[10px] font-black uppercase text-[#8B1E3F]">Syllabus Hours</label>
+                                <input 
+                                  type="number"
+                                  value={unit.hours}
+                                  onChange={(e) => {
+                                    const newList = [...editUnitsList];
+                                    newList[uIdx].hours = Number(e.target.value);
+                                    setEditUnitsList(newList);
+                                  }}
+                                  className="p-2 border border-gray-200 rounded-xl text-xs font-bold text-gray-800"
+                                  placeholder="e.g. 10"
+                                />
                               </div>
                             </div>
-                            <span className="text-[10px] font-bold bg-[#8B1E3F]/5 text-[#8B1E3F] px-2.5 py-0.5 rounded-full uppercase">
-                              {unit.topics.length} Lectures Mapped
-                            </span>
-                          </div>
 
-                          {isUnitExpanded && (
-                            <div className="mt-4 border-t border-gray-150/40 pt-3 flex flex-col gap-3 animate-fadeIn">
-                              <div>
-                                <span className="text-[8px] font-extrabold text-gray-400 uppercase tracking-widest block mb-1">Unit Description</span>
-                                <p className="text-xs text-gray-600 leading-relaxed font-semibold italic bg-white p-3 rounded-xl border border-gray-100">
-                                  {unit.description}
-                                </p>
+                            <div className="flex flex-col gap-1">
+                              <label className="text-[10px] font-black uppercase text-gray-400">Unit Description</label>
+                              <textarea 
+                                value={unit.description}
+                                onChange={(e) => {
+                                  const newList = [...editUnitsList];
+                                  newList[uIdx].description = e.target.value;
+                                  setEditUnitsList(newList);
+                                }}
+                                rows={2}
+                                className="p-2 border border-gray-200 rounded-xl text-xs font-bold text-gray-800"
+                                placeholder="Enter detailed unit summary..."
+                              />
+                            </div>
+
+                            <div className="flex flex-col gap-1.5 mt-2">
+                              <span className="text-[10px] font-black uppercase text-gray-400 block">Lectures/Topics mapped under {unit.name}</span>
+                              <div className="flex flex-col gap-2 bg-white/40 p-3 rounded-xl border border-gray-100">
+                                {unit.topics.map((topic: any, tIdx: number) => (
+                                  <div key={tIdx} className="flex items-center gap-2">
+                                    <input 
+                                      type="text" 
+                                      value={topic.number} 
+                                      onChange={(e) => {
+                                        const newList = [...editUnitsList];
+                                        newList[uIdx].topics[tIdx].number = e.target.value;
+                                        setEditUnitsList(newList);
+                                      }}
+                                      className="w-16 p-1.5 border border-gray-200 rounded-lg text-xs font-bold text-center"
+                                      placeholder="No."
+                                    />
+                                    <input 
+                                      type="text" 
+                                      value={topic.name} 
+                                      onChange={(e) => {
+                                        const newList = [...editUnitsList];
+                                        newList[uIdx].topics[tIdx].name = e.target.value;
+                                        setEditUnitsList(newList);
+                                      }}
+                                      className="flex-1 p-1.5 border border-gray-200 rounded-lg text-xs font-bold"
+                                      placeholder="Topic name"
+                                    />
+                                    <input 
+                                      type="text" 
+                                      value={topic.hours} 
+                                      onChange={(e) => {
+                                        const newList = [...editUnitsList];
+                                        newList[uIdx].topics[tIdx].hours = e.target.value;
+                                        setEditUnitsList(newList);
+                                      }}
+                                      className="w-16 p-1.5 border border-gray-200 rounded-lg text-xs font-bold text-center"
+                                      placeholder="Hrs"
+                                    />
+                                    <button 
+                                      onClick={() => {
+                                        const newList = [...editUnitsList];
+                                        newList[uIdx].topics = newList[uIdx].topics.filter((_: any, idx: number) => idx !== tIdx);
+                                        setEditUnitsList(newList);
+                                      }}
+                                      className="p-1.5 text-red-500 hover:bg-red-50 rounded-lg transition-all"
+                                      title="Delete Topic"
+                                    >
+                                      <Trash2 className="w-3.5 h-3.5" />
+                                    </button>
+                                  </div>
+                                ))}
+                                <button 
+                                  onClick={() => {
+                                    const newList = [...editUnitsList];
+                                    const nextNum = `${unit.topics.length + 1}`;
+                                    newList[uIdx].topics = [...newList[uIdx].topics, { number: nextNum, name: '', hours: '1' }];
+                                    setEditUnitsList(newList);
+                                  }}
+                                  className="mt-1 text-left text-[11px] font-bold text-[#8B1E3F] hover:underline flex items-center gap-1"
+                                >
+                                  + Add Syllabus Topic/Lecture
+                                </button>
                               </div>
-
-                              <div className="mt-2">
-                                <span className="text-[8px] font-extrabold text-gray-400 uppercase tracking-widest block mb-2">Curriculum Topics Index</span>
-                                <div className="flex flex-col gap-2">
-                                  {unit.topics.map((topic) => (
-                                    <div key={topic.number} className="flex justify-between items-center p-2.5 bg-white rounded-xl border border-gray-100 text-xs hover:border-pink-900/15 transition-all">
-                                      <div className="flex items-center gap-2.5 font-bold">
-                                        <span className="text-mono font-black text-gray-400 tracking-wider w-8 shrink-0">{topic.number}</span>
-                                        <span className="text-gray-800">{topic.name}</span>
-                                      </div>
-                                      <span className="text-[10px] font-black text-gray-400 bg-gray-50 border border-gray-100 px-2.5 py-0.5 rounded-full shrink-0">
-                                        {topic.hours} Hr
-                                      </span>
-                                    </div>
-                                  ))}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      activeSubjectCurriculum.units.map((unit) => {
+                        const isUnitExpanded = expandedCurriculumUnits[unit.name];
+                        return (
+                          <div 
+                            key={unit.name}
+                            className={`border rounded-2xl p-4 transition-all duration-300 ${isUnitExpanded ? 'bg-gray-50/40 border-[#8B1E3F]/25 shadow-sm' : 'border-gray-100 hover:bg-gray-50/40'}`}
+                          >
+                            <div 
+                              onClick={() => setExpandedCurriculumUnits(prev => ({ ...prev, [unit.name]: !prev[unit.name] }))}
+                              className="flex justify-between items-center cursor-pointer select-none group"
+                            >
+                              <div className="flex items-center gap-3">
+                                {isUnitExpanded ? <ChevronDown className="w-4 h-4 text-[#8B1E3F]" /> : <ChevronRight className="w-4 h-4 text-gray-400" />}
+                                <div>
+                                  <h4 className="text-xs font-black text-gray-900 uppercase tracking-wider">{unit.name}: {unit.title}</h4>
+                                  <span className="text-[9px] font-bold text-[#8B1E3F]/80 uppercase mt-0.5 block">{unit.hours} Syllabic Lecture Hours</span>
                                 </div>
                               </div>
+                              <span className="text-[10px] font-bold bg-[#8B1E3F]/5 text-[#8B1E3F] px-2.5 py-0.5 rounded-full uppercase">
+                                {unit.topics.length} Lectures Mapped
+                              </span>
                             </div>
-                          )}
-                        </div>
-                      );
-                    })}
+
+                            {isUnitExpanded && (
+                              <div className="mt-4 border-t border-gray-150/40 pt-3 flex flex-col gap-3 animate-fadeIn">
+                                <div>
+                                  <span className="text-[8px] font-extrabold text-gray-400 uppercase tracking-widest block mb-1">Unit Description</span>
+                                  <p className="text-xs text-gray-600 leading-relaxed font-semibold italic bg-white p-3 rounded-xl border border-gray-100">
+                                    {unit.description}
+                                  </p>
+                                </div>
+
+                                <div className="mt-2">
+                                  <span className="text-[8px] font-extrabold text-gray-400 uppercase tracking-widest block mb-2">Curriculum Topics Index</span>
+                                  <div className="flex flex-col gap-2">
+                                    {unit.topics.map((topic) => (
+                                      <div key={topic.number} className="flex justify-between items-center p-2.5 bg-white rounded-xl border border-gray-100 text-xs hover:border-pink-900/15 transition-all">
+                                        <div className="flex items-center gap-2.5 font-bold">
+                                          <span className="text-mono font-black text-gray-400 tracking-wider w-8 shrink-0">{topic.number}</span>
+                                          <span className="text-gray-800">{topic.name}</span>
+                                        </div>
+                                        <span className="text-[10px] font-black text-gray-400 bg-gray-50 border border-gray-100 px-2.5 py-0.5 rounded-full shrink-0">
+                                          {topic.hours} Hr
+                                        </span>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })
+                    )}
                   </div>
                 )}
               </div>
 
-              {/* 7 & 8. Books Mapped Section */}
+              {/* 7. Recommended Textbooks */}
               <div className="rounded-[24px] bg-white border border-gray-150/50 shadow-sm overflow-hidden">
                 <div 
-                  onClick={() => toggleSection('books')}
+                  onClick={() => { if (editingSection !== 'recommendedBooks') toggleSection('books'); }}
                   className="p-4 bg-gray-50/50 hover:bg-gray-50/80 cursor-pointer flex justify-between items-center border-b border-gray-100"
                 >
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-full bg-[#8B1E3F]/10 text-[#8B1E3F] flex items-center justify-center">
-                      <BookOpen className="w-4 h-4" />
+                  <div className="flex justify-between items-center w-full">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-full bg-[#8B1E3F]/10 text-[#8B1E3F] flex items-center justify-center">
+                        <BookOpen className="w-4 h-4" />
+                      </div>
+                      <h3 className="font-display font-extrabold text-sm text-gray-900 uppercase tracking-wide">7. Recommended Textbooks</h3>
                     </div>
-                    <h3 className="font-display font-extrabold text-sm text-gray-900 uppercase tracking-wide">7 & 8. Recommended and Reference Books</h3>
+                    {!readOnly && (
+                      editingSection === 'recommendedBooks' ? (
+                        <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
+                          <button 
+                            onClick={() => handleSaveSection('recommendedBooks')}
+                            disabled={savingSection === 'recommendedBooks'}
+                            className="px-3 py-1 text-[11px] font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg transition-all flex items-center gap-1 shadow-sm disabled:opacity-50"
+                          >
+                            {savingSection === 'recommendedBooks' ? 'Saving...' : 'Save'}
+                          </button>
+                          <button 
+                            onClick={handleCancelEdit}
+                            className="px-3 py-1 text-[11px] font-bold text-gray-500 bg-gray-100 hover:bg-gray-200 rounded-lg transition-all"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      ) : (
+                        <button 
+                          onClick={(e) => { e.stopPropagation(); handleStartEdit('recommendedBooks'); }}
+                          className="px-3 py-1 text-[11px] font-bold text-[#8B1E3F] bg-pink-50 hover:bg-pink-100 rounded-lg transition-all flex items-center gap-1 border border-pink-100"
+                        >
+                          <Edit className="w-3 h-3" /> Edit Section
+                        </button>
+                      )
+                    )}
                   </div>
-                  {collapsedSections.books ? <ChevronRight className="w-4 h-4 text-gray-400" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
                 </div>
 
                 {!collapsedSections.books && (
-                  <div className="p-5 grid grid-cols-1 md:grid-cols-2 gap-5 bg-white">
-                    <div>
-                      <span className="text-[9px] font-black uppercase tracking-widest text-gray-400 block mb-2.5">7. Recommended Textbooks</span>
-                      <div className="flex flex-col gap-2.5">
-                        {activeSubjectCurriculum.recommendedBooks.map((bk, bIdx) => (
-                          <div key={bIdx} className="p-3 bg-gray-50/40 border border-gray-100 rounded-xl">
-                            <h5 className="text-xs font-extrabold text-gray-800">{bk.title}</h5>
-                            <p className="text-[10px] font-bold text-[#8B1E3F] mt-0.5">{bk.author} • {bk.edition}</p>
+                  <div className="p-5 bg-white">
+                    {editingSection === 'recommendedBooks' ? (
+                      <div className="flex flex-col gap-3">
+                        {editRecBooksList.map((bk, bIdx) => (
+                          <div key={bIdx} className="flex flex-col sm:flex-row items-center gap-3 p-3 bg-pink-50/5 border border-pink-100 rounded-xl">
+                            <input 
+                              type="text"
+                              value={bk.title}
+                              onChange={(e) => {
+                                const newList = [...editRecBooksList];
+                                newList[bIdx].title = e.target.value;
+                                setEditRecBooksList(newList);
+                              }}
+                              className="w-full sm:flex-1 p-2 border border-gray-200 rounded-xl text-xs font-bold"
+                              placeholder="Book Title"
+                            />
+                            <input 
+                              type="text"
+                              value={bk.author}
+                              onChange={(e) => {
+                                const newList = [...editRecBooksList];
+                                newList[bIdx].author = e.target.value;
+                                setEditRecBooksList(newList);
+                              }}
+                              className="w-full sm:w-1/4 p-2 border border-gray-200 rounded-xl text-xs font-bold"
+                              placeholder="Author(s)"
+                            />
+                            <input 
+                              type="text"
+                              value={bk.edition}
+                              onChange={(e) => {
+                                const newList = [...editRecBooksList];
+                                newList[bIdx].edition = e.target.value;
+                                setEditRecBooksList(newList);
+                              }}
+                              className="w-full sm:w-1/6 p-2 border border-gray-200 rounded-xl text-xs font-bold text-center"
+                              placeholder="Edition"
+                            />
+                            <button 
+                              onClick={() => {
+                                setEditRecBooksList(editRecBooksList.filter((_, idx) => idx !== bIdx));
+                              }}
+                              className="p-2 border border-red-200 text-red-500 hover:bg-red-50 rounded-xl transition-all"
+                              title="Delete Book"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
                           </div>
                         ))}
+                        <button 
+                          onClick={() => setEditRecBooksList([...editRecBooksList, { title: '', author: '', edition: '' }])}
+                          className="mt-2 py-2 border border-dashed border-gray-200 hover:border-[#8B1E3F]/30 text-[#8B1E3F] hover:bg-pink-50/30 text-xs font-bold rounded-xl transition-all"
+                        >
+                          + Add Recommended Textbook
+                        </button>
                       </div>
-                    </div>
+                    ) : (
+                      activeSubjectCurriculum.recommendedBooks && activeSubjectCurriculum.recommendedBooks.length > 0 ? (
+                        <div className="flex flex-col gap-2.5">
+                          {activeSubjectCurriculum.recommendedBooks.map((bk, bIdx) => (
+                            <div key={bIdx} className="p-3 bg-gray-50/40 border border-gray-100 rounded-xl">
+                              <h5 className="text-xs font-extrabold text-gray-800">{bk.title}</h5>
+                              <p className="text-[10px] font-bold text-[#8B1E3F] mt-0.5">{bk.author} • {bk.edition}</p>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="p-6 text-center text-xs text-gray-400 font-semibold italic border border-dashed border-gray-200 rounded-2xl">
+                          "No recommended books added"
+                        </div>
+                      )
+                    )}
+                  </div>
+                )}
+              </div>
 
-                    <div>
-                      <span className="text-[9px] font-black uppercase tracking-widest text-gray-400 block mb-2.5">8. Reference Monographs</span>
-                      <div className="flex flex-col gap-2.5">
-                        {activeSubjectCurriculum.referenceBooks.map((bk, bIdx) => (
-                          <div key={bIdx} className="p-3 bg-gray-50/40 border border-gray-100 rounded-xl">
-                            <h5 className="text-xs font-extrabold text-gray-800">{bk.title}</h5>
-                            <p className="text-[10px] font-bold text-[#8B1E3F] mt-0.5">{bk.author} • {bk.edition}</p>
+              {/* 8. Reference Monographs */}
+              <div className="rounded-[24px] bg-white border border-gray-150/50 shadow-sm overflow-hidden">
+                <div 
+                  onClick={() => { if (editingSection !== 'referenceBooks') toggleSection('books'); }}
+                  className="p-4 bg-gray-50/50 hover:bg-gray-50/80 cursor-pointer flex justify-between items-center border-b border-gray-100"
+                >
+                  <div className="flex justify-between items-center w-full">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-full bg-[#8B1E3F]/10 text-[#8B1E3F] flex items-center justify-center">
+                        <BookOpen className="w-4 h-4" />
+                      </div>
+                      <h3 className="font-display font-extrabold text-sm text-gray-900 uppercase tracking-wide">8. Reference Monographs</h3>
+                    </div>
+                    {!readOnly && (
+                      editingSection === 'referenceBooks' ? (
+                        <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
+                          <button 
+                            onClick={() => handleSaveSection('referenceBooks')}
+                            disabled={savingSection === 'referenceBooks'}
+                            className="px-3 py-1 text-[11px] font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg transition-all flex items-center gap-1 shadow-sm disabled:opacity-50"
+                          >
+                            {savingSection === 'referenceBooks' ? 'Saving...' : 'Save'}
+                          </button>
+                          <button 
+                            onClick={handleCancelEdit}
+                            className="px-3 py-1 text-[11px] font-bold text-gray-500 bg-gray-100 hover:bg-gray-200 rounded-lg transition-all"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      ) : (
+                        <button 
+                          onClick={(e) => { e.stopPropagation(); handleStartEdit('referenceBooks'); }}
+                          className="px-3 py-1 text-[11px] font-bold text-[#8B1E3F] bg-pink-50 hover:bg-pink-100 rounded-lg transition-all flex items-center gap-1 border border-pink-100"
+                        >
+                          <Edit className="w-3 h-3" /> Edit Section
+                        </button>
+                      )
+                    )}
+                  </div>
+                </div>
+
+                {!collapsedSections.books && (
+                  <div className="p-5 bg-white">
+                    {editingSection === 'referenceBooks' ? (
+                      <div className="flex flex-col gap-3">
+                        {editRefBooksList.map((bk, bIdx) => (
+                          <div key={bIdx} className="flex flex-col sm:flex-row items-center gap-3 p-3 bg-pink-50/5 border border-pink-100 rounded-xl">
+                            <input 
+                              type="text"
+                              value={bk.title}
+                              onChange={(e) => {
+                                const newList = [...editRefBooksList];
+                                newList[bIdx].title = e.target.value;
+                                setEditRefBooksList(newList);
+                              }}
+                              className="w-full sm:flex-1 p-2 border border-gray-200 rounded-xl text-xs font-bold"
+                              placeholder="Book Title"
+                            />
+                            <input 
+                              type="text"
+                              value={bk.author}
+                              onChange={(e) => {
+                                const newList = [...editRefBooksList];
+                                newList[bIdx].author = e.target.value;
+                                setEditRefBooksList(newList);
+                              }}
+                              className="w-full sm:w-1/4 p-2 border border-gray-200 rounded-xl text-xs font-bold"
+                              placeholder="Author(s)"
+                            />
+                            <input 
+                              type="text"
+                              value={bk.edition}
+                              onChange={(e) => {
+                                const newList = [...editRefBooksList];
+                                newList[bIdx].edition = e.target.value;
+                                setEditRefBooksList(newList);
+                              }}
+                              className="w-full sm:w-1/6 p-2 border border-gray-200 rounded-xl text-xs font-bold text-center"
+                              placeholder="Edition"
+                            />
+                            <button 
+                              onClick={() => {
+                                setEditRefBooksList(editRefBooksList.filter((_, idx) => idx !== bIdx));
+                              }}
+                              className="p-2 border border-red-200 text-red-500 hover:bg-red-50 rounded-xl transition-all"
+                              title="Delete Book"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
                           </div>
                         ))}
+                        <button 
+                          onClick={() => setEditRefBooksList([...editRefBooksList, { title: '', author: '', edition: '' }])}
+                          className="mt-2 py-2 border border-dashed border-gray-200 hover:border-[#8B1E3F]/30 text-[#8B1E3F] hover:bg-pink-50/30 text-xs font-bold rounded-xl transition-all"
+                        >
+                          + Add Reference Monograph
+                        </button>
                       </div>
-                    </div>
+                    ) : (
+                      activeSubjectCurriculum.referenceBooks && activeSubjectCurriculum.referenceBooks.length > 0 ? (
+                        <div className="flex flex-col gap-2.5">
+                          {activeSubjectCurriculum.referenceBooks.map((bk, bIdx) => (
+                            <div key={bIdx} className="p-3 bg-gray-50/40 border border-gray-100 rounded-xl">
+                              <h5 className="text-xs font-extrabold text-gray-800">{bk.title}</h5>
+                              <p className="text-[10px] font-bold text-[#8B1E3F] mt-0.5">{bk.author} • {bk.edition}</p>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="p-6 text-center text-xs text-gray-400 font-semibold italic border border-dashed border-gray-200 rounded-2xl">
+                          "No reference books added"
+                        </div>
+                      )
+                    )}
                   </div>
                 )}
               </div>
@@ -1511,53 +3365,128 @@ export default function CourseDesignerHub({
               {/* 9. Assessment Pattern Section */}
               <div className="rounded-[24px] bg-white border border-gray-150/50 shadow-sm overflow-hidden">
                 <div 
-                  onClick={() => toggleSection('assessment')}
+                  onClick={() => { if (editingSection !== 'assessment') toggleSection('assessment'); }}
                   className="p-4 bg-gray-50/50 hover:bg-gray-50/80 cursor-pointer flex justify-between items-center border-b border-gray-100"
                 >
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-full bg-[#8B1E3F]/10 text-[#8B1E3F] flex items-center justify-center">
-                      <Clock className="w-4 h-4" />
+                  <div className="flex justify-between items-center w-full">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-full bg-[#8B1E3F]/10 text-[#8B1E3F] flex items-center justify-center">
+                        <Clock className="w-4 h-4" />
+                      </div>
+                      <h3 className="font-display font-extrabold text-sm text-gray-900 uppercase tracking-wide">9. Regulatory Assessment Pattern</h3>
                     </div>
-                    <h3 className="font-display font-extrabold text-sm text-gray-900 uppercase tracking-wide">9. Regulatory Assessment Pattern</h3>
+                    {!readOnly && (
+                      editingSection === 'assessment' ? (
+                        <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
+                          <button 
+                            onClick={() => handleSaveSection('assessment')}
+                            disabled={savingSection === 'assessment'}
+                            className="px-3 py-1 text-[11px] font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg transition-all flex items-center gap-1 shadow-sm disabled:opacity-50"
+                          >
+                            {savingSection === 'assessment' ? 'Saving...' : 'Save'}
+                          </button>
+                          <button 
+                            onClick={handleCancelEdit}
+                            className="px-3 py-1 text-[11px] font-bold text-gray-500 bg-gray-100 hover:bg-gray-200 rounded-lg transition-all"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      ) : (
+                        <button 
+                          onClick={(e) => { e.stopPropagation(); handleStartEdit('assessment'); }}
+                          className="px-3 py-1 text-[11px] font-bold text-[#8B1E3F] bg-pink-50 hover:bg-pink-100 rounded-lg transition-all flex items-center gap-1 border border-pink-100"
+                        >
+                          <Edit className="w-3 h-3" /> Edit Section
+                        </button>
+                      )
+                    )}
                   </div>
-                  {collapsedSections.assessment ? <ChevronRight className="w-4 h-4 text-gray-400" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
                 </div>
 
                 {!collapsedSections.assessment && (
                   <div className="p-5 bg-white text-xs">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="p-4 bg-gray-50/60 border border-gray-100 rounded-2xl flex flex-col gap-2">
-                        <span className="text-[9px] font-black uppercase tracking-wider text-gray-400 block">Theory Assessment Distribution</span>
-                        <div className="flex justify-between font-bold text-gray-700">
-                          <span>Internal Continuous Sessional Evaluation:</span>
-                          <span className="text-gray-900 font-extrabold">{activeSubjectCurriculum.assessmentPattern.theoryInternal} Marks</span>
+                    {editingSection === 'assessment' ? (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="p-4 bg-pink-50/5 border border-pink-100 rounded-2xl flex flex-col gap-3">
+                          <span className="text-[9px] font-black uppercase tracking-wider text-[#8B1E3F] block">Theory Assessment Distribution</span>
+                          <div className="flex flex-col gap-1">
+                            <label className="text-[10px] font-bold text-gray-500">Internal Continuous Evaluation (Marks)</label>
+                            <input 
+                              type="number"
+                              value={editTheoryInternal}
+                              onChange={(e) => setEditTheoryInternal(Number(e.target.value))}
+                              className="p-2 border border-gray-200 rounded-xl text-xs font-bold text-gray-800"
+                            />
+                          </div>
+                          <div className="flex flex-col gap-1">
+                            <label className="text-[10px] font-bold text-gray-500">End Semester University Exam (Marks)</label>
+                            <input 
+                              type="number"
+                              value={editTheoryExternal}
+                              onChange={(e) => setEditTheoryExternal(Number(e.target.value))}
+                              className="p-2 border border-gray-200 rounded-xl text-xs font-bold text-gray-800"
+                            />
+                          </div>
                         </div>
-                        <div className="flex justify-between font-bold text-gray-700">
-                          <span>End Semester University Exam:</span>
-                          <span className="text-gray-900 font-extrabold">{activeSubjectCurriculum.assessmentPattern.theoryExternal} Marks</span>
-                        </div>
-                        <div className="border-t border-gray-150/50 pt-2 flex justify-between text-[#8B1E3F] font-black uppercase tracking-wider">
-                          <span>Total Theory Valuation:</span>
-                          <span>100 Marks</span>
-                        </div>
-                      </div>
 
-                      <div className="p-4 bg-gray-50/60 border border-gray-100 rounded-2xl flex flex-col gap-2">
-                        <span className="text-[9px] font-black uppercase tracking-wider text-gray-400 block">Practical Assessment Distribution</span>
-                        <div className="flex justify-between font-bold text-gray-700">
-                          <span>Internal Laboratory Sessional Evaluation:</span>
-                          <span className="text-gray-900 font-extrabold">{activeSubjectCurriculum.assessmentPattern.practicalInternal} Marks</span>
-                        </div>
-                        <div className="flex justify-between font-bold text-gray-700">
-                          <span>End Semester Practical University Exam:</span>
-                          <span className="text-gray-900 font-extrabold">{activeSubjectCurriculum.assessmentPattern.practicalExternal} Marks</span>
-                        </div>
-                        <div className="border-t border-gray-150/50 pt-2 flex justify-between text-[#8B1E3F] font-black uppercase tracking-wider">
-                          <span>Total Practical Valuation:</span>
-                          <span>50 Marks</span>
+                        <div className="p-4 bg-pink-50/5 border border-pink-100 rounded-2xl flex flex-col gap-3">
+                          <span className="text-[9px] font-black uppercase tracking-wider text-[#8B1E3F] block">Practical Assessment Distribution</span>
+                          <div className="flex flex-col gap-1">
+                            <label className="text-[10px] font-bold text-gray-500">Internal Laboratory Sessional Evaluation (Marks)</label>
+                            <input 
+                              type="number"
+                              value={editPracticalInternal}
+                              onChange={(e) => setEditPracticalInternal(Number(e.target.value))}
+                              className="p-2 border border-gray-200 rounded-xl text-xs font-bold text-gray-800"
+                            />
+                          </div>
+                          <div className="flex flex-col gap-1">
+                            <label className="text-[10px] font-bold text-gray-500">End Semester Practical Exam (Marks)</label>
+                            <input 
+                              type="number"
+                              value={editPracticalExternal}
+                              onChange={(e) => setEditPracticalExternal(Number(e.target.value))}
+                              className="p-2 border border-gray-200 rounded-xl text-xs font-bold text-gray-800"
+                            />
+                          </div>
                         </div>
                       </div>
-                    </div>
+                    ) : (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="p-4 bg-gray-50/60 border border-gray-100 rounded-2xl flex flex-col gap-2">
+                          <span className="text-[9px] font-black uppercase tracking-wider text-gray-400 block">Theory Assessment Distribution</span>
+                          <div className="flex justify-between font-bold text-gray-700">
+                            <span>Internal Continuous Sessional Evaluation:</span>
+                            <span className="text-gray-900 font-extrabold">{activeSubjectCurriculum.assessmentPattern.theoryInternal} Marks</span>
+                          </div>
+                          <div className="flex justify-between font-bold text-gray-700">
+                            <span>End Semester University Exam:</span>
+                            <span className="text-gray-900 font-extrabold">{activeSubjectCurriculum.assessmentPattern.theoryExternal} Marks</span>
+                          </div>
+                          <div className="border-t border-gray-150/50 pt-2 flex justify-between text-[#8B1E3F] font-black uppercase tracking-wider">
+                            <span>Total Theory Valuation:</span>
+                            <span>100 Marks</span>
+                          </div>
+                        </div>
+
+                        <div className="p-4 bg-gray-50/60 border border-gray-100 rounded-2xl flex flex-col gap-2">
+                          <span className="text-[9px] font-black uppercase tracking-wider text-gray-400 block">Practical Assessment Distribution</span>
+                          <div className="flex justify-between font-bold text-gray-700">
+                            <span>Internal Laboratory Sessional Evaluation:</span>
+                            <span className="text-gray-900 font-extrabold">{activeSubjectCurriculum.assessmentPattern.practicalInternal} Marks</span>
+                          </div>
+                          <div className="flex justify-between font-bold text-gray-700">
+                            <span>End Semester Practical University Exam:</span>
+                            <span className="text-gray-900 font-extrabold">{activeSubjectCurriculum.assessmentPattern.practicalExternal} Marks</span>
+                          </div>
+                          <div className="border-t border-gray-150/50 pt-2 flex justify-between text-[#8B1E3F] font-black uppercase tracking-wider">
+                            <span>Total Practical Valuation:</span>
+                            <span>50 Marks</span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
@@ -1604,20 +3533,12 @@ export default function CourseDesignerHub({
                     <span>Count</span>
                   </div>
                   <div className="flex justify-between text-gray-800 font-bold">
-                    <span>Syllabic Units Mapped:</span>
-                    <span>{activeSubjectCurriculum.units.length} Units</span>
-                  </div>
-                  <div className="flex justify-between text-gray-800 font-bold">
                     <span>Curricular Topics:</span>
                     <span>{activeSubjectCurriculum.units.reduce((acc, u) => acc + u.topics.length, 0)} Lectures</span>
                   </div>
                   <div className="flex justify-between text-gray-800 font-bold">
                     <span>Referenced Books:</span>
                     <span>{activeSubjectCurriculum.recommendedBooks.length + activeSubjectCurriculum.referenceBooks.length} Editions</span>
-                  </div>
-                  <div className="flex justify-between text-gray-800 font-bold">
-                    <span>Assigned CO / POs:</span>
-                    <span>{activeSubjectCurriculum.courseOutcomes.length} COs</span>
                   </div>
                 </div>
               </GlassCard>
@@ -1877,7 +3798,215 @@ export default function CourseDesignerHub({
                 </>
               )}
             </div>
+          </div>
+        </div>
+      )}
 
+      {/* EDIT COURSE METADATA MODAL */}
+      {editingCourse && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/40 backdrop-blur-sm animate-fadeIn">
+          <div className="bg-white rounded-[32px] border border-gray-150/50 shadow-2xl p-6 w-full max-w-xl flex flex-col gap-5 max-h-[90vh] overflow-y-auto">
+            
+            <div className="flex justify-between items-start">
+              <div>
+                <h3 className="font-display font-black text-lg text-gray-950">Edit Course Metadata Shell</h3>
+                <p className="text-xs text-gray-500 mt-1">Modify structural PCI values, assigned faculty, regulation schema, or hours.</p>
+              </div>
+              <button 
+                onClick={() => setEditingCourse(null)}
+                className="w-8 h-8 rounded-full bg-gray-50 border border-gray-100 flex items-center justify-center text-gray-500 hover:text-gray-800 font-extrabold"
+              >
+                ✕
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveCourseEdit} className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="col-span-2">
+                  <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Course Title / Name</label>
+                  <input 
+                    type="text"
+                    required
+                    value={editName}
+                    onChange={(e) => setEditName(e.target.value)}
+                    className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#8B1E3F]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Course Code</label>
+                  <input 
+                    type="text"
+                    required
+                    value={editCode}
+                    onChange={(e) => setEditCode(e.target.value)}
+                    className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#8B1E3F]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Assigned Faculty In Charge</label>
+                  <input 
+                    type="text"
+                    required
+                    value={editFacultyName}
+                    onChange={(e) => setEditFacultyName(e.target.value)}
+                    className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#8B1E3F]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Academic Year</label>
+                  <select 
+                    value={editAcademicYear}
+                    onChange={(e) => setEditAcademicYear(e.target.value)}
+                    className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#8B1E3F]"
+                  >
+                    {academicYears.map((year, idx) => (
+                      <option key={`${year}-${idx}`} value={year}>{year}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Regulation Schema</label>
+                  <select 
+                    value={editRegulation}
+                    onChange={(e) => setEditRegulation(e.target.value)}
+                    className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#8B1E3F]"
+                  >
+                    <option value="PCI 2017">PCI 2017</option>
+                    <option value="PCI 2026">PCI 2026</option>
+                  </select>
+                </div>
+
+                {editingCourse.programme === 'B.Pharm' ? (
+                  <div>
+                    <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Semester (1 to 8)</label>
+                    <input 
+                      type="number"
+                      required
+                      min={1}
+                      max={8}
+                      value={editSemester}
+                      onChange={(e) => setEditSemester(parseInt(e.target.value) || 1)}
+                      className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#8B1E3F]"
+                    />
+                  </div>
+                ) : (
+                  <div>
+                    <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Doctorate Year (1 to 6)</label>
+                    <input 
+                      type="number"
+                      required
+                      min={1}
+                      max={6}
+                      value={editYear}
+                      onChange={(e) => setEditYear(parseInt(e.target.value) || 1)}
+                      className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#8B1E3F]"
+                    />
+                  </div>
+                )}
+
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="block text-[9px] font-bold text-gray-400 uppercase tracking-wider mb-1">Credits</label>
+                    <input 
+                      type="number"
+                      required
+                      min={1}
+                      value={editCredits}
+                      onChange={(e) => setEditCredits(parseInt(e.target.value) || 2)}
+                      className="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#8B1E3F]"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[9px] font-bold text-gray-400 uppercase tracking-wider mb-1">Total Hours</label>
+                    <input 
+                      type="number"
+                      required
+                      min={1}
+                      value={editHours}
+                      onChange={(e) => setEditHours(parseInt(e.target.value) || 45)}
+                      className="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#8B1E3F]"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex justify-end gap-2.5 pt-4 border-t border-gray-100">
+                <button
+                  type="button"
+                  onClick={() => setEditingCourse(null)}
+                  className="px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-bold rounded-full transition-all"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2.5 bg-[#8B1E3F] hover:bg-[#a12349] text-white text-xs font-black uppercase tracking-wider rounded-full transition-all flex items-center gap-1.5 shadow-md shadow-maroon-950/15"
+                >
+                  <Check className="w-4 h-4" /> Save Course Details
+                </button>
+              </div>
+            </form>
+
+          </div>
+        </div>
+      )}
+
+      {/* CUSTOM DELETE COURSE CONFIRMATION DIALOG */}
+      {courseToDelete && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/50 backdrop-blur-sm animate-fade-in" id="delete-course-confirm-modal">
+          <div className="bg-white rounded-[24px] border border-red-100 shadow-2xl p-6 w-full max-w-md flex flex-col gap-4">
+            <div className="flex items-center gap-3 text-red-600">
+              <div className="p-3 bg-red-50 rounded-full">
+                <Trash2 className="w-6 h-6" />
+              </div>
+              <div>
+                <h3 className="font-display font-black text-base text-gray-950">Confirm Course Deletion</h3>
+                <p className="text-xs text-red-500 font-bold uppercase tracking-wider">Warning: This action is permanent</p>
+              </div>
+            </div>
+
+            <div className="bg-gray-50 border border-gray-100 rounded-xl p-4 text-xs font-medium text-gray-600 flex flex-col gap-1.5">
+              <div>
+                <span className="font-bold text-gray-400">Subject Code: </span>
+                <span className="font-black text-gray-900">{courseToDelete.code}</span>
+              </div>
+              <div>
+                <span className="font-bold text-gray-400">Course Name: </span>
+                <span className="font-black text-gray-900">{courseToDelete.name}</span>
+              </div>
+              <div>
+                <span className="font-bold text-gray-400">Regulation: </span>
+                <span className="font-black text-gray-900">{courseToDelete.regulation || 'PCI 2017'}</span>
+              </div>
+            </div>
+
+            <p className="text-xs leading-relaxed text-gray-500">
+              Are you sure you want to permanently delete the active subject shell <span className="font-bold text-gray-900">{courseToDelete.code} - {courseToDelete.name}</span>? 
+              This will erase all syllabus units, topics, and teaching resource references from the system. This cannot be undone.
+            </p>
+
+            <div className="flex justify-end gap-2.5 pt-2 border-t border-gray-100">
+              <button
+                type="button"
+                onClick={() => setCourseToDelete(null)}
+                className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-bold rounded-full transition-all"
+                id="cancel-delete-course-btn"
+              >
+                No, Keep Course
+              </button>
+              <button
+                type="button"
+                onClick={confirmDeleteCourse}
+                className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-black uppercase tracking-wider rounded-full transition-all flex items-center gap-1.5 shadow-md shadow-red-950/15"
+                id="confirm-delete-course-btn"
+              >
+                <Trash2 className="w-4 h-4" /> Delete Permanently
+              </button>
+            </div>
           </div>
         </div>
       )}

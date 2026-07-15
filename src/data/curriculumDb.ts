@@ -92,10 +92,10 @@ export interface MasterCurriculumDb {
 const defaultCurriculumDb: MasterCurriculumDb = {
   courseInformation: [
     {
-      subjectCode: 'BP101T',
-      courseName: 'Human Anatomy and Physiology I',
-      programme: 'B.Pharm',
-      regulation: 'PCI Regulation 2020',
+      subjectCode: 'PD101',
+      courseName: 'Human Anatomy and Physiology',
+      programme: 'Pharm.D',
+      regulation: 'PCI 2008',
       year: 1,
       semester: 1,
       credits: 4,
@@ -103,21 +103,21 @@ const defaultCurriculumDb: MasterCurriculumDb = {
       subjectType: 'Theory',
       status: 'Approved',
       facultyAssigned: 'Dr. V. Chitra',
-      importVersion: '1.2',
-      academicYear: '2025-2026'
+      importVersion: '1.0',
+      academicYear: '2024-2025'
     },
     {
-      subjectCode: 'BP102T',
-      courseName: 'Pharmaceutical Analysis I',
-      programme: 'B.Pharm',
-      regulation: 'PCI Regulation 2020',
+      subjectCode: 'PD101',
+      courseName: 'Human Anatomy and Physiology',
+      programme: 'Pharm.D',
+      regulation: 'PCI 2008',
       year: 1,
       semester: 1,
       credits: 4,
       hours: 45,
       subjectType: 'Theory',
       status: 'Approved',
-      facultyAssigned: 'Dr. Meena Swaminathan, M.Pharm.',
+      facultyAssigned: 'Dr. V. Chitra',
       importVersion: '1.0',
       academicYear: '2025-2026'
     },
@@ -125,7 +125,7 @@ const defaultCurriculumDb: MasterCurriculumDb = {
       subjectCode: 'PD101',
       courseName: 'Human Anatomy and Physiology',
       programme: 'Pharm.D',
-      regulation: 'PCI Regulation 2008',
+      regulation: 'PCI 2008',
       year: 1,
       semester: 1,
       credits: 4,
@@ -134,13 +134,13 @@ const defaultCurriculumDb: MasterCurriculumDb = {
       status: 'Approved',
       facultyAssigned: 'Dr. V. Chitra',
       importVersion: '1.0',
-      academicYear: '2025-2026'
+      academicYear: '2026-2027'
     },
     {
       subjectCode: 'BP201T',
       courseName: 'Human Anatomy and Physiology II',
       programme: 'B.Pharm',
-      regulation: 'PCI Regulation 2020',
+      regulation: 'PCI 2017',
       year: 1,
       semester: 2,
       credits: 4,
@@ -152,18 +152,123 @@ const defaultCurriculumDb: MasterCurriculumDb = {
       academicYear: '2025-2026'
     },
     {
-      subjectCode: 'BP103T',
-      courseName: 'Pharmaceutics I',
+      subjectCode: 'BP301T',
+      courseName: 'Pharmaceutical Organic Chemistry II',
       programme: 'B.Pharm',
-      regulation: 'PCI Regulation 2020',
-      year: 1,
-      semester: 1,
+      regulation: 'PCI 2017',
+      year: 2,
+      semester: 3,
       credits: 4,
       hours: 45,
       subjectType: 'Theory',
       status: 'Approved',
       facultyAssigned: 'Dr. V. Chitra',
-      importVersion: '1.2',
+      importVersion: '1.0',
+      academicYear: '2025-2026'
+    },
+    {
+      subjectCode: 'BP501T',
+      courseName: 'Medicinal Chemistry II',
+      programme: 'B.Pharm',
+      regulation: 'PCI 2017',
+      year: 3,
+      semester: 5,
+      credits: 4,
+      hours: 45,
+      subjectType: 'Theory',
+      status: 'Approved',
+      facultyAssigned: 'Dr. V. Chitra',
+      importVersion: '1.0',
+      academicYear: '2025-2026'
+    },
+    {
+      subjectCode: 'BP601T',
+      courseName: 'Medicinal Chemistry III',
+      programme: 'B.Pharm',
+      regulation: 'PCI 2017',
+      year: 3,
+      semester: 6,
+      credits: 4,
+      hours: 45,
+      subjectType: 'Theory',
+      status: 'Approved',
+      facultyAssigned: 'Dr. V. Chitra',
+      importVersion: '1.0',
+      academicYear: '2025-2026'
+    },
+    {
+      subjectCode: 'BP701T',
+      courseName: 'Instrumental Methods of Analysis',
+      programme: 'B.Pharm',
+      regulation: 'PCI 2017',
+      year: 4,
+      semester: 7,
+      credits: 4,
+      hours: 45,
+      subjectType: 'Theory',
+      status: 'Approved',
+      facultyAssigned: 'Dr. V. Chitra',
+      importVersion: '1.0',
+      academicYear: '2025-2026'
+    },
+    {
+      subjectCode: 'BP801T',
+      courseName: 'Biostatistics and Research Methodology',
+      programme: 'B.Pharm',
+      regulation: 'PCI 2017',
+      year: 4,
+      semester: 8,
+      credits: 4,
+      hours: 45,
+      subjectType: 'Theory',
+      status: 'Approved',
+      facultyAssigned: 'Dr. V. Chitra',
+      importVersion: '1.0',
+      academicYear: '2025-2026'
+    },
+    {
+      subjectCode: 'PD201',
+      courseName: 'Pathophysiology',
+      programme: 'Pharm.D',
+      regulation: 'PCI 2008',
+      year: 2,
+      semester: 3,
+      credits: 4,
+      hours: 45,
+      subjectType: 'Theory',
+      status: 'Approved',
+      facultyAssigned: 'Prof. Elizabeth Mathew',
+      importVersion: '1.0',
+      academicYear: '2025-2026'
+    },
+    {
+      subjectCode: 'PD301',
+      courseName: 'Pharmacology II',
+      programme: 'Pharm.D',
+      regulation: 'PCI 2008',
+      year: 3,
+      semester: 5,
+      credits: 4,
+      hours: 45,
+      subjectType: 'Theory',
+      status: 'Approved',
+      facultyAssigned: 'Prof. Elizabeth Mathew',
+      importVersion: '1.0',
+      academicYear: '2025-2026'
+    },
+    {
+      subjectCode: 'PD401',
+      courseName: 'Clinical Pharmacy',
+      programme: 'Pharm.D',
+      regulation: 'PCI 2008',
+      year: 4,
+      semester: 7,
+      credits: 4,
+      hours: 45,
+      subjectType: 'Theory',
+      status: 'Approved',
+      facultyAssigned: 'Prof. Elizabeth Mathew',
+      importVersion: '1.0',
       academicYear: '2025-2026'
     }
   ],
@@ -399,25 +504,98 @@ const defaultCurriculumDb: MasterCurriculumDb = {
 
 // Initialize or read from localStorage
 export const getCurriculumDb = (): MasterCurriculumDb => {
+  const deletedData = localStorage.getItem('srmcop_deleted_subjects');
+  const deletedList = deletedData ? (JSON.parse(deletedData) as string[]) : [];
+
   const data = localStorage.getItem('srmcop_curriculum_db');
   if (!data) {
-    localStorage.setItem('srmcop_curriculum_db', JSON.stringify(defaultCurriculumDb));
-    return defaultCurriculumDb;
+    const initialDb = { ...defaultCurriculumDb };
+    if (deletedList.length > 0) {
+      initialDb.courseInformation = initialDb.courseInformation.filter(c => !deletedList.includes(c.subjectCode));
+      initialDb.scope = initialDb.scope.filter(s => !deletedList.includes(s.subjectCode));
+      initialDb.objectives = initialDb.objectives.filter(o => !deletedList.includes(o.subjectCode));
+      initialDb.courseOutcomes = initialDb.courseOutcomes.filter(o => !deletedList.includes(o.subjectCode));
+      initialDb.units = initialDb.units.filter(u => !deletedList.includes(u.subjectCode));
+      initialDb.curriculumTopics = initialDb.curriculumTopics.filter(t => !deletedList.includes(t.subjectCode));
+      initialDb.recommendedBooks = initialDb.recommendedBooks.filter(b => !deletedList.includes(b.subjectCode));
+      initialDb.referenceBooks = initialDb.referenceBooks.filter(b => !deletedList.includes(b.subjectCode));
+      initialDb.assessmentPattern = initialDb.assessmentPattern.filter(a => !deletedList.includes(a.subjectCode));
+    }
+    localStorage.setItem('srmcop_curriculum_db', JSON.stringify(initialDb));
+    return initialDb;
   }
   try {
     const parsed = JSON.parse(data) as MasterCurriculumDb;
     let updated = false;
 
-    // Check if default subjects are present in courseInformation, if not add them
+    // Filter out deleted items from parsed db just in case
+    if (deletedList.length > 0) {
+      const originalInfoLength = parsed.courseInformation?.length || 0;
+      parsed.courseInformation = parsed.courseInformation?.filter(c => !deletedList.includes(c.subjectCode)) || [];
+      if (parsed.courseInformation.length !== originalInfoLength) {
+        updated = true;
+      }
+      parsed.scope = parsed.scope?.filter(s => !deletedList.includes(s.subjectCode)) || [];
+      parsed.objectives = parsed.objectives?.filter(o => !deletedList.includes(o.subjectCode)) || [];
+      parsed.courseOutcomes = parsed.courseOutcomes?.filter(o => !deletedList.includes(o.subjectCode)) || [];
+      parsed.units = parsed.units?.filter(u => !deletedList.includes(u.subjectCode)) || [];
+      parsed.curriculumTopics = parsed.curriculumTopics?.filter(t => !deletedList.includes(t.subjectCode)) || [];
+      parsed.recommendedBooks = parsed.recommendedBooks?.filter(b => !deletedList.includes(b.subjectCode)) || [];
+      parsed.referenceBooks = parsed.referenceBooks?.filter(b => !deletedList.includes(b.subjectCode)) || [];
+      parsed.assessmentPattern = parsed.assessmentPattern?.filter(a => !deletedList.includes(a.subjectCode)) || [];
+    }
+
+    // Normalize regulations globally based on programme
+    if (parsed.courseInformation) {
+      parsed.courseInformation = parsed.courseInformation.map(c => {
+        let r = c.regulation ? String(c.regulation).trim() : '';
+        if (c.programme === 'Pharm.D') {
+          if (r !== 'PCI 2008') {
+            r = 'PCI 2008';
+            updated = true;
+          }
+        } else {
+          // B.Pharm
+          if (!r || r === 'PCI Regulation 2020' || r === 'PCI Regulation 2008' || r === 'PCI 2020' || r === 'PCI 2008' || r === 'PCI 2017') {
+            r = 'PCI 2017';
+          } else if (r === 'PCI2026' || r === 'PCI Regulation 2026' || r === 'PCI 2026') {
+            r = 'PCI 2026';
+          } else {
+            r = 'PCI 2017';
+          }
+        }
+        if (c.regulation !== r) {
+          updated = true;
+        }
+        return { ...c, regulation: r };
+      });
+    }
+
+    // Purge outdated PCI 2026 courses from parsed db to ensure it starts clean (only BP101T is the allowed test subject)
+    if (parsed.courseInformation) {
+      const originalLength = parsed.courseInformation.length;
+      parsed.courseInformation = parsed.courseInformation.filter(c => {
+        if (c.regulation === 'PCI 2026') {
+          return c.subjectCode === 'BP101T' && c.academicYear === '2026-2027';
+        }
+        return true;
+      });
+      if (parsed.courseInformation.length !== originalLength) {
+        updated = true;
+      }
+    }
+
+    // Check if default subjects are present in courseInformation, if not add them (skip deleted ones)
     defaultCurriculumDb.courseInformation.forEach(c => {
-      if (!parsed.courseInformation.some(existing => existing.subjectCode === c.subjectCode)) {
+      if (deletedList.includes(c.subjectCode)) return;
+      if (!parsed.courseInformation.some(existing => existing.subjectCode === c.subjectCode && (existing.regulation || 'PCI 2017') === c.regulation)) {
         parsed.courseInformation.push(c);
         updated = true;
       }
     });
 
     if (updated) {
-      // Merge all other key sheets so they are not missing
+      // Merge all other key sheets so they are not missing (skip deleted ones)
       const sheetsToMerge = [
         'scope', 'objectives', 'courseOutcomes', 'units', 
         'curriculumTopics', 'recommendedBooks', 'referenceBooks', 'assessmentPattern'
@@ -428,6 +606,7 @@ export const getCurriculumDb = (): MasterCurriculumDb => {
         const defaultArr = (defaultCurriculumDb as any)[key] || [];
         
         defaultArr.forEach((item: any) => {
+          if (deletedList.includes(item.subjectCode)) return;
           const isExisting = parsedArr.some((existing: any) => {
             if (key === 'scope' || key === 'assessmentPattern') {
               return existing.subjectCode === item.subjectCode;
@@ -470,6 +649,42 @@ export const getCurriculumDb = (): MasterCurriculumDb => {
 // Save to localStorage
 export const saveCurriculumDb = (db: MasterCurriculumDb) => {
   localStorage.setItem('srmcop_curriculum_db', JSON.stringify(db));
+  
+  // Sync to Firestore
+  import('../lib/firebase').then(({ addCourseToFirestore }) => {
+    for (const course of db.courseInformation) {
+      addCourseToFirestore(course).catch(err => console.error("Error syncing course to firestore:", err));
+    }
+  }).catch(e => console.error("Firebase load error inside saveCurriculumDb:", e));
+};
+
+// Permanently delete course across all collections
+export const deleteCourseFromDb = (code: string) => {
+  const deletedData = localStorage.getItem('srmcop_deleted_subjects');
+  const deletedList = deletedData ? (JSON.parse(deletedData) as string[]) : [];
+  if (!deletedList.includes(code)) {
+    deletedList.push(code);
+    localStorage.setItem('srmcop_deleted_subjects', JSON.stringify(deletedList));
+  }
+
+  const db = getCurriculumDb();
+  db.courseInformation = db.courseInformation.filter(c => c.subjectCode !== code);
+  db.scope = db.scope.filter(s => s.subjectCode !== code);
+  db.objectives = db.objectives.filter(o => o.subjectCode !== code);
+  db.courseOutcomes = db.courseOutcomes.filter(o => o.subjectCode !== code);
+  db.units = db.units.filter(u => u.subjectCode !== code);
+  db.curriculumTopics = db.curriculumTopics.filter(t => t.subjectCode !== code);
+  db.recommendedBooks = db.recommendedBooks.filter(b => b.subjectCode !== code);
+  db.referenceBooks = db.referenceBooks.filter(b => b.subjectCode !== code);
+  db.assessmentPattern = db.assessmentPattern.filter(a => a.subjectCode !== code);
+
+  saveCurriculumDb(db);
+  localStorage.removeItem(`srmcop_teaching_res_${code}`);
+
+  // Sync delete to Firestore
+  import('../lib/firebase').then(({ deleteCourseFromFirestore }) => {
+    deleteCourseFromFirestore(code).catch(err => console.error("Error deleting course from firestore:", err));
+  }).catch(e => console.error("Firebase load error inside deleteCourseFromDb:", e));
 };
 
 // Reusable worksheet existence validator
@@ -632,21 +847,36 @@ export const parseCurriculumWorkbook = (workbook: XLSX.WorkBook, defaultAcademic
   const assessmentRaw = sheetToJson<any>('Assessment Pattern');
 
   // Map to clean formats linking by Subject Code
-  const courseInformation: CourseInformation[] = courseInfoRaw.map(row => ({
-    subjectCode: String(row['Subject Code'] || row['subjectCode'] || '').trim(),
-    courseName: String(row['Course Name'] || row['courseName'] || '').trim(),
-    programme: String(row['Programme'] || row['programme'] || 'B.Pharm').trim(),
-    regulation: String(row['Regulation'] || row['regulation'] || 'PCI Regulation 2020').trim(),
-    year: Number(row['Year'] || row['year'] || 1),
-    semester: Number(row['Semester'] || row['semester'] || 1),
-    credits: Number(row['Credits'] || row['credits'] || 4),
-    hours: Number(row['Hours'] || row['hours'] || 45),
-    subjectType: ((row['Subject Type'] || row['subjectType'] || 'Theory') === 'Practical' ? 'Practical' : 'Theory') as 'Theory' | 'Practical',
-    status: String(row['Status'] || row['status'] || 'Approved') as any,
-    facultyAssigned: String(row['Faculty Assigned'] || row['facultyAssigned'] || 'Unassigned').trim(),
-    importVersion: String(row['Import Version'] || row['importVersion'] || '1.0').trim(),
-    academicYear: String(row['Academic Year'] || row['academicYear'] || defaultAcademicYear || '2025-2026').trim()
-  })).filter(row => row.subjectCode);
+  const courseInformation: CourseInformation[] = courseInfoRaw.map(row => {
+    const prog = String(row['Programme'] || row['programme'] || 'B.Pharm').trim();
+    let rawReg = String(row['Regulation'] || row['regulation'] || '').trim();
+    if (prog === 'Pharm.D') {
+      rawReg = 'PCI 2008';
+    } else {
+      if (!rawReg || rawReg === 'PCI Regulation 2020' || rawReg === 'PCI Regulation 2008' || rawReg === 'PCI 2020' || rawReg === 'PCI 2008' || rawReg === 'PCI 2017') {
+        rawReg = 'PCI 2017';
+      } else if (rawReg === 'PCI2026' || rawReg === 'PCI Regulation 2026' || rawReg === 'PCI 2026') {
+        rawReg = 'PCI 2026';
+      } else {
+        rawReg = 'PCI 2017';
+      }
+    }
+    return {
+      subjectCode: String(row['Subject Code'] || row['subjectCode'] || '').trim(),
+      courseName: String(row['Course Name'] || row['courseName'] || '').trim(),
+      programme: prog,
+      regulation: rawReg,
+      year: Number(row['Year'] || row['year'] || 1),
+      semester: Number(row['Semester'] || row['semester'] || 1),
+      credits: Number(row['Credits'] || row['credits'] || 4),
+      hours: Number(row['Hours'] || row['hours'] || 45),
+      subjectType: ((row['Subject Type'] || row['subjectType'] || 'Theory') === 'Practical' ? 'Practical' : 'Theory') as 'Theory' | 'Practical',
+      status: String(row['Status'] || row['status'] || 'Approved') as any,
+      facultyAssigned: String(row['Faculty Assigned'] || row['facultyAssigned'] || 'Unassigned').trim(),
+      importVersion: String(row['Import Version'] || row['importVersion'] || '1.0').trim(),
+      academicYear: String(row['Academic Year'] || row['academicYear'] || defaultAcademicYear || '2025-2026').trim()
+    };
+  }).filter(row => row.subjectCode);
 
   const scope: ScopeData[] = scopeRaw.map(row => ({
     subjectCode: String(row['Subject Code'] || row['subjectCode'] || '').trim(),
@@ -979,6 +1209,13 @@ export const getTeachingResources = (subjectCode: string): Resource[] => {
 // Save teaching resources for a specific subject
 export const saveTeachingResources = (subjectCode: string, resources: Resource[]) => {
   localStorage.setItem(`srmcop_teaching_res_${subjectCode}`, JSON.stringify(resources));
+
+  // Sync to Firestore
+  import('../lib/firebase').then(({ saveResourceToFirestore }) => {
+    for (const res of resources) {
+      saveResourceToFirestore(subjectCode, res).catch(err => console.error("Error saving resource to firestore:", err));
+    }
+  }).catch(e => console.error("Firebase load error inside saveTeachingResources:", e));
 };
 
 // Helper colors list to rotate styles on Course Cards
@@ -1003,14 +1240,26 @@ export const getAppSubjects = (): Subject[] => {
     const completedRes = resources.filter(r => r.status === 'completed').length;
     const progress = resources.length > 0 ? Math.round((completedRes / resources.length) * 100) : 0;
     
+    const reg = info.regulation || 'PCI 2017';
+    const isLegacy = (code === 'BP101T' && reg === 'PCI 2017') ||
+                     (code === 'PD101' && reg === 'PCI 2008') ||
+                     (code === 'BP201T' && reg === 'PCI 2017') ||
+                     (code === 'BP103T' && reg === 'PCI 2026');
+    
+    // If it's legacy and matches active year, keep it exact. Otherwise, make it unique.
+    const id = isLegacy
+      ? (info.academicYear === '2025-2026' ? code : `${code}-${info.academicYear}`)
+      : `${code}-${reg}-${info.academicYear || '2025-2026'}`;
+    
     return {
-      id: code, // Subject Code acts as primary key
+      id: id, // Unique combination where needed, legacy remains exact to prevent breaking lookups
       code: code,
       name: info.courseName,
       programme: info.programme as any,
       year: info.year,
       semester: info.semester,
       academicYear: info.academicYear || '2025-2026',
+      regulation: info.regulation || 'PCI 2017',
       facultyName: info.facultyAssigned || 'Dr. V. Chitra',
       progress: progress,
       color: colors[idx % colors.length],

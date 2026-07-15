@@ -250,6 +250,53 @@ export const mockSubjects: Subject[] = [
         status: 'completed'
       }
     ]
+  },
+  {
+    id: 'bpharm-y1-s1-p1-2026',
+    code: 'BP101T',
+    name: 'Human Anatomy and Physiology I',
+    programme: 'B.Pharm',
+    year: 1,
+    semester: 1,
+    academicYear: '2026-2027',
+    regulation: 'PCI 2026',
+    facultyName: 'Dr. V. Chitra',
+    progress: 40,
+    color: 'from-blue-500/20 to-indigo-500/20 border-blue-500/30',
+    resources: [
+      {
+        id: 'res-hap2026-1',
+        type: 'Video',
+        title: 'Introduction to Epithelial & Connective Tissues',
+        description: 'Comprehensive lecture on structure, classification, and function of epithelial and connective tissues in human body.',
+        duration: '42 mins',
+        status: 'completed',
+        unit: 'Unit I'
+      },
+      {
+        id: 'res-hap2026-2',
+        type: 'PDF',
+        title: 'Skeletal System Study Guide & Bone Landmarks',
+        description: 'High-definition bone atlas with labeled landmarks, osseous tissue physiology, and axial vs appendicular skeletal classifications.',
+        fileSize: '4.8 MB',
+        status: 'not-started',
+        unit: 'Unit II'
+      }
+    ]
+  },
+  {
+    id: 'TEST101T-PCI 2026',
+    code: 'TEST101T',
+    name: 'Mock Test Subject',
+    programme: 'B.Pharm',
+    year: 1,
+    semester: 1,
+    academicYear: '2026-2027',
+    regulation: 'PCI 2026',
+    facultyName: 'Dr. V. Chitra',
+    progress: 0,
+    color: 'from-emerald-500/20 to-teal-500/20 border-emerald-500/30 text-emerald-900',
+    resources: []
   }
 ];
 

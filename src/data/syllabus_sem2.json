@@ -1,0 +1,1230 @@
+[
+  {
+    "subjectCode": "BP201T",
+    "courseName": "Human Anatomy and Physiology II - Theory",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 1,
+    "semester": 2,
+    "credits": 4,
+    "hours": 45,
+    "subjectType": "Theory",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "This subject is designed to impart a fundamental knowledge on the structure and functions of the various systems of the human body. It also helps in understanding both homeostatic mechanisms and cellular pathways under standard therapeutic regimens.",
+    "objectives": [
+      "Describe the structure, location and basic physiology of various organs of the human body",
+      "Comprehend the homeostatic mechanisms and energetic pathways of the body",
+      "Appreciate the coordinated working pattern of different organs of each system",
+      "Appreciate the concepts of genetics and introduction to human chromosomes"
+    ],
+    "courseOutcomes": [
+      "CO1: Understand and explain the organization and function of the central and autonomic nervous systems.",
+      "CO2: Describe the anatomy and physiology of the digestive system and evaluate cellular bioenergetics.",
+      "CO3: Explain the anatomy and physiological mechanisms of respiration and renal excretion.",
+      "CO4: Discuss the endocrine glands, their secretions, and the hormonal control systems.",
+      "CO5: Describe the reproductive systems, physiology of menstruation, pregnancy, and basic genetics."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Nervous system & Central nervous system",
+        "title": "Nervous system & Central nervous system",
+        "hours": 10,
+        "description": "Nervous system & Central nervous system",
+        "topics": [
+          {
+            "topicCode": "T1.1",
+            "number": "T1.1",
+            "topicName": "Nervous system: Organization of nervous system, neuron, neuroglia, classification and properties of nerve fibre, electrophysiology, action potential, nerve impulse conduction, receptors, synapse, neurotransmitters.",
+            "name": "Nervous system: Organization of nervous system, neuron, neuroglia, classification and properties of nerve fibre, electrophysiology, action potential, nerve impulse conduction, receptors, synapse, neurotransmitters.",
+            "hours": 5
+          },
+          {
+            "topicCode": "T1.2",
+            "number": "T1.2",
+            "topicName": "Central nervous system: Meninges, ventricles of brain and cerebrospinal fluid. Structure and functions of brain (cerebrum, brain stem, cerebellum), spinal cord (gross anatomy, sensory and motor tracts, reflex activity).",
+            "name": "Central nervous system: Meninges, ventricles of brain and cerebrospinal fluid. Structure and functions of brain (cerebrum, brain stem, cerebellum), spinal cord (gross anatomy, sensory and motor tracts, reflex activity).",
+            "hours": 5
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit II",
+        "name": "Unit II",
+        "unitName": "Digestive system & Bioenergetics",
+        "title": "Digestive system & Bioenergetics",
+        "hours": 6,
+        "description": "Digestive system & Bioenergetics",
+        "topics": [
+          {
+            "topicCode": "T2.1",
+            "number": "T2.1",
+            "topicName": "Digestive system: Anatomy of GI Tract with special reference to anatomy and functions of stomach, acid production in the stomach, regulation of acid production, small intestine and large intestine, anatomy and functions of salivary glands, liver and pancreas, digestion and absorption of food.",
+            "name": "Digestive system: Anatomy of GI Tract with special reference to anatomy and functions of stomach, acid production in the stomach, regulation of acid production, small intestine and large intestine, anatomy and functions of salivary glands, liver and pancreas, digestion and absorption of food.",
+            "hours": 4
+          },
+          {
+            "topicCode": "T2.2",
+            "number": "T2.2",
+            "topicName": "Energetics: Formation and role of ATP, Creatinine Phosphate and BMR.",
+            "name": "Energetics: Formation and role of ATP, Creatinine Phosphate and BMR.",
+            "hours": 2
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit III",
+        "name": "Unit III",
+        "unitName": "Respiratory system & Urinary system",
+        "title": "Respiratory system & Urinary system",
+        "hours": 10,
+        "description": "Respiratory system & Urinary system",
+        "topics": [
+          {
+            "topicCode": "T3.1",
+            "number": "T3.1",
+            "topicName": "Respiratory system: Anatomy of respiratory organs; Mechanism of respiration, regulation of respiration, transport of respiratory gases, pulmonary ventilation volumes and capacities.",
+            "name": "Respiratory system: Anatomy of respiratory organs; Mechanism of respiration, regulation of respiration, transport of respiratory gases, pulmonary ventilation volumes and capacities.",
+            "hours": 5
+          },
+          {
+            "topicCode": "T3.2",
+            "number": "T3.2",
+            "topicName": "Urinary system: Anatomy of urinary tract with special reference to anatomy of kidney and nephron, physiology of urine formation, micturition reflex and role of kidneys in acid base balance.",
+            "name": "Urinary system: Anatomy of urinary tract with special reference to anatomy of kidney and nephron, physiology of urine formation, micturition reflex and role of kidneys in acid base balance.",
+            "hours": 5
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit IV",
+        "name": "Unit IV",
+        "unitName": "Endocrine system",
+        "title": "Endocrine system",
+        "hours": 10,
+        "description": "Endocrine system",
+        "topics": [
+          {
+            "topicCode": "T4.1",
+            "number": "T4.1",
+            "topicName": "Endocrine glands: Pituitary gland, thyroid gland, parathyroid gland, adrenal gland, pancreas, pineal gland, thymus and their hormones.",
+            "name": "Endocrine glands: Pituitary gland, thyroid gland, parathyroid gland, adrenal gland, pancreas, pineal gland, thymus and their hormones.",
+            "hours": 6
+          },
+          {
+            "topicCode": "T4.2",
+            "number": "T4.2",
+            "topicName": "Hormonal control: Classification of hormones, mechanism of hormone action, endocrine disorders (hypo and hyper secretions).",
+            "name": "Hormonal control: Classification of hormones, mechanism of hormone action, endocrine disorders (hypo and hyper secretions).",
+            "hours": 4
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit V",
+        "name": "Unit V",
+        "unitName": "Reproductive system & Introduction to genetics",
+        "title": "Reproductive system & Introduction to genetics",
+        "hours": 9,
+        "description": "Reproductive system & Introduction to genetics",
+        "topics": [
+          {
+            "topicCode": "T5.1",
+            "number": "T5.1",
+            "topicName": "Reproductive system: Anatomy of male and female reproductive organs, physiology of reproduction, spermatogenesis, oogenesis, pregnancy and parturition, menstrual cycle, contraceptive devices.",
+            "name": "Reproductive system: Anatomy of male and female reproductive organs, physiology of reproduction, spermatogenesis, oogenesis, pregnancy and parturition, menstrual cycle, contraceptive devices.",
+            "hours": 6
+          },
+          {
+            "topicCode": "T5.2",
+            "number": "T5.2",
+            "topicName": "Introduction to genetics: Chromosomes, genes, DNA replication, transcription, translation, cell division (mitosis and meiosis), gene expression, genetic disorders.",
+            "name": "Introduction to genetics: Chromosomes, genes, DNA replication, transcription, translation, cell division (mitosis and meiosis), gene expression, genetic disorders.",
+            "hours": 3
+          }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "Ross and Wilson", "title": "Anatomy and Physiology in Health and Illness", "edition": "Latest Edition" },
+      { "author": "Gerard J. Tortora and Bryan Derrickson", "title": "Principles of Anatomy and Physiology", "edition": "Latest Edition" },
+      { "author": "Arthur C. Guyton and John E. Hall", "title": "Textbook of Medical Physiology", "edition": "Latest Edition" }
+    ],
+    "referenceBooks": [
+      { "author": "Kathleen J.W. Wilson", "title": "Ross and Wilson Anatomy and Physiology in Health and Illness", "edition": "Latest Edition" },
+      { "author": "McNaught and Callander", "title": "Illustrated Physiology", "edition": "Latest Edition" },
+      { "author": "C.C. Chatterjee", "title": "Human Physiology", "edition": "Latest Edition" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 25,
+      "theoryExternal": 75,
+      "practicalInternal": 0,
+      "practicalExternal": 0,
+      "universityExam": 100
+    }
+  },
+  {
+    "subjectCode": "BP202T",
+    "courseName": "Pharmaceutical Organic Chemistry I - Theory",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 1,
+    "semester": 2,
+    "credits": 4,
+    "hours": 45,
+    "subjectType": "Theory",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "This subject deals with the classification, nomenclature, isomerism, and properties of organic compounds. The syllabus emphasizes the mechanisms and orientation of reactions.",
+    "objectives": [
+      "Write the structure, name and the type of isomerism of the organic compound",
+      "Write the reaction, name the reaction and orientation of reactions",
+      "Account for reactivity/stability of compounds",
+      "Identify the organic compounds by qualitative and quantitative tests"
+    ],
+    "courseOutcomes": [
+      "CO1: Classify organic compounds, write their IUPAC names, and identify structural isomerism.",
+      "CO2: Describe preparation and reactions of alkanes, alkenes, and conjugated dienes.",
+      "CO3: Explain nucleophilic substitution mechanisms (SN1, SN2) of alkyl halides and properties of alcohols.",
+      "CO4: Understand carbonyl compounds (aldehydes, ketones) and their nucleophilic addition reactions.",
+      "CO5: Explain properties, synthesis, acidity, and basicity of carboxylic acids and aliphatic amines."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Classification, nomenclature and isomerism",
+        "title": "Classification, nomenclature and isomerism",
+        "hours": 10,
+        "description": "Classification, nomenclature and isomerism",
+        "topics": [
+          {
+            "topicCode": "T1.1",
+            "number": "T1.1",
+            "topicName": "Classification of Organic Compounds, Common and IUPAC systems of nomenclature of organic compounds (Aliphatic, Alicyclic and Aromatic compounds).",
+            "name": "Classification of Organic Compounds, Common and IUPAC systems of nomenclature of organic compounds (Aliphatic, Alicyclic and Aromatic compounds).",
+            "hours": 5
+          },
+          {
+            "topicCode": "T1.2",
+            "number": "T1.2",
+            "topicName": "Structural isomerism in organic compounds.",
+            "name": "Structural isomerism in organic compounds.",
+            "hours": 5
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit II",
+        "name": "Unit II",
+        "unitName": "Alkanes*, Alkenes* and Conjugated dienes*",
+        "title": "Alkanes*, Alkenes* and Conjugated dienes*",
+        "hours": 10,
+        "description": "Alkanes*, Alkenes* and Conjugated dienes*",
+        "topics": [
+          {
+            "topicCode": "T2.1",
+            "number": "T2.1",
+            "topicName": "Alkanes*: Halogenation of alkanes, uses of paraffin, free radical mechanisms.",
+            "name": "Alkanes*: Halogenation of alkanes, uses of paraffin, free radical mechanisms.",
+            "hours": 3
+          },
+          {
+            "topicCode": "T2.2",
+            "number": "T2.2",
+            "topicName": "Alkenes*: E1 and E2 reactions, kinetics, order of reactivity of alkyl halides, rearrangement of carbocations, Saytzeffs orientation, free radical addition of HBr (anti-Markovnikov's), qualitative tests.",
+            "name": "Alkenes*: E1 and E2 reactions, kinetics, order of reactivity of alkyl halides, rearrangement of carbocations, Saytzeffs orientation, free radical addition of HBr (anti-Markovnikov's), qualitative tests.",
+            "hours": 4
+          },
+          {
+            "topicCode": "T2.3",
+            "number": "T2.3",
+            "topicName": "Conjugated dienes*: Electrophilic addition, 1,2 and 1,4-addition, Diels-Alder reaction.",
+            "name": "Conjugated dienes*: Electrophilic addition, 1,2 and 1,4-addition, Diels-Alder reaction.",
+            "hours": 3
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit III",
+        "name": "Unit III",
+        "unitName": "Alkyl halides* & Alcohols*",
+        "title": "Alkyl halides* & Alcohols*",
+        "hours": 10,
+        "description": "Alkyl halides* & Alcohols*",
+        "topics": [
+          {
+            "topicCode": "T3.1",
+            "number": "T3.1",
+            "topicName": "Alkyl halides*: SN1 and SN2 reactions - kinetics, mechanism, reactivity, stereochemistry, factors affecting nucleophilic substitutions.",
+            "name": "Alkyl halides*: SN1 and SN2 reactions - kinetics, mechanism, reactivity, stereochemistry, factors affecting nucleophilic substitutions.",
+            "hours": 6
+          },
+          {
+            "topicCode": "T3.2",
+            "number": "T3.2",
+            "topicName": "Alcohols*: Qualitative tests, structure and uses of Ethyl alcohol, Methyl alcohol, Chlorobutanol, Cetostearyl alcohol, Benzyl alcohol, Glycerol, Propylene glycol.",
+            "name": "Alcohols*: Qualitative tests, structure and uses of Ethyl alcohol, Methyl alcohol, Chlorobutanol, Cetostearyl alcohol, Benzyl alcohol, Glycerol, Propylene glycol.",
+            "hours": 4
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit IV",
+        "name": "Unit IV",
+        "unitName": "Carbonyl compounds* (Aldehydes and ketones)",
+        "title": "Carbonyl compounds* (Aldehydes and ketones)",
+        "hours": 10,
+        "description": "Carbonyl compounds* (Aldehydes and ketones)",
+        "topics": [
+          {
+            "topicCode": "T4.1",
+            "number": "T4.1",
+            "topicName": "Nucleophilic addition, Electromeric effect, Aldol condensation, Cannizzaro's reaction, Claisen-Schmidt condensation, Benzoin condensation.",
+            "name": "Nucleophilic addition, Electromeric effect, Aldol condensation, Cannizzaro's reaction, Claisen-Schmidt condensation, Benzoin condensation.",
+            "hours": 6
+          },
+          {
+            "topicCode": "T4.2",
+            "number": "T4.2",
+            "topicName": "Qualitative tests, structure and uses of Formaldehyde, Paraldehyde, Acetone, Chloral hydrate, Hexamine, Benzaldehyde, Vanillin, Cinnamaldehyde.",
+            "name": "Qualitative tests, structure and uses of Formaldehyde, Paraldehyde, Acetone, Chloral hydrate, Hexamine, Benzaldehyde, Vanillin, Cinnamaldehyde.",
+            "hours": 4
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit V",
+        "name": "Unit V",
+        "unitName": "Carboxylic acids* & Aliphatic amines*",
+        "title": "Carboxylic acids* & Aliphatic amines*",
+        "hours": 8,
+        "description": "Carboxylic acids* & Aliphatic amines*",
+        "topics": [
+          {
+            "topicCode": "T5.1",
+            "number": "T5.1",
+            "topicName": "Carboxylic acids*: Acidity, effect of substituents on acidity, structure and uses of Formic acid, Acetic acid, Oxalic acid, Succinic acid, Citric acid, Salicylic acid, Benzoic acid, Lactic acid, Tartaric acid.",
+            "name": "Carboxylic acids*: Acidity, effect of substituents on acidity, structure and uses of Formic acid, Acetic acid, Oxalic acid, Succinic acid, Citric acid, Salicylic acid, Benzoic acid, Lactic acid, Tartaric acid.",
+            "hours": 4
+          },
+          {
+            "topicCode": "T5.2",
+            "number": "T5.2",
+            "topicName": "Aliphatic amines*: Basicity, effect of substituents on basicity, qualitative tests, structure and uses of Methyl amine, Ethyl amine, Dimethyl amine, Triethyl amine.",
+            "name": "Aliphatic amines*: Basicity, effect of substituents on basicity, qualitative tests, structure and uses of Methyl amine, Ethyl amine, Dimethyl amine, Triethyl amine.",
+            "hours": 4
+          }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "Morrison and Boyd", "title": "Organic Chemistry", "edition": "Latest Edition" },
+      { "author": "I.L. Finar", "title": "Organic Chemistry, Volume-I", "edition": "Latest Edition" },
+      { "author": "B.S. Bahl and Arun Bahl", "title": "Textbook of Organic Chemistry", "edition": "Latest Edition" }
+    ],
+    "referenceBooks": [
+      { "author": "Jerry March", "title": "Advanced Organic Chemistry", "edition": "Latest Edition" },
+      { "author": "Solomons and Fryhle", "title": "Organic Chemistry", "edition": "Latest Edition" },
+      { "author": "Peter Sykes", "title": "A Guide Book to Mechanism in Organic Chemistry", "edition": "Latest Edition" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 25,
+      "theoryExternal": 75,
+      "practicalInternal": 0,
+      "practicalExternal": 0,
+      "universityExam": 100
+    }
+  },
+  {
+    "subjectCode": "BP203T",
+    "courseName": "Biochemistry - Theory",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 1,
+    "semester": 2,
+    "credits": 4,
+    "hours": 45,
+    "subjectType": "Theory",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "Biochemistry deals with complete understanding of the chemical processes associated with living cells. The clinical chemistry part of the syllabus has been designed to provide basic concept of clinical tests in kidney, liver and pancreas.",
+    "objectives": [
+      "Understand the catalytic role of enzymes, importance of enzyme inhibitors in design of new drugs, therapeutic and diagnostic applications of enzymes",
+      "Understand the metabolic pathways of biomolecules in physiological and pathological states",
+      "Understand the genetic organization of mammalian genome and hetero & autocatalytic functions of DNA"
+    ],
+    "courseOutcomes": [
+      "CO1: Understand and explain bioenergetics, thermodynamics, and energy-rich compounds.",
+      "CO2: Describe carbohydrate metabolism, glycolysis, TCA cycle, glycogenolysis, and biological oxidation.",
+      "CO3: Explain lipid metabolism, beta-oxidation, de novo synthesis, and amino acid catabolism/transamination.",
+      "CO4: Discuss nucleic acid metabolism, DNA replication, transcription, translation, and genetic transcription.",
+      "CO5: Detail enzyme kinetics, Michaelis-Menten equation, enzyme inhibition, coenzymes, and clinical markers."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Biomolecules, Bioenergetics, Energy rich compounds",
+        "title": "Biomolecules, Bioenergetics, Energy rich compounds",
+        "hours": 8,
+        "description": "Biomolecules, Bioenergetics, Energy rich compounds",
+        "topics": [
+          {
+            "topicCode": "T1.1",
+            "number": "T1.1",
+            "topicName": "Introduction, classification, chemical nature and biological role of Carbohydrates, Lipids, Nucleic acids, Amino acids and Proteins.",
+            "name": "Introduction, classification, chemical nature and biological role of Carbohydrates, Lipids, Nucleic acids, Amino acids and Proteins.",
+            "hours": 4
+          },
+          {
+            "topicCode": "T1.2",
+            "number": "T1.2",
+            "topicName": "Bioenergetics: Concept of free energy, endergonic and exergonic reactions, Relationship between free energy, entropy and enthalpy, redox potential.",
+            "name": "Bioenergetics: Concept of free energy, endergonic and exergonic reactions, Relationship between free energy, entropy and enthalpy, redox potential.",
+            "hours": 2
+          },
+          {
+            "topicCode": "T1.3",
+            "number": "T1.3",
+            "topicName": "Energy rich compounds: ATP, cyclic AMP, Creatinine phosphate, their production and biological significance.",
+            "name": "Energy rich compounds: ATP, cyclic AMP, Creatinine phosphate, their production and biological significance.",
+            "hours": 2
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit II",
+        "name": "Unit II",
+        "unitName": "Carbohydrate metabolism & Biological oxidation",
+        "title": "Carbohydrate metabolism & Biological oxidation",
+        "hours": 10,
+        "description": "Carbohydrate metabolism & Biological oxidation",
+        "topics": [
+          {
+            "topicCode": "T2.1",
+            "number": "T2.1",
+            "topicName": "Carbohydrate metabolism: Glycolysis, TCA cycle, HMP shunt, Glycogenolysis, Glycogenesis, Gluconeogenesis, Hormonal regulation of carbohydrate metabolism, Diabetes mellitus.",
+            "name": "Carbohydrate metabolism: Glycolysis, TCA cycle, HMP shunt, Glycogenolysis, Glycogenesis, Gluconeogenesis, Hormonal regulation of carbohydrate metabolism, Diabetes mellitus.",
+            "hours": 6
+          },
+          {
+            "topicCode": "T2.2",
+            "number": "T2.2",
+            "topicName": "Biological oxidation: Electron transport chain (ETC) and its mechanism, oxidative phosphorylation, inhibitors of ETC, oxidative phosphorylation.",
+            "name": "Biological oxidation: Electron transport chain (ETC) and its mechanism, oxidative phosphorylation, inhibitors of ETC, oxidative phosphorylation.",
+            "hours": 4
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit III",
+        "name": "Unit III",
+        "unitName": "Lipid metabolism & Amino acid metabolism",
+        "title": "Lipid metabolism & Amino acid metabolism",
+        "hours": 10,
+        "description": "Lipid metabolism & Amino acid metabolism",
+        "topics": [
+          {
+            "topicCode": "T3.1",
+            "number": "T3.1",
+            "topicName": "Lipid metabolism: Beta-oxidation of saturated fatty acids, de novo synthesis of fatty acids, metabolism of cholesterol, ketoacidosis, atherosclerosis, hypercholesterolemia.",
+            "name": "Lipid metabolism: Beta-oxidation of saturated fatty acids, de novo synthesis of fatty acids, metabolism of cholesterol, ketoacidosis, atherosclerosis, hypercholesterolemia.",
+            "hours": 5
+          },
+          {
+            "topicCode": "T3.2",
+            "number": "T3.2",
+            "topicName": "Amino acid metabolism: Transamination, deamination, decarboxylation, urea cycle, metabolism of phenylalanine and tyrosine, genetic disorders of amino acid metabolism.",
+            "name": "Amino acid metabolism: Transamination, deamination, decarboxylation, urea cycle, metabolism of phenylalanine and tyrosine, genetic disorders of amino acid metabolism.",
+            "hours": 5
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit IV",
+        "name": "Unit IV",
+        "unitName": "Nucleic acid metabolism and genetic information transfer",
+        "title": "Nucleic acid metabolism and genetic information transfer",
+        "hours": 10,
+        "description": "Nucleic acid metabolism and genetic information transfer",
+        "topics": [
+          {
+            "topicCode": "T4.1",
+            "number": "T4.1",
+            "topicName": "Biosynthesis of purine and pyrimidine nucleotides, catabolism of purine nucleotides, gout, hyperuricemia.",
+            "name": "Biosynthesis of purine and pyrimidine nucleotides, catabolism of purine nucleotides, gout, hyperuricemia.",
+            "hours": 5
+          },
+          {
+            "topicCode": "T4.2",
+            "number": "T4.2",
+            "topicName": "Genetic information transfer: DNA replication, transcription, translation, genetic code, regulation of gene expression, mutation and DNA repair.",
+            "name": "Genetic information transfer: DNA replication, transcription, translation, genetic code, regulation of gene expression, mutation and DNA repair.",
+            "hours": 5
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit V",
+        "name": "Unit V",
+        "unitName": "Enzymes",
+        "title": "Enzymes",
+        "hours": 7,
+        "description": "Enzymes",
+        "topics": [
+          {
+            "topicCode": "T5.1",
+            "number": "T5.1",
+            "topicName": "Classification, properties, mechanism of enzyme action, Michaelis-Menten equation, enzyme kinetics, factors affecting enzyme activity.",
+            "name": "Classification, properties, mechanism of enzyme action, Michaelis-Menten equation, enzyme kinetics, factors affecting enzyme activity.",
+            "hours": 4
+          },
+          {
+            "topicCode": "T5.2",
+            "number": "T5.2",
+            "topicName": "Enzyme inhibition (competitive, non-competitive, allosteric), coenzymes, clinical and diagnostic applications of enzymes, isoenzymes.",
+            "name": "Enzyme inhibition (competitive, non-competitive, allosteric), coenzymes, clinical and diagnostic applications of enzymes, isoenzymes.",
+            "hours": 3
+          }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "Lehninger", "title": "Principles of Biochemistry", "edition": "Latest Edition" },
+      { "author": "Harpers", "title": "Illustrated Biochemistry", "edition": "Latest Edition" },
+      { "author": "U. Satyanarayana", "title": "Biochemistry", "edition": "Latest Edition" }
+    ],
+    "referenceBooks": [
+      { "author": "Lubert Stryer", "title": "Biochemistry", "edition": "Latest Edition" },
+      { "author": "West and Todd", "title": "Textbook of Biochemistry", "edition": "Latest Edition" },
+      { "author": "Conn and Stumpf", "title": "Outlines of Biochemistry", "edition": "Latest Edition" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 25,
+      "theoryExternal": 75,
+      "practicalInternal": 0,
+      "practicalExternal": 0,
+      "universityExam": 100
+    }
+  },
+  {
+    "subjectCode": "BP204T",
+    "courseName": "Pathophysiology - Theory",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 1,
+    "semester": 2,
+    "credits": 4,
+    "hours": 45,
+    "subjectType": "Theory",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "Pathophysiology is the study of the causes of diseases and the reactions of the body to such disease producing agents.",
+    "objectives": [
+      "Describe the etiology and pathogenesis of the selected disease states",
+      "Name the signs and symptoms of the diseases",
+      "Comprehend the complications of diseases"
+    ],
+    "courseOutcomes": [
+      "CO1: Discuss cellular adaptation, reversible and irreversible cell injury, pathogenesis of inflammation and repair.",
+      "CO2: Describe etiology, pathogenesis, and clinical features of cardiovascular, respiratory, and renal diseases.",
+      "CO3: Explain pathophysiology of haematological, endocrine, nervous, and gastrointestinal disorders.",
+      "CO4: Discuss inflammatory joint diseases, osteoporosis, gout, and the basic principles of cancer.",
+      "CO5: Describe pathogenesis and transmission of major infectious and sexually transmitted diseases."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Cell injury, adaptation & Inflammation",
+        "title": "Cell injury, adaptation & Inflammation",
+        "hours": 10,
+        "description": "Cell injury, adaptation & Inflammation",
+        "topics": [
+          {
+            "topicCode": "T1.1",
+            "number": "T1.1",
+            "topicName": "Basic principles of Cell injury and Adaptation: Causes of cell injury, pathogenesis, morphology of cell injury, cellular adaptations (atrophy, hypertrophy, hyperplasia, metaplasia, dysplasia).",
+            "name": "Basic principles of Cell injury and Adaptation: Causes of cell injury, pathogenesis, morphology of cell injury, cellular adaptations (atrophy, hypertrophy, hyperplasia, metaplasia, dysplasia).",
+            "hours": 5
+          },
+          {
+            "topicCode": "T1.2",
+            "number": "T1.2",
+            "topicName": "Basic mechanism involved in the process of inflammation and repair: Vascular and cellular events of acute inflammation, chemical mediators, chronic inflammation, wound healing (primary and secondary intention).",
+            "name": "Basic mechanism involved in the process of inflammation and repair: Vascular and cellular events of acute inflammation, chemical mediators, chronic inflammation, wound healing (primary and secondary intention).",
+            "hours": 5
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit II",
+        "name": "Unit II",
+        "unitName": "Cardiovascular, Respiratory & Renal systems",
+        "title": "Cardiovascular, Respiratory & Renal systems",
+        "hours": 10,
+        "description": "Cardiovascular, Respiratory & Renal systems",
+        "topics": [
+          {
+            "topicCode": "T2.1",
+            "number": "T2.1",
+            "topicName": "Cardiovascular System: Hypertension, congestive heart failure, ischemic heart disease (angina, myocardial infarction, atherosclerosis).",
+            "name": "Cardiovascular System: Hypertension, congestive heart failure, ischemic heart disease (angina, myocardial infarction, atherosclerosis).",
+            "hours": 4
+          },
+          {
+            "topicCode": "T2.2",
+            "number": "T2.2",
+            "topicName": "Respiratory system: Asthma, Chronic obstructive airway disease (COPD).",
+            "name": "Respiratory system: Asthma, Chronic obstructive airway disease (COPD).",
+            "hours": 3
+          },
+          {
+            "topicCode": "T2.3",
+            "number": "T2.3",
+            "topicName": "Renal system: Acute and chronic renal failure.",
+            "name": "Renal system: Acute and chronic renal failure.",
+            "hours": 3
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit III",
+        "name": "Unit III",
+        "unitName": "Haematological, Endocrine, Nervous & GI diseases",
+        "title": "Haematological, Endocrine, Nervous & GI diseases",
+        "hours": 10,
+        "description": "Haematological, Endocrine, Nervous & GI diseases",
+        "topics": [
+          {
+            "topicCode": "T3.1",
+            "number": "T3.1",
+            "topicName": "Haematological Diseases: Iron deficiency anemia, megaloblastic anemia, sickle cell anemia, thalassemia, hemophilia.",
+            "name": "Haematological Diseases: Iron deficiency anemia, megaloblastic anemia, sickle cell anemia, thalassemia, hemophilia.",
+            "hours": 3
+          },
+          {
+            "topicCode": "T3.2",
+            "number": "T3.2",
+            "topicName": "Endocrine system: Diabetes mellitus, thyroid disorders (hypo and hyperthyroidism), disorders of sex hormones.",
+            "name": "Endocrine system: Diabetes mellitus, thyroid disorders (hypo and hyperthyroidism), disorders of sex hormones.",
+            "hours": 3
+          },
+          {
+            "topicCode": "T3.3",
+            "number": "T3.3",
+            "topicName": "Nervous system: Epilepsy, Parkinson's disease, Stroke, Alzheimer's disease.",
+            "name": "Nervous system: Epilepsy, Parkinson's disease, Stroke, Alzheimer's disease.",
+            "hours": 2
+          },
+          {
+            "topicCode": "T3.4",
+            "number": "T3.4",
+            "topicName": "Gastrointestinal system: Peptic ulcer, liver cirrhosis.",
+            "name": "Gastrointestinal system: Peptic ulcer, liver cirrhosis.",
+            "hours": 2
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit IV",
+        "name": "Unit IV",
+        "unitName": "Inflammatory, bone & joint disorders & Cancer",
+        "title": "Inflammatory, bone & joint disorders & Cancer",
+        "hours": 8,
+        "description": "Inflammatory, bone & joint disorders & Cancer",
+        "topics": [
+          {
+            "topicCode": "T4.1",
+            "number": "T4.1",
+            "topicName": "Inflammatory bowel diseases (IBD): Crohn's disease, ulcerative colitis.",
+            "name": "Inflammatory bowel diseases (IBD): Crohn's disease, ulcerative colitis.",
+            "hours": 2
+          },
+          {
+            "topicCode": "T4.2",
+            "number": "T4.2",
+            "topicName": "Disease of bones and joints: Rheumatoid Arthritis, Osteoporosis, Gout.",
+            "name": "Disease of bones and joints: Rheumatoid Arthritis, Osteoporosis, Gout.",
+            "hours": 3
+          },
+          {
+            "topicCode": "T4.3",
+            "number": "T4.3",
+            "topicName": "Principles of cancer: Classification, etiology, pathogenesis, metastasis, general hallmarks of cancer.",
+            "name": "Principles of cancer: Classification, etiology, pathogenesis, metastasis, general hallmarks of cancer.",
+            "hours": 3
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit V",
+        "name": "Unit V",
+        "unitName": "Infectious & Sexually Transmitted Diseases",
+        "title": "Infectious & Sexually Transmitted Diseases",
+        "hours": 7,
+        "description": "Infectious & Sexually Transmitted Diseases",
+        "topics": [
+          {
+            "topicCode": "T5.1",
+            "number": "T5.1",
+            "topicName": "Infectious diseases: Tuberculosis, leprosy, urinary tract infections, typhoid, pneumonia.",
+            "name": "Infectious diseases: Tuberculosis, leprosy, urinary tract infections, typhoid, pneumonia.",
+            "hours": 4
+          },
+          {
+            "topicCode": "T5.2",
+            "number": "T5.2",
+            "topicName": "Sexually transmitted diseases: AIDS, syphilis, gonorrhea.",
+            "name": "Sexually transmitted diseases: AIDS, syphilis, gonorrhea.",
+            "hours": 3
+          }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "Robbins & Cotran", "title": "Pathologic Basis of Disease", "edition": "Latest Edition" },
+      { "author": "Harsh Mohan", "title": "Textbook of Pathology", "edition": "Latest Edition" },
+      { "author": "Joseph T. DiPiro", "title": "Pharmacotherapy: A Pathophysiologic Approach", "edition": "Latest Edition" }
+    ],
+    "referenceBooks": [
+      { "author": "Ringler", "title": "Pathophysiology", "edition": "Latest Edition" },
+      { "author": "Sclavi", "title": "Pathophysiology: Concepts of Altered Health States", "edition": "Latest Edition" },
+      { "author": "J.B. Walter and M.S. Israel", "title": "General Pathology", "edition": "Latest Edition" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 25,
+      "theoryExternal": 75,
+      "practicalInternal": 0,
+      "practicalExternal": 0,
+      "universityExam": 100
+    }
+  },
+  {
+    "subjectCode": "BP205T",
+    "courseName": "Computer Applications in Pharmacy - Theory",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 1,
+    "semester": 2,
+    "credits": 3,
+    "hours": 30,
+    "subjectType": "Theory",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "This subject deals with the introduction Database, Database Management System, computer application in clinical studies and use of databases.",
+    "objectives": [
+      "Know the various types of application of computers in pharmacy",
+      "Know the various types of databases",
+      "Know the various applications of databases in pharmacy"
+    ],
+    "courseOutcomes": [
+      "CO1: Discuss number systems, binary arithmetic, and concepts of information systems and software.",
+      "CO2: Explain web technologies, HTML, XML, CSS, and search engine optimization concepts.",
+      "CO3: Describe databases, MS Access, SQL queries, and the application of computers in pharmacy.",
+      "CO4: Discuss bioinformatics, databases like BLAST, FASTA, and computer-aided drug design.",
+      "CO5: Explain computers in clinical trials, LIMS, and data analysis in preclinical development."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Number system & Information Systems",
+        "title": "Number system & Information Systems",
+        "hours": 6,
+        "description": "Number system & Information Systems",
+        "topics": [
+          {
+            "topicCode": "T1.1",
+            "number": "T1.1",
+            "topicName": "Number system: Binary, octal, decimal, hexadecimal number systems, conversions, binary addition, subtraction.",
+            "name": "Number system: Binary, octal, decimal, hexadecimal number systems, conversions, binary addition, subtraction.",
+            "hours": 3
+          },
+          {
+            "topicCode": "T1.2",
+            "number": "T1.2",
+            "topicName": "Concept of Information Systems and Software: Information systems, types of information systems, software, system software, application software.",
+            "name": "Concept of Information Systems and Software: Information systems, types of information systems, software, system software, application software.",
+            "hours": 3
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit II",
+        "name": "Unit II",
+        "unitName": "Web technologies",
+        "title": "Web technologies",
+        "hours": 6,
+        "description": "Web technologies",
+        "topics": [
+          {
+            "topicCode": "T2.1",
+            "number": "T2.1",
+            "topicName": "Introduction to Web technologies: Internet, WWW, Web browser, Web server, search engines, HTML, XML, CSS.",
+            "name": "Introduction to Web technologies: Internet, WWW, Web browser, Web server, search engines, HTML, XML, CSS.",
+            "hours": 3
+          },
+          {
+            "topicCode": "T2.2",
+            "number": "T2.2",
+            "topicName": "Web design: Introduction to HTML tags, creation of simple web pages using HTML, XML, CSS.",
+            "name": "Web design: Introduction to HTML tags, creation of simple web pages using HTML, XML, CSS.",
+            "hours": 3
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit III",
+        "name": "Unit III",
+        "unitName": "Application of computers in Pharmacy",
+        "title": "Application of computers in Pharmacy",
+        "hours": 6,
+        "description": "Application of computers in Pharmacy",
+        "topics": [
+          {
+            "topicCode": "T3.1",
+            "number": "T3.1",
+            "topicName": "Databases: Introduction to database, DBMS, RDBMS, MS Access, creating database, tables, queries, reports, forms in MS Access, SQL.",
+            "name": "Databases: Introduction to database, DBMS, RDBMS, MS Access, creating database, tables, queries, reports, forms in MS Access, SQL.",
+            "hours": 3
+          },
+          {
+            "topicCode": "T3.2",
+            "number": "T3.2",
+            "topicName": "Pharmacy Applications: Computer applications in pharmacy, inventory control, drug information storage and retrieval, retail pharmacy management.",
+            "name": "Pharmacy Applications: Computer applications in pharmacy, inventory control, drug information storage and retrieval, retail pharmacy management.",
+            "hours": 3
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit IV",
+        "name": "Unit IV",
+        "unitName": "Bioinformatics",
+        "title": "Bioinformatics",
+        "hours": 6,
+        "description": "Bioinformatics",
+        "topics": [
+          {
+            "topicCode": "T4.1",
+            "number": "T4.1",
+            "topicName": "Introduction to Bioinformatics: Biological databases, primary, secondary, composite databases, BLAST, FASTA.",
+            "name": "Introduction to Bioinformatics: Biological databases, primary, secondary, composite databases, BLAST, FASTA.",
+            "hours": 3
+          },
+          {
+            "topicCode": "T4.2",
+            "number": "T4.2",
+            "topicName": "Applications: Sequence alignment, phylogenetic analysis, protein structure prediction, computer-aided drug design.",
+            "name": "Applications: Sequence alignment, phylogenetic analysis, protein structure prediction, computer-aided drug design.",
+            "hours": 3
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit V",
+        "name": "Unit V",
+        "unitName": "Computers in clinical trials",
+        "title": "Computers in clinical trials",
+        "hours": 6,
+        "description": "Computers in clinical trials",
+        "topics": [
+          {
+            "topicCode": "T5.1",
+            "number": "T5.1",
+            "topicName": "Clinical trials: Application of computers in clinical trials, data management, electronic data capture, CRF, database lock.",
+            "name": "Clinical trials: Application of computers in clinical trials, data management, electronic data capture, CRF, database lock.",
+            "hours": 3
+          },
+          {
+            "topicCode": "T5.2",
+            "number": "T5.2",
+            "topicName": "LIMS & Preclinical: Laboratory Information Management System (LIMS), computers in preclinical development, data analysis, statistical software.",
+            "name": "LIMS & Preclinical: Laboratory Information Management System (LIMS), computers in preclinical development, data analysis, statistical software.",
+            "hours": 3
+          }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "G.P. Prasain", "title": "Computer Applications in Pharmacy", "edition": "Latest Edition" },
+      { "author": "Norton", "title": "Introduction to Computers", "edition": "Latest Edition" },
+      { "author": "Stephen Prata", "title": "C Primer Plus", "edition": "Latest Edition" }
+    ],
+    "referenceBooks": [
+      { "author": "Raymond Chang", "title": "Computer Applications in Pharmaceutical Research and Development", "edition": "Latest Edition" },
+      { "author": "David W. Mount", "title": "Bioinformatics: Sequence and Genome Analysis", "edition": "Latest Edition" },
+      { "author": "Microsoft Press", "title": "MS Office Reference Guide", "edition": "Latest Edition" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 25,
+      "theoryExternal": 50,
+      "practicalInternal": 0,
+      "practicalExternal": 0,
+      "universityExam": 75
+    }
+  },
+  {
+    "subjectCode": "BP206T",
+    "courseName": "Environmental Sciences - Theory",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 1,
+    "semester": 2,
+    "credits": 4,
+    "hours": 30,
+    "subjectType": "Theory",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "Environmental Sciences is the multidisciplinary science that teaches students the broad perspective of the environment, natural resources, ecosystems, and environmental pollution.",
+    "objectives": [
+      "Create an awareness on environmental problems",
+      "Develop an analytical attitude towards environmental issues",
+      "Understand natural resources and ecosystems",
+      "Understand the impact of environmental pollution",
+      "Appreciate environmental policies and ethics"
+    ],
+    "courseOutcomes": [
+      "CO1: Discuss the multidisciplinary nature of environmental studies and the conservation of natural resources.",
+      "CO2: Describe structural components, functions, and energy flow within different types of ecosystems.",
+      "CO3: Explain types, causes, effects, and control measures of air, water, soil, and noise pollution.",
+      "CO4: Discuss solid waste management, disaster management, and urban environmental problems.",
+      "CO5: Explain social issues, environmental protection acts, and the human population's impact on the environment."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Multidisciplinary nature & Natural Resources",
+        "title": "Multidisciplinary nature & Natural Resources",
+        "hours": 10,
+        "description": "Multidisciplinary nature & Natural Resources",
+        "topics": [
+          {
+            "topicCode": "T1.1",
+            "number": "T1.1",
+            "topicName": "Multidisciplinary nature of environmental studies: Definition, scope and importance; Need for public awareness.",
+            "name": "Multidisciplinary nature of environmental studies: Definition, scope and importance; Need for public awareness.",
+            "hours": 3
+          },
+          {
+            "topicCode": "T1.2",
+            "number": "T1.2",
+            "topicName": "Natural Resources: Renewable and non-renewable resources, Natural resources and associated problems: Forest resources, Water resources, Mineral resources, Food resources, Energy resources, Land resources.",
+            "name": "Natural Resources: Renewable and non-renewable resources, Natural resources and associated problems: Forest resources, Water resources, Mineral resources, Food resources, Energy resources, Land resources.",
+            "hours": 7
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit II",
+        "name": "Unit II",
+        "unitName": "Ecosystems",
+        "title": "Ecosystems",
+        "hours": 10,
+        "description": "Ecosystems",
+        "topics": [
+          {
+            "topicCode": "T2.1",
+            "number": "T2.1",
+            "topicName": "Concept of an ecosystem; Structure and function of an ecosystem; Producers, consumers and decomposers; Energy flow in the ecosystem; Ecological succession; Food chains, food webs and ecological pyramids.",
+            "name": "Concept of an ecosystem; Structure and function of an ecosystem; Producers, consumers and decomposers; Energy flow in the ecosystem; Ecological succession; Food chains, food webs and ecological pyramids.",
+            "hours": 5
+          },
+          {
+            "topicCode": "T2.2",
+            "number": "T2.2",
+            "topicName": "Introduction, types, characteristic features, structure and function of: Forest ecosystem, Grassland ecosystem, Desert ecosystem, Aquatic ecosystems (ponds, streams, lakes, rivers, oceans, estuaries).",
+            "name": "Introduction, types, characteristic features, structure and function of: Forest ecosystem, Grassland ecosystem, Desert ecosystem, Aquatic ecosystems (ponds, streams, lakes, rivers, oceans, estuaries).",
+            "hours": 5
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit III",
+        "name": "Unit III",
+        "unitName": "Environmental Pollution & Social Issues",
+        "title": "Environmental Pollution & Social Issues",
+        "hours": 10,
+        "description": "Environmental Pollution & Social Issues",
+        "topics": [
+          {
+            "topicCode": "T3.1",
+            "number": "T3.1",
+            "topicName": "Environmental Pollution: Cause, effects and control measures of Air pollution, Water pollution, Soil pollution, Marine pollution, Noise pollution, Thermal pollution, Nuclear hazards.",
+            "name": "Environmental Pollution: Cause, effects and control measures of Air pollution, Water pollution, Soil pollution, Marine pollution, Noise pollution, Thermal pollution, Nuclear hazards.",
+            "hours": 5
+          },
+          {
+            "topicCode": "T3.2",
+            "number": "T3.2",
+            "topicName": "Solid waste management: Causes, effects and control measures of urban and industrial wastes; Disaster management: floods, earthquake, cyclone and landslides.",
+            "name": "Solid waste management: Causes, effects and control measures of urban and industrial wastes; Disaster management: floods, earthquake, cyclone and landslides.",
+            "hours": 5
+          }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "Y.K. Sing", "title": "Environmental Science", "edition": "New Age International Publishers" },
+      { "author": "Erach Bharucha", "title": "Textbook of Environmental Studies for Undergraduate Courses", "edition": "University Grants Commission" },
+      { "author": "Benny Joseph", "title": "Environmental Studies", "edition": "Tata McGraw Hill" }
+    ],
+    "referenceBooks": [
+      { "author": "Anubha Kaushik and C.P. Kaushik", "title": "Perspectives in Environmental Studies", "edition": "New Age International Publishers" },
+      { "author": "Richard T. Wright", "title": "Environmental Science: Toward a Sustainable Future", "edition": "Prentice Hall" },
+      { "author": "G. Tyler Miller", "title": "Environmental Science", "edition": "Wadsworth Publishing" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 25,
+      "theoryExternal": 50,
+      "practicalInternal": 0,
+      "practicalExternal": 0,
+      "universityExam": 75
+    }
+  },
+  {
+    "subjectCode": "BP207P",
+    "courseName": "Human Anatomy and Physiology II - Practical",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 1,
+    "semester": 2,
+    "credits": 2,
+    "hours": 60,
+    "subjectType": "Practical",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "Practical anatomy and physiology is designed to provide hands-on experience in histological study, neurological examination, physiological parameters, and feedback loop mechanisms.",
+    "objectives": [
+      "Understand neurological testing, feedback systems, and slide inspection",
+      "Measure respiratory volumes, basal mass index, and total blood count"
+    ],
+    "courseOutcomes": [
+      "CO1: Study the integumentary, special senses, nervous, and endocrine systems using models and charts.",
+      "CO2: Demonstrate general neurological examination, reflex activity, and positive/negative feedback mechanisms.",
+      "CO3: Measure physiological parameters such as body temperature, tidal volume, vital capacity, and basal mass index.",
+      "CO4: Analyze permanent slides of vital organs and reproductive systems.",
+      "CO5: Perform total blood count using cell analyzer and study family planning devices."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Practical Laboratory Exercises",
+        "title": "Practical Laboratory Exercises",
+        "hours": 60,
+        "description": "Practical Laboratory Exercises",
+        "topics": [
+          { "topicCode": "T1.1", "number": "T1.1", "topicName": "Study of integumentary and special senses using specimens, models, etc.", "name": "Study of integumentary and special senses using specimens, models, etc.", "hours": 4 },
+          { "topicCode": "T1.2", "number": "T1.2", "topicName": "Study of nervous system using specimens, models, etc.", "name": "Study of nervous system using specimens, models, etc.", "hours": 4 },
+          { "topicCode": "T1.3", "number": "T1.3", "topicName": "Study of endocrine system using specimens, models, etc.", "name": "Study of endocrine system using specimens, models, etc.", "hours": 4 },
+          { "topicCode": "T1.4", "number": "T1.4", "topicName": "Demonstration of general neurological examination and function of olfactory nerve.", "name": "Demonstration of general neurological examination and function of olfactory nerve.", "hours": 4 },
+          { "topicCode": "T1.5", "number": "T1.5", "topicName": "Examination of different types of taste and demonstration of visual acuity.", "name": "Examination of different types of taste and demonstration of visual acuity.", "hours": 4 },
+          { "topicCode": "T1.6", "number": "T1.6", "topicName": "Demonstration of reflex activity and recording of body temperature.", "name": "Demonstration of reflex activity and recording of body temperature.", "hours": 4 },
+          { "topicCode": "T1.7", "number": "T1.7", "topicName": "Demonstration of positive and negative feedback mechanisms.", "name": "Demonstration of positive and negative feedback mechanisms.", "hours": 4 },
+          { "topicCode": "T1.8", "number": "T1.8", "topicName": "Determination of tidal volume and vital capacity.", "name": "Determination of tidal volume and vital capacity.", "hours": 4 },
+          { "topicCode": "T1.9", "number": "T1.9", "topicName": "Study of digestive, respiratory, cardiovascular, urinary, and reproductive systems with models, charts, and specimens.", "name": "Study of digestive, respiratory, cardiovascular, urinary, and reproductive systems with models, charts, and specimens.", "hours": 10 },
+          { "topicCode": "T1.10", "number": "T1.10", "topicName": "Recording of basal mass index and study of family planning devices and pregnancy diagnosis test.", "name": "Recording of basal mass index and study of family planning devices and pregnancy diagnosis test.", "hours": 6 },
+          { "topicCode": "T1.11", "number": "T1.11", "topicName": "Demonstration of total blood count by cell analyzer and permanent slides of vital organs and gonads.", "name": "Demonstration of total blood count by cell analyzer and permanent slides of vital organs and gonads.", "hours": 12 }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "Ross and Wilson", "title": "Anatomy and Physiology in Health and Illness", "edition": "Latest Edition" },
+      { "author": "Gerard J. Tortora", "title": "Principles of Anatomy and Physiology", "edition": "Latest Edition" }
+    ],
+    "referenceBooks": [
+      { "author": "C.C. Chatterjee", "title": "Human Physiology", "edition": "Latest Edition" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 0,
+      "theoryExternal": 0,
+      "practicalInternal": 15,
+      "practicalExternal": 35,
+      "universityExam": 50
+    }
+  },
+  {
+    "subjectCode": "BP208P",
+    "courseName": "Pharmaceutical Organic Chemistry I - Practical",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 1,
+    "semester": 2,
+    "credits": 2,
+    "hours": 60,
+    "subjectType": "Practical",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "This course deals with qualitative organic analysis, solid derivative preparation, and structural construction of molecular models.",
+    "objectives": [
+      "Perform qualitative analysis of unknown organic compounds",
+      "Synthesize solid derivatives and assemble molecular models"
+    ],
+    "courseOutcomes": [
+      "CO1: Perform qualitative analysis of unknown organic compounds containing different functional groups.",
+      "CO2: Execute solubility, element detection, and functional group testing.",
+      "CO3: Determine melting and boiling points of unknown compounds.",
+      "CO4: Synthesize suitable solid derivatives from organic compounds.",
+      "CO5: Construct molecular models for understanding organic stereochemistry."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Practical Organic Experiments",
+        "title": "Practical Organic Experiments",
+        "hours": 60,
+        "description": "Practical Organic Experiments",
+        "topics": [
+          { "topicCode": "T1.1", "number": "T1.1", "topicName": "Systematic qualitative analysis of unknown organic compounds (Preliminary, Element detection, Solubility, Functional group, MP/BP).", "name": "Systematic qualitative analysis of unknown organic compounds (Preliminary, Element detection, Solubility, Functional group, MP/BP).", "hours": 30 },
+          { "topicCode": "T1.2", "number": "T1.2", "topicName": "Preparation of suitable solid derivatives from organic compounds.", "name": "Preparation of suitable solid derivatives from organic compounds.", "hours": 15 },
+          { "topicCode": "T1.3", "number": "T1.3", "topicName": "Construction of molecular models of simple organic compounds.", "name": "Construction of molecular models of simple organic compounds.", "hours": 15 }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "Arthur I. Vogel", "title": "Textbook of Practical Organic Chemistry", "edition": "Latest Edition" },
+      { "author": "Mann and Saunders", "title": "Practical Organic Chemistry", "edition": "Latest Edition" }
+    ],
+    "referenceBooks": [
+      { "author": "NK Vishnoi", "title": "Advanced Practical Organic Chemistry", "edition": "Latest Edition" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 0,
+      "theoryExternal": 0,
+      "practicalInternal": 15,
+      "practicalExternal": 35,
+      "universityExam": 50
+    }
+  },
+  {
+    "subjectCode": "BP209P",
+    "courseName": "Biochemistry - Practical",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 1,
+    "semester": 2,
+    "credits": 2,
+    "hours": 60,
+    "subjectType": "Practical",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "This course introduces biochemical tests, carbohydrate/protein analysis, enzymatic hydrolysis, and clinical diagnostics of blood and urine samples.",
+    "objectives": [
+      "Analyze carbohydrates and proteins qualitatively",
+      "Perform quantitative blood and urine chemistry tests"
+    ],
+    "courseOutcomes": [
+      "CO1: Perform qualitative analysis of carbohydrates and proteins using specific identification tests.",
+      "CO2: Conduct quantitative analysis of reducing sugars and proteins.",
+      "CO3: Perform qualitative analysis of abnormal constituents of urine.",
+      "CO4: Determine blood creatinine, blood sugar, and serum total cholesterol levels.",
+      "CO5: Prepare buffer solutions and study salivary amylase activity including enzyme kinetics."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Practical Biochemistry Exercises",
+        "title": "Practical Biochemistry Exercises",
+        "hours": 60,
+        "description": "Practical Biochemistry Exercises",
+        "topics": [
+          { "topicCode": "T1.1", "number": "T1.1", "topicName": "Qualitative analysis of carbohydrates (Glucose, Fructose, Lactose, Maltose, Sucrose, Starch).", "name": "Qualitative analysis of carbohydrates (Glucose, Fructose, Lactose, Maltose, Sucrose, Starch).", "hours": 12 },
+          { "topicCode": "T1.2", "number": "T1.2", "topicName": "Identification tests for proteins (Albumin, Casein, Gelatin, Peptone).", "name": "Identification tests for proteins (Albumin, Casein, Gelatin, Peptone).", "hours": 8 },
+          { "topicCode": "T1.3", "number": "T1.3", "topicName": "Quantitative analysis of reducing sugars (DNSA method) and proteins (Biuret/Lowry method).", "name": "Quantitative analysis of reducing sugars (DNSA method) and proteins (Biuret/Lowry method).", "hours": 10 },
+          { "topicCode": "T1.4", "number": "T1.4", "topicName": "Qualitative analysis of urine for abnormal constituents (Glucose, Protein, Ketone bodies, Bile pigments).", "name": "Qualitative analysis of urine for abnormal constituents (Glucose, Protein, Ketone bodies, Bile pigments).", "hours": 10 },
+          { "topicCode": "T1.5", "number": "T1.5", "topicName": "Determination of blood creatinine, blood sugar, and serum total cholesterol.", "name": "Determination of blood creatinine, blood sugar, and serum total cholesterol.", "hours": 10 },
+          { "topicCode": "T1.6", "number": "T1.6", "topicName": "Preparation of buffer solutions, study of enzymatic hydrolysis of starch, salivary amylase activity, and temperature/substrate effects.", "name": "Preparation of buffer solutions, study of enzymatic hydrolysis of starch, salivary amylase activity, and temperature/substrate effects.", "hours": 10 }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "David T. Plummer", "title": "An Introduction to Practical Biochemistry", "edition": "Latest Edition" },
+      { "author": "Harold Varley", "title": "Practical Clinical Biochemistry", "edition": "Latest Edition" }
+    ],
+    "referenceBooks": [
+      { "author": "Rajagopal and Ramakrishna", "title": "Practical Biochemistry for Medical Students", "edition": "Latest Edition" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 0,
+      "theoryExternal": 0,
+      "practicalInternal": 15,
+      "practicalExternal": 35,
+      "universityExam": 50
+    }
+  },
+  {
+    "subjectCode": "BP210P",
+    "courseName": "Computer Applications in Pharmacy - Practical",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 1,
+    "semester": 2,
+    "credits": 2,
+    "hours": 30,
+    "subjectType": "Practical",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "Hands-on sessions focusing on questionnaires, HTML web pages, MS Access database design, SQL, drug information search, and invoice creation.",
+    "objectives": [
+      "Create documents, web pages, and databases",
+      "Apply database concepts to retrieve and present drug information"
+    ],
+    "courseOutcomes": [
+      "CO1: Design questionnaires and create basic HTML web pages using simple tags.",
+      "CO2: Create databases, design forms, and execute SQL queries in MS Access.",
+      "CO3: Retrieve and store drug information, and generate reports/invoices.",
+      "CO4: Perform drug interaction checks and export data to XML sheets.",
+      "CO5: Export MS Access tables, queries, and reports to XML documents."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Practical Computer Labs",
+        "title": "Practical Computer Labs",
+        "hours": 30,
+        "description": "Practical Computer Labs",
+        "topics": [
+          { "topicCode": "T1.1", "number": "T1.1", "topicName": "Design a questionnaire using a word processing package to gather user information.", "name": "Design a questionnaire using a word processing package to gather user information.", "hours": 3 },
+          { "topicCode": "T1.2", "number": "T1.2", "topicName": "Create a simple HTML web page with links, images, tables, and formatted text.", "name": "Create a simple HTML web page with links, images, tables, and formatted text.", "hours": 3 },
+          { "topicCode": "T1.3", "number": "T1.3", "topicName": "Create a database in MS Access to store drug/faculty information with primary keys.", "name": "Create a database in MS Access to store drug/faculty information with primary keys.", "hours": 6 },
+          { "topicCode": "T1.4", "number": "T1.4", "topicName": "Design forms, execute select/join queries, and generate reports in MS Access.", "name": "Design forms, execute select/join queries, and generate reports in MS Access.", "hours": 6 },
+          { "topicCode": "T1.5", "number": "T1.5", "topicName": "Store, retrieve, and search drug information and perform drug interaction tests.", "name": "Store, retrieve, and search drug information and perform drug interaction tests.", "hours": 4 },
+          { "topicCode": "T1.6", "number": "T1.6", "topicName": "Generate invoices, export tables/reports to XML, and create mailing labels.", "name": "Generate invoices, export tables/reports to XML, and create mailing labels.", "hours": 8 }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "Norton", "title": "Introduction to Computers", "edition": "Latest Edition" },
+      { "author": "Microsoft Press", "title": "MS Office Reference Guide", "edition": "Latest Edition" }
+    ],
+    "referenceBooks": [
+      { "author": "G.P. Prasain", "title": "Computer Applications in Pharmacy", "edition": "Latest Edition" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 0,
+      "theoryExternal": 0,
+      "practicalInternal": 10,
+      "practicalExternal": 15,
+      "universityExam": 25
+    }
+  }
+]

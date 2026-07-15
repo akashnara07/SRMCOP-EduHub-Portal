@@ -38,7 +38,7 @@ export default function Sidebar({
 
   const adminMenu = [
     { id: 'admin-dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { id: 'faculty-courses', label: 'Curriculums', icon: BookOpen },
+    { id: 'faculty-courses', label: 'Courses', icon: BookOpen },
     { id: 'faculty-subjects', label: 'Course Manager', icon: Sliders },
     { id: 'admin-programmes', label: 'Programmes', icon: GraduationCap },
     { id: 'admin-faculty', label: 'Faculty Registry', icon: Users },

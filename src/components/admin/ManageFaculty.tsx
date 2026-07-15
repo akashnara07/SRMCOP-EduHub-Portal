@@ -23,6 +23,17 @@ interface ManageFacultyProps {
   onBack: () => void;
 }
 
+const DEPARTMENTS = [
+  'Department of Pharmacology',
+  'Department of Pharmaceutical Analysis',
+  'Department of Pharmacognosy',
+  'Department of Pharmaceutics',
+  'Department of Pharmacy Practice',
+  'Department of Pharmaceutical Quality Assurance',
+  'Department of Pharmaceutical Regulatory affairs',
+  'Department of Pharmaceutical Chemistry'
+];
+
 const DEFAULT_FACULTY: FacultyMember[] = [
   { id: '1', name: 'Dr. V. Chitra', empId: '1805101', dept: 'Department of Pharmacology', email: 'chitra.v@srmcop.edu.in', phone: '9876543210', coursesAllotted: ['BP101T'], status: 'Authorized' },
   { id: '2', name: 'Dr. Meena Swaminathan, M.Pharm.', empId: '1805102', dept: 'Department of Pharmaceutical Chemistry', email: 'meena.s@srmcop.edu.in', phone: '9876543211', coursesAllotted: ['BP102T'], status: 'Authorized' },
@@ -56,11 +67,15 @@ export default function ManageFaculty({ onBack }: ManageFacultyProps) {
   // Manual Form States
   const [formName, setFormName] = useState('');
   const [formEmpId, setFormEmpId] = useState('');
-  const [formDept, setFormDept] = useState('Department of Pharmaceutics');
+  const [formDept, setFormDept] = useState('Department of Pharmacology');
   const [formEmail, setFormEmail] = useState('');
   const [formPhone, setFormPhone] = useState('');
   const [formCourses, setFormCourses] = useState<string[]>([]);
   const [editingFacultyId, setEditingFacultyId] = useState<string | null>(null);
+
+  // States for searchable course allotment redesign
+  const [allotSearchQuery, setAllotSearchQuery] = useState('');
+  const [allotFilterProg, setAllotFilterProg] = useState<'All' | 'B.Pharm' | 'Pharm.D'>('All');
 
   // Bulk Upload wizard states
   const [showBulkModal, setShowBulkModal] = useState(false);
@@ -111,7 +126,7 @@ export default function ManageFaculty({ onBack }: ManageFacultyProps) {
     // Reset Form
     setFormName('');
     setFormEmpId('');
-    setFormDept('Department of Pharmaceutics');
+    setFormDept('Department of Pharmacology');
     setFormEmail('');
     setFormPhone('');
     setFormCourses([]);
@@ -133,7 +148,7 @@ export default function ManageFaculty({ onBack }: ManageFacultyProps) {
     setEditingFacultyId(null);
     setFormName('');
     setFormEmpId('');
-    setFormDept('Department of Pharmaceutics');
+    setFormDept('Department of Pharmacology');
     setFormEmail('');
     setFormPhone('');
     setFormCourses([]);
@@ -429,10 +444,9 @@ export default function ManageFaculty({ onBack }: ManageFacultyProps) {
                 className="bg-gray-100 border-none text-xs font-bold rounded-lg px-3 py-1.5 text-gray-700 focus:ring-1 focus:ring-[#8B1E3F]"
               >
                 <option value="All">All Departments</option>
-                <option value="Department of Pharmaceutics">Pharmaceutics</option>
-                <option value="Department of Pharmaceutical Chemistry">Pharmaceutical Chemistry</option>
-                <option value="Department of Pharmacology">Pharmacology</option>
-                <option value="Department of Pharmacy Practice">Pharmacy Practice</option>
+                {DEPARTMENTS.map(d => (
+                  <option key={d} value={d}>{d.replace('Department of ', '')}</option>
+                ))}
               </select>
             </div>
           </GlassCard>
@@ -594,19 +608,16 @@ export default function ManageFaculty({ onBack }: ManageFacultyProps) {
                 onChange={(e) => setFormEmpId(e.target.value)}
                 className="w-full bg-gray-100/60 border border-transparent hover:border-gray-200 text-xs text-gray-800 p-2.5 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#8B1E3F]"
               />
-            </div>
-
-            <div>
+            </div>            <div>
               <label className="text-[9px] font-bold text-gray-400 uppercase block mb-1">Department Registry *</label>
               <select
                 value={formDept}
                 onChange={(e) => setFormDept(e.target.value)}
-                className="w-full bg-gray-100/60 text-xs text-gray-800 p-2.5 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#8B1E3F] bg-white"
+                className="w-full bg-gray-100/60 text-xs text-gray-800 p-2.5 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#8B1E3F] bg-white border border-transparent hover:border-gray-200"
               >
-                <option value="Department of Pharmaceutics">Department of Pharmaceutics</option>
-                <option value="Department of Pharmaceutical Chemistry">Department of Pharmaceutical Chemistry</option>
-                <option value="Department of Pharmacology">Department of Pharmacology</option>
-                <option value="Department of Pharmacy Practice">Department of Pharmacy Practice</option>
+                {DEPARTMENTS.map(d => (
+                  <option key={d} value={d}>{d}</option>
+                ))}
               </select>
             </div>
 
@@ -634,34 +645,118 @@ export default function ManageFaculty({ onBack }: ManageFacultyProps) {
               />
             </div>
 
-            {/* Courses selector with visual check lists of B.Pharm and Pharm.D subjects */}
-            <div>
-              <label className="text-[9px] font-bold text-gray-400 uppercase block mb-1">Allot Courses (B.Pharm & Pharm.D)</label>
-              <div className="border border-gray-100 rounded-xl p-2.5 bg-gray-50/50 max-h-36 overflow-y-auto flex flex-col gap-1.5">
-                {createdCourses.length > 0 ? (
-                  createdCourses.map(c => {
+            {/* Redesigned Courses Allotment for 100+ subjects */}
+            <div className="flex flex-col gap-2.5 border-t border-gray-150/45 pt-3 mt-1">
+              <label className="text-[10px] font-black text-gray-500 uppercase tracking-wider block">
+                Allot Courses (Redesigned Search & Add)
+              </label>
+              
+              {/* Filter controls */}
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center gap-1.5 bg-gray-100 p-0.5 rounded-lg">
+                  {(['All', 'B.Pharm', 'Pharm.D'] as const).map(prog => (
+                    <button
+                      key={prog}
+                      type="button"
+                      onClick={() => setAllotFilterProg(prog)}
+                      className={`flex-1 text-center py-1 text-[10px] font-bold uppercase rounded-md transition-all ${
+                        allotFilterProg === prog
+                          ? 'bg-[#8B1E3F] text-white shadow-sm'
+                          : 'text-gray-600 hover:text-gray-900'
+                      }`}
+                    >
+                      {prog}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="flex items-center gap-1.5 bg-gray-50 border border-gray-150 px-2.5 py-1.5 rounded-xl">
+                  <Search className="w-3.5 h-3.5 text-gray-400 shrink-0" />
+                  <input
+                    type="text"
+                    placeholder="Search master courses by code or name..."
+                    value={allotSearchQuery}
+                    onChange={(e) => setAllotSearchQuery(e.target.value)}
+                    className="w-full bg-transparent border-none text-[11px] text-gray-800 placeholder-gray-400 focus:outline-none"
+                  />
+                </div>
+              </div>
+
+              {/* Searched Results Panel */}
+              <div className="flex flex-col gap-1.5 max-h-40 overflow-y-auto border border-gray-150/60 rounded-xl p-2 bg-gray-50/30">
+                <span className="text-[9px] font-bold text-gray-400 uppercase tracking-wide px-1">
+                  Search Results:
+                </span>
+                {(() => {
+                  const filtered = createdCourses.filter(c => {
+                    const matchesSearch = c.courseName.toLowerCase().includes(allotSearchQuery.toLowerCase()) ||
+                                          c.subjectCode.toLowerCase().includes(allotSearchQuery.toLowerCase());
+                    const matchesProg = allotFilterProg === 'All' || c.programme === allotFilterProg;
+                    return matchesSearch && matchesProg;
+                  });
+
+                  if (filtered.length === 0) {
+                    return <span className="text-gray-400 italic text-[10px] text-center py-2">No matching courses found.</span>;
+                  }
+
+                  // Show matching courses
+                  return filtered.map(c => {
                     const isSelected = formCourses.includes(c.subjectCode);
                     return (
                       <button
                         key={c.subjectCode}
                         type="button"
                         onClick={() => handleToggleCourseSelect(c.subjectCode)}
-                        className={`flex items-center justify-between text-left text-[11px] p-2 rounded-lg border transition-all select-none
-                          ${isSelected ? 'bg-rose-50 border-[#8B1E3F]/20 text-[#8B1E3F] font-bold' : 'bg-white border-gray-100 hover:bg-gray-50 text-gray-700'}
-                        `}
+                        className={`flex items-center justify-between text-left text-[11px] p-2 rounded-lg border transition-all select-none ${
+                          isSelected 
+                            ? 'bg-rose-50/60 border-[#8B1E3F]/30 text-[#8B1E3F] font-bold' 
+                            : 'bg-white border-gray-100 hover:bg-gray-100 text-gray-700'
+                        }`}
                       >
-                        <div className="truncate pr-1">
-                          <span className="font-mono bg-gray-100 px-1 py-0.2 rounded text-[10px] text-gray-500 mr-1">{c.subjectCode}</span>
-                          {c.courseName}
+                        <div className="truncate pr-1 flex items-center gap-1.5">
+                          <span className="font-mono bg-gray-150 px-1 rounded text-[9px] text-gray-500 font-bold">{c.subjectCode}</span>
+                          <span className="truncate">{c.courseName}</span>
                         </div>
-                        <span className="text-[9px] font-black uppercase text-gray-400 scale-90 shrink-0">
-                          {c.programme}
+                        <span className="text-[9px] font-black uppercase text-gray-400 shrink-0">
+                          {isSelected ? '✓ Allotted' : '+ Allot'}
                         </span>
                       </button>
                     );
-                  })
+                  });
+                })()}
+              </div>
+
+              {/* Active Allotted List Chips */}
+              <div className="flex flex-col gap-1.5 mt-1">
+                <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest pl-0.5">
+                  CURRENTLY ALLOTTED ({formCourses.length})
+                </span>
+                {formCourses.length > 0 ? (
+                  <div className="flex flex-wrap gap-1.5 p-2 bg-white border border-gray-150/65 rounded-xl max-h-24 overflow-y-auto">
+                    {formCourses.map(code => {
+                      const cInfo = createdCourses.find(c => c.subjectCode === code);
+                      return (
+                        <div 
+                          key={code}
+                          className="flex items-center gap-1 bg-rose-50/50 border border-rose-100 text-[#8B1E3F] font-semibold text-[10px] pl-2 pr-1 py-0.5 rounded-full"
+                        >
+                          <span className="font-mono font-bold mr-0.5">{code}</span>
+                          <span className="max-w-[80px] truncate text-gray-600 font-normal">{cInfo?.courseName || ''}</span>
+                          <button
+                            type="button"
+                            onClick={() => setFormCourses(prev => prev.filter(c => c !== code))}
+                            className="w-4 h-4 rounded-full hover:bg-rose-100 flex items-center justify-center text-[#8B1E3F] transition-all text-[9px] font-bold shrink-0 ml-0.5"
+                          >
+                            ×
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
                 ) : (
-                  <span className="text-gray-400 italic text-[10px] text-center py-2">No master courses created yet.</span>
+                  <span className="text-gray-400 italic text-[10px] text-center py-2 bg-gray-50 border border-dashed border-gray-200 rounded-xl">
+                    No courses allotted yet. Search and select above.
+                  </span>
                 )}
               </div>
             </div>
@@ -812,10 +907,9 @@ export default function ManageFaculty({ onBack }: ManageFacultyProps) {
                                   onChange={(e) => handleCellEdit(idx, 'dept', e.target.value)}
                                   className="bg-transparent border-none p-0.5 focus:outline-none focus:ring-0 text-xs text-gray-700"
                                 >
-                                  <option value="Department of Pharmaceutics">Department of Pharmaceutics</option>
-                                  <option value="Department of Pharmaceutical Chemistry">Department of Pharmaceutical Chemistry</option>
-                                  <option value="Department of Pharmacology">Department of Pharmacology</option>
-                                  <option value="Department of Pharmacy Practice">Department of Pharmacy Practice</option>
+                                  {DEPARTMENTS.map(d => (
+                                    <option key={d} value={d}>{d}</option>
+                                  ))}
                                 </select>
                               </td>
 

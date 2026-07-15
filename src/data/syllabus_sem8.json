@@ -1,0 +1,752 @@
+[
+  {
+    "subjectCode": "BP801T",
+    "courseName": "Biostatistics and Research Methodology - Theory",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 4,
+    "semester": 8,
+    "credits": 4,
+    "hours": 45,
+    "subjectType": "Theory",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "To understand the applications of Biostatistical and Research Methodology in Pharmaceutics, Pharmacokinetics, and Clinical trials.",
+    "objectives": [
+      "Understand the application of statistical methods in pharmacy",
+      "Explain the design of research studies and clinical trials",
+      "Apply statistical calculations and tests to drug data"
+    ],
+    "courseOutcomes": [
+      "CO1: Apply descriptive and graphical statistics to clinical and analytical drug data.",
+      "CO2: Perform hypothesis testing using t-test, ANOVA, and Chi-square test.",
+      "CO3: Formulate experimental designs like Factorial designs and Response Surface methodology.",
+      "CO4: Comprehend observational and experimental research methodology designs.",
+      "CO5: Discuss data analysis software usage in pharmaceutical research."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Introduction to Biostatistics & Descriptive Data",
+        "title": "Introduction to Biostatistics & Descriptive Data",
+        "hours": 10,
+        "description": "Introduction to Biostatistics & Descriptive Data",
+        "topics": [
+          {
+            "topicCode": "T1.1",
+            "number": "T1.1",
+            "topicName": "Introduction: Definition, application, role of statistics in pharmacy, collection, classification, and tabulation of data.",
+            "name": "Introduction: Definition, application, role of statistics in pharmacy, collection, classification, and tabulation of data.",
+            "hours": 5
+          },
+          {
+            "topicCode": "T1.2",
+            "number": "T1.2",
+            "topicName": "Measures of central tendency: Mean, median, mode. Measures of dispersion: Standard deviation, standard error, variance, coefficient of variation.",
+            "name": "Measures of central tendency: Mean, median, mode. Measures of dispersion: Standard deviation, standard error, variance, coefficient of variation.",
+            "hours": 5
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit II",
+        "name": "Unit II",
+        "unitName": "Parametric & Non-Parametric Hypothesis Testing",
+        "title": "Parametric & Non-Parametric Hypothesis Testing",
+        "hours": 10,
+        "description": "Parametric & Non-Parametric Hypothesis Testing",
+        "topics": [
+          {
+            "topicCode": "T2.1",
+            "number": "T2.1",
+            "topicName": "Parametric tests: Student t-test (paired and unpaired), F-test, ANOVA (one-way and two-way), and multiple comparison tests.",
+            "name": "Parametric tests: Student t-test (paired and unpaired), F-test, ANOVA (one-way and two-way), and multiple comparison tests.",
+            "hours": 5
+          },
+          {
+            "topicCode": "T2.2",
+            "number": "T2.2",
+            "topicName": "Non-parametric tests: Chi-square test, Wilcoxon signed rank test, Mann-Whitney U test.",
+            "name": "Non-parametric tests: Chi-square test, Wilcoxon signed rank test, Mann-Whitney U test.",
+            "hours": 5
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit III",
+        "name": "Unit III",
+        "unitName": "Design of Experiments (DoE) & Optimization",
+        "title": "Design of Experiments (DoE) & Optimization",
+        "hours": 10,
+        "description": "Design of Experiments (DoE) & Optimization",
+        "topics": [
+          {
+            "topicCode": "T3.1",
+            "number": "T3.1",
+            "topicName": "Experimental Design: Factorial designs (2^2 and 2^3), Plackett-Burman design, central composite design.",
+            "name": "Experimental Design: Factorial designs (2^2 and 2^3), Plackett-Burman design, central composite design.",
+            "hours": 5
+          },
+          {
+            "topicCode": "T3.2",
+            "number": "T3.2",
+            "topicName": "Response Surface Methodology: Contour plots, 3D response curves, and pharmaceutical formulation optimization.",
+            "name": "Response Surface Methodology: Contour plots, 3D response curves, and pharmaceutical formulation optimization.",
+            "hours": 5
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit IV",
+        "name": "Unit IV",
+        "unitName": "Research & Clinical Trial Methodology",
+        "title": "Research & Clinical Trial Methodology",
+        "hours": 8,
+        "description": "Research & Clinical Trial Methodology",
+        "topics": [
+          {
+            "topicCode": "T4.1",
+            "number": "T4.1",
+            "topicName": "Research Design: Observation, cohort, randomized controlled clinical trials (RCTs), historical control, design aspects.",
+            "name": "Research Design: Observation, cohort, randomized controlled clinical trials (RCTs), historical control, design aspects.",
+            "hours": 5
+          },
+          {
+            "topicCode": "T4.2",
+            "number": "T4.2",
+            "topicName": "Ethics & Reporting: Informed consent, Helsinki declaration, reporting standards of clinical trials.",
+            "name": "Ethics & Reporting: Informed consent, Helsinki declaration, reporting standards of clinical trials.",
+            "hours": 3
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit V",
+        "name": "Unit V",
+        "unitName": "Regression Analysis & Statistical Softwares",
+        "title": "Regression Analysis & Statistical Softwares",
+        "hours": 7,
+        "description": "Regression Analysis & Statistical Softwares",
+        "topics": [
+          {
+            "topicCode": "T5.1",
+            "number": "T5.1",
+            "topicName": "Correlation and Regression: Linear correlation, Pearson correlation coefficient, simple and multiple linear regression.",
+            "name": "Correlation and Regression: Linear correlation, Pearson correlation coefficient, simple and multiple linear regression.",
+            "hours": 4
+          },
+          {
+            "topicCode": "T5.2",
+            "number": "T5.2",
+            "topicName": "Statistical Softwares: Brief introduction to SPSS, Minitab, and Excel statistical functions.",
+            "name": "Statistical Softwares: Brief introduction to SPSS, Minitab, and Excel statistical functions.",
+            "hours": 3
+          }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "Sanford Bolton & Charles Bon", "title": "Pharmaceutical Statistics: Practical and Clinical Applications", "edition": "5th Edition" },
+      { "author": "Khan and Khanum", "title": "Fundamentals of Biostatistics", "edition": "Latest Edition" }
+    ],
+    "referenceBooks": [
+      { "author": "Wayne W. Daniel", "title": "Biostatistics: A Foundation for Analysis in the Health Sciences", "edition": "9th Edition" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 25,
+      "theoryExternal": 75,
+      "practicalInternal": 0,
+      "practicalExternal": 0,
+      "universityExam": 100
+    }
+  },
+  {
+    "subjectCode": "BP802T",
+    "courseName": "Social and Preventive Pharmacy - Theory",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 4,
+    "semester": 8,
+    "credits": 4,
+    "hours": 45,
+    "subjectType": "Theory",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "The purpose of this course is to introduce to students a number of health issues and their challenges, and explain the roles of preventive pharmacy in public health.",
+    "objectives": [
+      "Acquire high-level consciousness of global health problems",
+      "Understand preventive measures for infectious and non-communicable diseases",
+      "Describe national health programs and policies in India"
+    ],
+    "courseOutcomes": [
+      "CO1: Comprehend concepts of health, disease prevention, and nutritional hygiene.",
+      "CO2: Describe etiology, transmission, and prevention of cholera, tuberculosis, malaria, and HIV/AIDS.",
+      "CO3: Formulate preventive and control measures for non-communicable diseases like cancer, diabetes, and hypertension.",
+      "CO4: Explain National Health Programs (pulse polio, tobacco control, malaria control) and their impacts.",
+      "CO5: Discuss community health services and primary health center (PHC) organizations."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Public Health & Preventive Concepts",
+        "title": "Public Health & Preventive Concepts",
+        "hours": 10,
+        "description": "Public Health & Preventive Concepts",
+        "topics": [
+          {
+            "topicCode": "T1.1",
+            "number": "T1.1",
+            "topicName": "Health Concepts: Definition of health, dimensions, determinants, indicators of health, disease transmission.",
+            "name": "Health Concepts: Definition of health, dimensions, determinants, indicators of health, disease transmission.",
+            "hours": 5
+          },
+          {
+            "topicCode": "T1.2",
+            "number": "T1.2",
+            "topicName": "Nutrition & Hygiene: Nutritional deficiencies, balanced diet, food hygiene, personal hygiene, and environmental sanitation.",
+            "name": "Nutrition & Hygiene: Nutritional deficiencies, balanced diet, food hygiene, personal hygiene, and environmental sanitation.",
+            "hours": 5
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit II",
+        "name": "Unit II",
+        "unitName": "Preventive Medicine of Infectious Diseases",
+        "title": "Preventive Medicine of Infectious Diseases",
+        "hours": 10,
+        "description": "Preventive Medicine of Infectious Diseases",
+        "topics": [
+          {
+            "topicCode": "T2.1",
+            "number": "T2.1",
+            "topicName": "Infectious Diseases: General principles of prevention and control of cholera, typhoid, tuberculosis, malaria, dengue, and influenza.",
+            "name": "Infectious Diseases: General principles of prevention and control of cholera, typhoid, tuberculosis, malaria, dengue, and influenza.",
+            "hours": 5
+          },
+          {
+            "topicCode": "T2.2",
+            "number": "T2.2",
+            "topicName": "Sexually Transmitted Infections: Hepatitis, HIV/AIDS, epidemiology, control measures.",
+            "name": "Sexually Transmitted Infections: Hepatitis, HIV/AIDS, epidemiology, control measures.",
+            "hours": 5
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit III",
+        "name": "Unit III",
+        "unitName": "Preventive Medicine of Non-communicable Diseases",
+        "title": "Preventive Medicine of Non-communicable Diseases",
+        "hours": 10,
+        "description": "Preventive Medicine of Non-communicable Diseases",
+        "topics": [
+          {
+            "topicCode": "T3.1",
+            "number": "T3.1",
+            "topicName": "Non-communicable Diseases: Prevention, screening, and management of cancer, diabetes mellitus, cardiovascular diseases, and hypertension.",
+            "name": "Non-communicable Diseases: Prevention, screening, and management of cancer, diabetes mellitus, cardiovascular diseases, and hypertension.",
+            "hours": 6
+          },
+          {
+            "topicCode": "T3.2",
+            "number": "T3.2",
+            "topicName": "Risk Factors: Substance abuse, tobacco, alcohol, drug addictions, obesity, and mental health.",
+            "name": "Risk Factors: Substance abuse, tobacco, alcohol, drug addictions, obesity, and mental health.",
+            "hours": 4
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit IV",
+        "name": "Unit IV",
+        "unitName": "National Health Programs in India",
+        "title": "National Health Programs in India",
+        "hours": 8,
+        "description": "National Health Programs in India",
+        "topics": [
+          {
+            "topicCode": "T4.1",
+            "number": "T4.1",
+            "topicName": "National Programs: Pulse Polio, National Tuberculosis Elimination Program (NTEP), National Malaria Control Program.",
+            "name": "National Programs: Pulse Polio, National Tuberculosis Elimination Program (NTEP), National Malaria Control Program.",
+            "hours": 4
+          },
+          {
+            "topicCode": "T4.2",
+            "number": "T4.2",
+            "topicName": "Welfare Programs: Family planning, maternal and child health, reproductive and child health (RCH) programs, tobacco control program.",
+            "name": "Welfare Programs: Family planning, maternal and child health, reproductive and child health (RCH) programs, tobacco control program.",
+            "hours": 4
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit V",
+        "name": "Unit V",
+        "unitName": "Community Health Services & PHC Organization",
+        "title": "Community Health Services & PHC Organization",
+        "hours": 7,
+        "description": "Community Health Services & PHC Organization",
+        "topics": [
+          {
+            "topicCode": "T5.1",
+            "number": "T5.1",
+            "topicName": "PHC & Community: Functions and organization of Primary Health Center (PHC), Community Health Center (CHC), rural health services.",
+            "name": "PHC & Community: Functions and organization of Primary Health Center (PHC), Community Health Center (CHC), rural health services.",
+            "hours": 4
+          },
+          {
+            "topicCode": "T5.2",
+            "number": "T5.2",
+            "topicName": "NGOs: Role of National and International NGOs, WHO, UNICEF, Red Cross in public health.",
+            "name": "NGOs: Role of National and International NGOs, WHO, UNICEF, Red Cross in public health.",
+            "hours": 3
+          }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "K. Park", "title": "Park's Textbook of Preventive and Social Medicine", "edition": "Latest Edition" }
+    ],
+    "referenceBooks": [
+      { "author": "Prabhakara G.N.", "title": "A Textbook of Preventive and Social Medicine", "edition": "Latest Edition" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 25,
+      "theoryExternal": 75,
+      "practicalInternal": 0,
+      "practicalExternal": 0,
+      "universityExam": 100
+    }
+  },
+  {
+    "subjectCode": "BP803ET",
+    "courseName": "Pharma Marketing Management - Theory",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 4,
+    "semester": 8,
+    "credits": 4,
+    "hours": 45,
+    "subjectType": "Theory",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "The course is designed to impart marketing concepts and strategies applicable to pharmaceutical industries.",
+    "objectives": [
+      "Understand core concepts of pharmaceutical marketing management",
+      "Formulate product design, pricing, and distribution channel structures"
+    ],
+    "courseOutcomes": [
+      "CO1: Explain pharmaceutical marketing concepts, environments, and consumer behaviors.",
+      "CO2: Understand product branding, packaging, and product life cycle (PLC) management.",
+      "CO3: Describe pharmaceutical pricing methods and selection of distribution channels."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Marketing Concepts & Pharma Environment",
+        "title": "Marketing Concepts & Pharma Environment",
+        "hours": 10,
+        "description": "Marketing Concepts & Pharma Environment",
+        "topics": [
+          { "topicCode": "T1.1", "number": "T1.1", "topicName": "Pharma Marketing: Definition, scope, traditional vs modern marketing concepts, macro/micro environments.", "name": "Pharma Marketing: Definition, scope, traditional vs modern marketing concepts, macro/micro environments.", "hours": 5 },
+          { "topicCode": "T1.2", "number": "T1.2", "topicName": "Consumer behavior: Models of buying behavior, factors influencing prescribing habits of physicians.", "name": "Consumer behavior: Models of buying behavior, factors influencing prescribing habits of physicians.", "hours": 5 }
+        ]
+      },
+      {
+        "unitCode": "Unit II",
+        "name": "Unit II",
+        "unitName": "Product Portfolio & Lifecycle Management",
+        "title": "Product Portfolio & Lifecycle Management",
+        "hours": 10,
+        "description": "Product Portfolio & Lifecycle Management",
+        "topics": [
+          { "topicCode": "T2.1", "number": "T2.1", "topicName": "Product management: Branding, packaging, labeling, product life cycle, new product development.", "name": "Product management: Branding, packaging, labeling, product life cycle, new product development.", "hours": 10 }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "Philip Kotler", "title": "Marketing Management", "edition": "Latest Edition" }
+    ],
+    "referenceBooks": [],
+    "assessmentPattern": { "theoryInternal": 25, "theoryExternal": 75, "practicalInternal": 0, "practicalExternal": 0, "universityExam": 100 }
+  },
+  {
+    "subjectCode": "BP804ET",
+    "courseName": "Pharmaceutical Regulatory Science - Theory",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 4,
+    "semester": 8,
+    "credits": 4,
+    "hours": 45,
+    "subjectType": "Theory",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "This course is designed to impart a fundamental knowledge on the regulatory requirements for drug approval.",
+    "objectives": [
+      "Understand regulatory affairs, guidelines, and international drug submissions"
+    ],
+    "courseOutcomes": [
+      "CO1: Explain drug development and clinical phase regulations.",
+      "CO2: Describe drug submission protocols and CTD dossier formatting."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Drug Development & Regulations",
+        "title": "Drug Development & Regulations",
+        "hours": 15,
+        "description": "Drug Development & Regulations",
+        "topics": [
+          { "topicCode": "T1.1", "number": "T1.1", "topicName": "Regulatory requirements: Pre-clinical studies, clinical trials, NDA, IND, ANDA filings.", "name": "Regulatory requirements: Pre-clinical studies, clinical trials, NDA, IND, ANDA filings.", "hours": 15 }
+        ]
+      }
+    ],
+    "recommendedBooks": [],
+    "referenceBooks": [],
+    "assessmentPattern": { "theoryInternal": 25, "theoryExternal": 75, "practicalInternal": 0, "practicalExternal": 0, "universityExam": 100 }
+  },
+  {
+    "subjectCode": "BP805ET",
+    "courseName": "Pharmacovigilance - Theory",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 4,
+    "semester": 8,
+    "credits": 4,
+    "hours": 45,
+    "subjectType": "Theory",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "The subject is designed to provide an overview of safety monitoring of drugs.",
+    "objectives": [
+      "Describe the principles of pharmacovigilance and drug safety surveillance"
+    ],
+    "courseOutcomes": [
+      "CO1: Understand ADR definitions, reporting tools, and database monitoring."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Pharmacovigilance Principles",
+        "title": "Pharmacovigilance Principles",
+        "hours": 15,
+        "description": "Pharmacovigilance Principles",
+        "topics": [
+          { "topicCode": "T1.1", "number": "T1.1", "topicName": "ADR Reporting: Reporting procedures, dictionaries, codes, databases, WHO center operations.", "name": "ADR Reporting: Reporting procedures, dictionaries, codes, databases, WHO center operations.", "hours": 15 }
+        ]
+      }
+    ],
+    "recommendedBooks": [],
+    "referenceBooks": [],
+    "assessmentPattern": { "theoryInternal": 25, "theoryExternal": 75, "practicalInternal": 0, "practicalExternal": 0, "universityExam": 100 }
+  },
+  {
+    "subjectCode": "BP806ET",
+    "courseName": "Quality Control and Standardization of Herbals - Theory",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 4,
+    "semester": 8,
+    "credits": 4,
+    "hours": 45,
+    "subjectType": "Theory",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "To impart guidelines for quality control and standardization of raw materials and herbal drug products.",
+    "objectives": [
+      "Describe herbal drug quality validation and pharmacognostic standards"
+    ],
+    "courseOutcomes": [
+      "CO1: Perform quality evaluation of herbal formulations according to WHO guidelines."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Herbal Standardization",
+        "title": "Herbal Standardization",
+        "hours": 15,
+        "description": "Herbal Standardization",
+        "topics": [
+          { "topicCode": "T1.1", "number": "T1.1", "topicName": "Quality Control: WHO guidelines on quality control of herbal drugs, ash value, moisture, extractive values.", "name": "Quality Control: WHO guidelines on quality control of herbal drugs, ash value, moisture, extractive values.", "hours": 15 }
+        ]
+      }
+    ],
+    "recommendedBooks": [],
+    "referenceBooks": [],
+    "assessmentPattern": { "theoryInternal": 25, "theoryExternal": 75, "practicalInternal": 0, "practicalExternal": 0, "universityExam": 100 }
+  },
+  {
+    "subjectCode": "BP807ET",
+    "courseName": "Computer Aided Drug Design - Theory",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 4,
+    "semester": 8,
+    "credits": 4,
+    "hours": 45,
+    "subjectType": "Theory",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "This course is designed to impart fundamental knowledge on drug design and discovery.",
+    "objectives": [
+      "Explain the techniques of computer aided drug design (CADD) and docking"
+    ],
+    "courseOutcomes": [
+      "CO1: Understand QSAR modeling, docking protocols, and virtual screening."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "CADD Methodologies",
+        "title": "CADD Methodologies",
+        "hours": 15,
+        "description": "CADD Methodologies",
+        "topics": [
+          { "topicCode": "T1.1", "number": "T1.1", "topicName": "QSAR: 2D QSAR, 3D QSAR, molecular modeling, protein-ligand docking methodologies.", "name": "QSAR: 2D QSAR, 3D QSAR, molecular modeling, protein-ligand docking methodologies.", "hours": 15 }
+        ]
+      }
+    ],
+    "recommendedBooks": [],
+    "referenceBooks": [],
+    "assessmentPattern": { "theoryInternal": 25, "theoryExternal": 75, "practicalInternal": 0, "practicalExternal": 0, "universityExam": 100 }
+  },
+  {
+    "subjectCode": "BP808ET",
+    "courseName": "Cell and Molecular Biology - Theory",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 4,
+    "semester": 8,
+    "credits": 4,
+    "hours": 45,
+    "subjectType": "Theory",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "Cell biology provides a basic understanding of the chemical, structural and functional properties of cells.",
+    "objectives": [
+      "Explain cellular structures, DNA replication, and gene expression"
+    ],
+    "courseOutcomes": [
+      "CO1: Comprehend cellular signals, genomic transcriptions, and translational biochemistry."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Cellular Mechanisms",
+        "title": "Cellular Mechanisms",
+        "hours": 15,
+        "description": "Cellular Mechanisms",
+        "topics": [
+          { "topicCode": "T1.1", "number": "T1.1", "topicName": "Cell Structure: Organelles, DNA replication, transcription, and translation, cell cycle regulation.", "name": "Cell Structure: Organelles, DNA replication, transcription, and translation, cell cycle regulation.", "hours": 15 }
+        ]
+      }
+    ],
+    "recommendedBooks": [],
+    "referenceBooks": [],
+    "assessmentPattern": { "theoryInternal": 25, "theoryExternal": 75, "practicalInternal": 0, "practicalExternal": 0, "universityExam": 100 }
+  },
+  {
+    "subjectCode": "BP809ET",
+    "courseName": "Cosmetic Science - Theory",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 4,
+    "semester": 8,
+    "credits": 4,
+    "hours": 45,
+    "subjectType": "Theory",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "This course is designed to impart fundamental knowledge on formulation, manufacturing, and evaluation of cosmetics.",
+    "objectives": [
+      "Describe skin anatomy in relation to cosmetics and formulation of creams, shampoos, and lotions"
+    ],
+    "courseOutcomes": [
+      "CO1: Formulate cosmetics and evaluate stability of standard preparations."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Cosmetic Formulations",
+        "title": "Cosmetic Formulations",
+        "hours": 15,
+        "description": "Cosmetic Formulations",
+        "topics": [
+          { "topicCode": "T1.1", "number": "T1.1", "topicName": "Cosmetics: Classifications, formulation of skin care (creams, face powders) and hair care products (shampoos).", "name": "Cosmetics: Classifications, formulation of skin care (creams, face powders) and hair care products (shampoos).", "hours": 15 }
+        ]
+      }
+    ],
+    "recommendedBooks": [],
+    "referenceBooks": [],
+    "assessmentPattern": { "theoryInternal": 25, "theoryExternal": 75, "practicalInternal": 0, "practicalExternal": 0, "universityExam": 100 }
+  },
+  {
+    "subjectCode": "BP810ET",
+    "courseName": "Experimental Pharmacology - Theory",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 4,
+    "semester": 8,
+    "credits": 4,
+    "hours": 45,
+    "subjectType": "Theory",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "This course is designed to impart fundamental knowledge on experimental animal screening techniques.",
+    "objectives": [
+      "Explain the animal ethical guidelines and common biological screening methods"
+    ],
+    "courseOutcomes": [
+      "CO1: Describe pre-clinical animal screening methods and CPCSEA guidelines."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Experimental Screening Techniques",
+        "title": "Experimental Screening Techniques",
+        "hours": 15,
+        "description": "Experimental Screening Techniques",
+        "topics": [
+          { "topicCode": "T1.1", "number": "T1.1", "topicName": "CPCSEA: Guidelines for breeding and usage of animals, screening for CNS and CVS active drugs.", "name": "CPCSEA: Guidelines for breeding and usage of animals, screening for CNS and CVS active drugs.", "hours": 15 }
+        ]
+      }
+    ],
+    "recommendedBooks": [],
+    "referenceBooks": [],
+    "assessmentPattern": { "theoryInternal": 25, "theoryExternal": 75, "practicalInternal": 0, "practicalExternal": 0, "universityExam": 100 }
+  },
+  {
+    "subjectCode": "BP811ET",
+    "courseName": "Advanced Instrumentation Techniques - Theory",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 4,
+    "semester": 8,
+    "credits": 4,
+    "hours": 45,
+    "subjectType": "Theory",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "This course is designed to impart advanced knowledge on NMR, Mass Spectrometry, and Thermal analytical methods.",
+    "objectives": [
+      "Understand the theory, instrumentation and applications of NMR and Mass spectrometry"
+    ],
+    "courseOutcomes": [
+      "CO1: Interpret NMR and Mass spectra and understand DSC/TGA thermal analyses."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Spectroscopic Interpretation",
+        "title": "Spectroscopic Interpretation",
+        "hours": 15,
+        "description": "Spectroscopic Interpretation",
+        "topics": [
+          { "topicCode": "T1.1", "number": "T1.1", "topicName": "Advanced Spectrophotometry: NMR theory and Mass fragmentation, applications, thermal analysis (DSC, TGA).", "name": "Advanced Spectrophotometry: NMR theory and Mass fragmentation, applications, thermal analysis (DSC, TGA).", "hours": 15 }
+        ]
+      }
+    ],
+    "recommendedBooks": [],
+    "referenceBooks": [],
+    "assessmentPattern": { "theoryInternal": 25, "theoryExternal": 75, "practicalInternal": 0, "practicalExternal": 0, "universityExam": 100 }
+  },
+  {
+    "subjectCode": "BP812ET",
+    "courseName": "Dietary Supplements and Nutraceuticals - Theory",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 4,
+    "semester": 8,
+    "credits": 4,
+    "hours": 45,
+    "subjectType": "Theory",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "This subject covers the nutritional and therapeutic values of dietary supplements.",
+    "objectives": [
+      "Identify the health benefits of phytochemicals and dietary supplements"
+    ],
+    "courseOutcomes": [
+      "CO1: Categorize nutraceuticals and explain their roles in disease preventions."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Nutraceutical Classifications",
+        "title": "Nutraceutical Classifications",
+        "hours": 15,
+        "description": "Nutraceutical Classifications",
+        "topics": [
+          { "topicCode": "T1.1", "number": "T1.1", "topicName": "Nutraceuticals: Definition, types, health benefits in diabetes, cancer, and age-related disorders.", "name": "Nutraceuticals: Definition, types, health benefits in diabetes, cancer, and age-related disorders.", "hours": 15 }
+        ]
+      }
+    ],
+    "recommendedBooks": [],
+    "referenceBooks": [],
+    "assessmentPattern": { "theoryInternal": 25, "theoryExternal": 75, "practicalInternal": 0, "practicalExternal": 0, "universityExam": 100 }
+  },
+  {
+    "subjectCode": "BP813ET",
+    "courseName": "Pharmaceutical Product Development - Theory",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 4,
+    "semester": 8,
+    "credits": 4,
+    "hours": 45,
+    "subjectType": "Theory",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "This course is designed to provide details of preformulation and formulation optimization.",
+    "objectives": [
+      "Understand preformulation factors and formulation parameters for pharmaceuticals"
+    ],
+    "courseOutcomes": [
+      "CO1: Describe preformulation parameters, excipient selections, and optimization studies."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Preformulation & Excipients",
+        "title": "Preformulation & Excipients",
+        "hours": 15,
+        "description": "Preformulation & Excipients",
+        "topics": [
+          { "topicCode": "T1.1", "number": "T1.1", "topicName": "Preformulation studies: Physical and chemical properties, excipients compatibility and optimization methods.", "name": "Preformulation studies: Physical and chemical properties, excipients compatibility and optimization methods.", "hours": 15 }
+        ]
+      }
+    ],
+    "recommendedBooks": [],
+    "referenceBooks": [],
+    "assessmentPattern": { "theoryInternal": 25, "theoryExternal": 75, "practicalInternal": 0, "practicalExternal": 0, "universityExam": 100 }
+  }
+]

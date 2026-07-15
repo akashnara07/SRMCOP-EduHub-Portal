@@ -12,13 +12,13 @@ interface StudentDashboardProps {
 }
 
 // Fixed marks database matching the curriculum evaluation standards
-const marksLookup: Record<string, { sessionalI: number; sessionalII: number; semesterExam: number; maxSessional: number; maxSemester: number }> = {
+const marksLookup: Record<string, { sessionalI: number; sessionalII: number; sessionalIII?: number; semesterExam: number; maxSessional: number; maxSemester: number }> = {
   'BP101T': { sessionalI: 26, sessionalII: 28, semesterExam: 64, maxSessional: 30, maxSemester: 75 },
   'BP102T': { sessionalI: 24, sessionalII: 25, semesterExam: 59, maxSessional: 30, maxSemester: 75 },
   'BP103T': { sessionalI: 28, sessionalII: 29, semesterExam: 68, maxSessional: 30, maxSemester: 75 },
   'BP104T': { sessionalI: 23, sessionalII: 24, semesterExam: 58, maxSessional: 30, maxSemester: 75 },
   'BP105T': { sessionalI: 29, sessionalII: 28, semesterExam: 71, maxSessional: 30, maxSemester: 75 },
-  'PD101': { sessionalI: 27, sessionalII: 26, semesterExam: 62, maxSessional: 30, maxSemester: 75 },
+  'PD101': { sessionalI: 27, sessionalII: 26, sessionalIII: 28, semesterExam: 62, maxSessional: 30, maxSemester: 75 },
   'BP201T': { sessionalI: 25, sessionalII: 27, semesterExam: 65, maxSessional: 30, maxSemester: 75 },
 };
 
@@ -36,19 +36,25 @@ export default function StudentDashboard({
 
   const activeSubject = subjects[activeSubjectIdx] || null;
   const currentMarks = activeSubject
-    ? (marksLookup[activeSubject.code] || { sessionalI: 22, sessionalII: 24, semesterExam: 56, maxSessional: 30, maxSemester: 75 })
-    : { sessionalI: 0, sessionalII: 0, semesterExam: 0, maxSessional: 30, maxSemester: 75 };
+    ? (marksLookup[activeSubject.code] || { sessionalI: 22, sessionalII: 24, sessionalIII: 25, semesterExam: 56, maxSessional: 30, maxSemester: 75 })
+    : { sessionalI: 0, sessionalII: 0, sessionalIII: 0, semesterExam: 0, maxSessional: 30, maxSemester: 75 };
+
+  const isPharmD = activeSubject?.programme === 'Pharm.D' || activeSubject?.code.startsWith('PD');
+  const sessionalIIIVal = currentMarks.sessionalIII ?? (isPharmD ? 25 : 0);
 
   const sessionalIPct = (currentMarks.sessionalI / currentMarks.maxSessional) * 100;
   const sessionalIIPct = (currentMarks.sessionalII / currentMarks.maxSessional) * 100;
+  const sessionalIIIPct = (sessionalIIIVal / currentMarks.maxSessional) * 100;
   const semesterExamPct = (currentMarks.semesterExam / currentMarks.maxSemester) * 100;
 
-  // Calculate coordinates for the SVG graph (viewBox="0 0 500 150")
-  // Let y be mapped from 125 (0%) to 25 (100%)
-  const getY = (pct: number) => 125 - (pct / 100) * 95;
-  const y1 = getY(sessionalIPct);
-  const y2 = getY(sessionalIIPct);
-  const y3 = getY(semesterExamPct);
+  const calculatedSessionalAvg = (() => {
+    if (isPharmD) {
+      const vals = [currentMarks.sessionalI, currentMarks.sessionalII, sessionalIIIVal].sort((a, b) => b - a);
+      return ((vals[0] + vals[1]) / 2).toFixed(1);
+    } else {
+      return ((currentMarks.sessionalI + currentMarks.sessionalII) / 2).toFixed(1);
+    }
+  })();
 
   const handlePrevSubject = () => {
     setActiveSubjectIdx((prev) => (prev > 0 ? prev - 1 : subjects.length - 1));
@@ -100,7 +106,7 @@ export default function StudentDashboard({
         ))}
       </div>
 
-      {/* 3. Center Section: Active Marks Graph & Announcements Bulletins */}
+      {/* 3. Center Section: Active Marks Graph & Announcements */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
         {/* Dynamic Subject Marks Progression Chart */}
@@ -150,64 +156,81 @@ export default function StudentDashboard({
                   </span>
                 </div>
 
-                {/* Custom SVG line graph for Sessional 1, Sessional 2, Semester Exam */}
-                <div className="h-44 w-full relative bg-gray-50/50 rounded-2xl border border-white p-4 flex flex-col justify-between">
-                  <svg className="w-full h-full" viewBox="0 0 500 150">
-                    <defs>
-                      <linearGradient id="marksGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="#8B1E3F" stopOpacity="0.15" />
-                        <stop offset="100%" stopColor="#8B1E3F" stopOpacity="0" />
-                      </linearGradient>
-                    </defs>
+                {/* Custom bar graph for Sessional assessments */}
+                <div className="h-44 w-full relative bg-gray-50/50 rounded-2xl border border-white p-4 flex flex-col justify-between overflow-hidden">
+                  {/* Background Grid Lines */}
+                  <div className="absolute inset-x-4 top-4 bottom-12 flex flex-col justify-between pointer-events-none">
+                    <div className="border-b border-gray-100/70 w-full h-0" />
+                    <div className="border-b border-gray-100/70 w-full h-0" />
+                    <div className="border-b border-gray-100/70 w-full h-0" />
+                    <div className="border-b border-gray-200 w-full h-0" />
+                  </div>
+                  
+                  {/* Bars Container */}
+                  <div className="relative z-10 flex h-28 items-end justify-around px-2">
+                    {/* Bar 1: Sessional I */}
+                    <div className="flex flex-col items-center gap-1.5 h-full justify-end w-20 group">
+                      <span className="text-[10px] font-black text-[#8B1E3F]">
+                        {currentMarks.sessionalI}/30
+                      </span>
+                      <div 
+                        className="w-8 bg-gradient-to-t from-[#8B1E3F]/80 to-[#8B1E3F] rounded-t-lg shadow-sm transition-all duration-300 hover:scale-105" 
+                        style={{ height: `${sessionalIPct}%` }}
+                      />
+                      <span className="text-[10px] font-bold text-gray-500 whitespace-nowrap">Sess I</span>
+                    </div>
 
-                    {/* Horizontal Reference Lines */}
-                    <line x1="30" y1="30" x2="470" y2="30" stroke="#f1f3f9" strokeWidth="1" strokeDasharray="3,3" />
-                    <line x1="30" y1="77.5" x2="470" y2="77.5" stroke="#f1f3f9" strokeWidth="1" strokeDasharray="3,3" />
-                    <line x1="30" y1="125" x2="470" y2="125" stroke="#eef0f6" strokeWidth="1" />
+                    {/* Bar 2: Sessional II */}
+                    <div className="flex flex-col items-center gap-1.5 h-full justify-end w-20 group">
+                      <span className="text-[10px] font-black text-[#8B1E3F]">
+                        {currentMarks.sessionalII}/30
+                      </span>
+                      <div 
+                        className="w-8 bg-gradient-to-t from-[#8B1E3F]/80 to-[#8B1E3F] rounded-t-lg shadow-sm transition-all duration-300 hover:scale-105" 
+                        style={{ height: `${sessionalIIPct}%` }}
+                      />
+                      <span className="text-[10px] font-bold text-gray-500 whitespace-nowrap">Sess II</span>
+                    </div>
 
-                    {/* Shaded Area under the curve */}
-                    <path
-                      d={`M 60 ${y1} C 145 ${y1}, 205 ${y2}, 250 ${y2} C 295 ${y2}, 355 ${y3}, 440 ${y3} L 440 125 L 60 125 Z`}
-                      fill="url(#marksGrad)"
-                    />
+                    {/* Bar 3: Sessional III (Pharm.D Only) */}
+                    {isPharmD && (
+                      <div className="flex flex-col items-center gap-1.5 h-full justify-end w-20 group">
+                        <span className="text-[10px] font-black text-[#8B1E3F]">
+                          {sessionalIIIVal}/30
+                        </span>
+                        <div 
+                          className="w-8 bg-gradient-to-t from-[#8B1E3F]/80 to-[#8B1E3F] rounded-t-lg shadow-sm transition-all duration-300 hover:scale-105" 
+                          style={{ height: `${sessionalIIIPct}%` }}
+                        />
+                        <span className="text-[10px] font-bold text-gray-500 whitespace-nowrap">Sess III</span>
+                      </div>
+                    )}
 
-                    {/* The main trend line */}
-                    <path
-                      d={`M 60 ${y1} C 145 ${y1}, 205 ${y2}, 250 ${y2} C 295 ${y2}, 355 ${y3}, 440 ${y3}`}
-                      fill="none"
-                      stroke="#8B1E3F"
-                      strokeWidth="3.5"
-                      strokeLinecap="round"
-                    />
-
-                    {/* Vertical reference guidelines */}
-                    <line x1="60" y1="125" x2="60" y2={y1} stroke="#8B1E3F" strokeWidth="1" strokeDasharray="2,2" strokeOpacity="0.4" />
-                    <line x1="250" y1="125" x2="250" y2={y2} stroke="#8B1E3F" strokeWidth="1" strokeDasharray="2,2" strokeOpacity="0.4" />
-                    <line x1="440" y1="125" x2="440" y2={y3} stroke="#8B1E3F" strokeWidth="1" strokeDasharray="2,2" strokeOpacity="0.4" />
-
-                    {/* Node Circles */}
-                    {/* Sessional 1 Node */}
-                    <circle cx="60" cy={y1} r="5" fill="#8B1E3F" stroke="#ffffff" strokeWidth="2.5" />
-                    {/* Sessional 2 Node */}
-                    <circle cx="250" cy={y2} r="5" fill="#8B1E3F" stroke="#ffffff" strokeWidth="2.5" />
-                    {/* Semester Exam Node */}
-                    <circle cx="440" cy={y3} r="7" fill="#8B1E3F" stroke="#ffffff" strokeWidth="3" className="animate-pulse" />
-                    <circle cx="440" cy={y3} r="5" fill="#8B1E3F" stroke="#ffffff" strokeWidth="2" />
-                  </svg>
+                    {/* Bar 4: Semester Exam */}
+                    <div className="flex flex-col items-center gap-1.5 h-full justify-end w-20 group">
+                      <span className="text-[10px] font-black text-emerald-700">
+                        {currentMarks.semesterExam}/75
+                      </span>
+                      <div 
+                        className="w-8 bg-gradient-to-t from-emerald-500 to-emerald-600 rounded-t-lg shadow-sm transition-all duration-300 hover:scale-105" 
+                        style={{ height: `${semesterExamPct}%` }}
+                      />
+                      <span className="text-[10px] font-bold text-emerald-700 whitespace-nowrap">Sem Exam</span>
+                    </div>
+                  </div>
 
                   {/* Horizontal Labels */}
-                  <div className="flex justify-between items-center text-[10px] font-extrabold text-gray-400 font-mono px-6">
-                    <span className="text-[#8B1E3F]">Sessional I ({sessionalIPct.toFixed(0)}%)</span>
-                    <span className="text-[#8B1E3F]">Sessional II ({sessionalIIPct.toFixed(0)}%)</span>
-                    <span className="text-emerald-700">Semester Exam ({semesterExamPct.toFixed(0)}%)</span>
+                  <div className="flex justify-between items-center text-[9px] font-extrabold text-gray-400 font-mono px-2 mt-2 border-t border-gray-100 pt-1.5">
+                    <span>Max Sessional: 30 Marks</span>
+                    <span>Max Semester Exam: 75 Marks</span>
                   </div>
                 </div>
 
                 {/* Score breakdown metrics list */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className={`grid grid-cols-1 ${isPharmD ? 'sm:grid-cols-4' : 'sm:grid-cols-3'} gap-4`}>
                   <div className="p-3 bg-gray-50/50 border border-white rounded-2xl">
                     <span className="text-[9px] font-black uppercase text-gray-400 block">Sessional 1 Marks</span>
-                    <p className="text-base font-extrabold text-gray-800 mt-0.5">{currentMarks.sessionalI} <span className="text-xs text-gray-400 font-medium">/ {currentMarks.maxSessional} Max</span></p>
+                    <p className="text-base font-extrabold text-gray-800 mt-0.5">{currentMarks.sessionalI} <span className="text-xs text-gray-400 font-medium">/ 30 Max</span></p>
                     <div className="w-full bg-gray-100 h-1.5 rounded-full mt-2 overflow-hidden">
                       <div className="bg-[#8B1E3F] h-full rounded-full" style={{ width: `${sessionalIPct}%` }} />
                     </div>
@@ -215,15 +238,25 @@ export default function StudentDashboard({
 
                   <div className="p-3 bg-gray-50/50 border border-white rounded-2xl">
                     <span className="text-[9px] font-black uppercase text-gray-400 block">Sessional 2 Marks</span>
-                    <p className="text-base font-extrabold text-gray-800 mt-0.5">{currentMarks.sessionalII} <span className="text-xs text-gray-400 font-medium">/ {currentMarks.maxSessional} Max</span></p>
+                    <p className="text-base font-extrabold text-gray-800 mt-0.5">{currentMarks.sessionalII} <span className="text-xs text-gray-400 font-medium">/ 30 Max</span></p>
                     <div className="w-full bg-gray-100 h-1.5 rounded-full mt-2 overflow-hidden">
                       <div className="bg-[#8B1E3F] h-full rounded-full" style={{ width: `${sessionalIIPct}%` }} />
                     </div>
                   </div>
 
+                  {isPharmD && (
+                    <div className="p-3 bg-gray-50/50 border border-white rounded-2xl">
+                      <span className="text-[9px] font-black uppercase text-gray-400 block">Sessional 3 Marks</span>
+                      <p className="text-base font-extrabold text-gray-800 mt-0.5">{sessionalIIIVal} <span className="text-xs text-gray-400 font-medium">/ 30 Max</span></p>
+                      <div className="w-full bg-gray-100 h-1.5 rounded-full mt-2 overflow-hidden">
+                        <div className="bg-[#8B1E3F] h-full rounded-full" style={{ width: `${sessionalIIIPct}%` }} />
+                      </div>
+                    </div>
+                  )}
+
                   <div className="p-3 bg-emerald-50/20 border border-white rounded-2xl">
                     <span className="text-[9px] font-black uppercase text-emerald-600 block">Semester Exam Marks</span>
-                    <p className="text-base font-extrabold text-emerald-800 mt-0.5">{currentMarks.semesterExam} <span className="text-xs text-emerald-400 font-medium">/ {currentMarks.maxSemester} Max</span></p>
+                    <p className="text-base font-extrabold text-emerald-800 mt-0.5">{currentMarks.semesterExam} <span className="text-xs text-emerald-400 font-medium">/ 75 Max</span></p>
                     <div className="w-full bg-emerald-100/50 h-1.5 rounded-full mt-2 overflow-hidden">
                       <div className="bg-emerald-600 h-full rounded-full" style={{ width: `${semesterExamPct}%` }} />
                     </div>
@@ -239,7 +272,9 @@ export default function StudentDashboard({
           </div>
 
           <div className="flex justify-between items-center mt-4 border-t border-gray-100 pt-4">
-            <span className="text-xs text-gray-500 font-semibold">Calculated Best-Of-2 Sessional Average: <span className="font-extrabold text-[#8B1E3F]">{(Math.max(currentMarks.sessionalI, currentMarks.sessionalII)).toFixed(1)} / 30</span> (Compliance Confirmed).</span>
+            <span className="text-xs text-gray-500 font-semibold">
+              Calculated Sessional Average: <span className="font-extrabold text-[#8B1E3F]">{calculatedSessionalAvg} / 30</span> ({isPharmD ? 'Best of 2' : 'Average'} Compliance Confirmed).
+            </span>
             <button 
               onClick={() => onGoToScreen('student-progress')}
               className="text-xs font-black text-[#8B1E3F] flex items-center gap-1 hover:underline"
@@ -249,7 +284,7 @@ export default function StudentDashboard({
           </div>
         </GlassCard>
 
-        {/* Quick Bulletins Bulletins */}
+        {/* Latest Announcements */}
         <GlassCard className="p-6 flex flex-col justify-between">
           <div>
             <h3 className="font-display font-extrabold text-base text-gray-900 mb-4">Latest Announcements</h3>

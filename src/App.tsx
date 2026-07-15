@@ -4,9 +4,10 @@
  */
 
 import { useState, useEffect } from 'react';
-import { mockSubjects, mockAnnouncements, mockStudentProgress, mockFacultyProfile, sampleQuiz } from './data/mockData';
+import { mockAnnouncements, mockStudentProgress, mockFacultyProfile, sampleQuiz } from './data/mockData';
 import { Subject, Resource, Announcement, QuizQuestion } from './types';
 import { getAppSubjects } from './data/curriculumDb';
+import { downloadFirestoreToLocal } from './lib/firebase';
 
 // UI components
 import Sidebar from './components/Sidebar';
@@ -58,6 +59,17 @@ export default function App() {
   useEffect(() => {
     setSubjects(getAppSubjects());
   }, [currentScreen]);
+
+  // Initial Firestore database synchronization on mount
+  useEffect(() => {
+    async function initFirestore() {
+      const success = await downloadFirestoreToLocal();
+      if (success) {
+        setSubjects(getAppSubjects());
+      }
+    }
+    initFirestore();
+  }, []);
 
   const handleImpersonateUser = (role: 'Student' | 'Faculty' | 'Admin', name: string) => {
     setImpersonatedUser({ role, name });
@@ -195,7 +207,7 @@ export default function App() {
       case 'student-calendar':
         return <StudentCalendar />;
       case 'student-progress':
-        return <StudentProgress />;
+        return <StudentProgress selectedProgramme={selectedProgramme} />;
       case 'student-library':
         return <LibraryView />;
       case 'student-announcements':
@@ -223,7 +235,8 @@ export default function App() {
           <CourseDesignerHub
             facultyProfile={mockFacultyProfile}
             subjects={subjects}
-            readOnly={currentRole === 'Admin' ? false : true}
+            readOnly={true}
+            isAdmin={currentRole === 'Admin'}
             onGoToSubject={(subId) => {
               setActiveSubjectId(subId);
               setCurrentScreen('faculty-course-viewer');
@@ -233,11 +246,15 @@ export default function App() {
           />
         );
       case 'faculty-course-viewer':
-        const viewerSub = subjects.find(s => s.id === activeSubjectId);
+        let viewerSub = subjects.find(s => s.id === activeSubjectId);
+        if (!viewerSub && activeSubjectId) {
+          const code = activeSubjectId.split('-')[0];
+          viewerSub = subjects.find(s => s.code === code);
+        }
         return viewerSub ? (
           <SubjectManagement
             subject={viewerSub}
-            readOnly={currentRole === 'Admin' ? false : true}
+            readOnly={true}
             onBack={() => {
               if (currentRole === 'Admin') {
                 setCurrentScreen('admin-dashboard');
@@ -253,6 +270,7 @@ export default function App() {
           <CourseDesignerHub
             facultyProfile={mockFacultyProfile}
             subjects={subjects}
+            isAdmin={currentRole === 'Admin'}
             onGoToSubject={(subId) => {
               setActiveSubjectId(subId);
               setCurrentScreen('faculty-subject-management');
@@ -262,10 +280,15 @@ export default function App() {
           />
         );
       case 'faculty-subject-management':
-        const facultySub = subjects.find(s => s.id === activeSubjectId);
+        let facultySub = subjects.find(s => s.id === activeSubjectId);
+        if (!facultySub && activeSubjectId) {
+          const code = activeSubjectId.split('-')[0];
+          facultySub = subjects.find(s => s.code === code);
+        }
         return facultySub ? (
           <SubjectManagement
             subject={facultySub}
+            readOnly={false}
             onBack={() => {
               if (currentRole === 'Admin') {
                 setCurrentScreen('admin-dashboard');
@@ -305,6 +328,7 @@ export default function App() {
             onGoToScreen={setCurrentScreen}
             onGoToSubject={(subId) => {
               setActiveSubjectId(subId);
+              setCurrentScreen('faculty-course-viewer');
             }}
             currentRole={currentRole}
             onChangeRole={setCurrentRole}
@@ -322,7 +346,17 @@ export default function App() {
       case 'admin-students':
         return <ManageStudents onBack={() => setCurrentScreen('admin-dashboard')} />;
       case 'admin-subjects':
-        return <SubjectList subjects={subjects} selectedProgramme="B.Pharm" onGoToSubject={() => {}} searchQuery="" />;
+        return (
+          <SubjectList 
+            subjects={subjects} 
+            selectedProgramme="B.Pharm" 
+            onGoToSubject={(subId) => {
+              setActiveSubjectId(subId);
+              setCurrentScreen('faculty-course-viewer');
+            }} 
+            searchQuery="" 
+          />
+        );
       case 'admin-permissions':
         return <ManageFaculty onBack={() => setCurrentScreen('admin-dashboard')} />;
 

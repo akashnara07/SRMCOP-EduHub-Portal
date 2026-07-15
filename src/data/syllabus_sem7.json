@@ -1,0 +1,776 @@
+[
+  {
+    "subjectCode": "BP701T",
+    "courseName": "Instrumental Methods of Analysis - Theory",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 4,
+    "semester": 7,
+    "credits": 4,
+    "hours": 45,
+    "subjectType": "Theory",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "This subject deals with the application of instrumental methods in qualitative and quantitative analysis of drugs. This subject is designed to impart a fundamental knowledge on the principles and instrumentation of spectroscopic and chromatographic technique. This also emphasizes on theoretical and practical knowledge on modern analytical instruments that are used for drug testing.",
+    "objectives": [
+      "Understand the interaction of matter with electromagnetic radiations and its applications in drug analysis",
+      "Understand the chromatographic separation and analysis of drugs",
+      "Perform quantitative & qualitative analysis of drugs using various analytical instruments"
+    ],
+    "courseOutcomes": [
+      "CO1: Explain the principles and applications of UV-Visible spectroscopy and Fluorimetry.",
+      "CO2: Comprehend the instrumentation and principles of IR spectroscopy, Flame photometry, and Atomic Absorption spectroscopy.",
+      "CO3: Discuss Nepheloturbidimetry and optical rotatory dispersion methods.",
+      "CO4: Formulate principles and qualitative/quantitative procedures of TLC, Paper, and Column chromatography.",
+      "CO5: Describe advanced chromatographic methods like HPLC, Gas Chromatography, and Ion Exchange chromatography."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "UV Visible Spectroscopy & Fluorimetry",
+        "title": "UV Visible Spectroscopy & Fluorimetry",
+        "hours": 10,
+        "description": "UV Visible Spectroscopy & Fluorimetry",
+        "topics": [
+          {
+            "topicCode": "T1.1",
+            "number": "T1.1",
+            "topicName": "UV Visible Spectroscopy: Electronic transitions, chromophores, auxochromes, spectral shifts, solvent effect on absorption spectra, Beer-Lambert's law, Derivation and deviations.",
+            "name": "UV Visible Spectroscopy: Electronic transitions, chromophores, auxochromes, spectral shifts, solvent effect on absorption spectra, Beer-Lambert's law, Derivation and deviations.",
+            "hours": 5
+          },
+          {
+            "topicCode": "T1.2",
+            "number": "T1.2",
+            "topicName": "Instrumentation: Sources of radiation, wavelength selectors, sample cells, detectors- Photo tube, Photomultiplier tube, Photo voltaic cell, Silicon Photodiode. Applications of UV Visible spectroscopy- Quantitative determination of single component and multicomponent preparations.",
+            "name": "Instrumentation: Sources of radiation, wavelength selectors, sample cells, detectors- Photo tube, Photomultiplier tube, Photo voltaic cell, Silicon Photodiode. Applications of UV Visible spectroscopy- Quantitative determination of single component and multicomponent preparations.",
+            "hours": 3
+          },
+          {
+            "topicCode": "T1.3",
+            "number": "T1.3",
+            "topicName": "Fluorimetry: Theory, Concepts of singlet, doublet and triplet electronic states, internal and external conversions, factors affecting fluorescence, quenchers, instrumentation and applications.",
+            "name": "Fluorimetry: Theory, Concepts of singlet, doublet and triplet electronic states, internal and external conversions, factors affecting fluorescence, quenchers, instrumentation and applications.",
+            "hours": 2
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit II",
+        "name": "Unit II",
+        "unitName": "IR Spectroscopy, Flame Photometry & AAS",
+        "title": "IR Spectroscopy, Flame Photometry & AAS",
+        "hours": 10,
+        "description": "IR Spectroscopy, Flame Photometry & AAS",
+        "topics": [
+          {
+            "topicCode": "T2.1",
+            "number": "T2.1",
+            "topicName": "IR Spectroscopy: Introduction, fundamental modes of vibrations in polyatomic molecules, sample handling, factors affecting vibrations, instrumentation- Sources of radiation, transmitters, monochromators, detectors- Golay cell, Bolometer, Thermocouple, Thermistor, Pyroelectric detector, and FT-IR.",
+            "name": "IR Spectroscopy: Introduction, fundamental modes of vibrations in polyatomic molecules, sample handling, factors affecting vibrations, instrumentation- Sources of radiation, transmitters, monochromators, detectors- Golay cell, Bolometer, Thermocouple, Thermistor, Pyroelectric detector, and FT-IR.",
+            "hours": 5
+          },
+          {
+            "topicCode": "T2.2",
+            "number": "T2.2",
+            "topicName": "Flame Photometry: Principle, interferences, instrumentation and applications.",
+            "name": "Flame Photometry: Principle, interferences, instrumentation and applications.",
+            "hours": 3
+          },
+          {
+            "topicCode": "T2.3",
+            "number": "T2.3",
+            "topicName": "Atomic Absorption Spectroscopy: Principle, interferences, instrumentation and applications.",
+            "name": "Atomic Absorption Spectroscopy: Principle, interferences, instrumentation and applications.",
+            "hours": 2
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit III",
+        "name": "Unit III",
+        "unitName": "Nepheloturbidimetry & ORD/CD",
+        "title": "Nepheloturbidimetry & ORD/CD",
+        "hours": 10,
+        "description": "Nepheloturbidimetry & ORD/CD",
+        "topics": [
+          {
+            "topicCode": "T3.1",
+            "number": "T3.1",
+            "topicName": "Nepheloturbidimetry: Principle, instrumentation and applications.",
+            "name": "Nepheloturbidimetry: Principle, instrumentation and applications.",
+            "hours": 5
+          },
+          {
+            "topicCode": "T3.2",
+            "number": "T3.2",
+            "topicName": "Optical Rotatory Dispersion (ORD) and Circular Dichroism (CD): Definition, types of ORD curves, Cotton effect, octant rule, and applications.",
+            "name": "Optical Rotatory Dispersion (ORD) and Circular Dichroism (CD): Definition, types of ORD curves, Cotton effect, octant rule, and applications.",
+            "hours": 5
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit IV",
+        "name": "Unit IV",
+        "unitName": "Chromatography Fundamentals, TLC & Paper",
+        "title": "Chromatography Fundamentals, TLC & Paper",
+        "hours": 8,
+        "description": "Chromatography Fundamentals, TLC & Paper",
+        "topics": [
+          {
+            "topicCode": "T4.1",
+            "number": "T4.1",
+            "topicName": "Introduction to Chromatography: Adsorption and partition column chromatography- methodology, advantages, disadvantages and applications.",
+            "name": "Introduction to Chromatography: Adsorption and partition column chromatography- methodology, advantages, disadvantages and applications.",
+            "hours": 3
+          },
+          {
+            "topicCode": "T4.2",
+            "number": "T4.2",
+            "topicName": "Thin Layer Chromatography (TLC): Principle, methodology, selection of materials, development techniques, detection and applications.",
+            "name": "Thin Layer Chromatography (TLC): Principle, methodology, selection of materials, development techniques, detection and applications.",
+            "hours": 3
+          },
+          {
+            "topicCode": "T4.3",
+            "number": "T4.3",
+            "topicName": "Paper Chromatography: Principle, methodology, development techniques, detection and applications.",
+            "name": "Paper Chromatography: Principle, methodology, development techniques, detection and applications.",
+            "hours": 2
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit V",
+        "name": "Unit V",
+        "unitName": "HPLC, Gas Chromatography & Ion Exchange",
+        "title": "HPLC, Gas Chromatography & Ion Exchange",
+        "hours": 7,
+        "description": "HPLC, Gas Chromatography & Ion Exchange",
+        "topics": [
+          {
+            "topicCode": "T5.1",
+            "number": "T5.1",
+            "topicName": "Gas Chromatography: Theory, instrumentation, derivatization methods, temperature programming, detectors and applications.",
+            "name": "Gas Chromatography: Theory, instrumentation, derivatization methods, temperature programming, detectors and applications.",
+            "hours": 3
+          },
+          {
+            "topicCode": "T5.2",
+            "number": "T5.2",
+            "topicName": "High Performance Liquid Chromatography (HPLC): Principles, instrumentation, mobile phase selection, column packing, detectors and applications.",
+            "name": "High Performance Liquid Chromatography (HPLC): Principles, instrumentation, mobile phase selection, column packing, detectors and applications.",
+            "hours": 2
+          },
+          {
+            "topicCode": "T5.3",
+            "number": "T5.3",
+            "topicName": "Ion Exchange and Gel Chromatography: Principles, methodologies, and pharmaceutical applications.",
+            "name": "Ion Exchange and Gel Chromatography: Principles, methodologies, and pharmaceutical applications.",
+            "hours": 2
+          }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "A.H. Beckett & J.B. Stenlake", "title": "Practical Pharmaceutical Chemistry", "edition": "4th Edition" },
+      { "author": "B.K. Sharma", "title": "Instrumental Methods of Chemical Analysis", "edition": "Latest Edition" }
+    ],
+    "referenceBooks": [
+      { "author": "Willard, Merritt, Dean & Settle", "title": "Instrumental Methods of Analysis", "edition": "7th Edition" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 25,
+      "theoryExternal": 75,
+      "practicalInternal": 15,
+      "practicalExternal": 35,
+      "universityExam": 100
+    }
+  },
+  {
+    "subjectCode": "BP702T",
+    "courseName": "Industrial Pharmacy II - Theory",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 4,
+    "semester": 7,
+    "credits": 4,
+    "hours": 45,
+    "subjectType": "Theory",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "This course is designed to impart fundamental knowledge on pharmaceutical product development, scale up, technology transfer, regulatory requirements for drug approval and quality management systems.",
+    "objectives": [
+      "Know the difficulty in scale up of pharmaceutical forms from laboratory to industrial scale",
+      "Understand the technology transfer process from R&D to production",
+      "Know the regulatory requirements for drug approvals in various countries",
+      "Understand the concept of quality management systems (QMS) in pharmaceutical industries"
+    ],
+    "courseOutcomes": [
+      "CO1: Explain pilot plant scale up considerations for solid, liquid, and semi-solid dosage forms.",
+      "CO2: Describe the technology transfer processes, guidelines, and agencies involved in India.",
+      "CO3: Formulate regulatory approval procedures (DMF, IND, NDA, ANDA) and CTD structures.",
+      "CO4: Comprehend TQM, ISO 9000/14000 series, NABL accreditation, and GLP requirements.",
+      "CO5: Discuss WHO guidelines for COPP and regulatory mandates of USFDA, MHRA, TGA."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Pilot Plant Scale Up Techniques",
+        "title": "Pilot Plant Scale Up Techniques",
+        "hours": 10,
+        "description": "Pilot Plant Scale Up Techniques",
+        "topics": [
+          {
+            "topicCode": "T1.1",
+            "number": "T1.1",
+            "topicName": "Pilot plant scale up considerations: General considerations - personnel, space, administration, raw materials, solid, liquid oral, and semi-solid dosage forms.",
+            "name": "Pilot plant scale up considerations: General considerations - personnel, space, administration, raw materials, solid, liquid oral, and semi-solid dosage forms.",
+            "hours": 5
+          },
+          {
+            "topicCode": "T1.2",
+            "number": "T1.2",
+            "topicName": "SUPAC Guidelines: Scale Up and Post Approval Changes for modified and immediate release oral dosage forms.",
+            "name": "SUPAC Guidelines: Scale Up and Post Approval Changes for modified and immediate release oral dosage forms.",
+            "hours": 5
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit II",
+        "name": "Unit II",
+        "unitName": "Technology Transfer Process",
+        "title": "Technology Transfer Process",
+        "hours": 10,
+        "description": "Technology Transfer Process",
+        "topics": [
+          {
+            "topicCode": "T2.1",
+            "number": "T2.1",
+            "topicName": "Technology Transfer: Development of technology by R&D, transfer from R&D to production, optimization, validation, and documentation.",
+            "name": "Technology Transfer: Development of technology by R&D, transfer from R&D to production, optimization, validation, and documentation.",
+            "hours": 5
+          },
+          {
+            "topicCode": "T2.2",
+            "number": "T2.2",
+            "topicName": "Agencies in India: APCTD, NRDC, TIFAC, BCIL, TBSE, and their roles in technology commercialization.",
+            "name": "Agencies in India: APCTD, NRDC, TIFAC, BCIL, TBSE, and their roles in technology commercialization.",
+            "hours": 5
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit III",
+        "name": "Unit III",
+        "unitName": "Regulatory Affairs & Drug Approval",
+        "title": "Regulatory Affairs & Drug Approval",
+        "hours": 10,
+        "description": "Regulatory Affairs & Drug Approval",
+        "topics": [
+          {
+            "topicCode": "T3.1",
+            "number": "T3.1",
+            "topicName": "Regulatory Affairs: Drug Master File (DMF), Common Technical Document (CTD), eCTD structure and submissions.",
+            "name": "Regulatory Affairs: Drug Master File (DMF), Common Technical Document (CTD), eCTD structure and submissions.",
+            "hours": 5
+          },
+          {
+            "topicCode": "T3.2",
+            "number": "T3.2",
+            "topicName": "IND, NDA, ANDA: Clinical development phases, Investigational New Drug application, New Drug Application, and Abbreviated New Drug Application.",
+            "name": "IND, NDA, ANDA: Clinical development phases, Investigational New Drug application, New Drug Application, and Abbreviated New Drug Application.",
+            "hours": 5
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit IV",
+        "name": "Unit IV",
+        "unitName": "Quality Management Systems",
+        "title": "Quality Management Systems",
+        "hours": 8,
+        "description": "Quality Management Systems",
+        "topics": [
+          {
+            "topicCode": "T4.1",
+            "number": "T4.1",
+            "topicName": "QMS Concepts: Quality by Design (QbD), Total Quality Management (TQM), ISO 9000 & ISO 14000 series standards.",
+            "name": "QMS Concepts: Quality by Design (QbD), Total Quality Management (TQM), ISO 9000 & ISO 14000 series standards.",
+            "hours": 4
+          },
+          {
+            "topicCode": "T4.2",
+            "number": "T4.2",
+            "topicName": "Guidelines & Codes: NABL accreditation requirements, Good Laboratory Practice (GLP) standards.",
+            "name": "Guidelines & Codes: NABL accreditation requirements, Good Laboratory Practice (GLP) standards.",
+            "hours": 4
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit V",
+        "name": "Unit V",
+        "unitName": "Global Regulatory Requirements",
+        "title": "Global Regulatory Requirements",
+        "hours": 7,
+        "description": "Global Regulatory Requirements",
+        "topics": [
+          {
+            "topicCode": "T5.1",
+            "number": "T5.1",
+            "topicName": "COPP & WHO: Certificate of Pharmaceutical Product (COPP), WHO guidelines for international trade of pharmaceuticals.",
+            "name": "COPP & WHO: Certificate of Pharmaceutical Product (COPP), WHO guidelines for international trade of pharmaceuticals.",
+            "hours": 4
+          },
+          {
+            "topicCode": "T5.2",
+            "number": "T5.2",
+            "topicName": "Regulatory Authorities: Brief overview of USFDA, MHRA, TGA, ANVISA requirements.",
+            "name": "Regulatory Authorities: Brief overview of USFDA, MHRA, TGA, ANVISA requirements.",
+            "hours": 3
+          }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "Leon Lachman & Herbert A. Lieberman", "title": "The Theory and Practice of Industrial Pharmacy", "edition": "3rd Edition" },
+      { "author": "Sanjay Kumar Jain", "title": "Industrial Pharmacy-II", "edition": "Latest Edition" }
+    ],
+    "referenceBooks": [
+      { "author": "Y. Anjaneyulu & R. Marayya", "title": "Quality Assurance and Quality Management in Pharmaceutical Industry", "edition": "Latest Edition" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 25,
+      "theoryExternal": 75,
+      "practicalInternal": 0,
+      "practicalExternal": 0,
+      "universityExam": 100
+    }
+  },
+  {
+    "subjectCode": "BP703T",
+    "courseName": "Pharmacy Practice - Theory",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 4,
+    "semester": 7,
+    "credits": 4,
+    "hours": 45,
+    "subjectType": "Theory",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "In the changing scenario of pharmacy practice, the pharmacists are expected to share responsibility with other health professionals in care of patients. This course is designed to impart the clinical skills and professional expertise of the students in various areas of pharmacy practice like hospital pharmacy, clinical pharmacy, community pharmacy, and providing patient care services.",
+    "objectives": [
+      "Know various drug distribution methods in a hospital",
+      "Know drug information services and patient counseling",
+      "Monitor drug therapy and report adverse drug reactions",
+      "Understand the professional skills required in clinical and community pharmacy practice"
+    ],
+    "courseOutcomes": [
+      "CO1: Explain hospital organizations, hospital pharmacy structures, and ADR monitoring protocols.",
+      "CO2: Describe drug distribution systems, hospital formularies, and patient counseling methodologies.",
+      "CO3: Formulate clinical pharmacy workflows, ward round participation, and drug information services.",
+      "CO4: Comprehend hospital budget preparations, clinical trials phase designs, and ethical requirements.",
+      "CO5: Discuss the roles of PTC, Pharmacoepidemiology, Pharmacoeconomics, and OTC dispensing."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Hospital & Community Pharmacy",
+        "title": "Hospital & Community Pharmacy",
+        "hours": 10,
+        "description": "Hospital & Community Pharmacy",
+        "topics": [
+          {
+            "topicCode": "T1.1",
+            "number": "T1.1",
+            "topicName": "Hospital Pharmacy: Definition, organization, functions, drug store management, storage of drugs, and inventory control.",
+            "name": "Hospital Pharmacy: Definition, organization, functions, drug store management, storage of drugs, and inventory control.",
+            "hours": 4
+          },
+          {
+            "topicCode": "T1.2",
+            "number": "T1.2",
+            "topicName": "Adverse Drug Reactions: Detection, reporting, monitoring, and management of ADRs.",
+            "name": "Adverse Drug Reactions: Detection, reporting, monitoring, and management of ADRs.",
+            "hours": 3
+          },
+          {
+            "topicCode": "T1.3",
+            "number": "T1.3",
+            "topicName": "Community Pharmacy: Organization, legal requirements, OTC drug dispensing, and roles of community pharmacists.",
+            "name": "Community Pharmacy: Organization, legal requirements, OTC drug dispensing, and roles of community pharmacists.",
+            "hours": 3
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit II",
+        "name": "Unit II",
+        "unitName": "Drug Distribution & Patient Care",
+        "title": "Drug Distribution & Patient Care",
+        "hours": 10,
+        "description": "Drug Distribution & Patient Care",
+        "topics": [
+          {
+            "topicCode": "T2.1",
+            "number": "T2.1",
+            "topicName": "Drug Distribution in Hospitals: Out-patient and in-patient drug distribution systems, unit dose dispensing, floor stock system, satellite pharmacy.",
+            "name": "Drug Distribution in Hospitals: Out-patient and in-patient drug distribution systems, unit dose dispensing, floor stock system, satellite pharmacy.",
+            "hours": 4
+          },
+          {
+            "topicCode": "T2.2",
+            "number": "T2.2",
+            "topicName": "Hospital Formulary: Definition, composition, preparation, and maintenance of hospital formulary.",
+            "name": "Hospital Formulary: Definition, composition, preparation, and maintenance of hospital formulary.",
+            "hours": 3
+          },
+          {
+            "topicCode": "T2.3",
+            "number": "T2.3",
+            "topicName": "Therapeutic Drug Monitoring (TDM) and Patient Counseling: Principles of counseling, communication barriers, and clinical drug monitoring.",
+            "name": "Therapeutic Drug Monitoring (TDM) and Patient Counseling: Principles of counseling, communication barriers, and clinical drug monitoring.",
+            "hours": 3
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit III",
+        "name": "Unit III",
+        "unitName": "Clinical Pharmacy Services",
+        "title": "Clinical Pharmacy Services",
+        "hours": 10,
+        "description": "Clinical Pharmacy Services",
+        "topics": [
+          {
+            "topicCode": "T3.1",
+            "number": "T3.1",
+            "topicName": "Clinical Pharmacy: Definition, scope, functions, and clinical pharmacist's roles in clinical settings.",
+            "name": "Clinical Pharmacy: Definition, scope, functions, and clinical pharmacist's roles in clinical settings.",
+            "hours": 4
+          },
+          {
+            "topicCode": "T3.2",
+            "number": "T3.2",
+            "topicName": "Ward Round Participation & Drug Information: Ward rounds, medication history interview, drug information center (DIC) management, resources and databases.",
+            "name": "Ward Round Participation & Drug Information: Ward rounds, medication history interview, drug information center (DIC) management, resources and databases.",
+            "hours": 6
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit IV",
+        "name": "Unit IV",
+        "unitName": "Hospital Budget & Clinical Trials",
+        "title": "Hospital Budget & Clinical Trials",
+        "hours": 8,
+        "description": "Hospital Budget & Clinical Trials",
+        "topics": [
+          {
+            "topicCode": "T4.1",
+            "number": "T4.1",
+            "topicName": "Hospital Budget: Preparation, implementation, and financial management in hospital pharmacy.",
+            "name": "Hospital Budget: Preparation, implementation, and financial management in hospital pharmacy.",
+            "hours": 3
+          },
+          {
+            "topicCode": "T4.2",
+            "number": "T4.2",
+            "topicName": "Clinical Trials: Phase I, II, III, and IV designs, roles of pharmacists in clinical trials, GCP compliance.",
+            "name": "Clinical Trials: Phase I, II, III, and IV designs, roles of pharmacists in clinical trials, GCP compliance.",
+            "hours": 5
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit V",
+        "name": "Unit V",
+        "unitName": "PTC, Epidemiology & Economics",
+        "title": "PTC, Epidemiology & Economics",
+        "hours": 7,
+        "description": "PTC, Epidemiology & Economics",
+        "topics": [
+          {
+            "topicCode": "T5.1",
+            "number": "T5.1",
+            "topicName": "PTC: Pharmacy and Therapeutics Committee composition, constitution, and functions in hospital policy making.",
+            "name": "PTC: Pharmacy and Therapeutics Committee composition, constitution, and functions in hospital policy making.",
+            "hours": 3
+          },
+          {
+            "topicCode": "T5.2",
+            "number": "T5.2",
+            "topicName": "Pharmacoepidemiology & Pharmacoeconomics: Scope, methods of study, and application of epidemiology and economic concepts in medication use evaluation.",
+            "name": "Pharmacoepidemiology & Pharmacoeconomics: Scope, methods of study, and application of epidemiology and economic concepts in medication use evaluation.",
+            "hours": 4
+          }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "Parthasarathi G, Karin Nyfort-Hansen & Milap C Nahata", "title": "A Textbook of Clinical Pharmacy Practice: Essential Concepts and Skills", "edition": "2nd Edition" },
+      { "author": "Tipnis H.P. & Bajaj Amrita", "title": "Hospital Pharmacy", "edition": "Latest Edition" }
+    ],
+    "referenceBooks": [
+      { "author": "Merchant S.H. & Qadry J.S.", "title": "A Textbook of Hospital Pharmacy", "edition": "Latest Edition" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 25,
+      "theoryExternal": 75,
+      "practicalInternal": 0,
+      "practicalExternal": 0,
+      "universityExam": 100
+    }
+  },
+  {
+    "subjectCode": "BP704T",
+    "courseName": "Novel Drug Delivery System - Theory",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 4,
+    "semester": 7,
+    "credits": 4,
+    "hours": 45,
+    "subjectType": "Theory",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "This subject is designed to impart basic knowledge on the principles, design, evaluation, and application of novel drug delivery systems.",
+    "objectives": [
+      "Understand the various novel drug delivery systems, their advantages and disadvantages",
+      "Know the formulation, design, and evaluation of modern drug delivery systems"
+    ],
+    "courseOutcomes": [
+      "CO1: Comprehend controlled and sustained release drug delivery systems and polymer classifications.",
+      "CO2: Describe mucosal, nasal, and ocular drug delivery designs and mechanisms.",
+      "CO3: Discuss Transdermal and Gastroretentive delivery systems formulation and evaluation.",
+      "CO4: Formulate targeted drug delivery methods, carrier systems (liposomes, nanoparticles), and monoclonal antibodies.",
+      "CO5: Explain ocular implants, intrauterine devices (IUDs), and clinical usages of modern novel delivery systems."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Controlled & Sustained Drug Delivery",
+        "title": "Controlled & Sustained Drug Delivery",
+        "hours": 10,
+        "description": "Controlled & Sustained Drug Delivery",
+        "topics": [
+          {
+            "topicCode": "T1.1",
+            "number": "T1.1",
+            "topicName": "Controlled Drug Delivery: Sustained release and controlled release, advantages, disadvantages, polymer classification, properties, and applications.",
+            "name": "Controlled Drug Delivery: Sustained release and controlled release, advantages, disadvantages, polymer classification, properties, and applications.",
+            "hours": 5
+          },
+          {
+            "topicCode": "T1.2",
+            "number": "T1.2",
+            "topicName": "Microencapsulation: Methods of encapsulation, coacervation phase separation, suspension, spray drying, and evaluation of microcapsules.",
+            "name": "Microencapsulation: Methods of encapsulation, coacervation phase separation, suspension, spray drying, and evaluation of microcapsules.",
+            "hours": 5
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit II",
+        "name": "Unit II",
+        "unitName": "Mucosal Drug Delivery Systems",
+        "title": "Mucosal Drug Delivery Systems",
+        "hours": 10,
+        "description": "Mucosal Drug Delivery Systems",
+        "topics": [
+          {
+            "topicCode": "T2.1",
+            "number": "T2.1",
+            "topicName": "Mucosal Delivery: Mucosal mechanisms, bioadhesion theories, buccal, nasal, ocular, sublingual, vaginal drug delivery systems formulation and evaluation.",
+            "name": "Mucosal Delivery: Mucosal mechanisms, bioadhesion theories, buccal, nasal, ocular, sublingual, vaginal drug delivery systems formulation and evaluation.",
+            "hours": 10
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit III",
+        "name": "Unit III",
+        "unitName": "Transdermal & Gastroretentive Delivery",
+        "title": "Transdermal & Gastroretentive Delivery",
+        "hours": 10,
+        "description": "Transdermal & Gastroretentive Delivery",
+        "topics": [
+          {
+            "topicCode": "T3.1",
+            "number": "T3.1",
+            "topicName": "Transdermal Drug Delivery Systems: Permeation enhancers, formulation designs, patches, evaluation of TDDS.",
+            "name": "Transdermal Drug Delivery Systems: Permeation enhancers, formulation designs, patches, evaluation of TDDS.",
+            "hours": 5
+          },
+          {
+            "topicCode": "T3.2",
+            "number": "T3.2",
+            "topicName": "Gastroretentive Delivery: Floating, high density, bioadhesive, expandable systems, formulation, and evaluation.",
+            "name": "Gastroretentive Delivery: Floating, high density, bioadhesive, expandable systems, formulation, and evaluation.",
+            "hours": 5
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit IV",
+        "name": "Unit IV",
+        "unitName": "Targeted Drug Delivery Systems",
+        "title": "Targeted Drug Delivery Systems",
+        "hours": 8,
+        "description": "Targeted Drug Delivery Systems",
+        "topics": [
+          {
+            "topicCode": "T4.1",
+            "number": "T4.1",
+            "topicName": "Targeting Principles: Concepts, active vs passive targeting, carrier systems - liposomes, niosomes, nanoparticles, monoclonal antibodies.",
+            "name": "Targeting Principles: Concepts, active vs passive targeting, carrier systems - liposomes, niosomes, nanoparticles, monoclonal antibodies.",
+            "hours": 8
+          }
+        ]
+      },
+      {
+        "unitCode": "Unit V",
+        "name": "Unit V",
+        "unitName": "Ocular & Intrauterine Systems",
+        "title": "Ocular & Intrauterine Systems",
+        "hours": 7,
+        "description": "Ocular & Intrauterine Systems",
+        "topics": [
+          {
+            "topicCode": "T5.1",
+            "number": "T5.1",
+            "topicName": "Ocular Delivery: Ocuserts, design, and evaluation of ocular inserts.",
+            "name": "Ocular Delivery: Ocuserts, design, and evaluation of ocular inserts.",
+            "hours": 3
+          },
+          {
+            "topicCode": "T5.2",
+            "number": "T5.2",
+            "topicName": "Intrauterine Drug Delivery: Copper-T, Progestasert, formulation, and evaluation.",
+            "name": "Intrauterine Drug Delivery: Copper-T, Progestasert, formulation, and evaluation.",
+            "hours": 4
+          }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "Yie W. Chien", "title": "Novel Drug Delivery Systems", "edition": "2nd Edition" },
+      { "author": "S.P. Vyas & R.K. Khar", "title": "Targeted and Controlled Drug Delivery: Novel Carrier Systems", "edition": "Latest Edition" }
+    ],
+    "referenceBooks": [
+      { "author": "N.K. Jain", "title": "Controlled and Novel Drug Delivery", "edition": "Latest Edition" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 25,
+      "theoryExternal": 75,
+      "practicalInternal": 0,
+      "practicalExternal": 0,
+      "universityExam": 100
+    }
+  },
+  {
+    "subjectCode": "BP705P",
+    "courseName": "Instrumental Methods of Analysis - Practical",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 4,
+    "semester": 7,
+    "credits": 2,
+    "hours": 60,
+    "subjectType": "Practical",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "This course covers practical aspects of instrumental drug analysis including UV/Vis spectrophotometry, Fluorimetry, Flame photometry, TLC, and Paper chromatography.",
+    "objectives": [
+      "Calibrate analytical instruments and perform quantitative drug analysis",
+      "Perform separation and identification of drug components using chromatographic methods"
+    ],
+    "courseOutcomes": [
+      "CO1: Verify Beer-Lambert's law and determine absorption maxima using UV spectrometer.",
+      "CO2: Perform assays of paracetamol and ibuprofen preparations spectrophotometrically.",
+      "CO3: Conduct quantitative determinations of elements like sodium and potassium using flame photometry.",
+      "CO4: Separate and identify mixtures using paper chromatography and thin layer chromatography.",
+      "CO5: Perform quantitative analysis of quinine sulfate by fluorimetric determination."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Spectroscopy & Chromatography Practicals",
+        "title": "Spectroscopy & Chromatography Practicals",
+        "hours": 60,
+        "description": "Spectroscopy & Chromatography Practicals",
+        "topics": [
+          {
+            "topicCode": "T1.1",
+            "number": "T1.1",
+            "topicName": "Calibration of UV Visible spectrophotometer.",
+            "name": "Calibration of UV Visible spectrophotometer.",
+            "hours": 6
+          },
+          {
+            "topicCode": "T1.2",
+            "number": "T1.2",
+            "topicName": "Determination of absorption maxima and Beer-Lambert's law verification.",
+            "name": "Determination of absorption maxima and Beer-Lambert's law verification.",
+            "hours": 12
+          },
+          {
+            "topicCode": "T1.3",
+            "number": "T1.3",
+            "topicName": "Assay of Paracetamol/Ibuprofen tablets using UV Visible spectrophotometer.",
+            "name": "Assay of Paracetamol/Ibuprofen tablets using UV Visible spectrophotometer.",
+            "hours": 12
+          },
+          {
+            "topicCode": "T1.4",
+            "number": "T1.4",
+            "topicName": "Determination of Quinine Sulfate by fluorimetry.",
+            "name": "Determination of Quinine Sulfate by fluorimetry.",
+            "hours": 10
+          },
+          {
+            "topicCode": "T1.5",
+            "number": "T1.5",
+            "topicName": "Determination of Sodium and Potassium in infusions by flame photometry.",
+            "name": "Determination of Sodium and Potassium in infusions by flame photometry.",
+            "hours": 10
+          },
+          {
+            "topicCode": "T1.6",
+            "number": "T1.6",
+            "topicName": "Separation of amino acids and plant pigments by paper chromatography and TLC.",
+            "name": "Separation of amino acids and plant pigments by paper chromatography and TLC.",
+            "hours": 10
+          }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "A.H. Beckett & J.B. Stenlake", "title": "Practical Pharmaceutical Chemistry", "edition": "4th Edition" }
+    ],
+    "referenceBooks": [
+      { "author": "B.K. Sharma", "title": "Instrumental Methods of Chemical Analysis", "edition": "Latest Edition" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 0,
+      "theoryExternal": 0,
+      "practicalInternal": 15,
+      "practicalExternal": 35,
+      "universityExam": 50
+    }
+  }
+]

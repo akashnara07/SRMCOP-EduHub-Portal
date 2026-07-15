@@ -1,0 +1,777 @@
+[
+  {
+    "subjectCode": "BP501T",
+    "courseName": "Medicinal Chemistry II",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 3,
+    "semester": 5,
+    "credits": 4,
+    "hours": 45,
+    "subjectType": "Theory",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "This subject is designed to impart fundamental knowledge on the structure, chemistry and therapeutic value of drugs. The subject emphasizes on structure activity relationships of drugs, importance of physicochemical properties and metabolism of drugs. The syllabus also emphasizes on chemical synthesis of important drugs under each class.",
+    "objectives": [
+      "Understand the chemistry of drugs with respect to their pharmacological activity",
+      "Understand the drug metabolic pathways, adverse effect and therapeutic value of drugs",
+      "Know the Structural Activity Relationship of different class of drugs",
+      "Study the chemical synthesis of selected drugs"
+    ],
+    "courseOutcomes": [
+      "CO1: Explain the concept of Antihistaminic agents (H1 and H2 antagonists), Gastric Proton Pump inhibitors and Anticancer agent and evaluate the chemistry to their pharmacological activity, Learn the Structural Activity Relationship (SAR) of the drug",
+      "CO2: Discuss about the drugs acting as Anti-anginal agents, Diuretics and Anti-hypertensive agents and identify the synthetic procedures for the preparation of drugs",
+      "CO3: Explain the chemistry, mechanism of action, pharmacological importance, and synthetic pathways of drugs used as anti-arrhythmic agents, anti-hyperlipidemic agents, drugs acting on congestive heart failure, and coagulation-modifying agents.",
+      "CO4: Compare and contrast the steroidal ring core, the basis of drugs acting on endocrine system and its metabolism. Investigate the concept of Thyroid and understand the drugs used as anti-thyroid agents",
+      "CO5: Outline the drugs acting as anti-diabetic agents, interpret the synthesis and understand the mechanism of action and classify the structures of Local anaesthetics and correlate with the biological activity through SAR studies"
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Antihistaminic agents & Anti-neoplastic agents",
+        "title": "Antihistaminic agents & Anti-neoplastic agents",
+        "hours": 10,
+        "description": "Study of Antihistaminic agents (H1 & H2 antagonists), Gastric Proton pump inhibitors, and Anti-neoplastic agents.",
+        "topics": [
+          { "topicCode": "T1.1", "number": "T1.1", "topicName": "Antihistaminic agents: Histamine, receptors and their distribution in the human body", "name": "Antihistaminic agents: Histamine, receptors and their distribution in the human body", "hours": 1 },
+          { "topicCode": "T1.2", "number": "T1.2", "topicName": "H1–antagonists: Diphenhydramine hydrochloride*, Dimenhydrinate, Doxylamines succinate, Clemastine fumarate, Diphenylphyraline hydrochloride, Tripelenamine hydrochloride, Chlorcyclizine hydrochloride, Meclizine hydrochloride, Buclizine hydrochloride, Chlorpheniramine maleate, Triprolidine hydrochloride*, Phenidamine tartarate, Promethazine hydrochloride*, Trimeprazine tartarate, Cyproheptadine hydrochloride, Azatidine maleate, Astemizole, Loratadine, Cetirizine, Levocetrazine Cromolyn sodium", "name": "H1–antagonists: Diphenhydramine hydrochloride*, Dimenhydrinate, Doxylamines succinate, Clemastine fumarate, Diphenylphyraline hydrochloride, Tripelenamine hydrochloride, Chlorcyclizine hydrochloride, Meclizine hydrochloride, Buclizine hydrochloride, Chlorpheniramine maleate, Triprolidine hydrochloride*, Phenidamine tartarate, Promethazine hydrochloride*, Trimeprazine tartarate, Cyproheptadine hydrochloride, Azatidine maleate, Astemizole, Loratadine, Cetirizine, Levocetrazine Cromolyn sodium", "hours": 4 },
+          { "topicCode": "T1.3", "number": "T1.3", "topicName": "H2-antagonists: Cimetidine*, Famotidine, Ranitidine.", "name": "H2-antagonists: Cimetidine*, Famotidine, Ranitidine.", "hours": 1 },
+          { "topicCode": "T1.4", "number": "T1.4", "topicName": "Gastric Proton pump inhibitors: Omeprazole, Lansoprazole, Rabeprazole, Pantoprazole", "name": "Gastric Proton pump inhibitors: Omeprazole, Lansoprazole, Rabeprazole, Pantoprazole", "hours": 1 },
+          { "topicCode": "T1.5", "number": "T1.5", "topicName": "Anti-neoplastic agents: Alkylating agents: Meclorethamine*, Cyclophosphamide, Melphalan, Chlorambucil, Busulfan, Thiotepa", "name": "Anti-neoplastic agents: Alkylating agents: Meclorethamine*, Cyclophosphamide, Melphalan, Chlorambucil, Busulfan, Thiotepa", "hours": 1 },
+          { "topicCode": "T1.6", "number": "T1.6", "topicName": "Antimetabolites: Mercaptopurine*, Thioguanine, Fluorouracil, Floxuridine, Cytarabine, Methotrexate*, Azathioprine", "name": "Antimetabolites: Mercaptopurine*, Thioguanine, Fluorouracil, Floxuridine, Cytarabine, Methotrexate*, Azathioprine", "hours": 1 },
+          { "topicCode": "T1.7", "number": "T1.7", "topicName": "Antibiotics: Dactinomycin, Daunorubicin, Doxorubicin, Bleomycin; Plant products: Etoposide, Vinblastin sulphate, Vincristin sulphate; Miscellaneous: Cisplatin, Mitotane", "name": "Antibiotics: Dactinomycin, Daunorubicin, Doxorubicin, Bleomycin; Plant products: Etoposide, Vinblastin sulphate, Vincristin sulphate; Miscellaneous: Cisplatin, Mitotane", "hours": 1 }
+        ]
+      },
+      {
+        "unitCode": "Unit II",
+        "name": "Unit II",
+        "unitName": "Anti-anginal, Diuretics & Anti-hypertensive Agents",
+        "title": "Anti-anginal, Diuretics & Anti-hypertensive Agents",
+        "hours": 10,
+        "description": "Detailed study of Anti-anginal agents, Diuretics, and Anti-hypertensive agents.",
+        "topics": [
+          { "topicCode": "T2.1", "number": "T2.1", "topicName": "Anti-anginal Vasodilators: Amyl nitrite, Nitroglycerin*, Pentaerythritol tetranitrate, Isosorbide dinitrite*, Dipyridamole", "name": "Anti-anginal Vasodilators: Amyl nitrite, Nitroglycerin*, Pentaerythritol tetranitrate, Isosorbide dinitrite*, Dipyridamole", "hours": 3 },
+          { "topicCode": "T2.2", "number": "T2.2", "topicName": "Calcium channel blockers: Verapamil, Bepridil hydrochloride, Diltiazem hydrochloride, Nifedipine, Amlodipine, Felodipine, Nicardipine, Nimodipine", "name": "Calcium channel blockers: Verapamil, Bepridil hydrochloride, Diltiazem hydrochloride, Nifedipine, Amlodipine, Felodipine, Nicardipine, Nimodipine", "hours": 2 },
+          { "topicCode": "T2.3", "number": "T2.3", "topicName": "Diuretics: Carbonic anhydrase inhibitors: Acetazolamide*, Methazolamide, Dichlorphenamide. Thiazides: Chlorthiazide*, Hydrochlorothiazide, Hydroflumethiazide, Cyclothiazide. Loop diuretics: Furosemide*, Bumetanide, Ethacrynic acid. Potassium sparing Diuretics: Spironolactone, Triamterene, Amiloride. Osmotic Diuretics: Mannitol", "name": "Diuretics: Carbonic anhydrase inhibitors: Acetazolamide*, Methazolamide, Dichlorphenamide. Thiazides: Chlorthiazide*, Hydrochlorothiazide, Hydroflumethiazide, Cyclothiazide. Loop diuretics: Furosemide*, Bumetanide, Ethacrynic acid. Potassium sparing Diuretics: Spironolactone, Triamterene, Amiloride. Osmotic Diuretics: Mannitol", "hours": 3 },
+          { "topicCode": "T2.4", "number": "T2.4", "topicName": "Anti-hypertensive Agents: Timolol, Captopril, Lisinopril, Enalapril, Benazepril hydrochloride, Quinapril hydrochloride, Methyldopate hydrochloride,* Clonidine hydrochloride, Guanethidine monosulphate, Guanabenz acetate, Sodium nitroprusside, Diazoxide, Minoxidil, Reserpine, Hydralazine hydrochloride", "name": "Anti-hypertensive Agents: Timolol, Captopril, Lisinopril, Enalapril, Benazepril hydrochloride, Quinapril hydrochloride, Methyldopate hydrochloride,* Clonidine hydrochloride, Guanethidine monosulphate, Guanabenz acetate, Sodium nitroprusside, Diazoxide, Minoxidil, Reserpine, Hydralazine hydrochloride", "hours": 2 }
+        ]
+      },
+      {
+        "unitCode": "Unit III",
+        "name": "Unit III",
+        "unitName": "Anti-arrhythmic, Anti-hyperlipidemic & Coagulant Agents",
+        "title": "Anti-arrhythmic, Anti-hyperlipidemic & Coagulant Agents",
+        "hours": 10,
+        "description": "Study of drugs used in cardiovascular disorders, including arrhythmias, hyperlipidemia, coagulation, and congestive heart failure.",
+        "topics": [
+          { "topicCode": "T3.1", "number": "T3.1", "topicName": "Anti-arrhythmic Drugs: Quinidine sulphate, Procainamide hydrochloride, Disopyramide phosphate*, Phenytoin sodium, Lidocaine hydrochloride, Tocainide hydrochloride, Mexiletine hydrochloride, Lorcainide hydrochloride, Amiodarone, Sotalol", "name": "Anti-arrhythmic Drugs: Quinidine sulphate, Procainamide hydrochloride, Disopyramide phosphate*, Phenytoin sodium, Lidocaine hydrochloride, Tocainide hydrochloride, Mexiletine hydrochloride, Lorcainide hydrochloride, Amiodarone, Sotalol", "hours": 4 },
+          { "topicCode": "T3.2", "number": "T3.2", "topicName": "Anti-hyperlipidemic agents: Clofibrate, Lovastatin, Cholesteramine and Cholestipol", "name": "Anti-hyperlipidemic agents: Clofibrate, Lovastatin, Cholesteramine and Cholestipol", "hours": 2 },
+          { "topicCode": "T3.3", "number": "T3.3", "topicName": "Coagulant & Anticoagulants: Menadione, Acetomenadione, Warfarin*, Anisindione, clopidogrel", "name": "Coagulant & Anticoagulants: Menadione, Acetomenadione, Warfarin*, Anisindione, clopidogrel", "hours": 2 },
+          { "topicCode": "T3.4", "number": "T3.4", "topicName": "Drugs used in Congestive Heart Failure: Digoxin, Digitoxin, Nesiritide, Bosentan, Tezosentan", "name": "Drugs used in Congestive Heart Failure: Digoxin, Digitoxin, Nesiritide, Bosentan, Tezosentan", "hours": 2 }
+        ]
+      },
+      {
+        "unitCode": "Unit IV",
+        "name": "Unit IV",
+        "unitName": "Drugs acting on Endocrine system",
+        "title": "Drugs acting on Endocrine system",
+        "hours": 8,
+        "description": "Study of nomenclature, stereochemistry, and metabolism of steroids, sex hormones, drugs for erectile dysfunction, oral contraceptives, corticosteroids, and thyroid drugs.",
+        "topics": [
+          { "topicCode": "T4.1", "number": "T4.1", "topicName": "Drugs acting on Endocrine system Nomenclature, Stereochemistry and metabolism of steroids", "name": "Drugs acting on Endocrine system Nomenclature, Stereochemistry and metabolism of steroids", "hours": 1 },
+          { "topicCode": "T4.2", "number": "T4.2", "topicName": "Sex hormones: Testosterone, Nandralone, Progestrones, Oestriol, Oestradiol, Oestrione, Diethyl stilbestrol", "name": "Sex hormones: Testosterone, Nandralone, Progestrones, Oestriol, Oestradiol, Oestrione, Diethyl stilbestrol", "hours": 2 },
+          { "topicCode": "T4.3", "number": "T4.3", "topicName": "Drugs for erectile dysfunction: Sildenafil, Tadalafil", "name": "Drugs for erectile dysfunction: Sildenafil, Tadalafil", "hours": 1 },
+          { "topicCode": "T4.4", "number": "T4.4", "topicName": "Oral contraceptives: Mifepristone, Norgestril, Levonorgestrol", "name": "Oral contraceptives: Mifepristone, Norgestril, Levonorgestrol", "hours": 1 },
+          { "topicCode": "T4.5", "number": "T4.5", "topicName": "Corticosteroids: Cortisone, Hydrocortisone, Prednisolone, Betamethasone, Dexamethasone", "name": "Corticosteroids: Cortisone, Hydrocortisone, Prednisolone, Betamethasone, Dexamethasone", "hours": 2 },
+          { "topicCode": "T4.6", "number": "T4.6", "topicName": "Thyroid and antithyroid drugs: L-Thyroxine, L-Thyronine, Propylthiouracil, Methimazole", "name": "Thyroid and antithyroid drugs: L-Thyroxine, L-Thyronine, Propylthiouracil, Methimazole", "hours": 1 }
+        ]
+      },
+      {
+        "unitCode": "Unit V",
+        "name": "Unit V",
+        "unitName": "Antidiabetic agents and Local Anesthetics",
+        "title": "Antidiabetic agents and Local Anesthetics",
+        "hours": 7,
+        "description": "Detailed study of antidiabetic agents (insulin, sulfonylureas, etc.) and local anesthetics (benzoic acid derivatives, amino benzoic acid derivatives, etc.).",
+        "topics": [
+          { "topicCode": "T5.1", "number": "T5.1", "topicName": "Antidiabetic agents: Insulin and its preparations; Sulfonyl ureas: Tolbutamide*, Chlorpropamide, Glipizide, Glimepiride. Biguanides: Metformin. Thiazolidinediones: Pioglitazone, Rosiglitazone. Meglitinides: Repaglinide, Nateglinide. Glucosidase inhibitors: Acrabose, Voglibose", "name": "Antidiabetic agents: Insulin and its preparations; Sulfonyl ureas: Tolbutamide*, Chlorpropamide, Glipizide, Glimepiride. Biguanides: Metformin. Thiazolidinediones: Pioglitazone, Rosiglitazone. Meglitinides: Repaglinide, Nateglinide. Glucosidase inhibitors: Acrabose, Voglibose", "hours": 3 },
+          { "topicCode": "T5.2", "number": "T5.2", "topicName": "Local Anesthetics: SAR of Local anesthetics", "name": "Local Anesthetics: SAR of Local anesthetics", "hours": 1 },
+          { "topicCode": "T5.3", "number": "T5.3", "topicName": "Benzoic Acid derivatives: Cocaine, Hexylcaine, Meprylcaine, Cyclomethycaine, Piperocaine. Amino Benzoic acid derivatives: Benzocaine*, Butamben, Procaine*, Butacaine, Propoxycaine, Tetracaine, Benoxinate. Lidocaine/Anilide derivatives: Lignocaine, Mepivacaine, Prilocaine, Etidocaine. Miscellaneous: Phenacaine, Diperodon, Dibucaine*", "name": "Benzoic Acid derivatives: Cocaine, Hexylcaine, Meprylcaine, Cyclomethycaine, Piperocaine. Amino Benzoic acid derivatives: Benzocaine*, Butamben, Procaine*, Butacaine, Propoxycaine, Tetracaine, Benoxinate. Lidocaine/Anilide derivatives: Lignocaine, Mepivacaine, Prilocaine, Etidocaine. Miscellaneous: Phenacaine, Diperodon, Dibucaine*", "hours": 3 }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "Wilson and Giswold", "title": "Organic medicinal and Pharmaceutical Chemistry", "edition": "Latest" },
+      { "author": "Foye", "title": "Principles of Medicinal Chemistry", "edition": "Latest" },
+      { "author": "Burger", "title": "Medicinal Chemistry", "edition": "Vol I to IV" },
+      { "author": "Smith and Williams", "title": "Introduction to principles of drug design", "edition": "Latest" },
+      { "author": "Remington", "title": "Pharmaceutical Sciences", "edition": "Latest" }
+    ],
+    "referenceBooks": [
+      { "author": "Martindale", "title": "Extra pharmacopoeia", "edition": "Latest" },
+      { "author": "I.L. Finar", "title": "Organic Chemistry", "edition": "Vol. II" },
+      { "author": "Lednicer", "title": "The Organic Chemistry of Drug Synthesis", "edition": "Vol. 1 to 5" },
+      { "author": "Indian Pharmacopoeia", "title": "Indian Pharmacopoeia", "edition": "Latest" },
+      { "author": "A.I. Vogel", "title": "Text book of practical organic chemistry", "edition": "Latest" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 25,
+      "theoryExternal": 75,
+      "practicalInternal": 0,
+      "practicalExternal": 0,
+      "universityExam": 100
+    }
+  },
+  {
+    "subjectCode": "BP502T",
+    "courseName": "Industrial Pharmacy I",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 3,
+    "semester": 5,
+    "credits": 4,
+    "hours": 45,
+    "subjectType": "Theory",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "Course enables the student to understand and appreciate the influence of pharmaceutical additives and various pharmaceutical dosage forms on the performance of the drug product.",
+    "objectives": [
+      "Know the various pharmaceutical dosage forms and their manufacturing techniques.",
+      "Know various considerations in development of pharmaceutical dosage forms",
+      "Formulate solid, liquid and semisolid dosage forms and evaluate them for their quality"
+    ],
+    "courseOutcomes": [
+      "CO1: Perform various characterization methods for drug and excipients.",
+      "CO2: Perform the manufacturing of tablets and coating of tablets.",
+      "CO3: Evaluate the method of preparation of hard and soft gelatin capsules.",
+      "CO4: Explain the formulation, manufacturing, and evaluation of parenteral products",
+      "CO5: Demonstrate the preparation of various cosmetics, aerosols and classify the packaging materials."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Preformulation Studies",
+        "title": "Preformulation Studies",
+        "hours": 7,
+        "description": "Introduction to preformulation, goals and objectives, study of physicochemical characteristics of drug substances.",
+        "topics": [
+          { "topicCode": "T1.1", "number": "T1.1", "topicName": "Physical properties: Physical form (crystal and amorphous), particle size, shape, flow properties, solubility profile (pKa, pH, partition coefficient), polymorphism", "name": "Physical properties: Physical form (crystal and amorphous), particle size, shape, flow properties, solubility profile (pKa, pH, partition coefficient), polymorphism", "hours": 3 },
+          { "topicCode": "T1.2", "number": "T1.2", "topicName": "Chemical Properties: Hydrolysis, oxidation, reduction, racemisation, polymerization", "name": "Chemical Properties: Hydrolysis, oxidation, reduction, racemisation, polymerization", "hours": 2 },
+          { "topicCode": "T1.3", "number": "T1.3", "topicName": "BCS classification of drugs Application of preformulation considerations in the development of solid, liquid oral and parenteral dosage forms and its impact on stability of dosage forms.", "name": "BCS classification of drugs Application of preformulation considerations in the development of solid, liquid oral and parenteral dosage forms and its impact on stability of dosage forms.", "hours": 2 }
+        ]
+      },
+      {
+        "unitCode": "Unit II",
+        "name": "Unit II",
+        "unitName": "Tablets & Liquid Orals",
+        "title": "Tablets & Liquid Orals",
+        "hours": 10,
+        "description": "Formulation, manufacturing and evaluation of Tablets, Tablet coating, and Liquid orals.",
+        "topics": [
+          { "topicCode": "T2.1", "number": "T2.1", "topicName": "Tablets: Introduction, ideal characteristics of tablets, classification of tablets. Excipients, Formulation of tablets, granulation methods, compression and processing problems. Equipments and tablet tooling.", "name": "Tablets: Introduction, ideal characteristics of tablets, classification of tablets. Excipients, Formulation of tablets, granulation methods, compression and processing problems. Equipments and tablet tooling.", "hours": 4 },
+          { "topicCode": "T2.2", "number": "T2.2", "topicName": "Tablet coating: Types of coating, coating materials, formulation of coating composition, methods of coating, equipment employed and defects in coating.", "name": "Tablet coating: Types of coating, coating materials, formulation of coating composition, methods of coating, equipment employed and defects in coating.", "hours": 3 },
+          { "topicCode": "T2.3", "number": "T2.3", "topicName": "Quality control tests: In process and finished product tests", "name": "Quality control tests: In process and finished product tests", "hours": 1 },
+          { "topicCode": "T2.4", "number": "T2.4", "topicName": "Liquid orals: Formulation and manufacturing consideration of solutions, suspensions and emulsions; Filling and packaging; evaluation of liquid orals official in pharmacopoeia.", "name": "Liquid orals: Formulation and manufacturing consideration of solutions, suspensions and emulsions; Filling and packaging; evaluation of liquid orals official in pharmacopoeia.", "hours": 2 }
+        ]
+      },
+      {
+        "unitCode": "Unit III",
+        "name": "Unit III",
+        "unitName": "Capsules & Pellets",
+        "title": "Capsules & Pellets",
+        "hours": 8,
+        "description": "Study of formulation, production, and quality control of Hard gelatin capsules, Soft gelatin capsules, and Pellets.",
+        "topics": [
+          { "topicCode": "T3.1", "number": "T3.1", "topicName": "Hard gelatin capsules: Introduction, Extraction of gelatin and production of hard gelatin capsule shells. size of capsules, Filling, finishing and special techniques of formulation of hard gelatin capsules. In process and final product quality control tests for capsules.", "name": "Hard gelatin capsules: Introduction, Extraction of gelatin and production of hard gelatin capsule shells. size of capsules, Filling, finishing and special techniques of formulation of hard gelatin capsules. In process and final product quality control tests for capsules.", "hours": 3 },
+          { "topicCode": "T3.2", "number": "T3.2", "topicName": "Soft gelatin capsules: Nature of shell and capsule content, size of capsules, importance of base adsorption and minimum/gram factors, production, in process and final product quality control tests. Packing, storage and stability testing of soft gelatin capsules", "name": "Soft gelatin capsules: Nature of shell and capsule content, size of capsules, importance of base adsorption and minimum/gram factors, production, in process and final product quality control tests. Packing, storage and stability testing of soft gelatin capsules", "hours": 3 },
+          { "topicCode": "T3.3", "number": "T3.3", "topicName": "Pellets: Introduction, formulation requirements, pelletization process, equipments for manufacture of pellets", "name": "Pellets: Introduction, formulation requirements, pelletization process, equipments for manufacture of pellets", "hours": 2 }
+        ]
+      },
+      {
+        "unitCode": "Unit IV",
+        "name": "Unit IV",
+        "unitName": "Parenteral Products & Ophthalmic Preparations",
+        "title": "Parenteral Products & Ophthalmic Preparations",
+        "hours": 10,
+        "description": "Study of Parenteral products (types, production, formulation) and Ophthalmic preparations.",
+        "topics": [
+          { "topicCode": "T4.1", "number": "T4.1", "topicName": "Parenteral Products: Definition, types, advantages and limitations. Preformulation factors and essential requirements, vehicles, additives, importance of isotonicity", "name": "Parenteral Products: Definition, types, advantages and limitations. Preformulation factors and essential requirements, vehicles, additives, importance of isotonicity", "hours": 2 },
+          { "topicCode": "T4.2", "number": "T4.2", "topicName": "Production procedure, production facilities and controls, aseptic processing.", "name": "Production procedure, production facilities and controls, aseptic processing.", "hours": 2 },
+          { "topicCode": "T4.3", "number": "T4.3", "topicName": "Formulation of injections, sterile powders, large volume parenterals and lyophilized products.", "name": "Formulation of injections, sterile powders, large volume parenterals and lyophilized products.", "hours": 2 },
+          { "topicCode": "T4.4", "number": "T4.4", "topicName": "Containers and closures selection, filling and sealing of ampoules, vials and infusion fluids. Quality control tests.", "name": "Containers and closures selection, filling and sealing of ampoules, vials and infusion fluids. Quality control tests.", "hours": 2 },
+          { "topicCode": "T4.5", "number": "T4.5", "topicName": "Ophthalmic Preparations: Introduction, formulation considerations; formulation of eye drops, eye ointments and eye lotions; methods of preparation; labeling, containers; evaluation of ophthalmic preparations.", "name": "Ophthalmic Preparations: Introduction, formulation considerations; formulation of eye drops, eye ointments and eye lotions; methods of preparation; labeling, containers; evaluation of ophthalmic preparations.", "hours": 2 }
+        ]
+      },
+      {
+        "unitCode": "Unit V",
+        "name": "Unit V",
+        "unitName": "Cosmetics, Aerosols & Packaging Materials Science",
+        "title": "Cosmetics, Aerosols & Packaging Materials Science",
+        "hours": 10,
+        "description": "Formulation and evaluation of Cosmetics, Pharmaceutical aerosols, and study of Packaging materials.",
+        "topics": [
+          { "topicCode": "T5.1", "number": "T5.1", "topicName": "Cosmetics: Formulation and preparation of the following cosmetic preparations: lipsticks, shampoos, cold cream and vanishing cream, tooth pastes, hair dyes and sunscreens.", "name": "Cosmetics: Formulation and preparation of the following cosmetic preparations: lipsticks, shampoos, cold cream and vanishing cream, tooth pastes, hair dyes and sunscreens.", "hours": 3 },
+          { "topicCode": "T5.2", "number": "T5.2", "topicName": "Pharmaceutical Aerosols: Definition, propellants, containers, valves, types of aerosol systems; formulation and manufacture of aerosols; Evaluation of aerosols; Quality control and stability studies.", "name": "Pharmaceutical Aerosols: Definition, propellants, containers, valves, types of aerosol systems; formulation and manufacture of aerosols; Evaluation of aerosols; Quality control and stability studies.", "hours": 3 },
+          { "topicCode": "T5.3", "number": "T5.3", "topicName": "Packaging Materials Science: Materials used for packaging of pharmaceutical products, factors influencing choice of containers, legal and official requirements for containers, stability aspects of packaging materials, quality control tests.", "name": "Packaging Materials Science: Materials used for packaging of pharmaceutical products, factors influencing choice of containers, legal and official requirements for containers, stability aspects of packaging materials, quality control tests.", "hours": 4 }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "H.A. Liberman, Leon Lachman and J.B. Schwartz", "title": "Pharmaceutical dosage forms - Tablets, volume 1 - 3", "edition": "Latest" },
+      { "author": "Liberman and Lachman", "title": "Pharmaceutical dosage form - Parenteral medication vol- 1 and 2", "edition": "Latest" },
+      { "author": "Liberman and Lachman", "title": "Pharmaceutical dosage form disperse system VOL-1", "edition": "Latest" },
+      { "author": "Gilbert S. Banker and C.T. Rhodes", "title": "Modern Pharmaceutics", "edition": "3rd Edition" },
+      { "author": "RPS", "title": "Remington: The Science and Practice of Pharmacy", "edition": "20th edition" }
+    ],
+    "referenceBooks": [
+      { "author": "Liberman and Lachman", "title": "Theory and Practice of Industrial Pharmacy", "edition": "Latest" },
+      { "author": "M.E. Aulton", "title": "Pharmaceutics- The science of dosage form design", "edition": "Latest" },
+      { "author": "H. C. Ansel, Lea and Febiger", "title": "Introduction to Pharmaceutical Dosage Forms", "edition": "5th edition" },
+      { "author": "Cartensen and C.J. Rhodes", "title": "Drug stability - Principles and practice", "edition": "3rd Edition" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 25,
+      "theoryExternal": 75,
+      "practicalInternal": 0,
+      "practicalExternal": 0,
+      "universityExam": 100
+    }
+  },
+  {
+    "subjectCode": "BP503T",
+    "courseName": "Pharmacology II",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 3,
+    "semester": 5,
+    "credits": 4,
+    "hours": 45,
+    "subjectType": "Theory",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "This subject is intended to impart the fundamental knowledge on various aspects (classification, mechanism of action, therapeutic effects, clinical uses, side effects and contraindications) of drugs acting on different systems of body and in addition, emphasis on the basic concepts of bioassay.",
+    "objectives": [
+      "Understand the mechanism of drug action and its relevance in the treatment of different diseases",
+      "Demonstrate isolation of different organs/tissues from the laboratory animals by simulated experiments",
+      "Demonstrate the various receptor actions using isolated tissue preparation",
+      "Appreciate correlation of pharmacology with related medical sciences"
+    ],
+    "courseOutcomes": [
+      "CO1: Possess a relevant knowledge in basic principles of pharmacology and its recent advances",
+      "CO2: Understand the mechanism of drug action and its relevance in the treatment of different diseases.",
+      "CO3: Demonstrate isolation of different organs/tissues from the laboratory animals by simulated experiments.",
+      "CO4: Demonstrate the various receptor actions using isolated tissue preparation.",
+      "CO5: Appreciate correlation of pharmacology with related medical sciences."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Pharmacology of drugs acting on cardio vascular system",
+        "title": "Pharmacology of drugs acting on cardio vascular system",
+        "hours": 10,
+        "description": "Introduction to cardiovascular hemodynamics, drugs for congestive heart failure, hypertension, angina, arrhythmias and hyperlipidemia.",
+        "topics": [
+          { "topicCode": "T1.1", "number": "T1.1", "topicName": "Introduction to hemodynamic and electrophysiology of heart.", "name": "Introduction to hemodynamic and electrophysiology of heart.", "hours": 2 },
+          { "topicCode": "T1.2", "number": "T1.2", "topicName": "Drugs used in congestive heart failure", "name": "Drugs used in congestive heart failure", "hours": 2 },
+          { "topicCode": "T1.3", "number": "T1.3", "topicName": "Anti-hypertensive drugs.", "name": "Anti-hypertensive drugs.", "hours": 2 },
+          { "topicCode": "T1.4", "number": "T1.4", "topicName": "Anti-anginal drugs.", "name": "Anti-anginal drugs.", "hours": 2 },
+          { "topicCode": "T1.5", "number": "T1.5", "topicName": "Anti-arrhythmic drugs.", "name": "Anti-arrhythmic drugs.", "hours": 1 },
+          { "topicCode": "T1.6", "number": "T1.6", "topicName": "Anti-hyperlipidemic drugs.", "name": "Anti-hyperlipidemic drugs.", "hours": 1 }
+        ]
+      },
+      {
+        "unitCode": "Unit II",
+        "name": "Unit II",
+        "unitName": "Pharmacology of CVS and Urinary system",
+        "title": "Pharmacology of CVS and Urinary system",
+        "hours": 10,
+        "description": "Drugs for shock, hematinics, coagulants, anticoagulants, fibrinolytics, plasma volume expanders and diuretics.",
+        "topics": [
+          { "topicCode": "T2.1", "number": "T2.1", "topicName": "Drug used in the therapy of shock. Hematinics, coagulants and anticoagulants. Fibrinolytics and anti-platelet drugs. Plasma volume expanders", "name": "Drug used in the therapy of shock. Hematinics, coagulants and anticoagulants. Fibrinolytics and anti-platelet drugs. Plasma volume expanders", "hours": 5 },
+          { "topicCode": "T2.2", "number": "T2.2", "topicName": "Pharmacology of drugs acting on urinary system: Diuretics and Anti-diuretics", "name": "Pharmacology of drugs acting on urinary system: Diuretics and Anti-diuretics", "hours": 5 }
+        ]
+      },
+      {
+        "unitCode": "Unit III",
+        "name": "Unit III",
+        "unitName": "Autocoids and related drugs",
+        "title": "Autocoids and related drugs",
+        "hours": 10,
+        "description": "Histamine, 5-HT, prostaglandins, leukotrienes, NSAIDs, anti-gout, and anti-rheumatic drugs.",
+        "topics": [
+          { "topicCode": "T3.1", "number": "T3.1", "topicName": "Introduction to autacoids and classification. Histamine, 5-HT and their antagonists. Prostaglandins, Thromboxanes and Leukotrienes.", "name": "Introduction to autacoids and classification. Histamine, 5-HT and their antagonists. Prostaglandins, Thromboxanes and Leukotrienes.", "hours": 4 },
+          { "topicCode": "T3.2", "number": "T3.2", "topicName": "Angiotensin, Bradykinin and Substance P.", "name": "Angiotensin, Bradykinin and Substance P.", "hours": 2 },
+          { "topicCode": "T3.3", "number": "T3.3", "topicName": "Non-steroidal anti-inflammatory agents.", "name": "Non-steroidal anti-inflammatory agents.", "hours": 2 },
+          { "topicCode": "T3.4", "number": "T3.4", "topicName": "Anti-gout drugs. Antirheumatic drugs", "name": "Anti-gout drugs. Antirheumatic drugs", "hours": 2 }
+        ]
+      },
+      {
+        "unitCode": "Unit IV",
+        "name": "Unit IV",
+        "unitName": "Pharmacology of drugs acting on endocrine system I",
+        "title": "Pharmacology of drugs acting on endocrine system I",
+        "hours": 8,
+        "description": "Pituitary, thyroid, calcium-regulating hormones, insulin, oral hypoglycemics, and corticosteroids.",
+        "topics": [
+          { "topicCode": "T4.1", "number": "T4.1", "topicName": "Basic concepts in endocrine pharmacology.", "name": "Basic concepts in endocrine pharmacology.", "hours": 1 },
+          { "topicCode": "T4.2", "number": "T4.2", "topicName": "Anterior Pituitary hormones- analogues and their inhibitors.", "name": "Anterior Pituitary hormones- analogues and their inhibitors.", "hours": 2 },
+          { "topicCode": "T4.3", "number": "T4.3", "topicName": "Thyroid hormones- analogues and their inhibitors.", "name": "Thyroid hormones- analogues and their inhibitors.", "hours": 1 },
+          { "topicCode": "T4.4", "number": "T4.4", "topicName": "Hormones regulating plasma calcium level- Parathormone, Calcitonin and Vitamin-D.", "name": "Hormones regulating plasma calcium level- Parathormone, Calcitonin and Vitamin-D.", "hours": 2 },
+          { "topicCode": "T4.5", "number": "T4.5", "topicName": "Insulin, Oral Hypoglycemic agents and glucagon. ACTH and corticosteroids.", "name": "Insulin, Oral Hypoglycemic agents and glucagon. ACTH and corticosteroids.", "hours": 2 }
+        ]
+      },
+      {
+        "unitCode": "Unit V",
+        "name": "Unit V",
+        "unitName": "Pharmacology of Endocrine System II & Bioassay",
+        "title": "Pharmacology of Endocrine System II & Bioassay",
+        "hours": 7,
+        "description": "Androgens, estrogens, contraceptives, uterine drugs, and principles of bioassays.",
+        "topics": [
+          { "topicCode": "T5.1", "number": "T5.1", "topicName": "Androgens and Anabolic steroids. Estrogens, progesterone and oral contraceptives. Drugs acting on the uterus.", "name": "Androgens and Anabolic steroids. Estrogens, progesterone and oral contraceptives. Drugs acting on the uterus.", "hours": 3 },
+          { "topicCode": "T5.2", "number": "T5.2", "topicName": "Bioassay: Principles and applications of bioassay.", "name": "Bioassay: Principles and applications of bioassay.", "hours": 1 },
+          { "topicCode": "T5.3", "number": "T5.3", "topicName": "Types of bioassay", "name": "Types of bioassay", "hours": 1 },
+          { "topicCode": "T5.4", "number": "T5.4", "topicName": "Bioassay of insulin, oxytocin, vasopressin, ACTH, d-tubocurarine, digitalis, histamine and 5-HT", "name": "Bioassay of insulin, oxytocin, vasopressin, ACTH, d-tubocurarine, digitalis, histamine and 5-HT", "hours": 2 }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "Rang H. P., Dale M. M., Ritter J. M., Flower R. J.", "title": "Rang and Dale's Pharmacology", "edition": "Latest" },
+      { "author": "Katzung B. G., Masters S. B., Trevor A. J.", "title": "Basic and clinical pharmacology", "edition": "Latest" },
+      { "author": "Goodman and Gilman", "title": "The Pharmacological Basis of Therapeutics", "edition": "Latest" }
+    ],
+    "referenceBooks": [
+      { "author": "K.D. Tripathi", "title": "Essentials of Medical Pharmacology", "edition": "Latest" },
+      { "author": "Mycek M.J, Gelnet S.B and Perper M.M.", "title": "Lippincott's Illustrated Reviews-Pharmacology", "edition": "Latest" },
+      { "author": "Ghosh MN", "title": "Fundamentals of Experimental Pharmacology", "edition": "Latest" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 25,
+      "theoryExternal": 75,
+      "practicalInternal": 0,
+      "practicalExternal": 0,
+      "universityExam": 100
+    }
+  },
+  {
+    "subjectCode": "BP504T",
+    "courseName": "Pharmacognosy and Phytochemistry II",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 3,
+    "semester": 5,
+    "credits": 4,
+    "hours": 45,
+    "subjectType": "Theory",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "The main purpose of subject is to impart the students the knowledge of how the secondary metabolites are produced in the crude drugs, how to isolate and identify and produce them industrially...",
+    "objectives": [
+      "to know the modern extraction techniques, characterization and identification of the herbal drugs and phytoconstituents",
+      "to understand the preparation and development of herbal formulation.",
+      "to understand the herbal drug interactions",
+      "to carryout isolation and identification of phytoconstituents"
+    ],
+    "courseOutcomes": [
+      "CO1: Brief the basic metabolic pathways leading to the formation of secondary metabolites and to explain the role of tracer techniques in exploring the biogenetic pathway.",
+      "CO2: Identify and appreciate the composition, chemistry, therapeutic and commercial stand of various crude drugs reported with secondary metabolites and to describe the general extraction, isolation and analytical methods of the same.",
+      "CO3: Schematize the specific isolation and identification techniques of terpenoids, glycosides, alkaloids and resins and sketch out a suitable conventional and modern analytical techniques for the same.",
+      "CO4: Detail the industrial production and estimation techniques of successful lead molecules including diosgenin, digoxin, forskolin and to update the current utilization status of these leads in present pharmaceutical market.",
+      "CO5: Elaborate the modern methods of extraction along with its instrumentation and applications and to elaborate the latest techniques in chromatographic and spectroscopic analysis related to natural products."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Metabolic pathways in higher plants and their determination",
+        "title": "Metabolic pathways in higher plants and their determination",
+        "hours": 7,
+        "description": "Shikimic acid, acetate, and amino acid pathways; tracer techniques in biogenetic studies.",
+        "topics": [
+          { "topicCode": "T1.1", "number": "T1.1", "topicName": "Brief study of basic metabolic pathways and formation of different secondary metabolites through these pathways- Shikimic acid pathway, Acetate pathways and Amino acid pathway.", "name": "Brief study of basic metabolic pathways and formation of different secondary metabolites through these pathways- Shikimic acid pathway, Acetate pathways and Amino acid pathway.", "hours": 4 },
+          { "topicCode": "T1.2", "number": "T1.2", "topicName": "Study of utilization of radioactive isotopes in the investigation of Biogenetic studies.", "name": "Study of utilization of radioactive isotopes in the investigation of Biogenetic studies.", "hours": 3 }
+        ]
+      },
+      {
+        "unitCode": "Unit II",
+        "name": "Unit II",
+        "unitName": "General introduction, composition, chemistry & chemical classes of secondary metabolites",
+        "title": "General introduction, composition, chemistry & chemical classes of secondary metabolites",
+        "hours": 14,
+        "description": "Alkaloids, phenylpropanoids, flavonoids, steroids, glycosides, volatile oils, resins, and tannins.",
+        "topics": [
+          { "topicCode": "T2.1", "number": "T2.1", "topicName": "Alkaloids: Vinca, Rauwolfia, Belladonna, Opium, Phenylpropanoids and Flavonoids: Lignans, Tea, Ruta", "name": "Alkaloids: Vinca, Rauwolfia, Belladonna, Opium, Phenylpropanoids and Flavonoids: Lignans, Tea, Ruta", "hours": 4 },
+          { "topicCode": "T2.2", "number": "T2.2", "topicName": "Steroids, Cardiac Glycosides and Triterpenoids: Liquorice, Dioscorea, Digitalis", "name": "Steroids, Cardiac Glycosides and Triterpenoids: Liquorice, Dioscorea, Digitalis", "hours": 3 },
+          { "topicCode": "T2.3", "number": "T2.3", "topicName": "Volatile oils: Mentha, Clove, Cinnamon, Fennel, Coriander; Tannins: Catechu, Pterocarpus", "name": "Volatile oils: Mentha, Clove, Cinnamon, Fennel, Coriander; Tannins: Catechu, Pterocarpus", "hours": 3 },
+          { "topicCode": "T2.4", "number": "T2.4", "topicName": "Resins: Benzoin, Guggul, Ginger, Asafoetida, Myrrh, Colophony; Glycosides: Senna, Aloes, Bitter Almond Iridoids, Other terpenoids and Naphthaquinones: Gentian, Artemisia, taxus, carotenoids.", "name": "Resins: Benzoin, Guggul, Ginger, Asafoetida, Myrrh, Colophony; Glycosides: Senna, Aloes, Bitter Almond Iridoids, Other terpenoids and Naphthaquinones: Gentian, Artemisia, taxus, carotenoids.", "hours": 4 }
+        ]
+      },
+      {
+        "unitCode": "Unit III",
+        "name": "Unit III",
+        "unitName": "Isolation, Identification and Analysis of Phytoconstituents",
+        "title": "Isolation, Identification and Analysis of Phytoconstituents",
+        "hours": 6,
+        "description": "Isolation, identification, and chromatography of terpenoids, glycosides, alkaloids, and resins.",
+        "topics": [
+          { "topicCode": "T3.1", "number": "T3.1", "topicName": "Terpenoids: Menthol, Citral, Artemisin", "name": "Terpenoids: Menthol, Citral, Artemisin", "hours": 2 },
+          { "topicCode": "T3.2", "number": "T3.2", "topicName": "Glycosides: Glycyrhetinic acid and Rutin", "name": "Glycosides: Glycyrhetinic acid and Rutin", "hours": 1 },
+          { "topicCode": "T3.3", "number": "T3.3", "topicName": "Alkaloids: Atropine, Quinine, Reserpine, Caffeine", "name": "Alkaloids: Atropine, Quinine, Reserpine, Caffeine", "hours": 2 },
+          { "topicCode": "T3.4", "number": "T3.4", "topicName": "Resins: Podophyllotoxin, Curcumin", "name": "Resins: Podophyllotoxin, Curcumin", "hours": 1 }
+        ]
+      },
+      {
+        "unitCode": "Unit IV",
+        "name": "Unit IV",
+        "unitName": "Industrial production, estimation and utilization of phytoconstituents",
+        "title": "Industrial production, estimation and utilization of phytoconstituents",
+        "hours": 10,
+        "description": "Production and analysis of Forskolin, Sennosides, Diosgenin, Digoxin, Taxol, Vincristine, and Vinblastine.",
+        "topics": [
+          { "topicCode": "T4.1", "number": "T4.1", "topicName": "Industrial production, estimation and utilization of the following phytoconstituents: Forskolin, Sennoside, Artemisinin, Diosgenin, Digoxin, Atropine, Podophyllotoxin, Caffeine, Taxol, Vincristine and Vinblastine", "name": "Industrial production, estimation and utilization of the following phytoconstituents: Forskolin, Sennoside, Artemisinin, Diosgenin, Digoxin, Atropine, Podophyllotoxin, Caffeine, Taxol, Vincristine and Vinblastine", "hours": 10 }
+        ]
+      },
+      {
+        "unitCode": "Unit V",
+        "name": "Unit V",
+        "unitName": "Basics of Phytochemistry",
+        "title": "Basics of Phytochemistry",
+        "hours": 8,
+        "description": "Modern extraction techniques, spectroscopy, chromatography, and electrophoresis in crude drug purification.",
+        "topics": [
+          { "topicCode": "T5.1", "number": "T5.1", "topicName": "Basics of Phytochemistry: Modern methods of extraction, application of latest techniques like Spectroscopy, chromatography and electrophoresis in the isolation, purification and identification of crude drugs.", "name": "Basics of Phytochemistry: Modern methods of extraction, application of latest techniques like Spectroscopy, chromatography and electrophoresis in the isolation, purification and identification of crude drugs.", "hours": 8 }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "W. C. Evans", "title": "Trease and Evans Pharmacognosy", "edition": "16th edition" },
+      { "author": "C.K. Kokate, Purohit, Gokhale", "title": "Text book of Pharmacognosy", "edition": "37th Edition" }
+    ],
+    "referenceBooks": [
+      { "author": "Mohammad Ali", "title": "Pharmacognosy and Phytochemistry", "edition": "Latest" },
+      { "author": "R Endress", "title": "Plant cell Biotechnology", "edition": "Springer-Verlag" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 25,
+      "theoryExternal": 75,
+      "practicalInternal": 0,
+      "practicalExternal": 0,
+      "universityExam": 100
+    }
+  },
+  {
+    "subjectCode": "BP505T",
+    "courseName": "Pharmaceutical Jurisprudence",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 3,
+    "semester": 5,
+    "credits": 4,
+    "hours": 45,
+    "subjectType": "Theory",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "This course is designed to impart basic knowledge on several important legislations related to the profession of pharmacy in India.",
+    "objectives": [
+      "The Pharmaceutical legislations and their implications in the development and marketing",
+      "Various Indian pharmaceutical Acts and Laws",
+      "The regulatory authorities and agencies governing the manufacture and sale of pharmaceuticals",
+      "The code of ethics during the pharmaceutical practice"
+    ],
+    "courseOutcomes": [
+      "CO1: Explain the Pharmaceutical legislations and their implications in the development and marketing of pharmaceuticals.",
+      "CO2: Describe the various Indian pharmaceutical Acts and Laws.",
+      "CO3: Explain the regulatory authorities and agencies governing the manufacture and sale of pharmaceuticals.",
+      "CO4: Apply the code of ethics during the pharmaceutical practice.",
+      "CO5: Explain the Medical termination of pregnancy, rights to information acts and intellectual property rights acts."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Drugs and Cosmetics Act, 1940 and its rules 1945 - Part I",
+        "title": "Drugs and Cosmetics Act, 1940 and its rules 1945 - Part I",
+        "hours": 10,
+        "description": "Objectives, definitions, import of drugs, manufacture of drugs, loan and repacking licensing.",
+        "topics": [
+          { "topicCode": "T1.1", "number": "T1.1", "topicName": "Objectives, Definitions, Legal definitions of schedules to the act and rules", "name": "Objectives, Definitions, Legal definitions of schedules to the act and rules", "hours": 3 },
+          { "topicCode": "T1.2", "number": "T1.2", "topicName": "Import of drugs – Classes of drugs and cosmetics prohibited from import, Import under license or permit. Offences and penalties.", "name": "Import of drugs – Classes of drugs and cosmetics prohibited from import, Import under license or permit. Offences and penalties.", "hours": 2 },
+          { "topicCode": "T1.3", "number": "T1.3", "topicName": "Manufacture of drugs – Prohibition of manufacture and sale of certain drugs.", "name": "Manufacture of drugs – Prohibition of manufacture and sale of certain drugs.", "hours": 2 },
+          { "topicCode": "T1.4", "number": "T1.4", "topicName": "Conditions for grant of license and conditions of license for manufacture of drugs, Manufacture of drugs for test, examination and analysis, manufacture of new drug, loan license and repacking license.", "name": "Conditions for grant of license and conditions of license for manufacture of drugs, Manufacture of drugs for test, examination and analysis, manufacture of new drug, loan license and repacking license.", "hours": 3 }
+        ]
+      },
+      {
+        "unitCode": "Unit II",
+        "name": "Unit II",
+        "unitName": "Drugs and Cosmetics Act, 1940 and its rules 1945 - Part II",
+        "title": "Drugs and Cosmetics Act, 1940 and its rules 1945 - Part II",
+        "hours": 10,
+        "description": "Schedules, sale of drugs, labeling and packing, administration of the Act (DTAB, CDL, inspectors).",
+        "topics": [
+          { "topicCode": "T2.1", "number": "T2.1", "topicName": "Detailed study of Schedule G, H, M, N, P,T,U, V, X, Y, Part XII B, Sch F and DMR (OA)", "name": "Detailed study of Schedule G, H, M, N, P,T,U, V, X, Y, Part XII B, Sch F and DMR (OA)", "hours": 3 },
+          { "topicCode": "T2.2", "number": "T2.2", "topicName": "Sale of Drugs – Wholesale, Retail sale and Restricted license. Offences and penalties", "name": "Sale of Drugs – Wholesale, Retail sale and Restricted license. Offences and penalties", "hours": 2 },
+          { "topicCode": "T2.3", "number": "T2.3", "topicName": "Labeling and Packing of drugs- General labeling requirements and specimen labels for drugs and cosmetics, List of permitted colors. Offences and penalties.", "name": "Labeling and Packing of drugs- General labeling requirements and specimen labels for drugs and cosmetics, List of permitted colors. Offences and penalties.", "hours": 2 },
+          { "topicCode": "T2.4", "number": "T2.4", "topicName": "Administration of the act and rules – Drugs Technical Advisory Board, Central drugs Laboratory, Drugs Consultative Committee, Government drug analysts, Licensing authorities, controlling authorities, Drugs Inspectors", "name": "Administration of the act and rules – Drugs Technical Advisory Board, Central drugs Laboratory, Drugs Consultative Committee, Government drug analysts, Licensing authorities, controlling authorities, Drugs Inspectors", "hours": 3 }
+        ]
+      },
+      {
+        "unitCode": "Unit III",
+        "name": "Unit III",
+        "unitName": "Pharmacy Act 1948 & Narcotic Acts",
+        "title": "Pharmacy Act 1948 & Narcotic Acts",
+        "hours": 10,
+        "description": "Pharmacy Council of India, state councils, Medicinal and Toilet Preparations Act, and NDPS Act.",
+        "topics": [
+          { "topicCode": "T3.1", "number": "T3.1", "topicName": "Pharmacy Act –1948: Objectives, Definitions, Pharmacy Council of India; its constitution and functions, Education Regulations, State and Joint state pharmacy councils; its constitution and functions, Registration of Pharmacists, Offences and Penalties", "name": "Pharmacy Act –1948: Objectives, Definitions, Pharmacy Council of India; its constitution and functions, Education Regulations, State and Joint state pharmacy councils; its constitution and functions, Registration of Pharmacists, Offences and Penalties", "hours": 4 },
+          { "topicCode": "T3.2", "number": "T3.2", "topicName": "Medicinal and Toilet Preparation Act –1955: Objectives, Definitions, Licensing, Manufacture In bond and Outside bond, Export of alcoholic preparations, Manufacture of Ayurvedic, Homeopathic, Patent and Proprietary Preparations. Offences and Penalties.", "name": "Medicinal and Toilet Preparation Act –1955: Objectives, Definitions, Licensing, Manufacture In bond and Outside bond, Export of alcoholic preparations, Manufacture of Ayurvedic, Homeopathic, Patent and Proprietary Preparations. Offences and Penalties.", "hours": 3 },
+          { "topicCode": "T3.3", "number": "T3.3", "topicName": "Narcotic Drugs and Psychotropic substances Act-1985 and Rules: Objectives, Definitions, Authorities and Officers, Constitution and Functions of narcotic and Psychotropic Consultative Committee, National Fund for Controlling the Drug Abuse, Prohibition, Control and Regulation, opium poppy cultivation and production of poppy straw, manufacture, sale and export of opium, Offences and Penalties.", "name": "Narcotic Drugs and Psychotropic substances Act-1985 and Rules: Objectives, Definitions, Authorities and Officers, Constitution and Functions of narcotic and Psychotropic Consultative Committee, National Fund for Controlling the Drug Abuse, Prohibition, Control and Regulation, opium poppy cultivation and production of poppy straw, manufacture, sale and export of opium, Offences and Penalties.", "hours": 3 }
+        ]
+      },
+      {
+        "unitCode": "Unit IV",
+        "name": "Unit IV",
+        "unitName": "Drugs & Magic Remedies Act & Other Legislations",
+        "title": "Drugs & Magic Remedies Act & Other Legislations",
+        "hours": 8,
+        "description": "Magic Remedies Act, Prevention of Cruelty to Animals Act, and DPCO 2013.",
+        "topics": [
+          { "topicCode": "T4.1", "number": "T4.1", "topicName": "Study of Salient Features of Drugs and magic remedies Act and its rules: Objectives, Definitions, Prohibition of certain advertisements, Classes of Exempted advertisements, Offences and Penalties", "name": "Study of Salient Features of Drugs and magic remedies Act and its rules: Objectives, Definitions, Prohibition of certain advertisements, Classes of Exempted advertisements, Offences and Penalties", "hours": 3 },
+          { "topicCode": "T4.2", "number": "T4.2", "topicName": "Prevention of Cruelty to animals Act-1960: Objectives, Definitions, Institutional Animal Ethics Committee, Breeding and Stocking of Animals, Performance of Experiments, Transfer and acquisition of animals for experiment, Records, Power to suspend or revoke registration, Offences and Penalties", "name": "Prevention of Cruelty to animals Act-1960: Objectives, Definitions, Institutional Animal Ethics Committee, Breeding and Stocking of Animals, Performance of Experiments, Transfer and acquisition of animals for experiment, Records, Power to suspend or revoke registration, Offences and Penalties", "hours": 3 },
+          { "topicCode": "T4.3", "number": "T4.3", "topicName": "National Pharmaceutical Pricing Authority: Drugs Price Control Order (DPCO)- 2013. Objectives, Definitions, Sale prices of bulk drugs, Retail price of formulations, Retail price and ceiling price of scheduled formulations, National List of Essential Medicines (NLEM)", "name": "National Pharmaceutical Pricing Authority: Drugs Price Control Order (DPCO)- 2013. Objectives, Definitions, Sale prices of bulk drugs, Retail price of formulations, Retail price and ceiling price of scheduled formulations, National List of Essential Medicines (NLEM)", "hours": 2 }
+        ]
+      },
+      {
+        "unitCode": "Unit V",
+        "name": "Unit V",
+        "unitName": "Pharmaceutical Legislations, Ethics & IPR",
+        "title": "Pharmaceutical Legislations, Ethics & IPR",
+        "hours": 7,
+        "description": "Committee reviews, code of pharmaceutical ethics, MTP Act, RTI Act, and Intellectual Property Rights.",
+        "topics": [
+          { "topicCode": "T5.1", "number": "T5.1", "topicName": "Pharmaceutical Legislations – A brief review, Introduction, Study of drugs enquiry committee, Health survey and development committee, Hathi committee and Mudaliar committee.", "name": "Pharmaceutical Legislations – A brief review, Introduction, Study of drugs enquiry committee, Health survey and development committee, Hathi committee and Mudaliar committee.", "hours": 2 },
+          { "topicCode": "T5.2", "number": "T5.2", "topicName": "Code of Pharmaceutical ethics: Definition, Pharmacist in relation to his job, trade, medical profession and his profession, Pharmacist‘s oath", "name": "Code of Pharmaceutical ethics: Definition, Pharmacist in relation to his job, trade, medical profession and his profession, Pharmacist‘s oath", "hours": 2 },
+          { "topicCode": "T5.3", "number": "T5.3", "topicName": "Medical Termination of pregnancy act & Right to information Act", "name": "Medical Termination of pregnancy act & Right to information Act", "hours": 1 },
+          { "topicCode": "T5.4", "number": "T5.4", "topicName": "Introduction to Intellectual Property Rights (IPR)", "name": "Introduction to Intellectual Property Rights (IPR)", "hours": 2 }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "B. Suresh", "title": "Forensic Pharmacy", "edition": "Latest" },
+      { "author": "B.M. Mithal", "title": "Text book of Forensic Pharmacy", "edition": "Latest" }
+    ],
+    "referenceBooks": [
+      { "author": "N.K. Jain", "title": "A text book of Forensic Pharmacy", "edition": "Latest" },
+      { "author": "M.L. Mehra", "title": "Hand book of drug law", "edition": "Latest" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 25,
+      "theoryExternal": 75,
+      "practicalInternal": 0,
+      "practicalExternal": 0,
+      "universityExam": 100
+    }
+  },
+  {
+    "subjectCode": "BP506P",
+    "courseName": "Industrial Pharmacy I",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 3,
+    "semester": 5,
+    "credits": 2,
+    "hours": 60,
+    "subjectType": "Practical",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "Laboratory training in preformulation studies, tablet manufacturing, coating, capsule evaluation, and parenteral/ophthalmic preparation under aseptic conditions.",
+    "objectives": [
+      "Perform preformulation studies for drug substances and excipients.",
+      "Prepare tablets using suitable formulation and manufacturing methods.",
+      "Perform coating of tablets and evaluate coating quality.",
+      "Prepare and evaluate ophthalmic preparations such as eye drops.",
+      "Evaluate hard gelatin capsules for quality control parameters.",
+      "Prepare and formulate parenteral preparations under aseptic conditions."
+    ],
+    "courseOutcomes": [
+      "CO1: Study the physical and chemical properties of drugs and excipients, and prepare tablets using suitable formulation methods.",
+      "CO2: Perform tablet coating to improve stability, appearance, and patient compliance, and evaluate the coated tablets.",
+      "CO3: Prepare eye drops under aseptic conditions and evaluate them for clarity, pH, sterility, and stability.",
+      "CO4: Evaluate hard gelatin capsules for weight variation, disintegration, dissolution, and content uniformity.",
+      "CO5: Prepare parenteral formulations under sterile conditions and evaluate them for sterility, pH, clarity, and stability."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Industrial Pharmacy - I Practicals",
+        "title": "Industrial Pharmacy - I Practicals",
+        "hours": 60,
+        "description": "Practical experiments in preformulation, tablets, coating, capsules, parenterals, and eye drops.",
+        "topics": [
+          { "topicCode": "T1.1", "number": "T1.1", "topicName": "Preformulation studies on paracetamol / aspirin / or any other drug", "name": "Preformulation studies on paracetamol / aspirin / or any other drug", "hours": 10 },
+          { "topicCode": "T1.2", "number": "T1.2", "topicName": "Preparation and evaluation of Paracetamol tablets", "name": "Preparation and evaluation of Paracetamol tablets", "hours": 10 },
+          { "topicCode": "T1.3", "number": "T1.3", "topicName": "Preparation and evaluation of Aspirin tablets", "name": "Preparation and evaluation of Aspirin tablets", "hours": 10 },
+          { "topicCode": "T1.4", "number": "T1.4", "topicName": "Coating of tablets – film coating of tablets / granules.", "name": "Coating of tablets – film coating of tablets / granules.", "hours": 5 },
+          { "topicCode": "T1.5", "number": "T1.5", "topicName": "Preparation and evaluation of Tetracycline capsules", "name": "Preparation and evaluation of Tetracycline capsules", "hours": 5 },
+          { "topicCode": "T1.6", "number": "T1.6", "topicName": "Preparation of Calcium Gluconate injection", "name": "Preparation of Calcium Gluconate injection", "hours": 5 },
+          { "topicCode": "T1.7", "number": "T1.7", "topicName": "Preparation of Ascorbic Acid injection", "name": "Preparation of Ascorbic Acid injection", "hours": 5 },
+          { "topicCode": "T1.8", "number": "T1.8", "topicName": "Quality control test of (as per IP) marketed tablets and capsules", "name": "Quality control test of (as per IP) marketed tablets and capsules", "hours": 4 },
+          { "topicCode": "T1.9", "number": "T1.9", "topicName": "Preparation of Eye drops / eye ointments", "name": "Preparation of Eye drops / eye ointments", "hours": 3 },
+          { "topicCode": "T1.10", "number": "T1.10", "topicName": "Preparation of Creams (cold / vanishing cream)", "name": "Preparation of Creams (cold / vanishing cream)", "hours": 2 },
+          { "topicCode": "T1.11", "number": "T1.11", "topicName": "Evaluation of Glass containers (as per I.P)", "name": "Evaluation of Glass containers (as per I.P)", "hours": 1 }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "H.A. Liberman, Leon Lachman and J.B. Schwartz", "title": "Pharmaceutical dosage forms - Tablets, volume 1 - 3", "edition": "Latest" }
+    ],
+    "referenceBooks": [
+      { "author": "Liberman and Lachman", "title": "Theory and Practice of Industrial Pharmacy", "edition": "Latest" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 0,
+      "theoryExternal": 0,
+      "practicalInternal": 15,
+      "practicalExternal": 35,
+      "universityExam": 50
+    }
+  },
+  {
+    "subjectCode": "BP507P",
+    "courseName": "Pharmacology II",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 3,
+    "semester": 5,
+    "credits": 2,
+    "hours": 60,
+    "subjectType": "Practical",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "Practical sessions on animal handling, routes of drug administration, simulated experiments on isolated organs, bioassays, and anti-inflammatory/analgesic evaluations.",
+    "objectives": [
+      "Demonstrate the maintenance of laboratory animals, blood collections techniques.",
+      "Know about the routes of administration and evaluate the effect of drugs isolated organ of frogs.",
+      "Understand about various receptors actions using isolated tissue preparation.",
+      "Understand isolation of different organs from the laboratory animals by simulated experiments.",
+      "Know about the screening methods of anti-inflammatory and analgesic activity"
+    ],
+    "courseOutcomes": [
+      "CO1: Describe the importance of physiological salt solutions and to identify the effect of various drugs on isolated frog heart",
+      "CO2: Analyze the diuretic activity of drugs in mice/rats and the dose response relationship on animal simulator software",
+      "CO3: Evaluate the PD2 value of drugs using guinea pig ileum and interpret the effect of spasmogens and spasmolytics using rabbit jejunum.",
+      "CO4: Evaluate the anti-inflammatory and analgesic properties of medicines through the use of several pharmacological screening methodologies.",
+      "CO5: Describe the importance of physiological salt solutions and to identify the effect of various drugs on isolated frog heart and DRC using animal simulator software."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Pharmacology - II Practicals",
+        "title": "Pharmacology - II Practicals",
+        "hours": 60,
+        "description": "Practicals on in-vitro pharmacology, bioassays (matching, interpolation, 3-point, 4-point), and animal models of inflammation/pain.",
+        "topics": [
+          { "topicCode": "T1.1", "number": "T1.1", "topicName": "Introduction to in-vitro pharmacology and physiological salt solutions.", "name": "Introduction to in-vitro pharmacology and physiological salt solutions.", "hours": 4 },
+          { "topicCode": "T1.2", "number": "T1.2", "topicName": "Effect of drugs on isolated frog heart.", "name": "Effect of drugs on isolated frog heart.", "hours": 4 },
+          { "topicCode": "T1.3", "number": "T1.3", "topicName": "Effect of drugs on blood pressure and heart rate of dog.", "name": "Effect of drugs on blood pressure and heart rate of dog.", "hours": 4 },
+          { "topicCode": "T1.4", "number": "T1.4", "topicName": "Study of diuretic activity of drugs using rats/mice.", "name": "Study of diuretic activity of drugs using rats/mice.", "hours": 4 },
+          { "topicCode": "T1.5", "number": "T1.5", "topicName": "DRC of acetylcholine using frog rectus abdominis muscle.", "name": "DRC of acetylcholine using frog rectus abdominis muscle.", "hours": 4 },
+          { "topicCode": "T1.6", "number": "T1.6", "topicName": "Effect of physostigmine and atropine on DRC of acetylcholine using frog rectus abdominis muscle and rat ileum respectively.", "name": "Effect of physostigmine and atropine on DRC of acetylcholine using frog rectus abdominis muscle and rat ileum respectively.", "hours": 4 },
+          { "topicCode": "T1.7", "number": "T1.7", "topicName": "Bioassay of histamine using guinea pig ileum by matching method.", "name": "Bioassay of histamine using guinea pig ileum by matching method.", "hours": 4 },
+          { "topicCode": "T1.8", "number": "T1.8", "topicName": "Bioassay of oxytocin using rat uterine horn by interpolation method.", "name": "Bioassay of oxytocin using rat uterine horn by interpolation method.", "hours": 4 },
+          { "topicCode": "T1.9", "number": "T1.9", "topicName": "Bioassay of serotonin using rat fundus strip by three point bioassay.", "name": "Bioassay of serotonin using rat fundus strip by three point bioassay.", "hours": 4 },
+          { "topicCode": "T1.10", "number": "T1.10", "topicName": "Bioassay of acetylcholine using rat ileum/colon by four point bioassay.", "name": "Bioassay of acetylcholine using rat ileum/colon by four point bioassay.", "hours": 4 },
+          { "topicCode": "T1.11", "number": "T1.11", "topicName": "Determination of PA2 value of prazosin using rat anococcygeus muscle (by Schilds plot method).", "name": "Determination of PA2 value of prazosin using rat anococcygeus muscle (by Schilds plot method).", "hours": 4 },
+          { "topicCode": "T1.12", "number": "T1.12", "topicName": "Determination of PD2 value using guinea pig ileum.", "name": "Determination of PD2 value using guinea pig ileum.", "hours": 4 },
+          { "topicCode": "T1.13", "number": "T1.13", "topicName": "Effect of spasmogens and spasmolytics using rabbit jejunum.", "name": "Effect of spasmogens and spasmolytics using rabbit jejunum.", "hours": 4 },
+          { "topicCode": "T1.14", "number": "T1.14", "topicName": "Anti-inflammatory activity of drugs using carrageenan induced paw-edema model.", "name": "Anti-inflammatory activity of drugs using carrageenan induced paw-edema model.", "hours": 4 },
+          { "topicCode": "T1.15", "number": "T1.15", "topicName": "Analgesic activity of drug using central and peripheral methods", "name": "Analgesic activity of drug using central and peripheral methods", "hours": 4 }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "Rang H. P., Dale M. M., Ritter J. M., Flower R. J.", "title": "Rang and Dale's Pharmacology", "edition": "Latest" }
+    ],
+    "referenceBooks": [
+      { "author": "K.D. Tripathi", "title": "Essentials of Medical Pharmacology", "edition": "Latest" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 0,
+      "theoryExternal": 0,
+      "practicalInternal": 15,
+      "practicalExternal": 35,
+      "universityExam": 50
+    }
+  },
+  {
+    "subjectCode": "BP508P",
+    "courseName": "Pharmacognosy and Phytochemistry II",
+    "programme": "B.Pharm",
+    "regulation": "PCI 2017",
+    "year": 3,
+    "semester": 5,
+    "credits": 2,
+    "hours": 60,
+    "subjectType": "Practical",
+    "status": "Approved",
+    "facultyAssigned": "Dr. V. Chitra",
+    "importVersion": "1.0",
+    "scope": "Practical experiments for morphological, histological, and microscopical evaluations of crude drugs, isolation/detection of active principles, and chromatographic/chemical test analyses.",
+    "objectives": [
+      "Perform the morphological evaluation of crude drugs",
+      "Carry out the histological and powder microscopical evaluation of crude drugs",
+      "Perform the isolation and detection of active phytoconstituents from crude drug sample",
+      "Carry out the chromatographic separation and evaluation of chemical constituents in natural drugs",
+      "Analyze the unorganized drugs by chemical tests"
+    ],
+    "courseOutcomes": [
+      "CO1: Report the morphological characteristics, histology and powder characteristics of organized crude drugs, identify and detect the allied species and adulterants.",
+      "CO2: Optimize and compose a suitable isolation procedure for bioactive constituents like Sennoside, Diosgenin, and Atropine from crude drug.",
+      "CO3: Explain the basic principles and concepts in chromatography, to separate the phytoconstituents based on chromatography using paper as well as TLC plates.",
+      "CO4: Distill volatile oil and confirm its identity by thin layer chromatography",
+      "CO5: Analyze the unorganized drug using suitable chemical tests."
+    ],
+    "units": [
+      {
+        "unitCode": "Unit I",
+        "name": "Unit I",
+        "unitName": "Pharmacognosy and Phytochemistry - II Practicals",
+        "title": "Pharmacognosy and Phytochemistry - II Practicals",
+        "hours": 60,
+        "description": "Morphological, histological, and chromatographic evaluations of major herbal drugs and active principles.",
+        "topics": [
+          { "topicCode": "T1.1", "number": "T1.1", "topicName": "Morphology, histology and powder characteristics and extraction and detection of: Cinchona, Cinnamon, Senna, Clove, Ephedra, Fennel and Coriander", "name": "Morphology, histology and powder characteristics and extraction and detection of: Cinchona, Cinnamon, Senna, Clove, Ephedra, Fennel and Coriander", "hours": 15 },
+          { "topicCode": "T1.2", "number": "T1.2", "topicName": "Exercise involving isolation and detection of active principles: a. Caffeine - from tea dust, b. Diosgenin from Dioscorea, c. Atropine from Belladonna, d. Sennosides from Senna", "name": "Exercise involving isolation and detection of active principles: a. Caffeine - from tea dust, b. Diosgenin from Dioscorea, c. Atropine from Belladonna, d. Sennosides from Senna", "hours": 15 },
+          { "topicCode": "T1.3", "number": "T1.3", "topicName": "Separation of sugars by Paper chromatography", "name": "Separation of sugars by Paper chromatography", "hours": 8 },
+          { "topicCode": "T1.4", "number": "T1.4", "topicName": "TLC of herbal extract.", "name": "TLC of herbal extract.", "hours": 7 },
+          { "topicCode": "T1.5", "number": "T1.5", "topicName": "Distillation of volatile oils and detection of phytoconstituents by TLC", "name": "Distillation of volatile oils and detection of phytoconstituents by TLC", "hours": 8 },
+          { "topicCode": "T1.6", "number": "T1.6", "topicName": "Analysis of crude drugs by chemical tests: (i) Asafoetida (ii) Benzoin (iii) Colophony (iv) Aloes (v) Myrrh", "name": "Analysis of crude drugs by chemical tests: (i) Asafoetida (ii) Benzoin (iii) Colophony (iv) Aloes (v) Myrrh", "hours": 7 }
+        ]
+      }
+    ],
+    "recommendedBooks": [
+      { "author": "W. C. Evans", "title": "Trease and Evans Pharmacognosy", "edition": "16th edition" }
+    ],
+    "referenceBooks": [
+      { "author": "C.K. Kokate, Purohit, Gokhale", "title": "Text book of Pharmacognosy", "edition": "37th Edition" }
+    ],
+    "assessmentPattern": {
+      "theoryInternal": 0,
+      "theoryExternal": 0,
+      "practicalInternal": 15,
+      "practicalExternal": 35,
+      "universityExam": 50
+    }
+  }
+]

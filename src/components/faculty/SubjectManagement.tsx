@@ -3,10 +3,13 @@ import {
   ArrowLeft, BookOpen, Play, Award, Users, BarChart3, Settings, 
   ChevronDown, ChevronRight, CheckCircle2, ShieldCheck, Sliders, 
   Trash2, Plus, Download, Upload, FileSpreadsheet, AlertCircle, FileText,
-  Search, ExternalLink, Calendar, HelpCircle, Check, Loader2, Info
+  Search, ExternalLink, Calendar, HelpCircle, Check, Loader2, Info, Edit, Layers, Library
 } from 'lucide-react';
 import GlassCard from '../GlassCard';
+import CurriculumTabContent from './CurriculumTabContent';
 import { Subject, Resource } from '../../types';
+import { db } from '../../lib/firebase';
+import { doc, setDoc } from 'firebase/firestore';
 import { 
   getCurriculumDb, 
   saveCurriculumDb, 
@@ -104,7 +107,6 @@ export default function SubjectManagement({
   const [showToast, setShowToast] = useState(false);
 
   // Accordion states
-  const [expandedCurriculumUnits, setExpandedCurriculumUnits] = useState<Record<string, boolean>>({});
   const [expandedWorkspaceUnits, setExpandedWorkspaceUnits] = useState<Record<string, boolean>>({
     'Unit I': true
   });
@@ -135,8 +137,11 @@ export default function SubjectManagement({
     setTimeout(() => setShowToast(false), 4000);
   };
 
-  // Safe numeric average for sessional exams (best of 2)
-  const calculateBestOfTwoAvg = (s1: number, s2: number, s3: number): string => {
+  // Safe numeric average for sessional exams (best of 2 for Pharm.D, or regular average of s1 and s2 for B.Pharm)
+  const calculateSessionalAvg = (s1: number, s2: number, s3: number, isPharmD: boolean): string => {
+    if (!isPharmD) {
+      return ((s1 + s2) / 2).toFixed(1);
+    }
     const vals = [s1, s2, s3].sort((a, b) => b - a);
     return ((vals[0] + vals[1]) / 2).toFixed(1);
   };
@@ -375,12 +380,20 @@ export default function SubjectManagement({
   };
 
   const handleDownloadRoster = () => {
-    const csvContent = "data:text/csv;charset=utf-8,S.No,Register Number,Name of Student,Programme,Sessional I,Sessional II,Sessional III,Average,Semester Grade\n"
-      + cohort.map(s => {
-        const avg = calculateBestOfTwoAvg(s.sessionalI, s.sessionalII, s.sessionalIII);
-        const grade = getSemesterGrade(avg);
-        return `"${s.sNo}","${s.registerNumber}","${s.name}","${s.programme}",${s.sessionalI},${s.sessionalII},${s.sessionalIII},${avg},"${grade}"`;
-      }).join("\n");
+    const isPharmD = subject.programme === 'Pharm.D';
+    const csvContent = isPharmD
+      ? "data:text/csv;charset=utf-8,S.No,Register Number,Name of Student,Programme,Sessional I,Sessional II,Sessional III,Average (Best of 2),Semester Grade\n"
+        + cohort.map(s => {
+          const avg = calculateSessionalAvg(s.sessionalI, s.sessionalII, s.sessionalIII, true);
+          const grade = getSemesterGrade(avg);
+          return `"${s.sNo}","${s.registerNumber}","${s.name}","${s.programme}",${s.sessionalI},${s.sessionalII},${s.sessionalIII},${avg},"${grade}"`;
+        }).join("\n")
+      : "data:text/csv;charset=utf-8,S.No,Register Number,Name of Student,Programme,Sessional I,Sessional II,Average,Semester Grade\n"
+        + cohort.map(s => {
+          const avg = calculateSessionalAvg(s.sessionalI, s.sessionalII, s.sessionalIII, false);
+          const grade = getSemesterGrade(avg);
+          return `"${s.sNo}","${s.registerNumber}","${s.name}","${s.programme}",${s.sessionalI},${s.sessionalII},${avg},"${grade}"`;
+        }).join("\n");
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
@@ -436,19 +449,8 @@ export default function SubjectManagement({
               {subjectInfo?.courseName || subject.name}
             </h1>
             <p className="text-xs text-pink-100/90 max-w-xl leading-relaxed font-medium mt-1">
-              Active Syllabus: {subjectInfo?.regulation || 'PCI Regulation 2020'} — Year {subjectInfo?.year || subject.year}, Semester {subjectInfo?.semester || subject.semester}
+              Active Syllabus: {subjectInfo?.regulation || 'PCI 2017'} — Year {subjectInfo?.year || subject.year}, Semester {subjectInfo?.semester || subject.semester}
             </p>
-          </div>
-
-          <div className="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10 shrink-0 flex items-center gap-4">
-            <div className="text-left border-r border-white/20 pr-4">
-              <span className="text-[9px] text-pink-200 block font-bold uppercase tracking-wider">LMS Materials</span>
-              <span className="text-lg font-black text-white">{resources.length} Mapped</span>
-            </div>
-            <div className="text-left">
-              <span className="text-[9px] text-pink-200 block font-bold uppercase tracking-wider">Curriculum Version</span>
-              <span className="text-lg font-black text-white">{subjectInfo?.importVersion ? `v${subjectInfo.importVersion}` : 'v1.0'}</span>
-            </div>
           </div>
         </div>
       </div>
@@ -457,7 +459,7 @@ export default function SubjectManagement({
       <div className="border-b border-gray-150/60 pb-1.5 flex flex-wrap gap-2">
         {[
           { id: 'overview', label: 'Overview', icon: BookOpen },
-          { id: 'curriculum', label: 'Curriculum (Read Only)', icon: Sliders },
+          { id: 'curriculum', label: 'Curriculum', icon: Sliders },
           { id: 'workspace', label: 'Teaching Workspace', icon: Play },
           { id: 'students', label: 'Students & Sessional Marks', icon: Users },
           { id: 'analytics', label: 'OBE Analytics', icon: BarChart3 }
@@ -562,7 +564,7 @@ export default function SubjectManagement({
                   </div>
                   <div className="flex justify-between">
                     <span>Regulation:</span>
-                    <span className="text-gray-800 font-extrabold">{subjectInfo?.regulation || 'PCI Regulation 2020'}</span>
+                    <span className="text-gray-800 font-extrabold">{subjectInfo?.regulation || 'PCI 2017'}</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Status:</span>
@@ -578,193 +580,13 @@ export default function SubjectManagement({
           </div>
         )}
 
-        {/* TAB 2: CURRICULUM (READ ONLY) */}
+        {/* TAB 2: CURRICULUM */}
         {activeTab === 'curriculum' && (
-          <div className="flex flex-col gap-6 animate-fadeIn">
-            <div className="p-4 bg-gray-50 border border-gray-100 rounded-2xl flex items-center gap-2.5 text-xs font-bold text-gray-500">
-              <Info className="w-4 h-4 text-[#8B1E3F]" />
-              <span>Syllabus compliance mode active. This curriculum was automatically loaded via the imported Master Curriculum Template and is read-only.</span>
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
-              <div className="lg:col-span-2 flex flex-col gap-6">
-                
-                {/* 1. Objectives */}
-                <div className="rounded-[24px] bg-white border border-gray-150/50 shadow-sm p-6 flex flex-col gap-3">
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-full bg-[#8B1E3F]/10 text-[#8B1E3F] flex items-center justify-center">
-                      <ShieldCheck className="w-4 h-4" />
-                    </div>
-                    <h3 className="font-display font-extrabold text-sm text-gray-900 uppercase tracking-wide">Course Syllabus Objectives</h3>
-                  </div>
-                  <div className="flex flex-col gap-2.5 mt-2">
-                    {objectivesList.length > 0 ? (
-                      objectivesList.map((obj, oIdx) => (
-                        <div key={oIdx} className="p-3 bg-gray-50/60 rounded-xl flex items-start gap-3 border border-gray-100">
-                          <span className="w-5 h-5 rounded-full bg-[#8B1E3F]/15 text-[#8B1E3F] text-[9px] font-black flex items-center justify-center shrink-0 mt-0.5">
-                            {obj.order}
-                          </span>
-                          <p className="text-xs font-semibold text-gray-700 leading-relaxed">{obj.objectiveText}</p>
-                        </div>
-                      ))
-                    ) : (
-                      <div className="p-6 text-center text-xs text-gray-400 italic">No syllabus learning objectives imported.</div>
-                    )}
-                  </div>
-                </div>
-
-                {/* 2. Course Outcomes */}
-                <div className="rounded-[24px] bg-white border border-gray-150/50 shadow-sm p-6 flex flex-col gap-3">
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-full bg-[#8B1E3F]/10 text-[#8B1E3F] flex items-center justify-center">
-                      <Award className="w-4 h-4" />
-                    </div>
-                    <h3 className="font-display font-extrabold text-sm text-gray-900 uppercase tracking-wide">Direct Course Outcomes (CO)</h3>
-                  </div>
-                  <div className="flex flex-col gap-2.5 mt-2">
-                    {outcomesList.length > 0 ? (
-                      outcomesList.map((co) => (
-                        <div key={co.coCode} className="p-3 bg-pink-50/20 rounded-xl flex items-start gap-3 border border-pink-100/30">
-                          <span className="w-8 h-5 rounded-full bg-[#8B1E3F] text-white text-[9px] font-black flex items-center justify-center shrink-0 mt-0.5">
-                            {co.coCode}
-                          </span>
-                          <p className="text-xs font-semibold text-gray-700 leading-relaxed pr-2 flex-1">{co.coText}</p>
-                          <span className="text-[10px] font-bold text-gray-400 bg-gray-50 border border-gray-100 px-2 py-0.5 rounded font-mono">
-                            Target: {co.attainmentTarget.toFixed(2)}
-                          </span>
-                        </div>
-                      ))
-                    ) : (
-                      <div className="p-6 text-center text-xs text-gray-400 italic">No course outcomes imported.</div>
-                    )}
-                  </div>
-                </div>
-
-                {/* 3. Units & Topics */}
-                <div className="rounded-[24px] bg-white border border-gray-150/50 shadow-sm p-6 flex flex-col gap-4">
-                  <h3 className="font-display font-extrabold text-sm text-gray-900 uppercase tracking-wide border-b border-gray-100 pb-3">PCI Topics Syllabus Matrix</h3>
-                  
-                  {unitsList.map((unit) => {
-                    const isUnitExpanded = expandedCurriculumUnits[unit.unitCode];
-                    const unitTopics = topicsList.filter(t => t.unitCode === unit.unitCode);
-                    return (
-                      <div key={unit.unitCode} className="border border-gray-100 rounded-2xl p-4">
-                        <div 
-                          onClick={() => setExpandedCurriculumUnits(prev => ({ ...prev, [unit.unitCode]: !prev[unit.unitCode] }))}
-                          className="flex justify-between items-center cursor-pointer select-none"
-                        >
-                          <div className="flex items-center gap-3">
-                            {isUnitExpanded ? <ChevronDown className="w-4 h-4 text-[#8B1E3F]" /> : <ChevronRight className="w-4 h-4 text-gray-400" />}
-                            <h4 className="text-xs font-black text-gray-800 uppercase tracking-wider">{unit.unitCode}: {unit.unitName}</h4>
-                          </div>
-                          <span className="text-[10px] font-bold text-[#8B1E3F] bg-[#8B1E3F]/5 px-2.5 py-0.5 rounded-full font-mono">
-                            {unit.hours} Hours
-                          </span>
-                        </div>
-
-                        {isUnitExpanded && (
-                          <div className="mt-4 border-t border-gray-100 pt-3 flex flex-col gap-2 animate-fadeIn">
-                            {unitTopics.length > 0 ? (
-                              unitTopics.map((topic) => (
-                                <div key={topic.topicCode} className="flex justify-between items-center p-2.5 bg-gray-50 rounded-xl text-xs font-semibold">
-                                  <div className="flex items-center gap-2">
-                                    <span className="text-mono font-black text-gray-400 w-10">{topic.topicCode}</span>
-                                    <span className="text-gray-700">{topic.topicName}</span>
-                                  </div>
-                                  <span className="text-[9px] font-bold text-gray-400 bg-white border border-gray-100 px-2.5 py-0.5 rounded-full shrink-0 font-mono">
-                                    {topic.hours} Hr
-                                  </span>
-                                </div>
-                              ))
-                            ) : (
-                              <div className="p-3 text-center text-xs text-gray-400 italic">No topics mapped to this unit.</div>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-
-              </div>
-
-              {/* Books & Assessments Column */}
-              <div className="flex flex-col gap-6">
-                
-                {/* Books list */}
-                <GlassCard className="p-5 flex flex-col gap-4">
-                  <h4 className="text-xs font-black uppercase tracking-wider text-gray-900 border-b border-gray-100 pb-2 flex items-center gap-2">
-                    <BookOpen className="w-4 h-4 text-[#8B1E3F]" />
-                    Syllabus Books
-                  </h4>
-
-                  <div className="flex flex-col gap-4">
-                    <div>
-                      <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest block mb-2">Recommended Books</span>
-                      {recBooks.length > 0 ? (
-                        recBooks.map((b, idx) => (
-                          <div key={idx} className="p-2.5 bg-gray-50 rounded-xl mb-1.5 last:mb-0">
-                            <span className="text-xs font-bold text-gray-800 block line-clamp-1">{b.title}</span>
-                            <span className="text-[10px] font-semibold text-[#8B1E3F] mt-0.5 block">{b.author} {b.edition && `— ${b.edition}`}</span>
-                          </div>
-                        ))
-                      ) : (
-                        <span className="text-xs text-gray-400 italic">No books imported.</span>
-                      )}
-                    </div>
-
-                    <div>
-                      <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest block mb-2 font-mono">Reference Books</span>
-                      {refBooks.length > 0 ? (
-                        refBooks.map((b, idx) => (
-                          <div key={idx} className="p-2.5 bg-gray-50 rounded-xl mb-1.5 last:mb-0">
-                            <span className="text-xs font-bold text-gray-800 block line-clamp-1">{b.title}</span>
-                            <span className="text-[10px] font-semibold text-[#8B1E3F] mt-0.5 block">{b.author} {b.edition && `— ${b.edition}`}</span>
-                          </div>
-                        ))
-                      ) : (
-                        <span className="text-xs text-gray-400 italic">No reference books imported.</span>
-                      )}
-                    </div>
-                  </div>
-                </GlassCard>
-
-                {/* Assessment Pattern */}
-                <GlassCard className="p-5 flex flex-col gap-3">
-                  <h4 className="text-xs font-black uppercase tracking-wider text-gray-900 border-b border-gray-100 pb-2">
-                    Assessment Weightages
-                  </h4>
-                  {assessment ? (
-                    <div className="flex flex-col gap-2 text-xs font-semibold text-gray-600">
-                      <div className="flex justify-between">
-                        <span>Theory Sessional Marks:</span>
-                        <span className="text-gray-800 font-extrabold">{assessment.theoryInternal} Marks</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Theory End Exam Marks:</span>
-                        <span className="text-gray-800 font-extrabold">{assessment.theoryExternal} Marks</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Practical Sessional Marks:</span>
-                        <span className="text-gray-800 font-extrabold">{assessment.practicalInternal} Marks</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Practical End Exam Marks:</span>
-                        <span className="text-gray-800 font-extrabold">{assessment.practicalExternal} Marks</span>
-                      </div>
-                      <div className="flex justify-between border-t border-gray-100 pt-2 font-black text-[#8B1E3F]">
-                        <span>University Exam Score:</span>
-                        <span>{assessment.universityExam} Marks</span>
-                      </div>
-                    </div>
-                  ) : (
-                    <span className="text-xs text-gray-400 italic">Sessional assessment scheme pending import.</span>
-                  )}
-                </GlassCard>
-
-              </div>
-            </div>
-          </div>
+          <CurriculumTabContent 
+            subject={subject} 
+            readOnly={readOnly} 
+            triggerToast={triggerToast} 
+          />
         )}
 
         {/* TAB 3: TEACHING WORKSPACE (EDITABLE RESOURCE ALLOCATIONS) */}
@@ -945,14 +767,15 @@ export default function SubjectManagement({
                       <th className="p-4">Programme</th>
                       <th className="p-4 text-center">Sessional I (30)</th>
                       <th className="p-4 text-center">Sessional II (30)</th>
-                      <th className="p-4 text-center">Sessional III (30)</th>
-                      <th className="p-4 text-center">Best of 2 Average</th>
+                      {subject.programme === 'Pharm.D' && <th className="p-4 text-center">Sessional III (30)</th>}
+                      <th className="p-4 text-center">{subject.programme === 'Pharm.D' ? 'Best of 2 Average' : 'Sessional Average'}</th>
                       <th className="p-4 text-right">Semester Grade</th>
                     </tr>
                   </thead>
                   <tbody>
                     {filteredCohort.map((student, sIdx) => {
-                      const avg = calculateBestOfTwoAvg(student.sessionalI, student.sessionalII, student.sessionalIII);
+                      const isStudentPharmD = subject.programme === 'Pharm.D';
+                      const avg = calculateSessionalAvg(student.sessionalI, student.sessionalII, student.sessionalIII || 0, isStudentPharmD);
                       const grade = getSemesterGrade(avg);
                       return (
                         <tr key={student.registerNumber} className="border-b border-gray-50 hover:bg-gray-50/30 transition-all font-semibold text-gray-700">
@@ -982,17 +805,19 @@ export default function SubjectManagement({
                               className="w-12 bg-gray-50 border border-gray-200 rounded p-1 text-center font-mono font-bold text-xs focus:ring-1 focus:ring-[#8B1E3F] focus:bg-white disabled:opacity-75"
                             />
                           </td>
-                          <td className="p-4 text-center">
-                            <input 
-                              type="number"
-                              min="0"
-                              max="30"
-                              disabled={readOnly}
-                              value={student.sessionalIII}
-                              onChange={(e) => handleMarkChange(sIdx, 'sessionalIII', e.target.value)}
-                              className="w-12 bg-gray-50 border border-gray-200 rounded p-1 text-center font-mono font-bold text-xs focus:ring-1 focus:ring-[#8B1E3F] focus:bg-white disabled:opacity-75"
-                            />
-                          </td>
+                          {isStudentPharmD && (
+                            <td className="p-4 text-center">
+                              <input 
+                                type="number"
+                                min="0"
+                                max="30"
+                                disabled={readOnly}
+                                value={student.sessionalIII || 0}
+                                onChange={(e) => handleMarkChange(sIdx, 'sessionalIII', e.target.value)}
+                                className="w-12 bg-gray-50 border border-gray-200 rounded p-1 text-center font-mono font-bold text-xs focus:ring-1 focus:ring-[#8B1E3F] focus:bg-white disabled:opacity-75"
+                              />
+                            </td>
+                          )}
                           <td className="p-4 text-center font-mono font-black text-[#8B1E3F] text-sm">
                             {avg}
                           </td>
@@ -1037,36 +862,44 @@ export default function SubjectManagement({
                   <table className="w-full text-left border-collapse text-[11px] font-semibold text-gray-700">
                     <thead>
                       <tr className="bg-gray-50/50 border-b border-gray-100 text-[9px] uppercase font-bold text-gray-400">
-                        <th className="p-3">Course Outcome Mapped</th>
-                        <th className="p-3 text-center">Internal Target (Avg/3.0)</th>
+                        <th className="p-3">Student Candidate</th>
+                        <th className="p-3 text-center">Internal Target (Scale 3.0)</th>
                         <th className="p-3 text-center">Internal Attainment Achieved (/3.0)</th>
-                        <th className="p-3 text-center">Semester Target (Avg/3.0)</th>
+                        <th className="p-3 text-center">Semester Target (Scale 3.0)</th>
                         <th className="p-3 text-center">Semester Attainment Achieved (/3.0)</th>
                         <th className="p-3 text-right">OBE Status</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {[
-                        { co: 'CO1', desc: 'Remembering & Basic Cell Histology', intTar: '1.95', intAtt: '2.50', semTar: '1.80', semAtt: '2.55' },
-                        { co: 'CO2', desc: 'Skeletal Articulations and Joint movements', intTar: '1.95', intAtt: '3.00', semTar: '1.80', semAtt: '2.40' },
-                        { co: 'CO3', desc: 'Plasma Components & Blood Transport dynamics', intTar: '1.95', intAtt: '2.50', semTar: '1.80', semAtt: '2.25' },
-                        { co: 'CO4', desc: 'Anatomy and conduction pathways of the Heart', intTar: '1.95', intAtt: '2.00', semTar: '1.80', semAtt: '2.10' },
-                        { co: 'CO5', desc: 'Epidermal histology & Autonomic Reflex pathways', intTar: '1.95', intAtt: '2.50', semTar: '1.80', semAtt: '2.70' }
-                      ].map((row) => (
-                        <tr key={row.co} className="border-b border-gray-50 hover:bg-gray-50/30 transition-all">
-                          <td className="p-3">
-                            <span className="font-extrabold text-[#8B1E3F] block">{row.co}</span>
-                            <span className="text-[9.5px] text-gray-500 font-semibold leading-tight">{row.desc}</span>
-                          </td>
-                          <td className="p-3 text-center font-mono text-gray-500">{row.intTar}</td>
-                          <td className="p-3 text-center font-mono font-black text-emerald-600">{row.intAtt}</td>
-                          <td className="p-3 text-center font-mono text-gray-500">{row.semTar}</td>
-                          <td className="p-3 text-center font-mono font-black text-emerald-600">{row.semAtt}</td>
-                          <td className="p-3 text-right">
-                            <span className="text-[8px] font-black bg-emerald-50 text-emerald-600 px-2.5 py-0.5 rounded-full uppercase">Target Met</span>
-                          </td>
-                        </tr>
-                      ))}
+                      {cohort.map((student) => {
+                        const isStudentPharmD = subject.programme === 'Pharm.D';
+                        const avg = calculateSessionalAvg(student.sessionalI, student.sessionalII, student.sessionalIII || 0, isStudentPharmD);
+                        const intAtt = (parseFloat(avg) / 30 * 3.0).toFixed(2);
+                        const semAtt = (student.gpa / 10 * 3.0).toFixed(2);
+                        const isExceeded = parseFloat(intAtt) >= 2.4 && parseFloat(semAtt) >= 2.4;
+                        
+                        return (
+                          <tr key={student.registerNumber} className="border-b border-gray-50 hover:bg-gray-50/30 transition-all">
+                            <td className="p-3">
+                              <span className="font-extrabold text-gray-900 block">{student.name}</span>
+                              <span className="text-[9.5px] text-[#8B1E3F] font-mono font-bold leading-tight">{student.registerNumber}</span>
+                            </td>
+                            <td className="p-3 text-center font-mono text-gray-500">2.00</td>
+                            <td className="p-3 text-center font-mono font-black text-emerald-600">{intAtt}</td>
+                            <td className="p-3 text-center font-mono text-gray-500">2.00</td>
+                            <td className="p-3 text-center font-mono font-black text-emerald-600">{semAtt}</td>
+                            <td className="p-3 text-right">
+                              <span className={`text-[8px] font-black px-2.5 py-0.5 rounded-full uppercase ${
+                                isExceeded 
+                                  ? 'bg-blue-50 text-blue-600' 
+                                  : 'bg-emerald-50 text-emerald-600'
+                              }`}>
+                                {isExceeded ? 'Target Exceeded' : 'Target Met'}
+                              </span>
+                            </td>
+                          </tr>
+                        );
+                      })}
                     </tbody>
                   </table>
                 </div>

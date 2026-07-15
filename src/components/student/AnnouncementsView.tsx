@@ -59,7 +59,7 @@ export default function AnnouncementsView({
         </GlassCard>
       </div>
 
-      {/* Bulletins list */}
+      {/* Announcements list */}
       <div className="flex flex-col gap-4">
         {filteredAnnouncements.map((ann) => (
           <GlassCard key={ann.id} className="p-6 border-l-4 border-l-[#8B1E3F]">

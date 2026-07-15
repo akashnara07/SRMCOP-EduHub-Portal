@@ -1,0 +1,125 @@
+{
+  "entities": {
+    "Course": {
+      "title": "Course Information",
+      "description": "Metadata for a course shell curriculum subject",
+      "type": "object",
+      "properties": {
+        "subjectCode": {
+          "type": "string",
+          "maxLength": 32,
+          "pattern": "^[a-zA-Z0-9_-]+$"
+        },
+        "courseName": {
+          "type": "string",
+          "maxLength": 256
+        },
+        "programme": {
+          "type": "string",
+          "enum": ["B.Pharm", "Pharm.D", "M.Pharm"]
+        },
+        "regulation": {
+          "type": "string",
+          "enum": ["PCI 2017", "PCI 2026"]
+        },
+        "year": {
+          "type": "integer"
+        },
+        "semester": {
+          "type": "integer"
+        },
+        "credits": {
+          "type": "integer"
+        },
+        "hours": {
+          "type": "integer"
+        },
+        "subjectType": {
+          "type": "string",
+          "enum": ["Theory", "Practical"]
+        },
+        "status": {
+          "type": "string",
+          "enum": ["Active", "Draft", "Approved", "Archived"]
+        },
+        "facultyAssigned": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "importVersion": {
+          "type": "string",
+          "maxLength": 16
+        },
+        "academicYear": {
+          "type": "string",
+          "maxLength": 32
+        }
+      },
+      "required": ["subjectCode", "courseName", "programme", "regulation", "year", "semester"]
+    },
+    "Resource": {
+      "title": "Teaching Resource",
+      "description": "Teaching and study resource added to a subject timeline",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_-]+$"
+        },
+        "subjectCode": {
+          "type": "string",
+          "maxLength": 32,
+          "pattern": "^[a-zA-Z0-9_-]+$"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["Video", "PDF", "Slides", "Quiz"]
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 256
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 1024
+        },
+        "url": {
+          "type": "string",
+          "maxLength": 1024
+        },
+        "duration": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "fileSize": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "status": {
+          "type": "string",
+          "enum": ["completed", "in-progress", "not-started"]
+        },
+        "unit": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "topicCode": {
+          "type": "string",
+          "maxLength": 64
+        }
+      },
+      "required": ["id", "subjectCode", "type", "title"]
+    }
+  },
+  "firestore": {
+    "courses/{courseId}": {
+      "schema": "Course",
+      "description": "Collection of courses in the SRM curriculum database"
+    },
+    "teaching_resources/{resourceId}": {
+      "schema": "Resource",
+      "description": "Collection of learning timeline resources and quizzes"
+    }
+  }
+}

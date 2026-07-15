@@ -10,7 +10,8 @@ import {
   saveCurriculumDb, 
   getAppSubjects,
   MasterCurriculumDb,
-  CourseInformation
+  CourseInformation,
+  deleteCourseFromDb
 } from '../../data/curriculumDb';
 import { Subject } from '../../types';
 
@@ -34,9 +35,15 @@ export default function AdminDashboard({
   onImpersonateUser
 }: AdminDashboardProps) {
   const [curriculumDb, setCurriculumDb] = useState<MasterCurriculumDb>(getCurriculumDb());
+  const [filterAcademicYear, setFilterAcademicYear] = useState<string>('2025-2026');
   const [filterProgramme, setFilterProgramme] = useState<string>('All');
   const [filterYear, setFilterYear] = useState<number | 'All'>('All');
   const [searchQuery, setSearchQuery] = useState('');
+  const [sortBy, setSortBy] = useState<'code' | 'name' | 'credits' | 'status'>('code');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+  const [curriculumActiveTab, setCurriculumActiveTab] = useState<'B.Pharm' | 'Pharm.D'>('B.Pharm');
+  const [adminStatusFilter, setAdminStatusFilter] = useState<'All' | 'Draft' | 'Active' | 'Approved'>('All');
+  const [filterRegulation, setFilterRegulation] = useState<string>('All');
   
   // Modals / Form state
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -47,6 +54,7 @@ export default function AdminDashboard({
   const [formCode, setFormCode] = useState('');
   const [formName, setFormName] = useState('');
   const [formProgramme, setFormProgramme] = useState<'B.Pharm' | 'Pharm.D' | 'M.Pharm'>('B.Pharm');
+  const [formRegulation, setFormRegulation] = useState<string>('PCI 2017');
   const [formYear, setFormYear] = useState(1);
   const [formSemester, setFormSemester] = useState(1);
   const [formCredits, setFormCredits] = useState(4);
@@ -54,6 +62,7 @@ export default function AdminDashboard({
   const [formType, setFormType] = useState<'Theory' | 'Practical'>('Theory');
   const [formFaculty, setFormFaculty] = useState('');
   const [formStatus, setFormStatus] = useState<'Active' | 'Draft' | 'Approved' | 'Archived'>('Approved');
+  const [formAcademicYear, setFormAcademicYear] = useState('2025-2026');
 
   // Logs state
   const [logs, setLogs] = useState<{ id: string; action: string; target: string; time: string; type: 'success' | 'info' | 'warning' }[]>([
@@ -91,6 +100,7 @@ export default function AdminDashboard({
     setFormCode(course.subjectCode);
     setFormName(course.courseName);
     setFormProgramme(course.programme as any);
+    setFormRegulation(course.regulation || 'PCI 2017');
     setFormYear(course.year);
     setFormSemester(course.semester);
     setFormCredits(course.credits);
@@ -98,6 +108,7 @@ export default function AdminDashboard({
     setFormType(course.subjectType);
     setFormFaculty(course.facultyAssigned);
     setFormStatus(course.status);
+    setFormAcademicYear(course.academicYear || '2025-2026');
     setShowEditModal(true);
   };
 
@@ -106,6 +117,7 @@ export default function AdminDashboard({
     setFormCode('');
     setFormName('');
     setFormProgramme('B.Pharm');
+    setFormRegulation('PCI 2017');
     setFormYear(1);
     setFormSemester(1);
     setFormCredits(4);
@@ -113,6 +125,7 @@ export default function AdminDashboard({
     setFormType('Theory');
     setFormFaculty('');
     setFormStatus('Approved');
+    setFormAcademicYear(filterAcademicYear);
     setShowCreateModal(true);
   };
 
@@ -137,7 +150,7 @@ export default function AdminDashboard({
       subjectCode: code,
       courseName: name,
       programme: formProgramme,
-      regulation: 'PCI Regulation 2020',
+      regulation: formRegulation,
       year: formYear,
       semester: formSemester,
       credits: formCredits,
@@ -146,7 +159,7 @@ export default function AdminDashboard({
       status: formStatus,
       facultyAssigned: formFaculty || 'Unassigned',
       importVersion: '1.0',
-      academicYear: '2025-2026'
+      academicYear: formAcademicYear
     };
 
     db.courseInformation.push(newCourse);
@@ -223,13 +236,15 @@ export default function AdminDashboard({
         ...db.courseInformation[idx],
         courseName: formName.trim(),
         programme: formProgramme,
+        regulation: formRegulation,
         year: formYear,
         semester: formSemester,
         credits: formCredits,
         hours: formHours,
         subjectType: formType,
         facultyAssigned: formFaculty || 'Unassigned',
-        status: formStatus
+        status: formStatus,
+        academicYear: formAcademicYear
       };
 
       saveCurriculumDb(db);
@@ -240,26 +255,22 @@ export default function AdminDashboard({
     }
   };
 
+  // Custom Delete Modal State
+  const [courseToDelete, setCourseToDelete] = useState<{ code: string; name: string } | null>(null);
+
   // Delete Course Handler
   const handleDeleteCourse = (code: string, name: string) => {
-    if (window.confirm(`Are you sure you want to permanently delete the master curriculum for ${code} - ${name}? This will remove all syllabus and learning resources.`)) {
-      const db = { ...curriculumDb };
-      
-      db.courseInformation = db.courseInformation.filter(c => c.subjectCode !== code);
-      db.scope = db.scope.filter(s => s.subjectCode !== code);
-      db.objectives = db.objectives.filter(o => o.subjectCode !== code);
-      db.courseOutcomes = db.courseOutcomes.filter(o => o.subjectCode !== code);
-      db.units = db.units.filter(u => u.subjectCode !== code);
-      db.curriculumTopics = db.curriculumTopics.filter(t => t.subjectCode !== code);
-      db.recommendedBooks = db.recommendedBooks.filter(b => b.subjectCode !== code);
-      db.referenceBooks = db.referenceBooks.filter(b => b.subjectCode !== code);
-      db.assessmentPattern = db.assessmentPattern.filter(a => a.subjectCode !== code);
+    setCourseToDelete({ code, name });
+  };
 
-      saveCurriculumDb(db);
-      setCurriculumDb(db);
-      onRefreshSubjects();
-      addLog('Deleted master course', `${code}`, 'warning');
-    }
+  const confirmDeleteCourse = () => {
+    if (!courseToDelete) return;
+    deleteCourseFromDb(courseToDelete.code);
+    const db = getCurriculumDb();
+    setCurriculumDb(db);
+    onRefreshSubjects();
+    addLog('Deleted master course', `${courseToDelete.code}`, 'warning');
+    setCourseToDelete(null);
   };
 
   // Filtered lists grouping
@@ -295,14 +306,6 @@ export default function AdminDashboard({
               Global operations dashboard. Monitor compliance indexes, mock student or faculty roles, configure unified master curriculums, and manage syllabus compliance templates.
             </p>
           </div>
-
-          <button 
-            onClick={handleOpenCreate}
-            className="bg-gradient-to-r from-[#8B1E3F] to-[#CD4368] text-white text-xs font-bold px-4 py-2.5 rounded-full hover:shadow-lg hover:shadow-maroon-900/20 active:scale-95 transition-all flex items-center gap-2 border border-white/15 shrink-0"
-          >
-            <Plus className="w-4 h-4" />
-            Create Master Course
-          </button>
         </div>
       </div>
 
@@ -312,19 +315,19 @@ export default function AdminDashboard({
           <Users className="w-5 h-5 text-[#8B1E3F]" />
           <div>
             <h2 className="font-display font-bold text-sm text-gray-900">User Switching & Impersonation Hub</h2>
-            <p className="text-[11px] text-gray-500">Instantly experience the LMS system from any active role's perspective</p>
+            <p className="text-[11px] text-gray-500">Instantly experience the LMS system from B.Pharm and Pharm.D student/faculty perspectives</p>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Student Persona card */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {/* B.Pharm Student Persona card */}
           <div className="p-4 bg-gradient-to-br from-blue-50/50 to-indigo-50/50 rounded-2xl border border-blue-100/60 flex flex-col justify-between hover:shadow-sm transition-all">
             <div>
               <div className="flex justify-between items-start">
                 <span className="text-[9px] font-bold uppercase tracking-wider text-blue-600 bg-blue-100/50 px-2.5 py-0.5 rounded-full">
-                  Student Persona
+                  B.Pharm Student
                 </span>
-                <span className="text-[10px] text-gray-400 font-bold">ID: SRM2026PH7810</span>
+                <span className="text-[10px] text-gray-400 font-bold">ID: PH7810</span>
               </div>
               <h3 className="font-display font-bold text-sm text-gray-900 mt-2">J. Akash</h3>
               <p className="text-[11px] text-gray-500 mt-0.5">Year 1 • B.Pharm • GPA: 8.85 • Attendance: 92.4%</p>
@@ -338,21 +341,63 @@ export default function AdminDashboard({
             </button>
           </div>
 
-          {/* Faculty Persona card */}
+          {/* Pharm.D Student Persona card */}
+          <div className="p-4 bg-gradient-to-br from-cyan-50/50 to-teal-50/50 rounded-2xl border border-cyan-100/60 flex flex-col justify-between hover:shadow-sm transition-all">
+            <div>
+              <div className="flex justify-between items-start">
+                <span className="text-[9px] font-bold uppercase tracking-wider text-cyan-600 bg-cyan-100/50 px-2.5 py-0.5 rounded-full">
+                  Pharm.D Student
+                </span>
+                <span className="text-[10px] text-gray-400 font-bold">ID: PH7811</span>
+              </div>
+              <h3 className="font-display font-bold text-sm text-gray-900 mt-2">Priya Sharma</h3>
+              <p className="text-[11px] text-gray-500 mt-0.5">Year 1 • Pharm.D • GPA: 9.10 • Attendance: 94.2%</p>
+            </div>
+            <button 
+              onClick={() => handleSwitchUser('Student', 'Priya Sharma')}
+              className="mt-4 w-full bg-cyan-600 hover:bg-cyan-700 text-white font-bold text-xs py-2 rounded-xl active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 shadow-sm"
+            >
+              <UserCheck className="w-3.5 h-3.5" />
+              Impersonate Student
+            </button>
+          </div>
+
+          {/* B.Pharm Faculty Persona card */}
           <div className="p-4 bg-gradient-to-br from-purple-50/50 to-pink-50/50 rounded-2xl border border-purple-100/60 flex flex-col justify-between hover:shadow-sm transition-all">
             <div>
               <div className="flex justify-between items-start">
                 <span className="text-[9px] font-bold uppercase tracking-wider text-purple-600 bg-purple-100/50 px-2.5 py-0.5 rounded-full">
-                  Faculty HOD Persona
+                  B.Pharm Faculty
                 </span>
-                <span className="text-[10px] text-gray-400 font-bold">Professor of Pharmacology</span>
+                <span className="text-[10px] text-gray-400 font-bold">Pharmacology HOD</span>
               </div>
               <h3 className="font-display font-bold text-sm text-gray-900 mt-2">Dr. V. Chitra</h3>
-              <p className="text-[11px] text-gray-500 mt-0.5">Professor & Head • Assg. 4 Subjects • PG Coordinator</p>
+              <p className="text-[11px] text-gray-500 mt-0.5">Professor & Head • Assg. 3 Subjects • PG Lead</p>
             </div>
             <button 
               onClick={() => handleSwitchUser('Faculty', 'Dr. V. Chitra')}
               className="mt-4 w-full bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs py-2 rounded-xl active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 shadow-sm"
+            >
+              <UserCheck className="w-3.5 h-3.5" />
+              Impersonate Faculty
+            </button>
+          </div>
+
+          {/* Pharm.D Faculty Persona card */}
+          <div className="p-4 bg-gradient-to-br from-emerald-50/50 to-teal-50/50 rounded-2xl border border-emerald-100/60 flex flex-col justify-between hover:shadow-sm transition-all">
+            <div>
+              <div className="flex justify-between items-start">
+                <span className="text-[9px] font-bold uppercase tracking-wider text-emerald-600 bg-emerald-100/50 px-2.5 py-0.5 rounded-full">
+                  Pharm.D Faculty
+                </span>
+                <span className="text-[10px] text-gray-400 font-bold">Pharmacy Practice</span>
+              </div>
+              <h3 className="font-display font-bold text-sm text-gray-900 mt-2">Prof. Elizabeth Mathew</h3>
+              <p className="text-[11px] text-gray-500 mt-0.5">Professor • Assg. 2 Subjects • Clinical Advisor</p>
+            </div>
+            <button 
+              onClick={() => handleSwitchUser('Faculty', 'Prof. Elizabeth Mathew')}
+              className="mt-4 w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs py-2 rounded-xl active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 shadow-sm"
             >
               <UserCheck className="w-3.5 h-3.5" />
               Impersonate Faculty
@@ -365,174 +410,355 @@ export default function AdminDashboard({
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         
         {/* Core Year & Course wise Matrix List (3 Columns) */}
-        <GlassCard className="lg:col-span-3 p-6 flex flex-col gap-4">
+        <GlassCard className="lg:col-span-3 p-6 flex flex-col gap-6">
           
           {/* Header Controls */}
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gray-100 pb-3">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gray-100 pb-4">
             <div>
               <h2 className="font-display font-extrabold text-base text-gray-900">Master Curriculum Matrix</h2>
-              <p className="text-xs text-gray-500">See all curriculum courses and year-wise altogether. Option to create or edit any.</p>
+              <p className="text-xs text-gray-500">Easily sort, edit, and filter active courses across custom-split academic years.</p>
             </div>
 
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Filters:</span>
-              
-              {/* Program filter selector */}
-              <select 
-                value={filterProgramme} 
-                onChange={(e) => setFilterProgramme(e.target.value)}
-                className="bg-gray-100 border-none text-[11px] font-bold rounded-full px-3 py-1.5 text-gray-700 focus:ring-1 focus:ring-[#8B1E3F]"
-              >
-                <option value="All">All Programmes</option>
-                <option value="B.Pharm">B.Pharm</option>
-                <option value="Pharm.D">Pharm.D</option>
-                <option value="M.Pharm">M.Pharm</option>
-              </select>
+            <div className="flex flex-wrap items-center gap-3">
+              <div className="flex items-center gap-1.5 bg-gray-100 p-1 rounded-xl">
+                <span className="text-[10px] font-extrabold text-gray-500 uppercase tracking-widest px-2">Academic Year:</span>
+                <select 
+                  value={filterAcademicYear} 
+                  onChange={(e) => setFilterAcademicYear(e.target.value)}
+                  className="bg-white border-none text-[11px] font-bold rounded-lg px-2 py-1 text-gray-700 focus:ring-1 focus:ring-[#8B1E3F] focus:outline-none"
+                >
+                  {filterRegulation === 'PCI 2026' ? (
+                    <option value="2026-2027">2026-2027</option>
+                  ) : (
+                    <>
+                      <option value="2024-2025">2024-2025</option>
+                      <option value="2025-2026">2025-2026 (Active)</option>
+                      <option value="2026-2027">2026-2027</option>
+                    </>
+                  )}
+                </select>
+              </div>
 
-              {/* Year filter selector */}
-              <select 
-                value={filterYear.toString()} 
-                onChange={(e) => setFilterYear(e.target.value === 'All' ? 'All' : Number(e.target.value))}
-                className="bg-gray-100 border-none text-[11px] font-bold rounded-full px-3 py-1.5 text-gray-700 focus:ring-1 focus:ring-[#8B1E3F]"
-              >
-                <option value="All">All Years</option>
-                <option value="1">Year I</option>
-                <option value="2">Year II</option>
-                <option value="3">Year III</option>
-                <option value="4">Year IV</option>
-              </select>
+              <div className="flex items-center gap-1.5 bg-gray-100 p-1 rounded-xl">
+                <span className="text-[10px] font-extrabold text-gray-500 uppercase tracking-widest px-2">Status:</span>
+                <select 
+                  value={adminStatusFilter} 
+                  onChange={(e) => setAdminStatusFilter(e.target.value as any)}
+                  className="bg-white border-none text-[11px] font-bold rounded-lg px-2 py-1 text-gray-700 focus:ring-1 focus:ring-[#8B1E3F] focus:outline-none"
+                >
+                  <option value="All">All Statuses</option>
+                  <option value="Draft">Drafts Only</option>
+                  <option value="Active">Active (Published)</option>
+                  <option value="Approved">Approved</option>
+                </select>
+              </div>
+
+              <div className="flex items-center gap-1.5 bg-gray-100 p-1 rounded-xl">
+                <span className="text-[10px] font-extrabold text-gray-500 uppercase tracking-widest px-2">Regulation:</span>
+                <select 
+                  value={filterRegulation} 
+                  onChange={(e) => {
+                    const reg = e.target.value;
+                    setFilterRegulation(reg);
+                    if (reg === 'PCI 2026') {
+                      setFilterAcademicYear('2026-2027');
+                    }
+                  }}
+                  className="bg-white border-none text-[11px] font-bold rounded-lg px-2 py-1 text-gray-700 focus:ring-1 focus:ring-[#8B1E3F] focus:outline-none"
+                >
+                  <option value="All">All Regulations</option>
+                  <option value="PCI 2017">PCI 2017</option>
+                  <option value="PCI 2026">PCI 2026</option>
+                </select>
+              </div>
             </div>
           </div>
 
-          {/* Search box */}
-          <div className="flex items-center gap-2 bg-gray-50 border border-gray-100 px-3.5 py-2 rounded-2xl w-full">
-            <Search className="w-4 h-4 text-gray-400 shrink-0" />
-            <input 
-              type="text" 
-              placeholder="Search master subjects by code, name, or assigned faculty..." 
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="bg-transparent border-none w-full text-xs placeholder-gray-400 focus:outline-none focus:ring-0 text-gray-800"
-            />
-            {searchQuery && (
-              <button 
-                onClick={() => setSearchQuery('')}
-                className="text-[10px] bg-gray-200 hover:bg-gray-300 text-gray-600 px-2 py-0.5 rounded-full shrink-0 font-bold"
-              >
-                Clear
-              </button>
-            )}
+          {/* Sort, Search, and Active Tabs */}
+          <div className="flex flex-col gap-4 bg-gray-50/50 p-4 rounded-2xl border border-gray-100/60">
+            {/* Search Box */}
+            <div className="flex items-center gap-2 bg-white border border-gray-150 px-3.5 py-2.5 rounded-xl w-full shadow-sm">
+              <Search className="w-4 h-4 text-gray-400 shrink-0" />
+              <input 
+                type="text" 
+                placeholder="Search master subjects by code, name, or assigned faculty..." 
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="bg-transparent border-none w-full text-xs placeholder-gray-400 focus:outline-none focus:ring-0 text-gray-800"
+              />
+              {searchQuery && (
+                <button 
+                  onClick={() => setSearchQuery('')}
+                  className="text-[10px] bg-gray-200 hover:bg-gray-300 text-gray-600 px-2 py-0.5 rounded-full shrink-0 font-bold"
+                >
+                  Clear
+                </button>
+              )}
+            </div>
+
+            {/* Program Toggles and Sort Controls */}
+            <div className="bg-white border border-gray-150/45 p-5 rounded-[22px] flex flex-col lg:flex-row lg:items-center justify-between gap-4 shadow-sm">
+              <div className="flex flex-col gap-0.5">
+                <span className="text-[10px] text-gray-400 font-extrabold uppercase tracking-widest pl-0.5">
+                  ACTIVE MASTER MATRIX VIEW
+                </span>
+                <h4 className="text-sm font-black text-gray-800">
+                  Program: <span className={curriculumActiveTab === 'B.Pharm' ? 'text-[#8B1E3F]' : 'text-[#0F766E]'}>
+                    {curriculumActiveTab === 'B.Pharm' ? 'Bachelor of Pharmacy (B.Pharm)' : 'Doctor of Pharmacy (Pharm.D)'}
+                  </span>
+                </h4>
+              </div>
+
+              <div className="flex flex-col sm:flex-row sm:items-center gap-4 w-full lg:w-auto justify-end">
+                <div className="flex items-center gap-1.5 bg-gray-100 p-1 rounded-xl w-full sm:w-auto">
+                  <button
+                    type="button"
+                    onClick={() => setCurriculumActiveTab('B.Pharm')}
+                    className={`flex-1 sm:flex-initial text-center px-4 py-2 text-xs font-black uppercase tracking-wider rounded-lg transition-all ${
+                      curriculumActiveTab === 'B.Pharm' 
+                        ? 'bg-[#8B1E3F] text-white shadow-md shadow-[#8B1E3F]/15' 
+                        : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'
+                    }`}
+                  >
+                    B.Pharm
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setCurriculumActiveTab('Pharm.D')}
+                    className={`flex-1 sm:flex-initial text-center px-4 py-2 text-xs font-black uppercase tracking-wider rounded-lg transition-all ${
+                      curriculumActiveTab === 'Pharm.D' 
+                        ? 'bg-[#0F766E] text-white shadow-md shadow-[#0F766E]/15' 
+                        : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'
+                    }`}
+                  >
+                    Pharm.D
+                  </button>
+                </div>
+
+                {/* Sorting Options */}
+                <div className="flex items-center gap-2 bg-gray-50 border border-gray-150/60 px-3 py-1.5 rounded-xl shrink-0 justify-between sm:justify-start">
+                  <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Sort:</span>
+                  <select 
+                    value={sortBy} 
+                    onChange={(e) => setSortBy(e.target.value as any)}
+                    className="bg-transparent border-none text-[11px] font-black text-gray-700 focus:ring-0 focus:outline-none cursor-pointer"
+                  >
+                    <option value="code">Subject Code</option>
+                    <option value="name">Course Name</option>
+                    <option value="credits">Credits</option>
+                    <option value="status">Syllabus Status</option>
+                  </select>
+
+                  <button
+                    type="button"
+                    onClick={() => setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc')}
+                    className="p-1 hover:bg-gray-250/30 text-gray-650 font-bold text-[10px] flex items-center transition-all ml-1 border-l border-gray-200 pl-2"
+                    title="Toggle Sort Order"
+                  >
+                    <span>{sortOrder === 'asc' ? '↑ Asc' : '↓ Desc'}</span>
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
 
-          {/* Unified Matrix Table */}
-          <div className="overflow-x-auto w-full border border-gray-100 rounded-2xl">
-            <table className="min-w-full divide-y divide-gray-100 text-left text-xs">
-              <thead className="bg-gray-50 text-[10px] font-bold uppercase tracking-wider text-gray-400">
-                <tr>
-                  <th className="px-4 py-3">Code & Name</th>
-                  <th className="px-4 py-3">Programme & Year</th>
-                  <th className="px-4 py-3">Semester</th>
-                  <th className="px-4 py-3">Credits/Hours</th>
-                  <th className="px-4 py-3">Faculty Assigned</th>
-                  <th className="px-4 py-3 text-center">Syllabus Status</th>
-                  <th className="px-4 py-3 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100 bg-white">
-                {filteredCourses.length > 0 ? (
-                  filteredCourses.map((course) => (
-                    <tr key={course.subjectCode} className="hover:bg-gray-50/50 transition-all">
-                      {/* Code & Name */}
-                      <td className="px-4 py-3.5">
-                        <div className="flex flex-col">
-                          <span className="font-mono font-bold text-gray-900 bg-gray-100 px-2 py-0.5 rounded text-[10px] w-max mb-1">
-                            {course.subjectCode}
-                          </span>
-                          <span className="font-bold text-gray-800 text-xs leading-snug">{course.courseName}</span>
-                        </div>
-                      </td>
+          {/* Grouped Lists (B.Pharm or Pharm.D split years) */}
+          <div className="flex flex-col gap-6">
+            {(curriculumActiveTab === 'B.Pharm' ? [
+              { label: 'B.Pharm - 1st Year (Semester I & II)', year: 1, semesters: [1, 2] },
+              { label: 'B.Pharm - 2nd Year (Semester III & IV)', year: 2, semesters: [3, 4] },
+              { label: 'B.Pharm - 3rd Year (Semester V & VI)', year: 3, semesters: [5, 6] },
+              { label: 'B.Pharm - 4th Year (Semester VII & VIII)', year: 4, semesters: [7, 8] }
+            ] : [
+              { label: 'Pharm.D - 1st Year', year: 1 },
+              { label: 'Pharm.D - 2nd Year', year: 2 },
+              { label: 'Pharm.D - 3rd Year', year: 3 },
+              { label: 'Pharm.D - 4th Year', year: 4 }
+            ]).map((group) => {
+              const matchedCourses = curriculumDb.courseInformation.filter(course => {
+                const matchesAcademicYear = !course.academicYear || course.academicYear === filterAcademicYear;
+                const matchesSearch = course.subjectCode.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                                      course.courseName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                                      (course.facultyAssigned && course.facultyAssigned.toLowerCase().includes(searchQuery.toLowerCase()));
+                const matchesProg = course.programme === curriculumActiveTab;
+                const matchesYear = course.year === group.year;
+                const matchesSem = 'semesters' in group && group.semesters ? group.semesters.includes(course.semester) : true;
+                const matchesStatus = adminStatusFilter === 'All' || course.status === adminStatusFilter;
+                const matchesRegulation = filterRegulation === 'All' || (course.regulation || 'PCI 2017') === filterRegulation;
+                return matchesAcademicYear && matchesSearch && matchesProg && matchesYear && matchesSem && matchesStatus && matchesRegulation;
+              }).sort((a, b) => {
+                let valA: any = a[sortBy] || '';
+                let valB: any = b[sortBy] || '';
+                
+                if (sortBy === 'code') {
+                  valA = a.subjectCode;
+                  valB = b.subjectCode;
+                } else if (sortBy === 'name') {
+                  valA = a.courseName;
+                  valB = b.courseName;
+                } else if (sortBy === 'credits') {
+                  valA = a.credits;
+                  valB = b.credits;
+                } else if (sortBy === 'status') {
+                  valA = a.status;
+                  valB = b.status;
+                }
+                
+                if (typeof valA === 'string') {
+                  return sortOrder === 'asc' 
+                    ? valA.localeCompare(valB) 
+                    : valB.localeCompare(valA);
+                } else {
+                  return sortOrder === 'asc' 
+                    ? (valA > valB ? 1 : -1) 
+                    : (valB > valA ? 1 : -1);
+                }
+              });
 
-                      {/* Programme & Year */}
-                      <td className="px-4 py-3.5">
-                        <div className="flex flex-col">
-                          <span className="font-semibold text-gray-700">{course.programme}</span>
-                          <span className="text-[10px] text-gray-400 font-bold">Year {course.year}</span>
-                        </div>
-                      </td>
+              return (
+                <div key={group.label} className="border border-gray-100 rounded-2xl overflow-hidden shadow-sm bg-white">
+                  {/* Group Header Bar */}
+                  <div className="bg-gray-50/70 border-b border-gray-100 px-4 py-3 flex items-center justify-between">
+                    <span className="font-display font-extrabold text-xs text-gray-800 tracking-tight flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-[#8B1E3F]" />
+                      {group.label}
+                    </span>
+                    <span className="text-[10px] font-bold text-gray-500 bg-gray-200/60 px-2.5 py-0.5 rounded-full">
+                      {matchedCourses.length} {matchedCourses.length === 1 ? 'Subject Shell' : 'Subject Shells'}
+                    </span>
+                  </div>
 
-                      {/* Semester */}
-                      <td className="px-4 py-3.5">
-                        <span className="font-semibold text-gray-700">Sem {course.semester}</span>
-                      </td>
+                  {/* Group Table */}
+                  <div className="overflow-x-auto w-full">
+                    <table className="min-w-full divide-y divide-gray-100 text-left text-xs">
+                      <thead className="bg-gray-50/30 text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                        <tr>
+                          <th className="px-4 py-2">Code & Name</th>
+                          {'semesters' in group && <th className="px-4 py-2">Semester</th>}
+                          <th className="px-4 py-2">Type & Credits</th>
+                          <th className="px-4 py-2">Assigned Faculty</th>
+                          <th className="px-4 py-2 text-center">Status</th>
+                          <th className="px-4 py-2 text-right">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-100 bg-white">
+                        {matchedCourses.length > 0 ? (
+                          matchedCourses.map((course) => (
+                            <tr key={course.subjectCode} className="hover:bg-gray-50/50 transition-all">
+                              {/* Code & Name */}
+                              <td className="px-4 py-3">
+                                <div className="flex flex-col">
+                                  <div className="flex items-center gap-1.5 flex-wrap mb-1">
+                                    <span className="font-mono font-bold text-gray-900 bg-gray-100 px-2 py-0.5 rounded text-[10px] w-max">
+                                      {course.subjectCode}
+                                    </span>
+                                    <span className="text-[10px] font-extrabold text-[#CD4368] bg-[#CD4368]/10 border border-[#CD4368]/20 px-2 py-0.5 rounded">
+                                      {course.regulation || 'PCI 2017'}
+                                    </span>
+                                  </div>
+                                  <span className="font-bold text-gray-800 text-xs leading-snug">{course.courseName}</span>
+                                </div>
+                              </td>
 
-                      {/* Credits/Hours */}
-                      <td className="px-4 py-3.5">
-                        <div className="flex flex-col">
-                          <span className="font-semibold text-gray-700">{course.credits} Credits</span>
-                          <span className="text-[10px] text-gray-400 font-bold">{course.hours} Hours</span>
-                        </div>
-                      </td>
+                              {/* Semester */}
+                              {'semesters' in group && (
+                                <td className="px-4 py-3">
+                                  <span className="font-semibold text-gray-700">Sem {course.semester}</span>
+                                </td>
+                              )}
 
-                      {/* Faculty */}
-                      <td className="px-4 py-3.5">
-                        <span className="font-bold text-[#8B1E3F] bg-rose-50/70 px-2.5 py-1 rounded-full text-[10px] inline-block">
-                          {course.facultyAssigned || 'Unassigned'}
-                        </span>
-                      </td>
+                              {/* Type & Credits */}
+                              <td className="px-4 py-3">
+                                <div className="flex flex-col">
+                                  <div className="flex items-center gap-1.5">
+                                    <span className={`text-[10px] font-bold px-1.5 py-0.2 rounded ${
+                                      course.subjectType === 'Theory' 
+                                        ? 'bg-purple-50 text-purple-600' 
+                                        : 'bg-green-50 text-green-600'
+                                    }`}>
+                                      {course.subjectType}
+                                    </span>
+                                    <span className="font-semibold text-gray-700">{course.credits} Credits</span>
+                                  </div>
+                                  <span className="text-[10px] text-gray-400 font-bold mt-0.5">{course.hours} Hours</span>
+                                </div>
+                              </td>
 
-                      {/* Status */}
-                      <td className="px-4 py-3.5 text-center">
-                        <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider
-                          ${course.status === 'Approved' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 
-                            course.status === 'Active' ? 'bg-blue-50 text-blue-600 border border-blue-100' : 
-                            course.status === 'Draft' ? 'bg-amber-50 text-amber-600 border border-amber-100' : 
-                            'bg-gray-100 text-gray-500'}
-                        `}>
-                          {course.status}
-                        </span>
-                      </td>
+                              {/* Faculty */}
+                              <td className="px-4 py-3">
+                                {course.facultyAssigned && course.facultyAssigned !== 'Unassigned' ? (
+                                  <span className="font-bold text-[#8B1E3F] bg-rose-50/70 px-2.5 py-1 rounded-full text-[10px] inline-block">
+                                    {course.facultyAssigned}
+                                  </span>
+                                ) : (
+                                  <button
+                                    type="button"
+                                    onClick={() => handleOpenEdit(course)}
+                                    className="font-bold text-amber-600 bg-amber-50 hover:bg-amber-100 px-2.5 py-1 rounded-full text-[10px] transition-all"
+                                    title="Click to quick assign faculty"
+                                  >
+                                    Assign Faculty
+                                  </button>
+                                )}
+                              </td>
 
-                      {/* Actions */}
-                      <td className="px-4 py-3.5 text-right">
-                        <div className="flex items-center justify-end gap-2">
-                          <button 
-                            title="Manage Course Chapters, Topics, Recommended Books & Import Options (Full Access)"
-                            onClick={() => {
-                              onGoToSubject(course.subjectCode);
-                              onGoToScreen('faculty-subject-management'); // Redirects to fully editable Course Manager view
-                            }}
-                            className="p-1.5 rounded-lg bg-[#8B1E3F]/5 hover:bg-[#8B1E3F] text-[#8B1E3F] hover:text-white transition-all flex items-center gap-1 font-bold text-[10px] px-2.5 py-1"
-                          >
-                            <Sliders className="w-3 h-3" />
-                            Manage
-                          </button>
-                          <button 
-                            title="Quick Edit Metadata"
-                            onClick={() => handleOpenEdit(course)}
-                            className="p-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-600 transition-all"
-                          >
-                            <Edit2 className="w-3 h-3" />
-                          </button>
-                          <button 
-                            title="Delete Curriculum"
-                            onClick={() => handleDeleteCourse(course.subjectCode, course.courseName)}
-                            className="p-1.5 rounded-lg bg-red-50 hover:bg-red-600 text-red-600 hover:text-white transition-all"
-                          >
-                            <Trash2 className="w-3 h-3" />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan={7} className="px-4 py-10 text-center text-gray-400 font-medium">
-                      No matching master courses found. Use filters above or click "Create Master Course" to create one.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+                              {/* Status */}
+                              <td className="px-4 py-3 text-center">
+                                <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider
+                                  ${course.status === 'Approved' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 
+                                    course.status === 'Active' ? 'bg-blue-50 text-blue-600 border border-blue-100' : 
+                                    course.status === 'Draft' ? 'bg-amber-50 text-amber-600 border border-amber-100' : 
+                                    'bg-gray-100 text-gray-500'}
+                                `}>
+                                  {course.status}
+                                </span>
+                              </td>
+
+                              {/* Actions */}
+                              <td className="px-4 py-3 text-right">
+                                <div className="flex items-center justify-end gap-1.5">
+                                  <button 
+                                    title="Manage Course Chapters, Topics, Recommended Books & Import Options (Full Access)"
+                                    onClick={() => {
+                                      onGoToSubject(course.subjectCode);
+                                      onGoToScreen('faculty-subject-management'); // Redirects to fully editable Course Manager view
+                                    }}
+                                    className="p-1 rounded-lg bg-[#8B1E3F]/5 hover:bg-[#8B1E3F] text-[#8B1E3F] hover:text-white transition-all flex items-center gap-1 font-bold text-[9px] px-2 py-1"
+                                  >
+                                    <Sliders className="w-3 h-3" />
+                                    Manage
+                                  </button>
+                                  <button 
+                                    title="Quick Edit Metadata"
+                                    onClick={() => handleOpenEdit(course)}
+                                    className="p-1 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-600 transition-all"
+                                  >
+                                    <Edit2 className="w-3 h-3" />
+                                  </button>
+                                  <button 
+                                    title="Delete Curriculum"
+                                    onClick={() => handleDeleteCourse(course.subjectCode, course.courseName)}
+                                    className="p-1 rounded-lg bg-red-50 hover:bg-red-600 text-red-600 hover:text-white transition-all"
+                                  >
+                                    <Trash2 className="w-3 h-3" />
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          ))
+                        ) : (
+                          <tr>
+                            <td colSpan={'semesters' in group ? 6 : 5} className="px-4 py-6 text-center text-gray-400 font-medium">
+                              No active courses allotted for this year.
+                            </td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </GlassCard>
 
@@ -540,15 +766,16 @@ export default function AdminDashboard({
         <div className="flex flex-col gap-6">
           <GlassCard className="p-6">
             <h3 className="font-display font-bold text-sm text-gray-900 border-b border-gray-100 pb-3 mb-4 flex items-center justify-between">
-              <span>Operational Integrity</span>
+              <span>Website Statistics</span>
               <ShieldCheck className="w-4 h-4 text-emerald-600" />
             </h3>
 
             <div className="flex flex-col gap-4">
               {[
-                { label: 'Total Curriculums', value: curriculumDb.courseInformation.length, icon: Database, color: 'text-rose-600 bg-rose-50' },
-                { label: 'Assigned Lectures', value: subjects.length, icon: GraduationCap, color: 'text-indigo-600 bg-indigo-50' },
-                { label: 'Compliance Index', value: '100%', icon: Sliders, color: 'text-emerald-600 bg-emerald-50' },
+                { label: 'Number of Faculty', value: 12, icon: Users, color: 'text-indigo-600 bg-indigo-50' },
+                { label: 'Number of Students', value: 148, icon: GraduationCap, color: 'text-emerald-600 bg-emerald-50' },
+                { label: 'Number of Courses', value: curriculumDb.courseInformation.length, icon: Database, color: 'text-[#8B1E3F] bg-red-50' },
+                { label: 'Unpublished (Draft) Courses', value: curriculumDb.courseInformation.filter(c => c.status === 'Draft').length, icon: AlertCircle, color: 'text-amber-600 bg-amber-50' },
               ].map((item, idx) => (
                 <div key={idx} className="flex items-center gap-3">
                   <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${item.color} border border-white/30 shrink-0 shadow-inner`}>
@@ -712,7 +939,44 @@ export default function AdminDashboard({
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-4 gap-4">
+                <div className="flex flex-col gap-1">
+                  <label className="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Regulation *</label>
+                  <select 
+                    value={formRegulation}
+                    onChange={(e) => {
+                      const reg = e.target.value;
+                      setFormRegulation(reg);
+                      if (reg === 'PCI 2026') {
+                        setFormAcademicYear('2026-2027');
+                      }
+                    }}
+                    className="border border-gray-200 text-xs rounded-xl px-3 py-2 focus:ring-1 focus:ring-[#8B1E3F] focus:outline-none bg-white font-semibold"
+                  >
+                    <option value="PCI 2017">PCI 2017</option>
+                    <option value="PCI 2026">PCI 2026</option>
+                  </select>
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <label className="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Academic Year *</label>
+                  <select 
+                    value={formAcademicYear}
+                    onChange={(e) => setFormAcademicYear(e.target.value)}
+                    className="border border-gray-200 text-xs rounded-xl px-3 py-2 focus:ring-1 focus:ring-[#8B1E3F] focus:outline-none bg-white font-semibold"
+                  >
+                    {formRegulation === 'PCI 2026' ? (
+                      <option value="2026-2027">2026-2027</option>
+                    ) : (
+                      <>
+                        <option value="2024-2025">2024-2025</option>
+                        <option value="2025-2026">2025-2026</option>
+                        <option value="2026-2027">2026-2027</option>
+                      </>
+                    )}
+                  </select>
+                </div>
+
                 <div className="flex flex-col gap-1">
                   <label className="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Faculty Assigned</label>
                   <input 
@@ -857,7 +1121,25 @@ export default function AdminDashboard({
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-3 gap-4">
+                <div className="flex flex-col gap-1">
+                  <label className="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Regulation *</label>
+                  <select 
+                    value={formRegulation}
+                    onChange={(e) => {
+                      const reg = e.target.value;
+                      setFormRegulation(reg);
+                      if (reg === 'PCI 2026') {
+                        setFormAcademicYear('2026-2027');
+                      }
+                    }}
+                    className="border border-gray-200 text-xs rounded-xl px-3 py-2 focus:ring-1 focus:ring-[#8B1E3F] focus:outline-none bg-white font-semibold"
+                  >
+                    <option value="PCI 2017">PCI 2017</option>
+                    <option value="PCI 2026">PCI 2026</option>
+                  </select>
+                </div>
+
                 <div className="flex flex-col gap-1">
                   <label className="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Faculty Assigned</label>
                   <input 
@@ -874,13 +1156,32 @@ export default function AdminDashboard({
                   <select 
                     value={formStatus}
                     onChange={(e) => setFormStatus(e.target.value as any)}
-                    className="border border-gray-200 text-xs rounded-xl px-3 py-2 focus:ring-1 focus:ring-[#8B1E3F] focus:outline-none bg-white"
+                    className="border border-gray-200 text-xs rounded-xl px-3 py-2 focus:ring-1 focus:ring-[#8B1E3F] focus:outline-none bg-white font-semibold"
                   >
                     <option value="Draft">Draft</option>
                     <option value="Active">Active</option>
                     <option value="Approved">Approved</option>
                   </select>
                 </div>
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <label className="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Allotted Academic Year</label>
+                <select 
+                  value={formAcademicYear}
+                  onChange={(e) => setFormAcademicYear(e.target.value)}
+                  className="border border-gray-200 text-xs rounded-xl px-3 py-2 focus:ring-1 focus:ring-[#8B1E3F] focus:outline-none bg-white font-semibold"
+                >
+                  {formRegulation === 'PCI 2026' ? (
+                    <option value="2026-2027">2026-2027</option>
+                  ) : (
+                    <>
+                      <option value="2024-2025">2024-2025</option>
+                      <option value="2025-2026">2025-2026 (Active)</option>
+                      <option value="2026-2027">2026-2027</option>
+                    </>
+                  )}
+                </select>
               </div>
 
               <div className="flex items-center justify-end gap-3 border-t border-gray-100 pt-4 mt-2">
@@ -899,6 +1200,58 @@ export default function AdminDashboard({
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* CUSTOM DELETE COURSE CONFIRMATION DIALOG */}
+      {courseToDelete && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/50 backdrop-blur-sm animate-fade-in" id="admin-delete-course-confirm-modal">
+          <div className="bg-white rounded-[24px] border border-red-100 shadow-2xl p-6 w-full max-w-md flex flex-col gap-4 text-left">
+            <div className="flex items-center gap-3 text-red-600">
+              <div className="p-3 bg-red-50 rounded-full">
+                <Trash2 className="w-6 h-6" />
+              </div>
+              <div>
+                <h3 className="font-display font-black text-base text-gray-950">Confirm Course Deletion</h3>
+                <p className="text-xs text-red-500 font-bold uppercase tracking-wider">Warning: This action is permanent</p>
+              </div>
+            </div>
+
+            <div className="bg-gray-50 border border-gray-100 rounded-xl p-4 text-xs font-medium text-gray-600 flex flex-col gap-1.5">
+              <div>
+                <span className="font-bold text-gray-400">Subject Code: </span>
+                <span className="font-black text-gray-900">{courseToDelete.code}</span>
+              </div>
+              <div>
+                <span className="font-bold text-gray-400">Course Name: </span>
+                <span className="font-black text-gray-900">{courseToDelete.name}</span>
+              </div>
+            </div>
+
+            <p className="text-xs leading-relaxed text-gray-500">
+              Are you sure you want to permanently delete the master curriculum for <span className="font-bold text-gray-900">{courseToDelete.code} - {courseToDelete.name}</span>? 
+              This will remove all syllabus materials, mapped outcomes, topics, and compliance structures. This cannot be undone.
+            </p>
+
+            <div className="flex justify-end gap-2.5 pt-2 border-t border-gray-100">
+              <button
+                type="button"
+                onClick={() => setCourseToDelete(null)}
+                className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-bold rounded-full transition-all"
+                id="admin-cancel-delete-course-btn"
+              >
+                No, Keep Course
+              </button>
+              <button
+                type="button"
+                onClick={confirmDeleteCourse}
+                className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-black uppercase tracking-wider rounded-full transition-all flex items-center gap-1.5 shadow-md shadow-red-950/15 animate-pulse"
+                id="admin-confirm-delete-course-btn"
+              >
+                <Trash2 className="w-4 h-4" /> Delete Permanently
+              </button>
+            </div>
           </div>
         </div>
       )}

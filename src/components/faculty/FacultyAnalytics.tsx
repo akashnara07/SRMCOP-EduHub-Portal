@@ -202,7 +202,7 @@ export default function FacultyAnalytics({
           <div class="header-container">
             <div class="college-details">
               <h1>SRM College of Pharmacy</h1>
-              <p>Department of Pharmaceutics • ISO 9001:2015 Certified</p>
+              <p>${facultyProfile?.department || 'Department of Pharmacology'} • ISO 9001:2015 Certified</p>
             </div>
             <div style="text-align: right; font-size: 11px; color: #666; font-weight: 600;">
               Academic Year: ${sub.academicYear || '2025-2026'}<br/>
