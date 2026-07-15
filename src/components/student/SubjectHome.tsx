@@ -24,6 +24,18 @@ export default function SubjectHome({
   const [activeMediaFilter, setActiveMediaFilter] = useState<'all' | 'video' | 'pdf' | 'assessment'>('all');
   const [activeSection, setActiveSection] = useState<'curriculum' | 'resources'>('curriculum');
 
+  // Track expanded units in learning resources workspace
+  const [expandedResourceUnits, setExpandedResourceUnits] = useState<Record<string, boolean>>({
+    'Unit I': true,
+    'Unit II': false,
+    'Unit III': false,
+    'Unit IV': false,
+    'Unit V': false,
+  });
+
+  // Track expanded topics in learning resources workspace
+  const [expandedResourceTopics, setExpandedResourceTopics] = useState<Record<string, boolean>>({});
+
   // Accordion Units toggle states for syllabus preview
   const [expandedUnits, setExpandedUnits] = useState<Record<string, boolean>>({
     'Unit I': true,
@@ -169,6 +181,177 @@ export default function SubjectHome({
       .filter(t => t.unitCode === u.unitCode)
       .map(t => `${t.topicCode}: ${t.topicName}`)
   })) : defaultUnits;
+
+  // Normalized resource units with structured topic objects for the learning resources accordion
+  const normalizedResourceUnits = (dbUnits.length > 0 ? dbUnits : defaultUnits).map((u: any, uIdx: number) => {
+    let unitTopicsList: any[] = [];
+    if (dbUnits.length > 0) {
+      unitTopicsList = dbTopics.filter((t: any) => t.unitCode === u.unitCode);
+    } else {
+      // defaultUnits fallback
+      unitTopicsList = u.topics.map((tStr: string, tIdx: number) => {
+        const match = tStr.match(/^([A-Za-z0-9\.]+)\s*:\s*(.*)$/);
+        if (match) {
+          return {
+            topicCode: match[1],
+            topicName: match[2]
+          };
+        } else {
+          const romanNumeral = u.name.split(' ')[1]; // e.g. "I"
+          const romanToNum: Record<string, number> = { 'I': 1, 'II': 2, 'III': 3, 'IV': 4, 'V': 5 };
+          const unitNum = romanToNum[romanNumeral] || (uIdx + 1);
+          const topicNum = tIdx + 1;
+          return {
+            topicCode: `T${unitNum}.${topicNum}`,
+            topicName: tStr
+          };
+        }
+      });
+    }
+
+    const nTopics = unitTopicsList.map((t: any) => ({
+      topicCode: t.topicCode || '',
+      topicName: t.topicName || t.topicText || ''
+    }));
+
+    return {
+      name: u.unitCode || u.name,
+      title: u.unitName || u.title,
+      hours: u.hours,
+      topics: nTopics
+    };
+  });
+
+  // Maps a resource to the most appropriate topic code in a unit
+  const mapResourceToTopic = (res: any, unitName: string, topics: { topicCode: string, topicName: string }[]) => {
+    if (res.topicCode) {
+      const matched = topics.find(t => t.topicCode.toLowerCase() === res.topicCode.toLowerCase());
+      if (matched) return matched.topicCode;
+    }
+
+    if (topics.length === 0) return '';
+
+    const titleLower = (res.title || '').toLowerCase();
+    for (const t of topics) {
+      const codeClean = t.topicCode.toLowerCase();
+      if (titleLower.includes(codeClean) || titleLower.includes(` ${codeClean} `) || titleLower.startsWith(codeClean)) {
+        return t.topicCode;
+      }
+    }
+
+    const descLower = (res.description || '').toLowerCase();
+    for (const t of topics) {
+      const nameClean = t.topicName.toLowerCase();
+      if (titleLower.includes(nameClean) || descLower.includes(nameClean)) {
+        return t.topicCode;
+      }
+    }
+
+    return topics[0].topicCode;
+  };
+
+  // Resolves the icon, type label, and style classes for resources
+  const getResourceIconAndLabel = (type: string, url?: string) => {
+    const t = type.toUpperCase();
+    if (t === 'VIDEO') {
+      return {
+        icon: <Video className="w-3.5 h-3.5 text-rose-500 shrink-0" />,
+        label: 'VIDEO',
+        colorClass: 'text-rose-500 bg-rose-50 border border-rose-100/30 font-mono'
+      };
+    }
+    if (t === 'PDF' || t === 'NOTES') {
+      return {
+        icon: <FileText className="w-3.5 h-3.5 text-blue-500 shrink-0" />,
+        label: 'PDF',
+        colorClass: 'text-blue-500 bg-blue-50 border border-blue-100/30 font-mono'
+      };
+    }
+    if (t === 'SLIDES' || t === 'PPT') {
+      return {
+        icon: <Layers className="w-3.5 h-3.5 text-amber-500 shrink-0" />,
+        label: 'PPT',
+        colorClass: 'text-amber-500 bg-amber-50 border border-amber-100/30 font-mono'
+      };
+    }
+    if (t === 'QUIZ' || t === 'TEST') {
+      return {
+        icon: <Award className="w-3.5 h-3.5 text-purple-500 shrink-0" />,
+        label: 'QUIZ',
+        colorClass: 'text-purple-500 bg-purple-50 border border-purple-100/30 font-mono'
+      };
+    }
+    if (t === 'ASSIGNMENT') {
+      return {
+        icon: <ClipboardList className="w-3.5 h-3.5 text-orange-500 shrink-0" />,
+        label: 'ASSIGNMENT',
+        colorClass: 'text-orange-500 bg-orange-50 border border-orange-100/30 font-mono'
+      };
+    }
+    if (url?.startsWith('http')) {
+      return {
+        icon: <ExternalLink className="w-3.5 h-3.5 text-teal-500 shrink-0" />,
+        label: 'LINK',
+        colorClass: 'text-teal-500 bg-teal-50 border border-teal-100/30 font-mono'
+      };
+    }
+    return {
+      icon: <FileText className="w-3.5 h-3.5 text-gray-500 shrink-0" />,
+      label: 'DOCUMENT',
+      colorClass: 'text-gray-500 bg-gray-50 border border-gray-100 font-mono'
+    };
+  };
+
+  // Determines the contextual launch action text for resources
+  const getResourceAction = (res: any) => {
+    const type = res.type?.toUpperCase() || '';
+    const status = res.status;
+
+    if (type === 'VIDEO') {
+      if (status === 'completed') return 'Replay';
+      if (status === 'in-progress') return 'Continue';
+      return 'Watch';
+    }
+    if (['PDF', 'NOTES', 'SLIDES', 'PRESENTATION'].includes(type)) {
+      return 'View';
+    }
+    if (type === 'EXTERNAL RESOURCE' || res.url?.startsWith('http')) {
+      return 'Open';
+    }
+    if (['QUIZ', 'ASSIGNMENT', 'TEST'].includes(type)) {
+      if (status === 'completed') return 'Review';
+      if (status === 'in-progress') return 'Continue';
+      return 'Attempt';
+    }
+    return 'View';
+  };
+
+  const toggleResourceUnitExpanded = (unitName: string) => {
+    setExpandedResourceUnits(prev => ({
+      ...prev,
+      [unitName]: !prev[unitName]
+    }));
+  };
+
+  const toggleResourceTopicExpanded = (unitName: string, topicCode: string) => {
+    const key = `${unitName}_${topicCode}`;
+    setExpandedResourceTopics(prev => ({
+      ...prev,
+      [key]: !prev[key]
+    }));
+  };
+
+  const isResourceTopicExpanded = (unitName: string, topicCode: string, topicsInUnit: { topicCode: string, topicName: string }[], unitResources: any[]) => {
+    const key = `${unitName}_${topicCode}`;
+    if (expandedResourceTopics[key] !== undefined) {
+      return expandedResourceTopics[key];
+    }
+    const firstTopicWithResources = topicsInUnit.find(t => {
+      const hasRes = unitResources.some(r => mapResourceToTopic(r, unitName, topicsInUnit) === t.topicCode);
+      return hasRes;
+    });
+    return firstTopicWithResources ? firstTopicWithResources.topicCode === topicCode : false;
+  };
 
   return (
     <div className="flex flex-col gap-8 w-full max-w-5xl mx-auto pb-12">
@@ -592,8 +775,8 @@ export default function SubjectHome({
           </div>
 
           {/* Resources Timeline list Grouped by Units */}
-          <div className="flex flex-col gap-8">
-            {units.map((unit: any) => {
+          <div className="flex flex-col gap-4">
+            {normalizedResourceUnits.map((unit: any) => {
               // Filter resources inside unit
               const unitResources = (subject.resources || []).filter((res) => {
                 const matchesSearch = res.title.toLowerCase().includes(resourceSearch.toLowerCase()) || 
@@ -609,87 +792,198 @@ export default function SubjectHome({
                 return res.unit === unit.name || res.title.startsWith(`${unit.name}:`) || (!res.unit && unit.name === 'Unit I' && !res.title.includes('Unit '));
               });
 
+              const isUnitExpanded = expandedResourceUnits[unit.name];
+
               return (
-                <div key={unit.name} className="flex flex-col gap-4">
-                  <div className="flex items-center gap-2.5 border-b border-gray-150 pb-2">
-                    <span className="text-[10px] font-black uppercase tracking-wider text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100">
-                      {unit.name}
-                    </span>
-                    <h4 className="text-xs font-black text-gray-800 uppercase tracking-wide">
-                      {unit.title}
-                    </h4>
-                    <span className="text-[9px] font-bold text-gray-400 ml-auto bg-gray-50 px-2.5 py-0.5 rounded-full font-mono">
-                      {unitResources.length} Materials
-                    </span>
+                <div key={unit.name} className="flex flex-col gap-2 bg-white/45 border border-slate-150 rounded-2xl p-2.5 shadow-sm">
+                  {/* UNIT HEADER */}
+                  <div 
+                    onClick={() => toggleResourceUnitExpanded(unit.name)}
+                    className="w-full bg-[#f8fafc] border border-gray-200/80 rounded-xl px-4 py-3 flex items-center justify-between gap-4 cursor-pointer hover:bg-gray-100/50 transition-colors select-none"
+                  >
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className="w-6 h-6 rounded-lg bg-white border border-gray-150 flex items-center justify-center shrink-0">
+                        {isUnitExpanded ? (
+                          <ChevronDown className="w-4 h-4 text-gray-600" />
+                        ) : (
+                          <ChevronRight className="w-4 h-4 text-gray-600" />
+                        )}
+                      </div>
+                      <span className="font-display font-extrabold text-xs sm:text-sm text-gray-800 tracking-wide uppercase truncate">
+                        {unit.name}: {unit.title}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <span className="text-[10px] sm:text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-100 font-mono">
+                        {unitResources.length} {unitResources.length === 1 ? 'Resource' : 'Resources'}
+                      </span>
+                    </div>
                   </div>
 
-                  {unitResources.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      {unitResources.map((res) => {
-                        const isCompleted = res.status === 'completed';
-                        const isInProgress = res.status === 'in-progress';
-                        const displayTitle = res.title.startsWith(`${unit.name}: `) 
-                          ? res.title.substring(res.title.indexOf(': ') + 2) 
-                          : res.title;
+                  {/* TOPICS ACCORDION */}
+                  {isUnitExpanded && (
+                    <div className="mt-1 flex flex-col border border-gray-100 rounded-xl bg-white overflow-hidden">
+                      {unit.topics.map((topic: any) => {
+                        const topicResources = unitResources.filter(res => mapResourceToTopic(res, unit.name, unit.topics) === topic.topicCode);
+                        const isTopicExpanded = isResourceTopicExpanded(unit.name, topic.topicCode, unit.topics, unitResources);
+                        const hasResources = topicResources.length > 0;
 
                         return (
-                          <GlassCard 
-                            key={res.id}
-                            hoverLift
-                            className="p-5 flex flex-col justify-between border border-gray-150/40 rounded-3xl hover:border-emerald-500/20 hover:bg-white/90 cursor-pointer transition-all duration-300"
-                            onClick={() => onSelectResource(res)}
-                          >
-                            <div className="flex items-start gap-4">
-                              <div className="w-10 h-10 rounded-full bg-white border border-gray-100 flex items-center justify-center shrink-0 shadow-sm">
-                                {getIconForType(res.type)}
-                              </div>
-                              
-                              <div className="flex-1 min-w-0 pr-4">
-                                <div className="flex items-center gap-2 flex-wrap mb-1">
-                                  <span className="text-[9px] font-black uppercase text-gray-400 tracking-wider">{res.type}</span>
-                                  {res.duration && (
-                                    <span className="text-[9px] font-bold text-gray-500 flex items-center gap-1 bg-gray-100 px-2 py-0.5 rounded-full">
-                                      <Clock className="w-2.5 h-2.5" /> {res.duration}
-                                    </span>
-                                  )}
-                                  {res.fileSize && (
-                                    <span className="text-[9px] font-bold text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full">
-                                      {res.fileSize}
-                                    </span>
-                                  )}
-                                  {res.dueDate && (
-                                    <span className="text-[9px] font-bold text-orange-600 bg-orange-50 border border-orange-100 px-2 py-0.5 rounded-full">
-                                      Due: {res.dueDate}
-                                    </span>
-                                  )}
-                                </div>
+                          <div key={topic.topicCode} className="border-b border-gray-100/80 last:border-0">
+                            {/* TOPIC ROW */}
+                            <div 
+                              onClick={() => {
+                                if (hasResources) {
+                                  toggleResourceTopicExpanded(unit.name, topic.topicCode);
+                                }
+                              }}
+                              className={`flex items-center justify-between gap-4 py-2.5 px-3 sm:px-4 select-none transition-colors
+                                ${hasResources 
+                                  ? 'cursor-pointer hover:bg-slate-50/50' 
+                                  : 'cursor-not-allowed opacity-75 bg-gray-50/20'}`}
+                            >
+                              <div className="flex items-center gap-3 min-w-0">
+                                {hasResources ? (
+                                  <div className="w-5 h-5 flex items-center justify-center shrink-0">
+                                    {isTopicExpanded ? (
+                                      <ChevronDown className="w-3.5 h-3.5 text-gray-500" />
+                                    ) : (
+                                      <ChevronRight className="w-3.5 h-3.5 text-gray-500" />
+                                    )}
+                                  </div>
+                                ) : (
+                                  <div className="w-5 h-5 shrink-0" />
+                                )}
                                 
-                                <h4 className="font-extrabold text-sm text-gray-800 leading-snug line-clamp-1">{displayTitle}</h4>
-                                <p className="text-[11px] text-gray-500 font-medium leading-relaxed mt-1 line-clamp-2">{res.description}</p>
+                                <div className="flex items-center gap-2.5 min-w-0">
+                                  <span className="font-mono text-[10px] font-black text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-100/50 shrink-0">
+                                    {topic.topicCode}
+                                  </span>
+                                  <span className="text-xs sm:text-sm font-semibold text-gray-700 truncate" title={topic.topicName}>
+                                    {topic.topicName}
+                                  </span>
+                                </div>
+                              </div>
+
+                              <div className="flex items-center gap-3 shrink-0">
+                                <span className="text-[10px] sm:text-xs font-semibold text-gray-400 font-mono bg-gray-50 px-2 py-0.5 rounded border border-gray-100">
+                                  {topicResources.length} {topicResources.length === 1 ? 'Resource' : 'Resources'}
+                                </span>
                               </div>
                             </div>
 
-                            <div className="flex justify-between items-center border-t border-gray-100 pt-3 mt-4">
-                              <span className={`text-[10px] font-bold px-3 py-1 rounded-full ${
-                                isCompleted 
-                                  ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' 
-                                  : isInProgress 
-                                  ? 'bg-amber-50 text-amber-600 border border-amber-100' 
-                                  : 'bg-gray-50 text-gray-500 border border-gray-100'
-                              }`}>
-                                {res.status.replace('-', ' ')}
-                              </span>
-                              <span className="text-[10px] font-bold text-[#8B1E3F] flex items-center gap-0.5 hover:underline">
-                                Launch Resource <ChevronRight className="w-3.5 h-3.5" />
-                              </span>
-                            </div>
-                          </GlassCard>
+                            {/* TOPIC RESOURCES TABLE */}
+                            {isTopicExpanded && hasResources && (
+                              <div className="pl-6 sm:pl-10 pr-3 sm:pr-4 py-2 bg-slate-50/20 border-t border-b border-gray-100/50">
+                                {/* Table Header (Desktop Only) */}
+                                <div className="hidden md:grid grid-cols-12 gap-4 px-4 py-2 text-[10px] font-black text-gray-400 uppercase tracking-wider border-b border-gray-200/50">
+                                  <div className="col-span-2">Type</div>
+                                  <div className="col-span-5">Resource Title</div>
+                                  <div className="col-span-2">Duration / Size</div>
+                                  <div className="col-span-2">Progress</div>
+                                  <div className="col-span-1 text-right">Action</div>
+                                </div>
+
+                                {/* Table Rows */}
+                                <div className="flex flex-col">
+                                  {topicResources.map((res: any) => {
+                                    const { icon, label, colorClass } = getResourceIconAndLabel(res.type, res.url);
+                                    const actionText = getResourceAction(res);
+                                    const isCompleted = res.status === 'completed';
+                                    const isInProgress = res.status === 'in-progress';
+                                    
+                                    const progressColorClass = isCompleted 
+                                      ? 'bg-emerald-50 text-emerald-600 border border-emerald-100/50' 
+                                      : isInProgress 
+                                      ? 'bg-amber-50 text-amber-600 border border-amber-100/50' 
+                                      : 'bg-gray-50 text-gray-500 border border-gray-100';
+
+                                    const displayTitle = res.title.startsWith(`${unit.name}: `) 
+                                      ? res.title.substring(res.title.indexOf(': ') + 2) 
+                                      : res.title;
+
+                                    return (
+                                      <div 
+                                        key={res.id}
+                                        onClick={() => onSelectResource(res)}
+                                        className="group cursor-pointer hover:bg-white border-b border-gray-100/60 last:border-0 transition-all duration-200"
+                                      >
+                                        {/* Desktop View */}
+                                        <div className="hidden md:grid grid-cols-12 gap-4 items-center px-4 py-2.5 text-xs">
+                                          {/* Type Column */}
+                                          <div className="col-span-2 flex items-center gap-2">
+                                            {icon}
+                                            <span className={`text-[9px] font-extrabold uppercase px-2 py-0.5 rounded ${colorClass}`}>
+                                              {label}
+                                            </span>
+                                          </div>
+
+                                          {/* Title Column */}
+                                          <div className="col-span-5 min-w-0 pr-4">
+                                            <span className="font-extrabold text-gray-800 truncate block group-hover:text-emerald-700 transition-colors" title={displayTitle}>
+                                              {displayTitle}
+                                            </span>
+                                            {res.description && (
+                                              <span className="text-[10px] text-gray-400 font-medium truncate block" title={res.description}>
+                                                {res.description}
+                                              </span>
+                                            )}
+                                          </div>
+
+                                          {/* Duration / Size Column */}
+                                          <div className="col-span-2 text-gray-500 font-mono font-semibold">
+                                            {res.duration || res.fileSize || '—'}
+                                          </div>
+
+                                          {/* Progress Column */}
+                                          <div className="col-span-2">
+                                            <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full ${progressColorClass}`}>
+                                              {res.status.replace('-', ' ')}
+                                            </span>
+                                          </div>
+
+                                          {/* Action Column */}
+                                          <div className="col-span-1 text-right">
+                                            <button className="text-[10px] font-black text-[#8B1E3F] hover:underline flex items-center gap-0.5 ml-auto">
+                                              {actionText} <ChevronRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+                                            </button>
+                                          </div>
+                                        </div>
+
+                                        {/* Mobile View */}
+                                        <div className="md:hidden flex flex-col gap-2 p-3">
+                                          <div className="flex justify-between items-start gap-2">
+                                            <div className="flex items-center gap-1.5 min-w-0">
+                                              {icon}
+                                              <span className={`text-[9px] font-black uppercase px-1.5 py-0.5 rounded ${colorClass} shrink-0`}>
+                                                {label}
+                                              </span>
+                                              <span className="text-xs font-extrabold text-gray-800 truncate" title={displayTitle}>
+                                                {displayTitle}
+                                              </span>
+                                            </div>
+                                            <span className="text-[10px] font-semibold text-gray-400 font-mono shrink-0">
+                                              {res.duration || res.fileSize || '—'}
+                                            </span>
+                                          </div>
+                                          <div className="flex justify-between items-center mt-1">
+                                            <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${progressColorClass}`}>
+                                              {res.status.replace('-', ' ')}
+                                            </span>
+                                            <button className="text-[10px] font-extrabold text-[#8B1E3F] flex items-center gap-0.5">
+                                              {actionText} <ChevronRight className="w-3 h-3" />
+                                            </button>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                            )}
+                          </div>
                         );
                       })}
-                    </div>
-                  ) : (
-                    <div className="text-center py-6 text-[11px] text-gray-400 font-semibold italic border border-dashed border-gray-200 rounded-2xl bg-white/50">
-                      No matching modules found for this unit.
                     </div>
                   )}
                 </div>

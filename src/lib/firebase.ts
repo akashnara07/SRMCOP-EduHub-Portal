@@ -27,6 +27,14 @@ const firebaseConfig = {
 
 const hasConfig = !!firebaseConfig.apiKey && !!firebaseConfig.projectId;
 
+console.log("===== FIREBASE ENV CHECK =====");
+console.log("Project ID:", firebaseConfig.projectId);
+console.log("Auth Domain:", firebaseConfig.authDomain);
+console.log("Storage Bucket:", firebaseConfig.storageBucket);
+console.log("API Key Present:", !!firebaseConfig.apiKey);
+console.log("hasConfig:", hasConfig);
+console.log("==============================");
+
 // Initialize Firebase app safely (with mock fallback for robust local dev initialization)
 const app = hasConfig 
   ? initializeApp(firebaseConfig) 
@@ -36,6 +44,9 @@ const app = hasConfig
       authDomain: "mock-project-id.firebaseapp.com",
       appId: "mock-app-id"
     });
+
+console.log("Connected Project:", app.options.projectId);
+console.log("Connected Auth Domain:", app.options.authDomain);
 
 // Initialize Firestore, Auth and Storage with standard Firebase Web SDK references
 export const db = getFirestore(app);
@@ -130,11 +141,23 @@ export async function uploadLocalDbToFirestore() {
 export async function downloadFirestoreToLocal(): Promise<boolean> {
   try {
     // 1. Fetch courses from the 'courses' collection
-    const coursesSnapshot = await getDocs(collection(db, 'courses'));
     const courses: CourseInformation[] = [];
-    coursesSnapshot.forEach((docSnap) => {
-      courses.push(docSnap.data() as CourseInformation);
-    });
+    let coursesSnapshot: any = null;
+    try {
+      console.log("Reading collection:", "courses");
+      coursesSnapshot = await getDocs(collection(db, 'courses'));
+      console.log("courses OK");
+      if (coursesSnapshot) {
+        coursesSnapshot.forEach((docSnap: any) => {
+          courses.push(docSnap.data() as CourseInformation);
+        });
+      }
+    } catch (error: any) {
+      console.error("Collection failed:", "courses");
+      console.error("Code:", error ? error.code : "N/A");
+      console.error("Message:", error ? error.message : "N/A");
+      console.error(error);
+    }
 
     const localDb = getCurriculumDb();
 
@@ -169,9 +192,12 @@ export async function downloadFirestoreToLocal(): Promise<boolean> {
       for (const reg of regs) {
         for (const year of years) {
           for (const sem of sems) {
+            const collectionName = `curriculum/${prog}/${reg}/${year}/${sem}`;
             try {
+              console.log("Reading collection:", collectionName);
               const colRef = collection(db, 'curriculum', prog, reg, year, sem);
               const snap = await getDocs(colRef);
+              console.log(`${collectionName} OK`);
               
               snap.forEach((docSnap) => {
                 const data = docSnap.data();
@@ -309,8 +335,11 @@ export async function downloadFirestoreToLocal(): Promise<boolean> {
                   }
                 }
               });
-            } catch (err) {
-              // Ignore non-existent collections gracefully
+            } catch (error: any) {
+              console.error("Collection failed:", collectionName);
+              console.error("Code:", error ? error.code : "N/A");
+              console.error("Message:", error ? error.message : "N/A");
+              console.error(error);
             }
           }
         }
@@ -327,17 +356,29 @@ export async function downloadFirestoreToLocal(): Promise<boolean> {
     });
 
     // 4. Save resources per subject
-    const resourcesSnapshot = await getDocs(collection(db, 'teaching_resources'));
+    let resourcesSnapshot: any = null;
+    try {
+      console.log("Reading collection:", "teaching_resources");
+      resourcesSnapshot = await getDocs(collection(db, 'teaching_resources'));
+      console.log("teaching_resources OK");
+    } catch (error: any) {
+      console.error("Collection failed:", "teaching_resources");
+      console.error("Code:", error ? error.code : "N/A");
+      console.error("Message:", error ? error.message : "N/A");
+      console.error(error);
+    }
+
     const resourcesBySubject: Record<string, Resource[]> = {};
-    
-    resourcesSnapshot.forEach((docSnap) => {
-      const res = docSnap.data() as Resource & { subjectCode: string };
-      const subCode = res.subjectCode;
-      if (!resourcesBySubject[subCode]) {
-        resourcesBySubject[subCode] = [];
-      }
-      resourcesBySubject[subCode].push(res);
-    });
+    if (resourcesSnapshot) {
+      resourcesSnapshot.forEach((docSnap: any) => {
+        const res = docSnap.data() as Resource & { subjectCode: string };
+        const subCode = res.subjectCode;
+        if (!resourcesBySubject[subCode]) {
+          resourcesBySubject[subCode] = [];
+        }
+        resourcesBySubject[subCode].push(res);
+      });
+    }
 
     saveCurriculumDb(localDb);
 
@@ -348,7 +389,16 @@ export async function downloadFirestoreToLocal(): Promise<boolean> {
 
     console.log("Local storage synchronized with complete Firebase curriculum and courses!");
     return true;
-  } catch (error) {
+  } catch (error: any) {
+    console.error("===== FIRESTORE SYNC ERROR DIAGNOSTICS =====");
+    if (error) {
+      console.error("Error Code:", error.code);
+      console.error("Error Message:", error.message);
+      console.error("Full Error Object:", error);
+    } else {
+      console.error("Unknown error caught (null/undefined)");
+    }
+    console.error("============================================");
     console.warn("Failed to synchronize with Firestore, falling back to local storage.", error);
     return false;
   }
@@ -402,5 +452,106 @@ export async function deleteResourceFromFirestore(resourceId: string) {
     await deleteDoc(resRef);
   } catch (error) {
     handleFirestoreError(error, OperationType.DELETE, `teaching_resources/${resourceId}`);
+  }
+}
+
+/**
+ * Generate a deterministic event ID based on:
+ * academicYear + normalizedTitle + startDate + endDate + programme + semester/year + category
+ */
+export function generateDeterministicEventId(event: any) {
+  const academicYear = (event.academicYear || '').trim().toLowerCase();
+  const normalizedTitle = (event.title || '')
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, ' ');
+  const startDate = (event.startDate || '').trim().toLowerCase();
+  const endDate = (event.endDate || event.startDate || '').trim().toLowerCase();
+  const programme = (event.programme || '').trim().toLowerCase();
+  const semester = (event.semester || '').trim().toLowerCase();
+  const category = (event.category || '').trim().toLowerCase();
+
+  const rawKey = `${academicYear}_${normalizedTitle}_${startDate}_${endDate}_${programme}_${semester}_${category}`;
+  
+  // Clean rawKey for a safe Firestore Document ID [a-zA-Z0-9_\-]
+  const safeId = rawKey
+    .replace(/[^a-zA-Z0-9_\-]+/g, '-') // replace invalid chars with a dash
+    .replace(/-+/g, '-')              // consolidate multiple dashes
+    .replace(/^-|-$/g, '');           // trim leading/trailing dashes
+  
+  return `cal-${safeId}`.substring(0, 120).toLowerCase();
+}
+
+/**
+ * Save academic calendar event to Firestore
+ */
+export async function saveCalendarEventToFirestore(event: any) {
+  try {
+    const id = event.id || generateDeterministicEventId(event);
+    const eventRef = doc(db, 'academicCalendar', id);
+    const data = { 
+      ...event, 
+      id,
+      createdAt: event.createdAt || new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+    await setDoc(eventRef, data);
+    return data;
+  } catch (error) {
+    handleFirestoreError(error, OperationType.WRITE, `academicCalendar/${event.id}`);
+  }
+}
+
+/**
+ * Save multiple academic calendar events in a batch
+ */
+export async function saveCalendarEventsBatchToFirestore(events: any[]) {
+  try {
+    const batch = writeBatch(db);
+    const processedEvents = events.map(event => {
+      const id = event.id || generateDeterministicEventId(event);
+      const eventRef = doc(db, 'academicCalendar', id);
+      const data = {
+        ...event,
+        id,
+        createdAt: event.createdAt || new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+      batch.set(eventRef, data);
+      return data;
+    });
+    await batch.commit();
+    return processedEvents;
+  } catch (error) {
+    handleFirestoreError(error, OperationType.WRITE, 'academicCalendar/batch');
+  }
+}
+
+/**
+ * Get all academic calendar events from Firestore
+ */
+export async function getCalendarEventsFromFirestore() {
+  try {
+    const querySnapshot = await getDocs(collection(db, 'academicCalendar'));
+    const events: any[] = [];
+    querySnapshot.forEach((docSnap) => {
+      events.push(docSnap.data());
+    });
+    return events;
+  } catch (error) {
+    console.error("Failed to read academicCalendar from Firestore:", error);
+    return [];
+  }
+}
+
+/**
+ * Delete an academic calendar event from Firestore
+ */
+export async function deleteCalendarEventFromFirestore(eventId: string) {
+  try {
+    const eventRef = doc(db, 'academicCalendar', eventId);
+    await deleteDoc(eventRef);
+  } catch (error) {
+    handleFirestoreError(error, OperationType.DELETE, `academicCalendar/${eventId}`);
   }
 }

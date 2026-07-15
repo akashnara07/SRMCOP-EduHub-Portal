@@ -188,104 +188,175 @@ export default function FacultyDashboard({
             {/* Subject Performance Class Averages Line Chart */}
             {(() => {
               const activeSub = mySubjects[currentSubIdx];
-              // Seed deterministic averages for any subject code so it is extremely realistic
-              let sessionalIVal = 23.5;
-              let sessionalIIVal = 24.8;
-              let semesterExamVal = 61.2;
+              if (!activeSub) return null;
 
-              if (activeSub) {
-                const charSum = activeSub.code.split('').reduce((acc: number, char: string) => acc + char.charCodeAt(0), 0);
-                sessionalIVal = 21 + (charSum % 7) + 0.4; // 21.4 to 27.4
-                sessionalIIVal = 22 + ((charSum + 2) % 7) + 0.6; // 22.6 to 28.6
-                semesterExamVal = 56 + ((charSum + 5) % 13) + 0.5; // 56.5 to 68.5
-              }
+              const isPharmD = activeSub.programme === 'Pharm.D';
 
-              const sessionalIPct = (sessionalIVal / 30) * 100;
-              const sessionalIIPct = (sessionalIIVal / 30) * 100;
-              const semesterExamPct = (semesterExamVal / 75) * 100;
+              // Helper function to load student sessional cohort marks
+              const getSessionalCohort = (subjectCode: string, programme: string) => {
+                const saved = localStorage.getItem(`sessional_marks_${subjectCode}`);
+                if (saved) {
+                  try {
+                    return JSON.parse(saved);
+                  } catch (e) {
+                    console.error(e);
+                  }
+                }
+                // Default fallback cohort list
+                return [
+                  { sNo: 1, name: 'J. Akash', registerNumber: 'SRM2026PH7810', programme, attendance: 92.4, gpa: 8.85, status: 'Active', sessionalI: 24, sessionalII: 25, sessionalIII: 23 },
+                  { sNo: 2, name: 'Meera Patel', registerNumber: 'SRM2026PH7812', programme, attendance: 88.5, gpa: 8.12, status: 'Active', sessionalI: 19, sessionalII: 22, sessionalIII: 20 },
+                  { sNo: 3, name: 'Rahul Sharma', registerNumber: 'SRM2026PH7815', programme, attendance: 95.0, gpa: 9.20, status: 'Active', sessionalI: 28, sessionalII: 29, sessionalIII: 28 },
+                  { sNo: 4, name: 'Anjali Rao', registerNumber: 'SRM2026PH7831', programme, attendance: 94.0, gpa: 8.75, status: 'Active', sessionalI: 26, sessionalII: 24, sessionalIII: 25 },
+                  { sNo: 5, name: 'Priyesh Sen', registerNumber: 'SRM2026PH7830', programme, attendance: 91.5, gpa: 8.20, status: 'Active', sessionalI: 22, sessionalII: 23, sessionalIII: 24 },
+                  { sNo: 6, name: 'Vignesh Nair', registerNumber: 'SRM2026PH7832', programme, attendance: 86.2, gpa: 7.90, status: 'Active', sessionalI: 18, sessionalII: 20, sessionalIII: 21 }
+                ];
+              };
 
-              // Map pct to SVG height (range 20 to 120 where 100% is 20 and 0% is 120)
-              const getY = (pct: number) => 120 - (pct / 100) * 85;
-              const y1 = getY(sessionalIPct);
-              const y2 = getY(sessionalIIPct);
-              const y3 = getY(semesterExamPct);
+              const cohort = getSessionalCohort(activeSub.code, activeSub.programme);
+
+              // Calculate averages
+              const count = cohort.length || 1;
+              const avgSessionalI = cohort.reduce((acc, s) => acc + s.sessionalI, 0) / count;
+              const avgSessionalII = cohort.reduce((acc, s) => acc + s.sessionalII, 0) / count;
+              const avgSessionalIII = isPharmD 
+                ? (cohort.reduce((acc, s) => acc + (s.sessionalIII || 0), 0) / count) 
+                : 0;
+              const avgSemesterExam = cohort.reduce((acc, s) => acc + Math.round(((s.gpa || 8.0) / 10) * 75), 0) / count;
+
+              const getSessionalAvgForStudent = (s1: number, s2: number, s3: number, isPharm: boolean) => {
+                if (!isPharm) {
+                  return (s1 + s2) / 2;
+                }
+                const vals = [s1, s2, s3].sort((a, b) => b - a);
+                return (vals[0] + vals[1]) / 2;
+              };
+
+              const classSessionalAvg = (cohort.reduce((acc, s) => acc + getSessionalAvgForStudent(s.sessionalI, s.sessionalII, s.sessionalIII || 0, isPharmD), 0) / count).toFixed(1);
+
+              const sessionalIPct = (avgSessionalI / 30) * 100;
+              const sessionalIIPct = (avgSessionalII / 30) * 100;
+              const sessionalIIIPct = (avgSessionalIII / 30) * 100;
+              const semesterExamPct = (avgSemesterExam / 75) * 100;
 
               return (
-                <div className="flex flex-col gap-4">
-                  <div className="h-44 w-full relative bg-gray-50/40 border border-gray-150/40 rounded-2xl p-4 flex flex-col justify-between">
-                    <svg className="w-full h-full overflow-visible" viewBox="0 0 500 130">
-                      <defs>
-                        <linearGradient id="aggregateGrad" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="0%" stopColor="#8B1E3F" stopOpacity="0.1" />
-                          <stop offset="100%" stopColor="#8B1E3F" stopOpacity="0" />
-                        </linearGradient>
-                      </defs>
+                <div className="flex flex-col gap-5">
+                  {/* Subject Marks Performance Bar Graph */}
+                  <div className="h-44 w-full relative bg-gray-50/50 rounded-2xl border border-gray-150/40 p-4 flex flex-col justify-between overflow-hidden" id="subject_marks_performance_chart">
+                    {/* Background Grid Lines */}
+                    <div className="absolute inset-x-4 top-4 bottom-12 flex flex-col justify-between pointer-events-none">
+                      <div className="border-b border-gray-100/75 w-full h-0" />
+                      <div className="border-b border-gray-100/75 w-full h-0" />
+                      <div className="border-b border-gray-100/75 w-full h-0" />
+                      <div className="border-b border-gray-200 w-full h-0" />
+                    </div>
 
-                      {/* Reference line grid */}
-                      <line x1="10" y1="120" x2="490" y2="120" stroke="#f1f3f5" strokeWidth="1.5" />
-                      <line x1="10" y1="77" x2="490" y2="77" stroke="#f1f3f5" strokeWidth="1" strokeDasharray="4,4" />
-                      <line x1="10" y1="35" x2="490" y2="35" stroke="#f1f3f5" strokeWidth="1" strokeDasharray="4,4" />
+                    {/* Bars Container */}
+                    <div className="relative z-10 flex h-28 items-end justify-around px-2">
+                      {/* Bar 1: Sessional I */}
+                      <div className="flex flex-col items-center gap-1 h-full justify-end w-20 group">
+                        <span className="text-[10px] font-black text-[#8B1E3F]">
+                          {avgSessionalI.toFixed(1)}/30
+                        </span>
+                        <div 
+                          className="w-10 bg-gradient-to-t from-[#8B1E3F]/80 to-[#8B1E3F] rounded-t-lg shadow-sm transition-all duration-300 hover:scale-105" 
+                          style={{ height: `${sessionalIPct}%` }}
+                        />
+                        <span className="text-[10px] font-extrabold text-gray-500 whitespace-nowrap">Sess I</span>
+                      </div>
 
-                      {/* Area under curve */}
-                      <path
-                        d={`M 60 120 L 60 ${y1} C 145 ${y1}, 205 ${y2}, 250 ${y2} C 295 ${y2}, 355 ${y3}, 440 ${y3} L 440 120 Z`}
-                        fill="url(#aggregateGrad)"
-                      />
+                      {/* Bar 2: Sessional II */}
+                      <div className="flex flex-col items-center gap-1 h-full justify-end w-20 group">
+                        <span className="text-[10px] font-black text-[#8B1E3F]">
+                          {avgSessionalII.toFixed(1)}/30
+                        </span>
+                        <div 
+                          className="w-10 bg-gradient-to-t from-[#8B1E3F]/80 to-[#8B1E3F] rounded-t-lg shadow-sm transition-all duration-300 hover:scale-105" 
+                          style={{ height: `${sessionalIIPct}%` }}
+                        />
+                        <span className="text-[10px] font-extrabold text-gray-500 whitespace-nowrap">Sess II</span>
+                      </div>
 
-                      {/* Smooth cubic spline curve */}
-                      <path
-                        d={`M 60 ${y1} C 145 ${y1}, 205 ${y2}, 250 ${y2} C 295 ${y2}, 355 ${y3}, 440 ${y3}`}
-                        fill="none"
-                        stroke="#8B1E3F"
-                        strokeWidth="3.5"
-                        strokeLinecap="round"
-                      />
+                      {/* Bar 3: Sessional III (Pharm.D Only) */}
+                      {isPharmD && (
+                        <div className="flex flex-col items-center gap-1 h-full justify-end w-20 group">
+                          <span className="text-[10px] font-black text-[#8B1E3F]">
+                            {avgSessionalIII.toFixed(1)}/30
+                          </span>
+                          <div 
+                            className="w-10 bg-gradient-to-t from-[#8B1E3F]/80 to-[#8B1E3F] rounded-t-lg shadow-sm transition-all duration-300 hover:scale-105" 
+                            style={{ height: `${sessionalIIIPct}%` }}
+                          />
+                          <span className="text-[10px] font-extrabold text-gray-500 whitespace-nowrap">Sess III</span>
+                        </div>
+                      )}
 
-                      {/* Vertical guidelines */}
-                      <line x1="60" y1="120" x2="60" y2={y1} stroke="#8B1E3F" strokeWidth="1" strokeDasharray="2,2" strokeOpacity="0.4" />
-                      <line x1="250" y1="120" x2="250" y2={y2} stroke="#8B1E3F" strokeWidth="1" strokeDasharray="2,2" strokeOpacity="0.4" />
-                      <line x1="440" y1="120" x2="440" y2={y3} stroke="#8B1E3F" strokeWidth="1" strokeDasharray="2,2" strokeOpacity="0.4" />
+                      {/* Bar 4: Semester Exam */}
+                      <div className="flex flex-col items-center gap-1 h-full justify-end w-20 group">
+                        <span className="text-[10px] font-black text-emerald-700">
+                          {avgSemesterExam.toFixed(1)}/75
+                        </span>
+                        <div 
+                          className="w-10 bg-gradient-to-t from-emerald-500 to-emerald-600 rounded-t-lg shadow-sm transition-all duration-300 hover:scale-105" 
+                          style={{ height: `${semesterExamPct}%` }}
+                        />
+                        <span className="text-[10px] font-extrabold text-emerald-700 whitespace-nowrap">Sem Exam</span>
+                      </div>
+                    </div>
 
-                      {/* Nodes */}
-                      <circle cx="60" cy={y1} r="5.5" fill="#8B1E3F" stroke="#ffffff" strokeWidth="2.5" />
-                      <circle cx="250" cy={y2} r="5.5" fill="#8B1E3F" stroke="#ffffff" strokeWidth="2.5" />
-                      <circle cx="440" cy={y3} r="7" fill="#8B1E3F" stroke="#ffffff" strokeWidth="3" className="animate-pulse" />
-                      <circle cx="440" cy={y3} r="5" fill="#8B1E3F" stroke="#ffffff" strokeWidth="2" />
-                    </svg>
-
-                    {/* Labels under nodes */}
-                    <div className="flex justify-between items-center text-[10px] font-black text-gray-400 uppercase tracking-widest px-6 mt-1">
-                      <span className="text-[#8B1E3F]">Class Avg I Sessional ({sessionalIPct.toFixed(0)}%)</span>
-                      <span className="text-[#8B1E3F]">Class Avg II Sessional ({sessionalIIPct.toFixed(0)}%)</span>
-                      <span className="text-emerald-700">Class Avg Semester Grade ({semesterExamPct.toFixed(0)}%)</span>
+                    {/* Horizontal Labels */}
+                    <div className="flex justify-between items-center text-[9px] font-extrabold text-gray-400 font-mono px-2 mt-2 border-t border-gray-100 pt-1.5">
+                      <span>Max Sessional: 30 Marks</span>
+                      <span>Max Semester Exam: 75 Marks</span>
                     </div>
                   </div>
 
-                  {/* Summary score cards */}
-                  <div className="grid grid-cols-3 gap-3">
+                  {/* Summary section with dynamic grid columns */}
+                  <div className={`grid grid-cols-1 ${isPharmD ? 'sm:grid-cols-4' : 'sm:grid-cols-3'} gap-4`}>
+                    {/* Panel 1 */}
                     <div className="p-3 bg-gray-50 border border-gray-150/50 rounded-2xl">
                       <span className="text-[9px] font-black uppercase text-gray-400 block tracking-wider">Avg I Sessional</span>
-                      <p className="text-sm font-extrabold text-gray-800 mt-0.5">{sessionalIVal.toFixed(1)} <span className="text-[10px] text-gray-400 font-medium">/ 30 Max</span></p>
+                      <p className="text-sm font-extrabold text-gray-850 mt-0.5">{avgSessionalI.toFixed(1)} <span className="text-[10px] text-gray-400 font-medium font-mono">/ 30 Max</span></p>
                       <div className="w-full bg-gray-150 h-1 rounded-full mt-1.5 overflow-hidden">
                         <div className="bg-[#8B1E3F] h-full rounded-full" style={{ width: `${sessionalIPct}%` }} />
                       </div>
                     </div>
 
+                    {/* Panel 2 */}
                     <div className="p-3 bg-gray-50 border border-gray-150/50 rounded-2xl">
                       <span className="text-[9px] font-black uppercase text-gray-400 block tracking-wider">Avg II Sessional</span>
-                      <p className="text-sm font-extrabold text-gray-800 mt-0.5">{sessionalIIVal.toFixed(1)} <span className="text-[10px] text-gray-400 font-medium">/ 30 Max</span></p>
+                      <p className="text-sm font-extrabold text-gray-850 mt-0.5">{avgSessionalII.toFixed(1)} <span className="text-[10px] text-gray-400 font-medium font-mono">/ 30 Max</span></p>
                       <div className="w-full bg-gray-150 h-1 rounded-full mt-1.5 overflow-hidden">
                         <div className="bg-[#8B1E3F] h-full rounded-full" style={{ width: `${sessionalIIPct}%` }} />
                       </div>
                     </div>
 
-                    <div className="p-3 bg-emerald-50/10 border border-emerald-150/45 rounded-2xl">
-                      <span className="text-[9px] font-black uppercase text-emerald-600 block tracking-wider">Avg Semester Grade</span>
-                      <p className="text-sm font-extrabold text-emerald-800 mt-0.5">{semesterExamVal.toFixed(1)} <span className="text-[10px] text-emerald-400 font-medium">/ 75 Max</span></p>
+                    {/* Panel 3 (Pharm.D Only) */}
+                    {isPharmD && (
+                      <div className="p-3 bg-gray-50 border border-gray-150/50 rounded-2xl">
+                        <span className="text-[9px] font-black uppercase text-gray-400 block tracking-wider">Avg III Sessional</span>
+                        <p className="text-sm font-extrabold text-gray-850 mt-0.5">{avgSessionalIII.toFixed(1)} <span className="text-[10px] text-gray-400 font-medium font-mono">/ 30 Max</span></p>
+                        <div className="w-full bg-gray-150 h-1 rounded-full mt-1.5 overflow-hidden">
+                          <div className="bg-[#8B1E3F] h-full rounded-full" style={{ width: `${sessionalIIIPct}%` }} />
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Panel 4: Semester Exam */}
+                    <div className="p-3 bg-emerald-50/20 border border-emerald-100 rounded-2xl">
+                      <span className="text-[9px] font-black uppercase text-emerald-600 block tracking-wider font-mono">Avg Semester Grade</span>
+                      <p className="text-sm font-extrabold text-emerald-800 mt-0.5">{avgSemesterExam.toFixed(1)} <span className="text-[10px] text-emerald-400 font-medium font-mono">/ 75 Max</span></p>
                       <div className="w-full bg-emerald-100 h-1 rounded-full mt-1.5 overflow-hidden">
                         <div className="bg-emerald-600 h-full rounded-full" style={{ width: `${semesterExamPct}%` }} />
                       </div>
                     </div>
+                  </div>
+
+                  {/* Class Sessional Average Indicator */}
+                  <div className="flex justify-between items-center mt-2 border-t border-gray-100 pt-3">
+                    <span className="text-xs text-gray-500 font-semibold">
+                      Class Sessional Average: <span className="font-extrabold text-[#8B1E3F]">{classSessionalAvg} / 30</span> ({isPharmD ? 'Best of 2' : 'Average'} Compliance Confirmed).
+                    </span>
                   </div>
                 </div>
               );

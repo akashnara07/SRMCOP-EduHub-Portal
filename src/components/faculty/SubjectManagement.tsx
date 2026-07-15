@@ -92,14 +92,29 @@ export default function SubjectManagement({
   }, [subject.code]);
 
   // Cohort student roster
-  const [cohort, setCohort] = useState<EnrolledStudent[]>([
-    { sNo: 1, name: 'J. Akash', registerNumber: 'SRM2026PH7810', programme: subject.programme, attendance: 92.4, gpa: 8.85, status: 'Active', sessionalI: 24, sessionalII: 25, sessionalIII: 23 },
-    { sNo: 2, name: 'Meera Patel', registerNumber: 'SRM2026PH7812', programme: subject.programme, attendance: 88.5, gpa: 8.12, status: 'Active', sessionalI: 19, sessionalII: 22, sessionalIII: 20 },
-    { sNo: 3, name: 'Rahul Sharma', registerNumber: 'SRM2026PH7815', programme: subject.programme, attendance: 95.0, gpa: 9.20, status: 'Active', sessionalI: 28, sessionalII: 29, sessionalIII: 28 },
-    { sNo: 4, name: 'Anjali Rao', registerNumber: 'SRM2026PH7831', programme: subject.programme, attendance: 94.0, gpa: 8.75, status: 'Active', sessionalI: 26, sessionalII: 24, sessionalIII: 25 },
-    { sNo: 5, name: 'Priyesh Sen', registerNumber: 'SRM2026PH7830', programme: subject.programme, attendance: 91.5, gpa: 8.20, status: 'Active', sessionalI: 22, sessionalII: 23, sessionalIII: 24 },
-    { sNo: 6, name: 'Vignesh Nair', registerNumber: 'SRM2026PH7832', programme: subject.programme, attendance: 86.2, gpa: 7.90, status: 'Active', sessionalI: 18, sessionalII: 20, sessionalIII: 21 }
-  ]);
+  const [cohort, setCohort] = useState<EnrolledStudent[]>([]);
+
+  useEffect(() => {
+    const saved = localStorage.getItem(`sessional_marks_${subject.code}`);
+    if (saved) {
+      try {
+        setCohort(JSON.parse(saved));
+      } catch (e) {
+        console.error(e);
+      }
+    } else {
+      const defaultList: EnrolledStudent[] = [
+        { sNo: 1, name: 'J. Akash', registerNumber: 'SRM2026PH7810', programme: subject.programme, attendance: 92.4, gpa: 8.85, status: 'Active', sessionalI: 24, sessionalII: 25, sessionalIII: 23 },
+        { sNo: 2, name: 'Meera Patel', registerNumber: 'SRM2026PH7812', programme: subject.programme, attendance: 88.5, gpa: 8.12, status: 'Active', sessionalI: 19, sessionalII: 22, sessionalIII: 20 },
+        { sNo: 3, name: 'Rahul Sharma', registerNumber: 'SRM2026PH7815', programme: subject.programme, attendance: 95.0, gpa: 9.20, status: 'Active', sessionalI: 28, sessionalII: 29, sessionalIII: 28 },
+        { sNo: 4, name: 'Anjali Rao', registerNumber: 'SRM2026PH7831', programme: subject.programme, attendance: 94.0, gpa: 8.75, status: 'Active', sessionalI: 26, sessionalII: 24, sessionalIII: 25 },
+        { sNo: 5, name: 'Priyesh Sen', registerNumber: 'SRM2026PH7830', programme: subject.programme, attendance: 91.5, gpa: 8.20, status: 'Active', sessionalI: 22, sessionalII: 23, sessionalIII: 24 },
+        { sNo: 6, name: 'Vignesh Nair', registerNumber: 'SRM2026PH7832', programme: subject.programme, attendance: 86.2, gpa: 7.90, status: 'Active', sessionalI: 18, sessionalII: 20, sessionalIII: 21 }
+      ];
+      setCohort(defaultList);
+      localStorage.setItem(`sessional_marks_${subject.code}`, JSON.stringify(defaultList));
+    }
+  }, [subject.code, subject.programme]);
 
   const [studentSearch, setStudentSearch] = useState('');
   const [resourceSearch, setResourceSearch] = useState('');
@@ -164,6 +179,7 @@ export default function SubjectManagement({
       [field]: numVal
     };
     setCohort(updated);
+    localStorage.setItem(`sessional_marks_${subject.code}`, JSON.stringify(updated));
   };
 
   // Add a supplementary material into the Teaching Workspace attached to a specific topic

@@ -1,7 +1,8 @@
 import { 
   LayoutDashboard, BookOpen, GraduationCap, Calendar, 
   TrendingUp, Bell, Library, User, Settings, Sliders, 
-  Users, ClipboardList, BarChart3, Database, ShieldAlert
+  Users, ClipboardList, BarChart3, Database, ShieldAlert,
+  LogOut
 } from 'lucide-react';
 import GlassCard from './GlassCard';
 
@@ -10,6 +11,7 @@ interface SidebarProps {
   onChangeRole: (role: 'Student' | 'Faculty' | 'Admin') => void;
   currentScreen: string;
   onChangeScreen: (screen: string) => void;
+  onLogout?: () => void;
 }
 
 export default function Sidebar({
@@ -17,6 +19,7 @@ export default function Sidebar({
   onChangeRole,
   currentScreen,
   onChangeScreen,
+  onLogout,
 }: SidebarProps) {
   
   // Menu items config for each role
@@ -24,6 +27,7 @@ export default function Sidebar({
     { id: 'student-dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { id: 'student-subjects', label: 'Subjects', icon: BookOpen },
     { id: 'student-progress', label: 'My Progress', icon: TrendingUp },
+    { id: 'academic-calendar', label: 'Academic Calendar', icon: Calendar },
     { id: 'student-announcements', label: 'Announcements', icon: Bell },
     { id: 'student-profile', label: 'My Profile', icon: User },
   ];
@@ -32,6 +36,7 @@ export default function Sidebar({
     { id: 'faculty-dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { id: 'faculty-courses', label: 'Courses', icon: BookOpen },
     { id: 'faculty-subjects', label: 'Course Manager', icon: Sliders },
+    { id: 'academic-calendar', label: 'Academic Calendar', icon: Calendar },
     { id: 'faculty-analytics', label: 'Analytics', icon: BarChart3 },
     { id: 'faculty-profile', label: 'Faculty Profile', icon: User },
   ];
@@ -44,6 +49,7 @@ export default function Sidebar({
     { id: 'admin-faculty', label: 'Faculty Registry', icon: Users },
     { id: 'admin-students', label: 'Student Registry', icon: Users },
     { id: 'admin-years', label: 'Academic Years', icon: Database },
+    { id: 'academic-calendar', label: 'Academic Calendar', icon: Calendar },
   ];
 
   const getMenuForRole = () => {
@@ -149,18 +155,29 @@ export default function Sidebar({
         </div>
 
         {/* User Info Capsule */}
-        <div className="flex items-center gap-3 bg-white/40 border border-white/20 p-2.5 rounded-full">
-          <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-[#8B1E3F] to-rose-400 flex items-center justify-center text-white font-bold text-xs shadow-inner shrink-0">
-            {currentRole === 'Student' ? 'JA' : currentRole === 'Faculty' ? 'VC' : 'JN'}
+        <div className="flex items-center gap-3 bg-white/40 border border-white/20 p-2.5 rounded-full justify-between">
+          <div className="flex items-center gap-2.5 min-w-0 flex-1">
+            <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-[#8B1E3F] to-rose-400 flex items-center justify-center text-white font-bold text-xs shadow-inner shrink-0">
+              {currentRole === 'Student' ? 'JA' : currentRole === 'Faculty' ? 'VC' : 'JN'}
+            </div>
+            <div className="flex-1 min-w-0">
+              <h4 className="text-xs font-semibold text-gray-900 truncate">
+                {currentRole === 'Student' ? 'J. Akash' : currentRole === 'Faculty' ? 'Dr. V. Chitra' : 'Dr. J. Narayanan'}
+              </h4>
+              <p className="text-[10px] text-gray-500 truncate">
+                {currentRole === 'Student' ? 'Year I (B.Pharm)' : currentRole === 'Faculty' ? 'Professor Pharmacology' : 'Emp ID: 1805447'}
+              </p>
+            </div>
           </div>
-          <div className="flex-1 min-w-0">
-            <h4 className="text-xs font-semibold text-gray-900 truncate">
-              {currentRole === 'Student' ? 'J. Akash' : currentRole === 'Faculty' ? 'Dr. V. Chitra' : 'Dr. J. Narayanan'}
-            </h4>
-            <p className="text-[10px] text-gray-500 truncate">
-              {currentRole === 'Student' ? 'Year I (B.Pharm)' : currentRole === 'Faculty' ? 'Professor Pharmacology' : 'Emp ID: 1805447'}
-            </p>
-          </div>
+          {onLogout && (
+            <button
+              onClick={onLogout}
+              className="w-8 h-8 rounded-full bg-white/60 hover:bg-red-50 text-gray-500 hover:text-red-600 flex items-center justify-center border border-white/40 shadow-sm transition-all hover:scale-105 active:scale-95 shrink-0 cursor-pointer"
+              title="Sign Out of Workspace"
+            >
+              <LogOut className="w-3.5 h-3.5" />
+            </button>
+          )}
         </div>
       </div>
     </GlassCard>

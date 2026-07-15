@@ -35,8 +35,40 @@ export default function StudentDashboard({
   const totalResourcesCount = subjects.reduce((acc, sub) => acc + sub.resources.length, 0);
 
   const activeSubject = subjects[activeSubjectIdx] || null;
+  const getStudentMarks = (subjectCode: string, registerNumber: string, programme: string) => {
+    const saved = localStorage.getItem(`sessional_marks_${subjectCode}`);
+    if (saved) {
+      try {
+        const cohort = JSON.parse(saved);
+        const student = cohort.find((s: any) => s.registerNumber === registerNumber);
+        if (student) {
+          return {
+            sessionalI: student.sessionalI,
+            sessionalII: student.sessionalII,
+            sessionalIII: student.sessionalIII || 0,
+            semesterExam: Math.round(((student.gpa || 8.0) / 10) * 75),
+            maxSessional: 30,
+            maxSemester: 75
+          };
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    // Fallback to static marksLookup or general default
+    const fallback = marksLookup[subjectCode] || { sessionalI: 22, sessionalII: 24, sessionalIII: 25, semesterExam: 56, maxSessional: 30, maxSemester: 75 };
+    return {
+      sessionalI: fallback.sessionalI,
+      sessionalII: fallback.sessionalII,
+      sessionalIII: fallback.sessionalIII || 0,
+      semesterExam: fallback.semesterExam,
+      maxSessional: fallback.maxSessional,
+      maxSemester: fallback.maxSemester
+    };
+  };
+
   const currentMarks = activeSubject
-    ? (marksLookup[activeSubject.code] || { sessionalI: 22, sessionalII: 24, sessionalIII: 25, semesterExam: 56, maxSessional: 30, maxSemester: 75 })
+    ? getStudentMarks(activeSubject.code, studentProgress.registerNumber, activeSubject.programme)
     : { sessionalI: 0, sessionalII: 0, sessionalIII: 0, semesterExam: 0, maxSessional: 30, maxSemester: 75 };
 
   const isPharmD = activeSubject?.programme === 'Pharm.D' || activeSubject?.code.startsWith('PD');
@@ -229,7 +261,7 @@ export default function StudentDashboard({
                 {/* Score breakdown metrics list */}
                 <div className={`grid grid-cols-1 ${isPharmD ? 'sm:grid-cols-4' : 'sm:grid-cols-3'} gap-4`}>
                   <div className="p-3 bg-gray-50/50 border border-white rounded-2xl">
-                    <span className="text-[9px] font-black uppercase text-gray-400 block">Sessional 1 Marks</span>
+                    <span className="text-[9px] font-black uppercase text-gray-400 block">Sessional I</span>
                     <p className="text-base font-extrabold text-gray-800 mt-0.5">{currentMarks.sessionalI} <span className="text-xs text-gray-400 font-medium">/ 30 Max</span></p>
                     <div className="w-full bg-gray-100 h-1.5 rounded-full mt-2 overflow-hidden">
                       <div className="bg-[#8B1E3F] h-full rounded-full" style={{ width: `${sessionalIPct}%` }} />
@@ -237,7 +269,7 @@ export default function StudentDashboard({
                   </div>
 
                   <div className="p-3 bg-gray-50/50 border border-white rounded-2xl">
-                    <span className="text-[9px] font-black uppercase text-gray-400 block">Sessional 2 Marks</span>
+                    <span className="text-[9px] font-black uppercase text-gray-400 block">Sessional II</span>
                     <p className="text-base font-extrabold text-gray-800 mt-0.5">{currentMarks.sessionalII} <span className="text-xs text-gray-400 font-medium">/ 30 Max</span></p>
                     <div className="w-full bg-gray-100 h-1.5 rounded-full mt-2 overflow-hidden">
                       <div className="bg-[#8B1E3F] h-full rounded-full" style={{ width: `${sessionalIIPct}%` }} />
@@ -246,7 +278,7 @@ export default function StudentDashboard({
 
                   {isPharmD && (
                     <div className="p-3 bg-gray-50/50 border border-white rounded-2xl">
-                      <span className="text-[9px] font-black uppercase text-gray-400 block">Sessional 3 Marks</span>
+                      <span className="text-[9px] font-black uppercase text-gray-400 block">Sessional III</span>
                       <p className="text-base font-extrabold text-gray-800 mt-0.5">{sessionalIIIVal} <span className="text-xs text-gray-400 font-medium">/ 30 Max</span></p>
                       <div className="w-full bg-gray-100 h-1.5 rounded-full mt-2 overflow-hidden">
                         <div className="bg-[#8B1E3F] h-full rounded-full" style={{ width: `${sessionalIIIPct}%` }} />
@@ -255,7 +287,7 @@ export default function StudentDashboard({
                   )}
 
                   <div className="p-3 bg-emerald-50/20 border border-white rounded-2xl">
-                    <span className="text-[9px] font-black uppercase text-emerald-600 block">Semester Exam Marks</span>
+                    <span className="text-[9px] font-black uppercase text-emerald-600 block">Semester Exam</span>
                     <p className="text-base font-extrabold text-emerald-800 mt-0.5">{currentMarks.semesterExam} <span className="text-xs text-emerald-400 font-medium">/ 75 Max</span></p>
                     <div className="w-full bg-emerald-100/50 h-1.5 rounded-full mt-2 overflow-hidden">
                       <div className="bg-emerald-600 h-full rounded-full" style={{ width: `${semesterExamPct}%` }} />
@@ -273,7 +305,7 @@ export default function StudentDashboard({
 
           <div className="flex justify-between items-center mt-4 border-t border-gray-100 pt-4">
             <span className="text-xs text-gray-500 font-semibold">
-              Calculated Sessional Average: <span className="font-extrabold text-[#8B1E3F]">{calculatedSessionalAvg} / 30</span> ({isPharmD ? 'Best of 2' : 'Average'} Compliance Confirmed).
+              Class Sessional Average: <span className="font-extrabold text-[#8B1E3F]">{calculatedSessionalAvg} / 30</span> ({isPharmD ? 'Best of 2' : 'Average'} Compliance Confirmed).
             </span>
             <button 
               onClick={() => onGoToScreen('student-progress')}

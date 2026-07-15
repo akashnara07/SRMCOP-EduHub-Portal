@@ -18,11 +18,57 @@ export default function StudentProgress({ selectedProgramme }: StudentProgressPr
 
   const getSemesterData = (semesterNum: number) => {
     const isPharmD = programme === 'Pharm.D';
+
+    const getDynamicMarks = (subCode: string, defaultI: number, defaultII: number, defaultIII: number, gpa: number = 8.8) => {
+      const cleanCode = subCode.endsWith('T') ? subCode.slice(0, -1) : subCode;
+      const keyCandidates = [`sessional_marks_${subCode}`, `sessional_marks_${cleanCode}`];
+      for (const key of keyCandidates) {
+        const saved = localStorage.getItem(key);
+        if (saved) {
+          try {
+            const cohort = JSON.parse(saved);
+            const akash = cohort.find((s: any) => s.registerNumber === 'SRM2026PH7810');
+            if (akash) {
+              const s1 = akash.sessionalI;
+              const s2 = akash.sessionalII;
+              const s3 = akash.sessionalIII || 0;
+              let avg = 0;
+              if (isPharmD) {
+                const sorted = [s1, s2, s3].sort((a, b) => b - a);
+                avg = (sorted[0] + sorted[1]) / 2;
+              } else {
+                avg = (s1 + s2) / 2;
+              }
+              return {
+                sessionalI: s1,
+                sessionalII: s2,
+                sessionalIII: s3,
+                bestOf2Sessional: avg,
+                semesterExam: Math.round(((akash.gpa || gpa) / 10) * 75)
+              };
+            }
+          } catch (e) {
+            console.error(e);
+          }
+        }
+      }
+      const fallbackAvg = isPharmD 
+        ? ([defaultI, defaultII, defaultIII].sort((a, b) => b - a)[0] + [defaultI, defaultII, defaultIII].sort((a, b) => b - a)[1]) / 2 
+        : (defaultI + defaultII) / 2;
+      return {
+        sessionalI: defaultI,
+        sessionalII: defaultII,
+        sessionalIII: defaultIII,
+        bestOf2Sessional: fallbackAvg,
+        semesterExam: isPharmD ? 62 : 64
+      };
+    };
+
     // Exact original Semester 1 data
     if (semesterNum === 1) {
-      return [
+      const s1Data = [
         {
-          code: isPharmD ? 'PD101T' : 'BP101T',
+          code: isPharmD ? 'PD101' : 'BP101T',
           name: 'Human Anatomy and Physiology I',
           sessionalI: 26,
           sessionalII: 28,
@@ -102,6 +148,26 @@ export default function StudentProgress({ selectedProgramme }: StudentProgressPr
           ]
         },
       ];
+      return s1Data.map(item => {
+        const dynamic = getDynamicMarks(item.code, item.sessionalI, item.sessionalII, item.sessionalIII);
+        const total = Math.round(dynamic.bestOf2Sessional) + dynamic.semesterExam;
+        let grade = 'B+';
+        if (total >= 90) grade = 'O';
+        else if (total >= 80) grade = 'A+';
+        else if (total >= 70) grade = 'A';
+        else if (total >= 60) grade = 'B+';
+        else grade = 'B';
+        return {
+          ...item,
+          sessionalI: dynamic.sessionalI,
+          sessionalII: dynamic.sessionalII,
+          sessionalIII: dynamic.sessionalIII,
+          bestOf2Sessional: dynamic.bestOf2Sessional,
+          semesterExam: dynamic.semesterExam,
+          totalMarks: total,
+          grade
+        };
+      });
     }
 
     const semesterSubjects: Record<number, { code: string; name: string }[]> = {
@@ -158,16 +224,8 @@ export default function StudentProgress({ selectedProgramme }: StudentProgressPr
       const s2 = 21 + ((seed + 2) % 9);
       const s3 = 20 + ((seed + 4) % 10);
       
-      const bestOf2 = isPharmD 
-        ? (() => {
-            const sMarksSorted = [s1, s2, s3].sort((a, b) => b - a);
-            return (sMarksSorted[0] + sMarksSorted[1]) / 2;
-          })()
-        : (s1 + s2) / 2;
-
-      const internals = Math.round(18 + (seed % 7));
-      const semExam = Math.round(52 + (seed * 1.5) % 20);
-      const total = internals + semExam;
+      const dynamic = getDynamicMarks(sub.code, s1, s2, s3);
+      const total = Math.round(dynamic.bestOf2Sessional) + dynamic.semesterExam;
 
       let grade = 'B+';
       if (total >= 90) grade = 'O';
@@ -181,12 +239,12 @@ export default function StudentProgress({ selectedProgramme }: StudentProgressPr
       return {
         code: sub.code,
         name: sub.name,
-        sessionalI: s1,
-        sessionalII: s2,
-        sessionalIII: s3,
-        bestOf2Sessional: bestOf2,
-        internals: internals,
-        semesterExam: semExam,
+        sessionalI: dynamic.sessionalI,
+        sessionalII: dynamic.sessionalII,
+        sessionalIII: dynamic.sessionalIII,
+        bestOf2Sessional: dynamic.bestOf2Sessional,
+        internals: Math.round(18 + (seed % 7)),
+        semesterExam: dynamic.semesterExam,
         totalMarks: total,
         grade: grade,
         attainmentTarget: 2.5,

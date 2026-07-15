@@ -63,5 +63,11 @@ service cloud.firestore {
     match /curriculum/{document=**} {
       allow read, write: if true;
     }
+
+    // Rules for Academic Calendar
+    match /academicCalendar/{calendarId} {
+      allow read: if true;
+      allow create, update, delete: if true;
+    }
   }
 }

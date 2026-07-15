@@ -13,6 +13,7 @@ import { downloadFirestoreToLocal } from './lib/firebase';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import GlassCard from './components/GlassCard';
+import LoginModule from './components/LoginModule';
 
 // Student screens
 import StudentDashboard from './components/student/StudentDashboard';
@@ -41,13 +42,25 @@ import ManageProgrammes from './components/admin/ManageProgrammes';
 import ManageFaculty from './components/admin/ManageFaculty';
 import AcademicYears from './components/admin/AcademicYears';
 import ManageStudents from './components/admin/ManageStudents';
+import AcademicCalendarModule from './components/AcademicCalendarModule';
 
 export default function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [currentRole, setCurrentRole] = useState<'Student' | 'Faculty' | 'Admin'>('Student');
   const [currentScreen, setCurrentScreen] = useState<string>('student-dashboard');
   const [impersonatedUser, setImpersonatedUser] = useState<{ role: 'Student' | 'Faculty' | 'Admin'; name: string } | null>(null);
   const [selectedProgramme, setSelectedProgramme] = useState<'B.Pharm' | 'Pharm.D'>('B.Pharm');
   const [searchQuery, setSearchQuery] = useState('');
+
+  const handleLogin = (role: 'Student' | 'Faculty' | 'Admin') => {
+    setCurrentRole(role);
+    setCurrentScreen(`${role.toLowerCase()}-dashboard`);
+    setIsLoggedIn(true);
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+  };
 
   // Persistent database simulation
   const [subjects, setSubjects] = useState<Subject[]>(() => getAppSubjects());
@@ -184,10 +197,14 @@ export default function App() {
           />
         ) : null;
       case 'student-videoplayer':
-        return activeResource ? (
+        const currentSub = subjects.find(s => s.id === activeSubjectId);
+        return activeResource && currentSub ? (
           <VideoPlayer
             resource={activeResource}
+            subject={currentSub}
             onBack={() => setCurrentScreen('student-subject-home')}
+            onUpdateSubjectResources={handleUpdateSubjectResources}
+            onSelectResource={setActiveResource}
           />
         ) : null;
       case 'student-pdfreader':
@@ -359,6 +376,8 @@ export default function App() {
         );
       case 'admin-permissions':
         return <ManageFaculty onBack={() => setCurrentScreen('admin-dashboard')} />;
+      case 'academic-calendar':
+        return <AcademicCalendarModule role={currentRole} />;
 
       default:
         return (
@@ -376,6 +395,10 @@ export default function App() {
     }
   };
 
+  if (!isLoggedIn) {
+    return <LoginModule onLogin={handleLogin} />;
+  }
+
   return (
     <div className="min-h-screen bg-[#F7F8FC] text-slate-800 flex relative overflow-hidden font-sans antialiased" style={{ background: "radial-gradient(circle at top left, #FDFDFE, #F7F8FC)" }}>
       {/* Visual background nodes for Apple glass look */}
@@ -391,6 +414,7 @@ export default function App() {
           onChangeRole={setCurrentRole}
           currentScreen={currentScreen}
           onChangeScreen={setCurrentScreen}
+          onLogout={handleLogout}
         />
 
         {/* Content Container (Header + Routed Screens) */}
