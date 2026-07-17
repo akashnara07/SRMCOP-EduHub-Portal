@@ -106,9 +106,9 @@ export default function LoginModule({ onLogin }: LoginModuleProps) {
   const getRoleDescription = () => {
     switch (loginRole) {
       case 'Student':
-        return 'Access your structured curriculum, download learning resources, view exam progress, and stay in touch.';
+        return '';
       case 'Faculty':
-        return 'Manage syllabus contents, timeline events, curate study materials, conduct tests, and view class reports.';
+        return '';
       case 'Admin':
         return 'Supervise courses and programs, allot faculty roles, update registries, and manage the institutional calendar.';
     }
@@ -291,12 +291,14 @@ export default function LoginModule({ onLogin }: LoginModuleProps) {
                 </div>
 
                 {/* Subtext description adapts based on active role */}
-                <div className="p-3.5 rounded-2xl bg-[#8B1E3F]/3 border border-[#8B1E3F]/5 flex gap-2.5 items-start">
-                  <Info className="w-4 h-4 text-[#8B1E3F] shrink-0 mt-0.5" />
-                  <p className="text-[11px] text-gray-600 leading-normal font-semibold">
-                    {getRoleDescription()}
-                  </p>
-                </div>
+                {getRoleDescription() && (
+                  <div className="p-3.5 rounded-2xl bg-[#8B1E3F]/3 border border-[#8B1E3F]/5 flex gap-2.5 items-start">
+                    <Info className="w-4 h-4 text-[#8B1E3F] shrink-0 mt-0.5" />
+                    <p className="text-[11px] text-gray-600 leading-normal font-semibold">
+                      {getRoleDescription()}
+                    </p>
+                  </div>
+                )}
 
                 {/* LOGIN FORM */}
                 <form onSubmit={handleSignInSubmit} className="space-y-4">

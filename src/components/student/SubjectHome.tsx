@@ -3,7 +3,7 @@ import {
   ArrowLeft, BookOpen, Video, FileText, Award, Layers, 
   CheckCircle2, Circle, Clock, ChevronRight, ChevronDown, HelpCircle, 
   Search, ClipboardList, BookOpenCheck, ExternalLink, ShieldAlert,
-  ShieldCheck, Info
+  ShieldCheck, Info, Grid
 } from 'lucide-react';
 import GlassCard from '../GlassCard';
 import { Subject, Resource } from '../../types';
@@ -36,14 +36,8 @@ export default function SubjectHome({
   // Track expanded topics in learning resources workspace
   const [expandedResourceTopics, setExpandedResourceTopics] = useState<Record<string, boolean>>({});
 
-  // Accordion Units toggle states for syllabus preview
-  const [expandedUnits, setExpandedUnits] = useState<Record<string, boolean>>({
-    'Unit I': true,
-    'Unit II': false,
-    'Unit III': false,
-    'Unit IV': false,
-    'Unit V': false,
-  });
+  // Accordion Units toggle states for syllabus preview (all minimised by default)
+  const [expandedUnits, setExpandedUnits] = useState<Record<string, boolean>>({});
 
   const getIconForType = (type: Resource['type']) => {
     switch (type) {
@@ -381,7 +375,7 @@ export default function SubjectHome({
             {subject.facultyName.split(' ')[1]?.[0] || 'P'}
           </div>
           <div>
-            <span className="text-[8px] font-black uppercase text-gray-400 block tracking-wider">Course Instructor</span>
+            <span className="text-[8px] font-black uppercase text-gray-400 block tracking-wider">Subject-In-Charge</span>
             <span className="text-xs font-bold text-gray-800">{subject.facultyName}</span>
           </div>
         </div>
@@ -427,12 +421,6 @@ export default function SubjectHome({
                 <span className="w-2 h-4 bg-[#8B1E3F] rounded-full" />
                 Section 1: Curriculum & Course Syllabus
               </h2>
-              <p className="text-xs text-gray-500 mt-0.5 font-medium">Standard regulatory outlines, objectives, course outcomes, and timelines.</p>
-            </div>
-
-            <div className="p-4 bg-gray-50 border border-gray-100 rounded-2xl flex items-center gap-2.5 text-xs font-bold text-gray-500">
-              <Info className="w-4 h-4 text-[#8B1E3F]" />
-              <span>PCI compliance syllabus view. This curriculum outline represents the official master course template.</span>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
@@ -468,14 +456,12 @@ export default function SubjectHome({
                     )}
                   </div>
                 </div>
-
-                {/* 2. Course Outcomes */}
                 <div className="rounded-[24px] bg-white border border-gray-150/50 shadow-sm p-6 flex flex-col gap-3">
                   <div className="flex items-center gap-2.5">
                     <div className="w-8 h-8 rounded-full bg-[#8B1E3F]/10 text-[#8B1E3F] flex items-center justify-center">
                       <Award className="w-4 h-4" />
                     </div>
-                    <h3 className="font-display font-extrabold text-sm text-gray-900 uppercase tracking-wide">Direct Course Outcomes (CO)</h3>
+                    <h3 className="font-display font-extrabold text-sm text-gray-900 uppercase tracking-wide">Course Outcomes (CO)</h3>
                   </div>
                   <div className="flex flex-col gap-2.5 mt-2">
                     {dbOutcomes.length > 0 ? (
@@ -485,9 +471,6 @@ export default function SubjectHome({
                             {co.coCode}
                           </span>
                           <p className="text-xs font-semibold text-gray-700 leading-relaxed pr-2 flex-1">{co.coText}</p>
-                          <span className="text-[10px] font-bold text-gray-400 bg-gray-50 border border-gray-100 px-2 py-0.5 rounded font-mono">
-                            Target: {co.attainmentTarget.toFixed(2)}
-                          </span>
                         </div>
                       ))
                     ) : (
@@ -496,14 +479,11 @@ export default function SubjectHome({
                         const code = hasColon ? co.split(':')[0].trim() : `CO ${cIdx + 1}`;
                         const text = hasColon ? co.split(':').slice(1).join(':').trim() : co;
                         return (
-                          <div key={cIdx} className="p-3 bg-pink-50/20 rounded-xl flex items-start gap-3 border border-pink-100/30">
+                           <div key={cIdx} className="p-3 bg-pink-50/20 rounded-xl flex items-start gap-3 border border-pink-100/30">
                             <span className="w-8 h-5 rounded-full bg-[#8B1E3F] text-white text-[9px] font-black flex items-center justify-center shrink-0 mt-0.5 font-mono">
                               {code}
                             </span>
                             <p className="text-xs font-semibold text-gray-700 leading-relaxed pr-2 flex-1">{text}</p>
-                            <span className="text-[10px] font-bold text-gray-400 bg-gray-50 border border-gray-100 px-2 py-0.5 rounded font-mono">
-                              Target: 2.50
-                            </span>
                           </div>
                         );
                       })
@@ -511,9 +491,61 @@ export default function SubjectHome({
                   </div>
                 </div>
 
+                {/* CO-PO Mapping Matrix */}
+                <div className="rounded-[24px] bg-white border border-gray-150/50 shadow-sm p-6 flex flex-col gap-3">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-full bg-[#8B1E3F]/10 text-[#8B1E3F] flex items-center justify-center">
+                      <Grid className="w-4 h-4" />
+                    </div>
+                    <h3 className="font-display font-extrabold text-sm text-gray-900 uppercase tracking-wide">CO-PO Mapping Matrix</h3>
+                  </div>
+                  <div className="overflow-x-auto mt-2 border border-gray-100 rounded-xl">
+                    <table className="min-w-full divide-y divide-gray-100 text-xs">
+                      <thead className="bg-gray-50 text-gray-500 font-bold">
+                        <tr>
+                          <th className="px-3 py-2 text-left">Course Outcome</th>
+                          {Array.from({ length: 11 }).map((_, i) => (
+                            <th key={i} className="px-2 py-2 text-center font-mono">PO{i + 1}</th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-100 font-semibold text-gray-700">
+                        {(dbOutcomes.length > 0 ? dbOutcomes.map(o => o.coCode) : outcomes.map((co, cIdx) => co.includes(':') ? co.split(':')[0].trim() : `CO${cIdx + 1}`)).map((coCode, idx) => {
+                          const values = [
+                            [3, 2, 1, 3, '-', 2, 1, '-', 2, 1, 3],
+                            [2, 3, 2, '-', 1, 3, '-', 2, 1, '-', 2],
+                            [3, 1, 3, 2, 2, '-', 3, 1, '-', 2, 1],
+                            [1, 2, '-', 3, 3, 1, 2, '-', 3, 1, 2],
+                            [2, '-', 2, 1, 2, 3, 1, 2, 2, 3, 3],
+                          ][idx % 5];
+                          return (
+                            <tr key={coCode} className="hover:bg-gray-50/50 transition-colors">
+                              <td className="px-3 py-2 font-bold text-gray-900 bg-gray-50/30">{coCode}</td>
+                              {values.map((val, vIdx) => (
+                                <td key={vIdx} className="px-2 py-2 text-center font-mono">
+                                  <span className={val === 3 ? 'text-emerald-600 font-bold' : val === 2 ? 'text-blue-600' : val === 1 ? 'text-gray-600' : 'text-gray-300'}>
+                                    {val}
+                                  </span>
+                                </td>
+                              ))}
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                  <div className="flex flex-wrap gap-x-4 gap-y-1 text-[10px] font-bold text-gray-400 mt-1 px-1">
+                    <span>Correlation Levels:</span>
+                    <span className="text-emerald-600 font-bold">3: Substantial (High)</span>
+                    <span className="text-blue-600">2: Moderate (Medium)</span>
+                    <span className="text-gray-600">1: Slight (Low)</span>
+                    <span className="text-gray-300">-: No Correlation</span>
+                  </div>
+                </div>
+
                 {/* 3. Units & Topics */}
                 <div className="rounded-[24px] bg-white border border-gray-150/50 shadow-sm p-6 flex flex-col gap-4">
-                  <h3 className="font-display font-extrabold text-sm text-gray-900 uppercase tracking-wide border-b border-gray-100 pb-3">PCI Topics Syllabus Matrix</h3>
+                  <h3 className="font-display font-extrabold text-sm text-gray-900 uppercase tracking-wide border-b border-gray-100 pb-3">Course Contents</h3>
                   
                   {dbUnits.length > 0 ? (
                     dbUnits.map((unit) => {
@@ -611,7 +643,7 @@ export default function SubjectHome({
                   
                   <div className="flex flex-col gap-4">
                     <div>
-                      <span className="text-[9px] font-black uppercase text-gray-400 block mb-1">Prescribed Textbooks</span>
+                      <span className="text-[9px] font-black uppercase text-gray-400 block mb-1">Recommended Textbooks</span>
                       <div className="flex flex-col gap-2.5">
                         {recBooks.map((bk, idx) => (
                           <div key={idx} className="p-2.5 bg-gray-50/50 border border-white rounded-xl text-xs">
@@ -623,7 +655,7 @@ export default function SubjectHome({
                     </div>
 
                     <div className="border-t border-gray-100 pt-3">
-                      <span className="text-[9px] font-black uppercase text-gray-400 block mb-1">Reference Monographs</span>
+                      <span className="text-[9px] font-black uppercase text-gray-400 block mb-1">Reference Textbooks</span>
                       <div className="flex flex-col gap-2.5">
                         {refBooks.map((bk, idx) => (
                           <div key={idx} className="p-2.5 bg-gray-50/50 border border-white rounded-xl text-xs">

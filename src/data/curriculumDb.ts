@@ -1231,8 +1231,10 @@ const colors = [
 // Reconstruct Subject list from Excel Course Information DB dynamically
 export const getAppSubjects = (): Subject[] => {
   const db = getCurriculumDb();
+  const seenIds = new Set<string>();
+  const uniqueSubjects: Subject[] = [];
   
-  return db.courseInformation.map((info, idx) => {
+  db.courseInformation.forEach((info, idx) => {
     const code = info.subjectCode;
     const resources = getTeachingResources(code);
     
@@ -1251,20 +1253,25 @@ export const getAppSubjects = (): Subject[] => {
       ? (info.academicYear === '2025-2026' ? code : `${code}-${info.academicYear}`)
       : `${code}-${reg}-${info.academicYear || '2025-2026'}`;
     
-    return {
-      id: id, // Unique combination where needed, legacy remains exact to prevent breaking lookups
-      code: code,
-      name: info.courseName,
-      programme: info.programme as any,
-      year: info.year,
-      semester: info.semester,
-      academicYear: info.academicYear || '2025-2026',
-      regulation: info.regulation || 'PCI 2017',
-      facultyName: info.facultyAssigned || 'Dr. V. Chitra',
-      progress: progress,
-      color: colors[idx % colors.length],
-      resources: resources
-    };
+    if (!seenIds.has(id)) {
+      seenIds.add(id);
+      uniqueSubjects.push({
+        id: id, // Unique combination where needed, legacy remains exact to prevent breaking lookups
+        code: code,
+        name: info.courseName,
+        programme: info.programme as any,
+        year: info.year,
+        semester: info.semester,
+        academicYear: info.academicYear || '2025-2026',
+        regulation: info.regulation || 'PCI 2017',
+        facultyName: info.facultyAssigned || 'Dr. V. Chitra',
+        progress: progress,
+        color: colors[idx % colors.length],
+        resources: resources
+      });
+    }
   });
+
+  return uniqueSubjects;
 };
 

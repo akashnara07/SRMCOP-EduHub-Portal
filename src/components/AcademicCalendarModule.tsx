@@ -47,6 +47,94 @@ interface CalendarEvent {
   applicableYears?: string[];
 }
 
+interface CalendarDisplayEvent {
+  id: string;
+  title: string;
+  startDate: string;
+  endDate: string;
+  category: string;
+  source: 'institutional' | 'examination' | 'holiday';
+  programme?: string;
+  semesterOrYear?: string;
+  rawEvent?: CalendarEvent;
+}
+
+export interface ExamSchedule {
+  programme: 'B.Pharm' | 'Pharm.D';
+  semesterOrYear: string;
+  start: string;
+  end: string;
+  sessionalI: { practical: string; theory: string };
+  sessionalII: { practical: string; theory: string };
+  sessionalIII?: { practical: string; theory: string };
+  universityExam: { practical: string; theory: string };
+}
+
+export const CANONICAL_SCHEDULES: ExamSchedule[] = [
+  // B.Pharm Semester I
+  {
+    programme: 'B.Pharm',
+    semesterOrYear: 'Semester I',
+    start: '2026-09-02',
+    end: '2027-02-17',
+    sessionalI: { practical: '2026-11-02', theory: '2026-11-10' },
+    sessionalII: { practical: '2027-01-05', theory: '2027-01-18' },
+    universityExam: { practical: '2027-02-01', theory: '2027-02-08' }
+  },
+  // B.Pharm Semesters III, V, VII
+  ...['Semester III', 'Semester V', 'Semester VII'].map(sem => ({
+    programme: 'B.Pharm' as const,
+    semesterOrYear: sem,
+    start: '2026-06-15',
+    end: '2026-11-13',
+    sessionalI: { practical: '2026-08-03', theory: '2026-08-10' },
+    sessionalII: { practical: '2026-10-05', theory: '2026-10-12' },
+    universityExam: { practical: '2026-10-26', theory: '2026-11-02' }
+  })),
+  // B.Pharm Semester II
+  {
+    programme: 'B.Pharm',
+    semesterOrYear: 'Semester II',
+    start: '2027-03-01',
+    end: '2027-08-20',
+    sessionalI: { practical: '2027-04-29', theory: '2027-05-07' },
+    sessionalII: { practical: '2027-07-12', theory: '2027-07-20' },
+    universityExam: { practical: '2027-08-02', theory: '2027-08-09' }
+  },
+  // B.Pharm Semesters IV, VI, VIII
+  ...['Semester IV', 'Semester VI', 'Semester VIII'].map(sem => ({
+    programme: 'B.Pharm' as const,
+    semesterOrYear: sem,
+    start: '2026-11-16',
+    end: '2027-05-07',
+    sessionalI: { practical: '2027-01-18', theory: '2027-01-25' },
+    sessionalII: { practical: '2027-03-22', theory: '2027-03-29' },
+    universityExam: { practical: '2027-04-19', theory: '2027-04-26' }
+  })),
+  // Pharm.D Year I
+  {
+    programme: 'Pharm.D',
+    semesterOrYear: 'Year I',
+    start: '2026-09-02',
+    end: '2027-08-27',
+    sessionalI: { practical: '2026-11-30', theory: '2026-12-07' },
+    sessionalII: { practical: '2027-03-08', theory: '2027-03-17' },
+    sessionalIII: { practical: '2027-07-12', theory: '2027-07-20' },
+    universityExam: { practical: '2027-08-23', theory: '2027-08-09' }
+  },
+  // Pharm.D Years II, III, IV, V
+  ...['Year II', 'Year III', 'Year IV', 'Year V'].map(yr => ({
+    programme: 'Pharm.D' as const,
+    semesterOrYear: yr,
+    start: '2026-06-15',
+    end: '2027-05-07',
+    sessionalI: { practical: '2026-08-31', theory: '2026-09-07' },
+    sessionalII: { practical: '2026-11-30', theory: '2026-12-07' },
+    sessionalIII: { practical: '2027-03-08', theory: '2027-03-15' },
+    universityExam: { practical: '2027-04-19', theory: '2027-05-03' }
+  }))
+];
+
 interface AcademicCalendarModuleProps {
   role: 'Admin' | 'Faculty' | 'Student';
 }
@@ -85,6 +173,90 @@ const MONTHS = [
   { label: 'November', value: '11' },
   { label: 'December', value: '12' }
 ];
+
+function getNormalizedTitle(title: string): string {
+  if (!title) return '';
+  let t = title.toLowerCase().trim();
+  
+  // Replace symbols/punctuation with spaces or standards
+  t = t.replace(/&/g, 'and');
+  t = t.replace(/[\(\)\-\:\,\.\/]/g, ' '); // replace common separators with spaces
+  
+  // Normalize specific words
+  t = t.replace(/\bfaculty development programmes?\b/g, 'fdp');
+  t = t.replace(/\bfdp s\b/g, 'fdp');
+  t = t.replace(/\bfdps\b/g, 'fdp');
+  t = t.replace(/\bprogrammes?\b/g, 'program');
+  t = t.replace(/\bexaminations?\b/g, 'exam');
+  t = t.replace(/\bcontinuous internal assessments?\b/g, 'cia');
+  
+  // Collapse spaces
+  t = t.replace(/\s+/g, ' ');
+  
+  // Deduplicate consecutive identical words (e.g. "fdp fdp" to "fdp")
+  const words = t.split(' ');
+  const uniqueWords: string[] = [];
+  words.forEach(w => {
+    if (uniqueWords.length === 0 || uniqueWords[uniqueWords.length - 1] !== w) {
+      uniqueWords.push(w);
+    }
+  });
+  t = uniqueWords.join(' ');
+
+  return t.trim();
+}
+
+function getSemanticEventKey(evt: CalendarEvent): string {
+  const title = getNormalizedTitle(evt.title);
+  const start = (evt.startDate || '').trim();
+  const end = (evt.endDate || evt.startDate || '').trim();
+  
+  // Normalize category: group "fdp" and "workshop" together
+  let cat = (evt.category || '').toLowerCase().trim();
+  if (cat === 'fdp' || cat === 'workshop') {
+    cat = 'fdp-workshop';
+  }
+  
+  // Normalize programme
+  let prog = (evt.programme || '').toLowerCase().trim();
+  if (prog === 'institution' || prog === 'all' || prog === 'all programmes' || prog === 'all students') {
+    prog = 'all';
+  }
+  
+  // Normalize semester
+  let sem = (evt.semester || '').toLowerCase().trim();
+  if (sem === 'all' || sem === 'all semesters') {
+    sem = 'all';
+  }
+
+  return `${title}|${start}|${end}|${cat}|${prog}|${sem}`;
+}
+
+function formatEventDateRange(startDateStr: string, endDateStr: string): string {
+  if (!startDateStr) return '';
+  if (!endDateStr || endDateStr === startDateStr) {
+    return new Date(startDateStr).toLocaleDateString('en-US', { day: 'numeric', month: 'short' });
+  }
+  
+  const startD = new Date(startDateStr);
+  const endD = new Date(endDateStr);
+  
+  if (startD.getFullYear() === endD.getFullYear() && startD.getMonth() === endD.getMonth()) {
+    // Same month and year, e.g., "Jul 20–24"
+    const monthStr = startD.toLocaleDateString('en-US', { month: 'short' });
+    return `${monthStr} ${startD.getDate()}–${endD.getDate()}`;
+  } else if (startD.getFullYear() === endD.getFullYear()) {
+    // Different months, same year, e.g., "Jul 30 – Aug 2"
+    const startMonthStr = startD.toLocaleDateString('en-US', { month: 'short' });
+    const endMonthStr = endD.toLocaleDateString('en-US', { month: 'short' });
+    return `${startMonthStr} ${startD.getDate()} – ${endMonthStr} ${endD.getDate()}`;
+  } else {
+    // Different years
+    const startStr = startD.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
+    const endStr = endD.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
+    return `${startStr} – ${endStr}`;
+  }
+}
 
 export default function AcademicCalendarModule({ role }: AcademicCalendarModuleProps) {
   // Master state
@@ -154,6 +326,61 @@ export default function AcademicCalendarModule({ role }: AcademicCalendarModuleP
     try {
       let result = await getCalendarEventsFromFirestore();
       
+      // Group loaded Firestore events by deterministic ID to detect and prune duplicates at the source
+      const groups: Record<string, CalendarEvent[]> = {};
+      result.forEach(e => {
+        const detId = generateDeterministicEventId(e);
+        if (!groups[detId]) {
+          groups[detId] = [];
+        }
+        groups[detId].push(e);
+      });
+
+      const cleanedResult: CalendarEvent[] = [];
+      const duplicateIdsToDelete: string[] = [];
+      const eventsToUpsert: CalendarEvent[] = [];
+
+      for (const detId in groups) {
+        const listInGroup = groups[detId];
+        if (listInGroup.length === 1) {
+          cleanedResult.push(listInGroup[0]);
+        } else {
+          // Prioritize the one whose .id is exactly the deterministic ID
+          let mainEvent = listInGroup.find(e => e.id === detId);
+          if (!mainEvent) {
+            mainEvent = { ...listInGroup[0], id: detId };
+            eventsToUpsert.push(mainEvent);
+          }
+          cleanedResult.push(mainEvent);
+
+          // Identify duplicate records with different IDs to delete from Firestore
+          listInGroup.forEach(e => {
+            if (e.id && e.id !== mainEvent!.id) {
+              duplicateIdsToDelete.push(e.id);
+            }
+          });
+        }
+      }
+
+      if (duplicateIdsToDelete.length > 0) {
+        console.log(`Deduplicating Firestore: Deleting ${duplicateIdsToDelete.length} legacy/duplicate calendar records...`);
+        for (const idToDelete of duplicateIdsToDelete) {
+          await deleteCalendarEventFromFirestore(idToDelete);
+        }
+      }
+
+      if (eventsToUpsert.length > 0) {
+        console.log(`Deduplicating Firestore: Migrating ${eventsToUpsert.length} records to use deterministic IDs...`);
+        await saveCalendarEventsBatchToFirestore(eventsToUpsert);
+      }
+
+      // If changes were made to Firestore, re-fetch to ensure sync
+      if (duplicateIdsToDelete.length > 0 || eventsToUpsert.length > 0) {
+        result = await getCalendarEventsFromFirestore();
+      } else {
+        result = cleanedResult;
+      }
+
       // Keep live database fully correct and up-to-date with our new authoritative exam datasets
       const correctExams = getCorrectExamEvents();
       const missingOrOutdated = correctExams.filter(exam => {
@@ -185,7 +412,19 @@ export default function AcademicCalendarModule({ role }: AcademicCalendarModuleP
           console.log("Production mode: Academic calendar in Firestore is empty. Not seeding mock data.");
         }
       }
-      setEvents(result);
+
+      // Perform one final in-memory deduplication pass just to be absolutely bulletproof
+      const finalSeen = new Set<string>();
+      const finalUniqueEvents: CalendarEvent[] = [];
+      result.forEach(e => {
+        const key = getSemanticEventKey(e);
+        if (!finalSeen.has(key)) {
+          finalSeen.add(key);
+          finalUniqueEvents.push(e);
+        }
+      });
+
+      setEvents(finalUniqueEvents);
     } catch (e) {
       console.error(e);
     } finally {
@@ -268,6 +507,7 @@ export default function AcademicCalendarModule({ role }: AcademicCalendarModuleP
   };
 
   const isExamEvent = (evt: CalendarEvent) => {
+    if (evt.examCategory) return true;
     if (isMilestoneEvent(evt)) return false;
     const category = (evt.category || '').toLowerCase();
     const title = (evt.title || '').toLowerCase();
@@ -427,16 +667,31 @@ export default function AcademicCalendarModule({ role }: AcademicCalendarModuleP
     );
   };
 
-  // Filter events dynamically based on selected period
-  const filteredEvents = events.filter(evt => {
-    const start = evt.startDate;
-    const end = evt.endDate || evt.startDate;
-    if (selectedRange === 'Jul-Dec-2026') {
-      return start <= '2026-12-31' && end >= '2026-07-01';
-    } else {
-      return start <= '2027-08-31' && end >= '2027-01-01';
-    }
-  });
+  // Filter events dynamically based on selected period and deduplicate them using stable unique identity
+  const filteredEvents = (() => {
+    const rawFiltered = events.filter(evt => {
+      const start = evt.startDate;
+      const end = evt.endDate || evt.startDate;
+      if (selectedRange === 'Jul-Dec-2026') {
+        return start <= '2026-12-31' && end >= '2026-07-01';
+      } else {
+        return start <= '2027-08-31' && end >= '2027-01-01';
+      }
+    });
+
+    const seen = new Set<string>();
+    const uniq: CalendarEvent[] = [];
+    rawFiltered.forEach(evt => {
+      const eventIdentity = getSemanticEventKey(evt);
+      if (!seen.has(eventIdentity)) {
+        seen.add(eventIdentity);
+        uniq.push(evt);
+      }
+    });
+
+    console.log(`[Trace] filteredEvents calculated for period: ${selectedRange}. Total raw events matching range: ${rawFiltered.length}, Semantically unique events: ${uniq.length}`);
+    return uniq;
+  })();
 
   // Helper colors for events
   const getCategoryColor = (category: string) => {
@@ -710,9 +965,139 @@ export default function AcademicCalendarModule({ role }: AcademicCalendarModuleP
 
   const calendarGridDays = getDaysInGridMonth();
 
-  // Get events on a specific date string
-  const getEventsForDate = (dateStr: string) => {
-    return filteredEvents.filter(e => e.startDate <= dateStr && e.endDate >= dateStr);
+  // Source 1: Institutional/Curricular Events
+  const institutionalEvents = React.useMemo(() => {
+    return filteredEvents.filter(e => !isHolidayEvent(e) && !isExamEvent(e));
+  }, [filteredEvents]);
+
+  // Source 2: Sessional / Examination Schedule
+  const examinationEvents = React.useMemo(() => {
+    return filteredEvents.filter(isExamEvent);
+  }, [filteredEvents]);
+
+  // Source 3: Scheduled Holidays
+  const holidayEvents = React.useMemo(() => {
+    return filteredEvents.filter(isHolidayEvent);
+  }, [filteredEvents]);
+
+  // Combined calendarEvents list for runtime verification & debugging
+  const calendarEvents = React.useMemo(() => {
+    const list: CalendarDisplayEvent[] = [
+      ...institutionalEvents.map(e => ({
+        id: e.id || `${e.title}-${e.startDate}`,
+        title: e.title,
+        startDate: e.startDate,
+        endDate: e.endDate || e.startDate,
+        category: e.category,
+        source: 'institutional' as const,
+        programme: e.programme,
+        semesterOrYear: e.semester || e.year,
+        rawEvent: e
+      })),
+      ...examinationEvents.map(e => ({
+        id: e.id || `${e.title}-${e.startDate}`,
+        title: e.title,
+        startDate: e.startDate,
+        endDate: e.endDate || e.startDate,
+        category: e.category,
+        source: 'examination' as const,
+        programme: e.programme,
+        semesterOrYear: e.semester || e.year,
+        rawEvent: e
+      })),
+      ...holidayEvents.map(e => ({
+        id: e.id || `${e.title}-${e.startDate}`,
+        title: e.title,
+        startDate: e.startDate,
+        endDate: e.endDate || e.startDate,
+        category: e.category,
+        source: 'holiday' as const,
+        programme: e.programme,
+        semesterOrYear: e.semester || e.year,
+        rawEvent: e
+      }))
+    ];
+
+    // Debug logging as required by the verification section
+    console.log("[Trace] Rebuilt calendarEvents list:", list.length);
+    console.table(list.map(event => ({
+      title: event.title,
+      startDate: event.startDate,
+      endDate: event.endDate,
+      source: event.source
+    })));
+
+    return list;
+  }, [institutionalEvents, examinationEvents, holidayEvents]);
+
+  // PHASE 4 — BUILD DATE MATCHING FROM SCRATCH
+  const getNewCalendarDisplayEventsForDate = (dateStr: string): CalendarDisplayEvent[] => {
+    // 1. Find institutional events where: date >= startDate AND date <= endDate
+    const instMatched = institutionalEvents.filter(e => {
+      const start = e.startDate;
+      const end = e.endDate || e.startDate;
+      return dateStr >= start && dateStr <= end;
+    }).map(e => ({
+      id: e.id || `${e.title}-${e.startDate}`,
+      title: e.title,
+      startDate: e.startDate,
+      endDate: e.endDate || e.startDate,
+      category: e.category,
+      source: 'institutional' as const,
+      programme: e.programme,
+      semesterOrYear: e.semester || e.year,
+      rawEvent: e
+    }));
+
+    // 2. Find examination events matching that date
+    const examMatched = examinationEvents.filter(e => {
+      const start = e.startDate;
+      const end = e.endDate || e.startDate;
+      return dateStr >= start && dateStr <= end;
+    }).map(e => ({
+      id: e.id || `${e.title}-${e.startDate}`,
+      title: e.title,
+      startDate: e.startDate,
+      endDate: e.endDate || e.startDate,
+      category: e.category,
+      source: 'examination' as const,
+      programme: e.programme,
+      semesterOrYear: e.semester || e.year,
+      rawEvent: e
+    }));
+
+    // 3. Find holidays matching that date
+    const holidayMatched = holidayEvents.filter(e => {
+      const start = e.startDate;
+      const end = e.endDate || e.startDate;
+      return dateStr >= start && dateStr <= end;
+    }).map(e => ({
+      id: e.id || `${e.title}-${e.startDate}`,
+      title: e.title,
+      startDate: e.startDate,
+      endDate: e.endDate || e.startDate,
+      category: e.category,
+      source: 'holiday' as const,
+      programme: e.programme,
+      semesterOrYear: e.semester || e.year,
+      rawEvent: e
+    }));
+
+    // Combine results for DISPLAY ONLY (avoid semantic duplicates within the same date cell)
+    const seenKeys = new Set<string>();
+    const combined: CalendarDisplayEvent[] = [];
+
+    [...holidayMatched, ...examMatched, ...instMatched].forEach(e => {
+      const normTitle = getNormalizedTitle(e.title);
+      // Key contains title, date range, and source to identify logical event
+      const key = `${normTitle}|${e.startDate}|${e.endDate}|${e.source}`;
+      if (!seenKeys.has(key)) {
+        seenKeys.add(key);
+        combined.push(e);
+      }
+    });
+
+    return combined;
   };
 
   // Next / Current Key Event Cards for Students
@@ -865,9 +1250,6 @@ export default function AcademicCalendarModule({ role }: AcademicCalendarModuleP
       {/* ----------------- Header Section ----------------- */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white/40 border border-white/20 p-6 rounded-[28px] shadow-sm backdrop-blur-md shrink-0 print:border-none print:shadow-none print:bg-transparent">
         <div>
-          <span className="text-[10px] font-black uppercase tracking-widest text-[#8B1E3F] bg-[#8B1E3F]/10 px-3.5 py-1.5 rounded-full inline-block mb-2">
-            Central ERP Scheduling Engine
-          </span>
           <div className="flex flex-col sm:flex-row sm:items-center gap-3">
             <h1 className="font-display font-extrabold text-3xl text-gray-900 tracking-tight">Academic Calendar</h1>
             <div className="flex items-center bg-[#8B1E3F]/5 border border-[#8B1E3F]/15 p-1 rounded-full shrink-0 select-none">
@@ -903,9 +1285,6 @@ export default function AcademicCalendarModule({ role }: AcademicCalendarModuleP
               </button>
             </div>
           </div>
-          <p className="text-sm text-gray-500 leading-relaxed mt-2.5">
-            Manage master institutional academic schedules, semester timelines, holidays, examinations, and events.
-          </p>
         </div>
 
         {/* Top Actions Block - Responsive */}
@@ -929,22 +1308,22 @@ export default function AcademicCalendarModule({ role }: AcademicCalendarModuleP
               >
                 <Upload className="w-4 h-4 text-[#8B1E3F]" /> Import AI Pipeline
               </button>
+
+              <button 
+                onClick={handleDownloadExcel}
+                className="bg-white/80 border border-gray-200 hover:bg-green-50 hover:border-green-300 text-gray-800 text-xs font-bold px-4 py-3 rounded-full flex items-center gap-2 transition-all"
+              >
+                <FileSpreadsheet className="w-4 h-4 text-green-600" /> Export Excel
+              </button>
+
+              <button 
+                onClick={handleDownloadWord}
+                className="bg-white/80 border border-gray-200 hover:bg-blue-50 hover:border-blue-300 text-gray-800 text-xs font-bold px-4 py-3 rounded-full flex items-center gap-2 transition-all"
+              >
+                <FileText className="w-4 h-4 text-blue-600" /> Export Word
+              </button>
             </>
           )}
-
-          <button 
-            onClick={handleDownloadExcel}
-            className="bg-white/80 border border-gray-200 hover:bg-green-50 hover:border-green-300 text-gray-800 text-xs font-bold px-4 py-3 rounded-full flex items-center gap-2 transition-all"
-          >
-            <FileSpreadsheet className="w-4 h-4 text-green-600" /> Export Excel
-          </button>
-
-          <button 
-            onClick={handleDownloadWord}
-            className="bg-white/80 border border-gray-200 hover:bg-blue-50 hover:border-blue-300 text-gray-800 text-xs font-bold px-4 py-3 rounded-full flex items-center gap-2 transition-all"
-          >
-            <FileText className="w-4 h-4 text-blue-600" /> Export Word
-          </button>
 
           <button 
             onClick={handlePrint}
@@ -963,104 +1342,6 @@ export default function AcademicCalendarModule({ role }: AcademicCalendarModuleP
               <RefreshCw className={`w-4 h-4 ${syncing ? 'animate-spin' : ''}`} />
             </button>
           )}
-        </div>
-      </div>
-
-      {/* ----------------- Dashboard Summary Cards ----------------- */}
-      <div className="flex flex-col gap-4 print:hidden select-none">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-white/30 border border-white/20 p-4 rounded-2xl backdrop-blur-sm">
-          <div>
-            <h3 className="font-display font-extrabold text-sm text-gray-900 flex items-center gap-2">
-              <CalendarDays className="text-[#8B1E3F] w-4.5 h-4.5" />
-              Course Metrics Summary
-            </h3>
-            <p className="text-[11px] text-gray-500 font-medium">
-              Calculated over the full teaching period: <strong className="text-[#8B1E3F] font-bold">{formatDateToDMY(teachingRange.start)} to {formatDateToDMY(teachingRange.end)}</strong>
-            </p>
-          </div>
-          <div className="flex items-center bg-gray-100 p-0.5 rounded-full border border-gray-200 shrink-0">
-            <button
-              onClick={() => setSelectedMetricsProg('B.Pharm')}
-              className={`px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-wider transition-all duration-300 ${
-                selectedMetricsProg === 'B.Pharm'
-                  ? 'bg-[#8B1E3F] text-white shadow-sm'
-                  : 'text-gray-500 hover:text-gray-800'
-              }`}
-            >
-              B.Pharm (Semester)
-            </button>
-            <button
-              onClick={() => setSelectedMetricsProg('Pharm.D')}
-              className={`px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-wider transition-all duration-300 ${
-                selectedMetricsProg === 'Pharm.D'
-                  ? 'bg-[#8B1E3F] text-white shadow-sm'
-                  : 'text-gray-500 hover:text-gray-800'
-              }`}
-            >
-              Pharm.D (Annual)
-            </button>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          {/* Working Days */}
-          <div className="bg-white/50 border border-white/20 p-5 rounded-2xl flex flex-col justify-between gap-4 backdrop-blur-sm relative overflow-hidden group shadow-sm hover:shadow-md transition-all">
-            <div className="absolute top-2 right-2 w-8 h-8 rounded-full bg-green-500/10 flex items-center justify-center text-green-600 text-xs font-bold">
-              WD
-            </div>
-            <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">Working Days</span>
-            <h2 className="text-3xl font-extrabold text-green-600 leading-none">{workingDaysCount}</h2>
-          </div>
-
-          {/* Holidays */}
-          <div className="bg-white/50 border border-white/20 p-5 rounded-2xl flex flex-col justify-between gap-4 backdrop-blur-sm relative overflow-hidden group shadow-sm hover:shadow-md transition-all">
-            <div className="absolute top-2 right-2 w-8 h-8 rounded-full bg-red-500/10 flex items-center justify-center text-red-600 text-xs font-bold">
-              H
-            </div>
-            <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">Holidays</span>
-            <h2 className="text-3xl font-extrabold text-red-600 leading-none">{holidaysCount}</h2>
-          </div>
-
-          {/* Exam Days */}
-          <div className="bg-white/50 border border-white/20 p-5 rounded-2xl flex flex-col justify-between gap-4 backdrop-blur-sm relative overflow-hidden group shadow-sm hover:shadow-md transition-all">
-            <div className="absolute top-2 right-2 w-8 h-8 rounded-full bg-amber-500/10 flex items-center justify-center text-amber-600 text-xs font-bold">
-              EX
-            </div>
-            <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">Exam Days</span>
-            <h2 className="text-3xl font-extrabold text-amber-600 leading-none">{examsCount}</h2>
-          </div>
-
-          {/* Total Events */}
-          <div className="bg-white/50 border border-white/20 p-5 rounded-2xl flex flex-col justify-between gap-4 backdrop-blur-sm relative overflow-hidden group shadow-sm hover:shadow-md transition-all">
-            <div className="absolute top-2 right-2 w-8 h-8 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-600 text-xs font-bold">
-              EV
-            </div>
-            <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">Total Events</span>
-            <h2 className="text-3xl font-extrabold text-blue-600 leading-none">{totalEventsCount}</h2>
-          </div>
-
-          {/* Remaining Days */}
-          <div className="bg-white/50 border border-white/20 p-5 rounded-2xl flex flex-col justify-between gap-4 backdrop-blur-sm relative overflow-hidden group shadow-sm hover:shadow-md transition-all">
-            <div className="absolute top-2 right-2 w-8 h-8 rounded-full bg-purple-500/10 flex items-center justify-center text-purple-600 text-xs font-bold">
-              RD
-            </div>
-            <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">Remaining Days</span>
-            <h2 className="text-3xl font-extrabold text-purple-600 leading-none">{remainingDays}</h2>
-          </div>
-
-          {/* Academic Year */}
-          <div className="bg-[#8B1E3F]/5 border border-[#8B1E3F]/10 p-5 rounded-2xl flex flex-col justify-between gap-4 backdrop-blur-sm relative overflow-hidden group shadow-sm hover:shadow-md transition-all">
-            <div className="absolute top-2 right-2 w-8 h-8 rounded-full bg-[#8B1E3F]/15 flex items-center justify-center text-[#8B1E3F] text-xs font-bold">
-              AY
-            </div>
-            <span className="text-[10px] font-black uppercase tracking-widest text-[#8B1E3F]">Academic Year</span>
-            <div className="flex flex-col mt-1">
-              <span className="text-[10px] font-bold text-gray-400">Duration Range</span>
-              <span className="text-xs font-extrabold text-[#8B1E3F] leading-tight">
-                {getAcademicYearRange()}
-              </span>
-            </div>
-          </div>
         </div>
       </div>
 
@@ -1111,7 +1392,7 @@ export default function AcademicCalendarModule({ role }: AcademicCalendarModuleP
                   return <div key={`empty-${idx}`} className="aspect-square bg-gray-50/20 rounded-2xl border border-transparent" />;
                 }
 
-                const dayEvents = getEventsForDate(cell.date);
+                const dayEvents = getNewCalendarDisplayEventsForDate(cell.date);
                 const isSelected = selectedGridDay === cell.date;
                 const hasEvents = dayEvents.length > 0;
                 
@@ -1122,9 +1403,16 @@ export default function AcademicCalendarModule({ role }: AcademicCalendarModuleP
 
                 if (hasEvents) {
                   const prime = dayEvents[0];
-                  const details = getCategoryColor(prime.category);
-                  borderStyle = `border-${details.text}-300/60`;
-                  bgStyle = `${details.bg} hover:brightness-95`;
+                  if (prime.source === 'holiday') {
+                    borderStyle = "border-red-300/60";
+                    bgStyle = "bg-red-50 hover:bg-red-100/85 border-red-200/50";
+                  } else if (prime.source === 'examination') {
+                    borderStyle = "border-orange-300/60";
+                    bgStyle = "bg-orange-50 hover:bg-orange-100/85 border-orange-200/50";
+                  } else {
+                    borderStyle = "border-blue-300/60";
+                    bgStyle = "bg-blue-50 hover:bg-blue-100/85 border-blue-200/50";
+                  }
                 }
 
                 if (isSelected) {
@@ -1152,24 +1440,49 @@ export default function AcademicCalendarModule({ role }: AcademicCalendarModuleP
                       )}
                     </span>
 
-                    {/* Small colored dot indicator block */}
-                    {hasEvents && !isSelected && (
-                      <div className="flex flex-wrap gap-1 items-center justify-center max-w-full">
-                        {dayEvents.slice(0, 3).map((e, eIdx) => (
-                          <span 
-                            key={eIdx} 
-                            style={{ backgroundColor: getCategoryColor(e.category).hex }} 
-                            className="w-1.5 h-1.5 rounded-full"
-                          />
-                        ))}
-                      </div>
-                    )}
+                    {hasEvents && (
+                      <div className="w-full flex flex-col gap-0.5 mt-0.5 overflow-hidden flex-1 justify-end z-10">
+                        {dayEvents.slice(0, 2).map((e, eIdx) => {
+                          const isHoliday = e.source === 'holiday';
+                          const isExam = e.source === 'examination';
+                          const dotColor = isSelected 
+                            ? '#ffffff' 
+                            : isHoliday 
+                              ? '#dc2626' // Red
+                              : isExam 
+                                ? '#f97316' // Orange
+                                : '#2563eb'; // Blue
 
-                    {/* Miniature title overlay for large viewports */}
-                    {hasEvents && !isSelected && (
-                      <span className="text-[8px] font-medium leading-none truncate max-w-full hidden md:block text-slate-500 group-hover:text-slate-800">
-                        {dayEvents[0].title}
-                      </span>
+                          const bgClass = isSelected 
+                            ? 'bg-white/10 text-white' 
+                            : isHoliday 
+                              ? 'bg-red-100/50 text-red-700' 
+                              : isExam 
+                                ? 'bg-orange-100/50 text-orange-700' 
+                                : 'bg-blue-100/50 text-blue-700';
+
+                          return (
+                            <div 
+                              key={eIdx} 
+                              className={`flex items-center gap-1 w-full text-[8px] leading-none text-left py-0.5 px-1 rounded truncate ${bgClass}`}
+                              title={e.title}
+                            >
+                              <span 
+                                className="w-1 h-1 rounded-full shrink-0" 
+                                style={{ backgroundColor: dotColor }} 
+                              />
+                              <span className="truncate font-medium select-none">
+                                {e.title}
+                              </span>
+                            </div>
+                          );
+                        })}
+                        {dayEvents.length > 2 && (
+                          <div className={`text-[7px] font-black text-center leading-none mt-0.5 ${isSelected ? 'text-white/85' : 'text-gray-500'}`}>
+                            +{dayEvents.length - 2} more
+                          </div>
+                        )}
+                      </div>
                     )}
                   </button>
                 );
@@ -1223,7 +1536,7 @@ export default function AcademicCalendarModule({ role }: AcademicCalendarModuleP
                           <div className="flex flex-col">
                             <span className="font-bold text-gray-900 leading-normal">{evt.title}</span>
                             <span className="text-[9px] text-gray-500 font-bold">
-                              {new Date(evt.startDate).toLocaleDateString('en-US', { day: 'numeric', month: 'short' })}
+                              {formatEventDateRange(evt.startDate, evt.endDate)}
                             </span>
                           </div>
                         </div>
@@ -1262,13 +1575,13 @@ export default function AcademicCalendarModule({ role }: AcademicCalendarModuleP
 
               {/* Event lists on selected day */}
               <div className="flex-1 overflow-y-auto pr-1 flex flex-col gap-3">
-                {getEventsForDate(selectedGridDay).length === 0 ? (
+                {getNewCalendarDisplayEventsForDate(selectedGridDay).length === 0 ? (
                   <div className="py-16 text-center flex flex-col items-center justify-center gap-3">
                     <CalendarIcon className="w-12 h-12 text-gray-300 stroke-[1.5]" />
                     <p className="text-xs text-gray-400 font-medium">No institutional events scheduled for this day.</p>
                   </div>
                 ) : (
-                  getEventsForDate(selectedGridDay).map((evt) => {
+                  getNewCalendarDisplayEventsForDate(selectedGridDay).map((evt) => {
                     const design = getCategoryColor(evt.category);
                     return (
                       <div 
@@ -1280,37 +1593,37 @@ export default function AcademicCalendarModule({ role }: AcademicCalendarModuleP
                             {evt.category}
                           </span>
                           <span className="text-[9px] font-bold text-gray-500 flex items-center gap-1">
-                            <Clock className="w-3 h-3" /> All Day
+                            <Clock className="w-3 h-3" /> {!evt.endDate || evt.startDate === evt.endDate ? "All Day" : formatEventDateRange(evt.startDate, evt.endDate)}
                           </span>
                         </div>
                         
                         <h4 className="text-sm font-extrabold leading-snug text-gray-900">{evt.title}</h4>
-                        {evt.description && (
-                          <p className="text-xs text-gray-600 font-medium">{evt.description}</p>
+                        {evt.rawEvent?.description && (
+                          <p className="text-xs text-gray-600 font-medium">{evt.rawEvent.description}</p>
                         )}
 
                         <div className="grid grid-cols-2 gap-2 mt-2 pt-2 border-t border-gray-200/20 text-[10px] font-bold text-gray-500">
                           <div>
                             <span className="block text-[8px] text-gray-400 uppercase tracking-wide">Scope / Semester</span>
-                            <span className="text-gray-700">{evt.semester} ({evt.programme})</span>
+                            <span className="text-gray-700">{evt.rawEvent?.semester || evt.semesterOrYear || 'All'} ({evt.programme || 'Institution'})</span>
                           </div>
                           <div>
                             <span className="block text-[8px] text-gray-400 uppercase tracking-wide">Regulation</span>
-                            <span className="text-gray-700">{evt.regulation}</span>
+                            <span className="text-gray-700">{evt.rawEvent?.regulation || 'Universal'}</span>
                           </div>
                         </div>
 
-                        {role === 'Admin' && (
+                        {role === 'Admin' && evt.rawEvent && (
                           <div className="flex items-center justify-end gap-1.5 mt-2 pt-2 border-t border-gray-200/20">
                             <button 
-                              onClick={() => openEditDialog(evt)}
+                              onClick={() => openEditDialog(evt.rawEvent!)}
                               className="p-1.5 hover:bg-white rounded-full text-blue-600 hover:text-blue-700 transition-all shadow-sm"
                               title="Edit"
                             >
                               <Edit2 className="w-3.5 h-3.5" />
                             </button>
                             <button 
-                              onClick={() => handleDeleteEvent(evt.id!)}
+                              onClick={() => handleDeleteEvent(evt.rawEvent!.id!)}
                               className="p-1.5 hover:bg-white rounded-full text-red-600 hover:text-red-700 transition-all shadow-sm"
                               title="Delete"
                             >
@@ -1396,7 +1709,6 @@ export default function AcademicCalendarModule({ role }: AcademicCalendarModuleP
                   <span className="w-2.5 h-2.5 rounded-full bg-red-500 inline-block" />
                   Scheduled Holidays
                 </h3>
-                <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mt-0.5">State & National Festival Calendar</p>
               </div>
               <span className="text-[10px] font-black text-red-600 bg-red-50 px-2 py-1 rounded-full uppercase tracking-wider border border-red-100">
                 {filteredEvents.filter(isHolidayEvent).length} Holidays
@@ -1409,14 +1721,13 @@ export default function AcademicCalendarModule({ role }: AcademicCalendarModuleP
                   <tr className="border-b border-gray-100 text-gray-400 font-bold uppercase tracking-wider text-[9px]">
                     <th className="py-2.5 px-2">Date</th>
                     <th className="py-2.5 px-2">Holiday</th>
-                    <th className="py-2.5 px-2">Applicable To</th>
                     {role === 'Admin' && <th className="py-2.5 px-2 text-right">Actions</th>}
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-50 font-medium text-gray-700">
                   {filteredEvents.filter(isHolidayEvent).length === 0 ? (
                     <tr>
-                      <td colSpan={role === 'Admin' ? 4 : 3} className="py-8 text-center text-gray-400">
+                      <td colSpan={role === 'Admin' ? 3 : 2} className="py-8 text-center text-gray-400">
                         No holidays scheduled for this period.
                       </td>
                     </tr>
@@ -1432,7 +1743,6 @@ export default function AcademicCalendarModule({ role }: AcademicCalendarModuleP
                             <div className="font-extrabold text-gray-900 leading-normal">{evt.title}</div>
                             {evt.description && <div className="text-[9px] text-gray-400 mt-0.5 font-medium">{evt.description}</div>}
                           </td>
-                          <td className="py-2.5 px-2 text-slate-500 font-semibold">{evt.applicableTo}</td>
                           {role === 'Admin' && (
                             <td className="py-2.5 px-2 text-right whitespace-nowrap">
                               <div className="flex items-center justify-end gap-1">
@@ -1466,7 +1776,9 @@ export default function AcademicCalendarModule({ role }: AcademicCalendarModuleP
         <GlassCard className="p-6 select-none overflow-hidden flex flex-col justify-between print:border-none print:shadow-none print:bg-transparent">
           {(() => {
             const displaySections = sessionalTab === 'B.Pharm'
-              ? ['Semester I', 'Semester II', 'Semester III', 'Semester IV', 'Semester V', 'Semester VI', 'Semester VII', 'Semester VIII']
+              ? (selectedRange === 'Jul-Dec-2026'
+                ? ['Semester I', 'Semester III', 'Semester V', 'Semester VII']
+                : ['Semester II', 'Semester IV', 'Semester VI', 'Semester VIII'])
               : ['Year I', 'Year II', 'Year III', 'Year IV', 'Year V'];
 
             // Filter current program exams
@@ -1621,9 +1933,6 @@ export default function AcademicCalendarModule({ role }: AcademicCalendarModuleP
                               {sessionalTab === 'B.Pharm' ? 'B.Pharm' : 'Pharm.D'} – {semYearName}
                             </span>
                           </div>
-                          <span className="text-[9px] font-bold text-slate-500 bg-slate-50 border border-slate-100 px-2 py-0.5 rounded-md">
-                            {sortedEvents.length} {sortedEvents.length === 1 ? 'Exam' : 'Exams'}
-                          </span>
                         </div>
 
                         {/* Accordion Content */}
@@ -5020,448 +5329,191 @@ const generateWordTemplate = async (eventsList: any[]) => {
 
 function getCorrectExamEvents(): CalendarEvent[] {
   const list: CalendarEvent[] = [];
-  
-  // 1. B.Pharm Semesters I, III, V, VII (Odd Semesters)
-  const oddSems = ["Semester I", "Semester III", "Semester V", "Semester VII"];
-  const oddSemCodes = ["I", "III", "V", "VII"];
-  
-  oddSems.forEach((semName, idx) => {
-    const semCode = oddSemCodes[idx];
+
+  CANONICAL_SCHEDULES.forEach(schedule => {
+    const isBPharm = schedule.programme === 'B.Pharm';
+    const reg = isBPharm ? "PCI 2017" : "PCI 2008";
     
-    // I Sessional CIA Practical
+    // Get numeric code or year code (e.g., "Semester I" -> "I", "Year I" -> "I")
+    const semOrYrCode = schedule.semesterOrYear.split(' ').pop() || '';
+
+    // Sessional I Practical
     list.push({
       academicYear: "2026-2027",
-      programme: "B.Pharm",
-      regulation: "PCI 2017",
-      semester: semName,
-      startDate: "2026-08-03",
-      endDate: "2026-08-05",
-      title: "I Sessional Practical Examination",
-      description: `First Continuous Internal Assessment - Practical evaluations for ${semName} B.Pharm`,
+      programme: schedule.programme,
+      regulation: reg,
+      semester: schedule.semesterOrYear,
+      startDate: schedule.sessionalI.practical,
+      endDate: schedule.sessionalI.practical,
+      title: `${schedule.semesterOrYear} I Sessional Practical Examination`,
+      description: `First Continuous Internal Assessment - Practical evaluations for ${schedule.semesterOrYear} ${schedule.programme}`,
       category: "Practical Examination",
       workingDay: "Yes",
       holiday: "No",
-      applicableTo: `B.Pharm (${semName}) Students`,
+      applicableTo: `${schedule.programme} (${schedule.semesterOrYear}) Students`,
       status: "Published",
       remarks: "Internal Assessment",
       examCategory: "I Sessional / CIA",
       examType: "Practical",
-      applicableSemesters: [semCode]
+      ...(isBPharm ? { applicableSemesters: [semOrYrCode] } : { applicableYears: [semOrYrCode] })
     });
 
-    // I Sessional CIA Theory
+    // Sessional I Theory
     list.push({
       academicYear: "2026-2027",
-      programme: "B.Pharm",
-      regulation: "PCI 2017",
-      semester: semName,
-      startDate: "2026-08-10",
-      endDate: "2026-08-11",
-      title: "I Sessional Theory Examination",
-      description: `First Continuous Internal Assessment - Theory evaluations for ${semName} B.Pharm`,
+      programme: schedule.programme,
+      regulation: reg,
+      semester: schedule.semesterOrYear,
+      startDate: schedule.sessionalI.theory,
+      endDate: schedule.sessionalI.theory,
+      title: `${schedule.semesterOrYear} I Sessional Theory Examination`,
+      description: `First Continuous Internal Assessment - Theory evaluations for ${schedule.semesterOrYear} ${schedule.programme}`,
       category: "CIA / Sessional Examination",
       workingDay: "Yes",
       holiday: "No",
-      applicableTo: `B.Pharm (${semName}) Students`,
+      applicableTo: `${schedule.programme} (${schedule.semesterOrYear}) Students`,
       status: "Published",
       remarks: "Internal Assessment",
       examCategory: "I Sessional / CIA",
       examType: "Theory",
-      applicableSemesters: [semCode]
+      ...(isBPharm ? { applicableSemesters: [semOrYrCode] } : { applicableYears: [semOrYrCode] })
     });
 
-    // II Sessional CIA Practical
+    // Sessional II Practical
     list.push({
       academicYear: "2026-2027",
-      programme: "B.Pharm",
-      regulation: "PCI 2017",
-      semester: semName,
-      startDate: "2026-10-05",
-      endDate: "2026-10-07",
-      title: "II Sessional Practical Examination",
-      description: `Second Continuous Internal Assessment - Practical evaluations for ${semName} B.Pharm`,
+      programme: schedule.programme,
+      regulation: reg,
+      semester: schedule.semesterOrYear,
+      startDate: schedule.sessionalII.practical,
+      endDate: schedule.sessionalII.practical,
+      title: `${schedule.semesterOrYear} II Sessional Practical Examination`,
+      description: `Second Continuous Internal Assessment - Practical evaluations for ${schedule.semesterOrYear} ${schedule.programme}`,
       category: "Practical Examination",
       workingDay: "Yes",
       holiday: "No",
-      applicableTo: `B.Pharm (${semName}) Students`,
+      applicableTo: `${schedule.programme} (${schedule.semesterOrYear}) Students`,
       status: "Published",
       remarks: "Internal Assessment",
       examCategory: "II Sessional / CIA",
       examType: "Practical",
-      applicableSemesters: [semCode]
+      ...(isBPharm ? { applicableSemesters: [semOrYrCode] } : { applicableYears: [semOrYrCode] })
     });
 
-    // II Sessional CIA Theory
+    // Sessional II Theory
     list.push({
       academicYear: "2026-2027",
-      programme: "B.Pharm",
-      regulation: "PCI 2017",
-      semester: semName,
-      startDate: "2026-10-12",
-      endDate: "2026-10-13",
-      title: "II Sessional Theory Examination",
-      description: `Second Continuous Internal Assessment - Theory evaluations for ${semName} B.Pharm`,
+      programme: schedule.programme,
+      regulation: reg,
+      semester: schedule.semesterOrYear,
+      startDate: schedule.sessionalII.theory,
+      endDate: schedule.sessionalII.theory,
+      title: `${schedule.semesterOrYear} II Sessional Theory Examination`,
+      description: `Second Continuous Internal Assessment - Theory evaluations for ${schedule.semesterOrYear} ${schedule.programme}`,
       category: "CIA / Sessional Examination",
       workingDay: "Yes",
       holiday: "No",
-      applicableTo: `B.Pharm (${semName}) Students`,
+      applicableTo: `${schedule.programme} (${schedule.semesterOrYear}) Students`,
       status: "Published",
       remarks: "Internal Assessment",
       examCategory: "II Sessional / CIA",
       examType: "Theory",
-      applicableSemesters: [semCode]
+      ...(isBPharm ? { applicableSemesters: [semOrYrCode] } : { applicableYears: [semOrYrCode] })
     });
 
-    // Semester Examination Practical
+    // Sessional III (Pharm.D only)
+    if (!isBPharm && schedule.sessionalIII) {
+      // Sessional III Practical
+      list.push({
+        academicYear: "2026-2027",
+        programme: schedule.programme,
+        regulation: reg,
+        semester: schedule.semesterOrYear,
+        startDate: schedule.sessionalIII.practical,
+        endDate: schedule.sessionalIII.practical,
+        title: `${schedule.semesterOrYear} III Sessional Practical Examination`,
+        description: `Third Continuous Internal Assessment - Practical evaluations for ${schedule.semesterOrYear} ${schedule.programme}`,
+        category: "Practical Examination",
+        workingDay: "Yes",
+        holiday: "No",
+        applicableTo: `${schedule.programme} (${schedule.semesterOrYear}) Students`,
+        status: "Published",
+        remarks: "Internal Assessment",
+        examCategory: "III Sessional / CIA",
+        examType: "Practical",
+        applicableYears: [semOrYrCode]
+      });
+
+      // Sessional III Theory
+      list.push({
+        academicYear: "2026-2027",
+        programme: schedule.programme,
+        regulation: reg,
+        semester: schedule.semesterOrYear,
+        startDate: schedule.sessionalIII.theory,
+        endDate: schedule.sessionalIII.theory,
+        title: `${schedule.semesterOrYear} III Sessional Theory Examination`,
+        description: `Third Continuous Internal Assessment - Theory evaluations for ${schedule.semesterOrYear} ${schedule.programme}`,
+        category: "CIA / Sessional Examination",
+        workingDay: "Yes",
+        holiday: "No",
+        applicableTo: `${schedule.programme} (${schedule.semesterOrYear}) Students`,
+        status: "Published",
+        remarks: "Internal Assessment",
+        examCategory: "III Sessional / CIA",
+        examType: "Theory",
+        applicableYears: [semOrYrCode]
+      });
+    }
+
+    // University Practical
     list.push({
       academicYear: "2026-2027",
-      programme: "B.Pharm",
-      regulation: "PCI 2017",
-      semester: semName,
-      startDate: "2026-11-23",
-      endDate: "2026-11-28",
-      title: "End-Semester Practical Examination",
-      description: `Semester practical examinations for ${semName} B.Pharm`,
+      programme: schedule.programme,
+      regulation: reg,
+      semester: schedule.semesterOrYear,
+      startDate: schedule.universityExam.practical,
+      endDate: schedule.universityExam.practical,
+      title: isBPharm 
+        ? `${schedule.semesterOrYear} End-Semester Practical Examination` 
+        : `${schedule.semesterOrYear} Annual University Practical Examination`,
+      description: isBPharm 
+        ? `Semester practical examinations for ${schedule.semesterOrYear} ${schedule.programme}` 
+        : `Official end-of-year comprehensive university practical examinations for ${schedule.programme} ${schedule.semesterOrYear}`,
       category: "Practical Examination",
       workingDay: "Yes",
       holiday: "No",
-      applicableTo: `B.Pharm (${semName}) Students`,
+      applicableTo: `${schedule.programme} (${schedule.semesterOrYear}) Students`,
       status: "Published",
-      remarks: "End Semester Exams",
-      examCategory: "Semester Examination",
+      remarks: isBPharm ? "End Semester Exams" : "Final University Exams",
+      examCategory: isBPharm ? "Semester Examination" : "University Examination",
       examType: "Practical",
-      applicableSemesters: [semCode]
+      ...(isBPharm ? { applicableSemesters: [semOrYrCode] } : { applicableYears: [semOrYrCode] })
     });
 
-    // Semester Examination Theory
+    // University Theory
     list.push({
       academicYear: "2026-2027",
-      programme: "B.Pharm",
-      regulation: "PCI 2017",
-      semester: semName,
-      startDate: "2026-11-30",
-      endDate: "2026-12-05",
-      title: "End-Semester Theory Examination",
-      description: `Semester theory examinations for ${semName} B.Pharm`,
+      programme: schedule.programme,
+      regulation: reg,
+      semester: schedule.semesterOrYear,
+      startDate: schedule.universityExam.theory,
+      endDate: schedule.universityExam.theory,
+      title: isBPharm 
+        ? `${schedule.semesterOrYear} End-Semester Theory Examination` 
+        : `${schedule.semesterOrYear} Annual University Theory Examination`,
+      description: isBPharm 
+        ? `Semester theory examinations for ${schedule.semesterOrYear} ${schedule.programme}` 
+        : `Official end-of-year comprehensive university theory examinations for ${schedule.programme} ${schedule.semesterOrYear}`,
       category: "University Examination",
       workingDay: "Yes",
       holiday: "No",
-      applicableTo: `B.Pharm (${semName}) Students`,
+      applicableTo: `${schedule.programme} (${schedule.semesterOrYear}) Students`,
       status: "Published",
-      remarks: "End Semester Exams",
-      examCategory: "Semester Examination",
+      remarks: isBPharm ? "End Semester Exams" : "Final University Exams",
+      examCategory: isBPharm ? "Semester Examination" : "University Examination",
       examType: "Theory",
-      applicableSemesters: [semCode]
-    });
-  });
-
-  // 2. B.Pharm Semesters II, IV, VI, VIII (Even Semesters)
-  const evenSems = ["Semester II", "Semester IV", "Semester VI", "Semester VIII"];
-  const evenSemCodes = ["II", "IV", "VI", "VIII"];
-  
-  evenSems.forEach((semName, idx) => {
-    const semCode = evenSemCodes[idx];
-    
-    // I Sessional CIA Practical
-    list.push({
-      academicYear: "2026-2027",
-      programme: "B.Pharm",
-      regulation: "PCI 2017",
-      semester: semName,
-      startDate: "2027-02-01",
-      endDate: "2027-02-03",
-      title: "I Sessional Practical Examination",
-      description: `First Continuous Internal Assessment - Practical evaluations for ${semName} B.Pharm`,
-      category: "Practical Examination",
-      workingDay: "Yes",
-      holiday: "No",
-      applicableTo: `B.Pharm (${semName}) Students`,
-      status: "Published",
-      remarks: "Internal Assessment",
-      examCategory: "I Sessional / CIA",
-      examType: "Practical",
-      applicableSemesters: [semCode]
-    });
-
-    // I Sessional CIA Theory
-    list.push({
-      academicYear: "2026-2027",
-      programme: "B.Pharm",
-      regulation: "PCI 2017",
-      semester: semName,
-      startDate: "2027-02-08",
-      endDate: "2027-02-10",
-      title: "I Sessional Theory Examination",
-      description: `First Continuous Internal Assessment - Theory evaluations for ${semName} B.Pharm`,
-      category: "CIA / Sessional Examination",
-      workingDay: "Yes",
-      holiday: "No",
-      applicableTo: `B.Pharm (${semName}) Students`,
-      status: "Published",
-      remarks: "Internal Assessment",
-      examCategory: "I Sessional / CIA",
-      examType: "Theory",
-      applicableSemesters: [semCode]
-    });
-
-    // II Sessional CIA Practical
-    list.push({
-      academicYear: "2026-2027",
-      programme: "B.Pharm",
-      regulation: "PCI 2017",
-      semester: semName,
-      startDate: "2027-04-05",
-      endDate: "2027-04-07",
-      title: "II Sessional Practical Examination",
-      description: `Second Continuous Internal Assessment - Practical evaluations for ${semName} B.Pharm`,
-      category: "Practical Examination",
-      workingDay: "Yes",
-      holiday: "No",
-      applicableTo: `B.Pharm (${semName}) Students`,
-      status: "Published",
-      remarks: "Internal Assessment",
-      examCategory: "II Sessional / CIA",
-      examType: "Practical",
-      applicableSemesters: [semCode]
-    });
-
-    // II Sessional CIA Theory
-    list.push({
-      academicYear: "2026-2027",
-      programme: "B.Pharm",
-      regulation: "PCI 2017",
-      semester: semName,
-      startDate: "2027-04-12",
-      endDate: "2027-04-13",
-      title: "II Sessional Theory Examination",
-      description: `Second Continuous Internal Assessment - Theory evaluations for ${semName} B.Pharm`,
-      category: "CIA / Sessional Examination",
-      workingDay: "Yes",
-      holiday: "No",
-      applicableTo: `B.Pharm (${semName}) Students`,
-      status: "Published",
-      remarks: "Internal Assessment",
-      examCategory: "II Sessional / CIA",
-      examType: "Theory",
-      applicableSemesters: [semCode]
-    });
-
-    // Semester Examination Practical
-    list.push({
-      academicYear: "2026-2027",
-      programme: "B.Pharm",
-      regulation: "PCI 2017",
-      semester: semName,
-      startDate: "2027-06-14",
-      endDate: "2027-06-19",
-      title: "End-Semester Practical Examination",
-      description: `Semester practical examinations for ${semName} B.Pharm`,
-      category: "Practical Examination",
-      workingDay: "Yes",
-      holiday: "No",
-      applicableTo: `B.Pharm (${semName}) Students`,
-      status: "Published",
-      remarks: "End Semester Exams",
-      examCategory: "Semester Examination",
-      examType: "Practical",
-      applicableSemesters: [semCode]
-    });
-
-    // Semester Examination Theory
-    list.push({
-      academicYear: "2026-2027",
-      programme: "B.Pharm",
-      regulation: "PCI 2017",
-      semester: semName,
-      startDate: "2027-06-21",
-      endDate: "2027-06-26",
-      title: "End-Semester Theory Examination",
-      description: `Semester theory examinations for ${semName} B.Pharm`,
-      category: "University Examination",
-      workingDay: "Yes",
-      holiday: "No",
-      applicableTo: `B.Pharm (${semName}) Students`,
-      status: "Published",
-      remarks: "End Semester Exams",
-      examCategory: "Semester Examination",
-      examType: "Theory",
-      applicableSemesters: [semCode]
-    });
-  });
-
-  // 3. Pharm.D Years I–V
-  const pdYears = ["Year I", "Year II", "Year III", "Year IV", "Year V"];
-  const pdYearCodes = ["I", "II", "III", "IV", "V"];
-  
-  pdYears.forEach((yrName, idx) => {
-    const yrCode = pdYearCodes[idx];
-    
-    // I Sessional CIA Practical
-    list.push({
-      academicYear: "2026-2027",
-      programme: "Pharm.D",
-      regulation: "PCI 2008",
-      semester: yrName,
-      startDate: "2026-08-31",
-      endDate: "2026-09-05",
-      title: "I Sessional Practical Examination",
-      description: `First Continuous Internal Assessment - Practical evaluations for ${yrName} Pharm.D`,
-      category: "Practical Examination",
-      workingDay: "Yes",
-      holiday: "No",
-      applicableTo: `Pharm.D (${yrName}) Students`,
-      status: "Published",
-      remarks: "Internal Assessment",
-      examCategory: "I Sessional / CIA",
-      examType: "Practical",
-      applicableYears: [yrCode]
-    });
-
-    // I Sessional CIA Theory
-    list.push({
-      academicYear: "2026-2027",
-      programme: "Pharm.D",
-      regulation: "PCI 2008",
-      semester: yrName,
-      startDate: "2026-09-07",
-      endDate: "2026-09-12",
-      title: "I Sessional Theory Examination",
-      description: `First Continuous Internal Assessment - Theory evaluations for ${yrName} Pharm.D`,
-      category: "CIA / Sessional Examination",
-      workingDay: "Yes",
-      holiday: "No",
-      applicableTo: `Pharm.D (${yrName}) Students`,
-      status: "Published",
-      remarks: "Internal Assessment",
-      examCategory: "I Sessional / CIA",
-      examType: "Theory",
-      applicableYears: [yrCode]
-    });
-
-    // II Sessional CIA Practical
-    list.push({
-      academicYear: "2026-2027",
-      programme: "Pharm.D",
-      regulation: "PCI 2008",
-      semester: yrName,
-      startDate: "2026-11-30",
-      endDate: "2026-12-05",
-      title: "II Sessional Practical Examination",
-      description: `Second Continuous Internal Assessment - Practical evaluations for ${yrName} Pharm.D`,
-      category: "Practical Examination",
-      workingDay: "Yes",
-      holiday: "No",
-      applicableTo: `Pharm.D (${yrName}) Students`,
-      status: "Published",
-      remarks: "Internal Assessment",
-      examCategory: "II Sessional / CIA",
-      examType: "Practical",
-      applicableYears: [yrCode]
-    });
-
-    // II Sessional CIA Theory
-    list.push({
-      academicYear: "2026-2027",
-      programme: "Pharm.D",
-      regulation: "PCI 2008",
-      semester: yrName,
-      startDate: "2026-12-07",
-      endDate: "2026-12-12",
-      title: "II Sessional Theory Examination",
-      description: `Second Continuous Internal Assessment - Theory evaluations for ${yrName} Pharm.D`,
-      category: "CIA / Sessional Examination",
-      workingDay: "Yes",
-      holiday: "No",
-      applicableTo: `Pharm.D (${yrName}) Students`,
-      status: "Published",
-      remarks: "Internal Assessment",
-      examCategory: "II Sessional / CIA",
-      examType: "Theory",
-      applicableYears: [yrCode]
-    });
-
-    // III Sessional CIA Practical
-    list.push({
-      academicYear: "2026-2027",
-      programme: "Pharm.D",
-      regulation: "PCI 2008",
-      semester: yrName,
-      startDate: "2027-03-01",
-      endDate: "2027-03-06",
-      title: "III Sessional Practical Examination",
-      description: `Third Continuous Internal Assessment - Practical evaluations for ${yrName} Pharm.D`,
-      category: "Practical Examination",
-      workingDay: "Yes",
-      holiday: "No",
-      applicableTo: `Pharm.D (${yrName}) Students`,
-      status: "Published",
-      remarks: "Internal Assessment",
-      examCategory: "III Sessional / CIA",
-      examType: "Practical",
-      applicableYears: [yrCode]
-    });
-
-    // III Sessional CIA Theory
-    list.push({
-      academicYear: "2026-2027",
-      programme: "Pharm.D",
-      regulation: "PCI 2008",
-      semester: yrName,
-      startDate: "2027-03-08",
-      endDate: "2027-03-13",
-      title: "III Sessional Theory Examination",
-      description: `Third Continuous Internal Assessment - Theory evaluations for ${yrName} Pharm.D`,
-      category: "CIA / Sessional Examination",
-      workingDay: "Yes",
-      holiday: "No",
-      applicableTo: `Pharm.D (${yrName}) Students`,
-      status: "Published",
-      remarks: "Internal Assessment",
-      examCategory: "III Sessional / CIA",
-      examType: "Theory",
-      applicableYears: [yrCode]
-    });
-
-    // University Examination Practical
-    list.push({
-      academicYear: "2026-2027",
-      programme: "Pharm.D",
-      regulation: "PCI 2008",
-      semester: yrName,
-      startDate: "2027-04-19",
-      endDate: "2027-04-24",
-      title: "Annual University Practical Examination",
-      description: `Official end-of-year comprehensive university practical examinations for Pharm.D ${yrName}`,
-      category: "Practical Examination",
-      workingDay: "No",
-      holiday: "No",
-      applicableTo: `Pharm.D (${yrName}) Students`,
-      status: "Published",
-      remarks: "Final University Exams",
-      examCategory: "University Examination",
-      examType: "Practical",
-      applicableYears: [yrCode]
-    });
-
-    // University Examination Theory
-    list.push({
-      academicYear: "2026-2027",
-      programme: "Pharm.D",
-      regulation: "PCI 2008",
-      semester: yrName,
-      startDate: "2027-05-03",
-      endDate: "2027-05-08",
-      title: "Annual University Theory Examination",
-      description: `Official end-of-year comprehensive university theory examinations for Pharm.D ${yrName}`,
-      category: "University Examination",
-      workingDay: "No",
-      holiday: "No",
-      applicableTo: `Pharm.D (${yrName}) Students`,
-      status: "Published",
-      remarks: "Final University Exams",
-      examCategory: "University Examination",
-      examType: "Theory",
-      applicableYears: [yrCode]
+      ...(isBPharm ? { applicableSemesters: [semOrYrCode] } : { applicableYears: [semOrYrCode] })
     });
   });
 

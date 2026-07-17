@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { 
   Sliders, Plus, Edit2, Trash2, ShieldCheck, Users, GraduationCap, 
   Database, RefreshCw, Upload, FileSpreadsheet, Download, Check, 
-  AlertCircle, ArrowRight, ArrowLeft, Search, Layers, UserCheck, Play, Eye
+  AlertCircle, ArrowRight, ArrowLeft, Search, Layers, UserCheck, Play, Eye,
+  ChevronDown, ChevronUp
 } from 'lucide-react';
 import GlassCard from '../GlassCard';
 import { 
@@ -44,6 +45,7 @@ export default function AdminDashboard({
   const [curriculumActiveTab, setCurriculumActiveTab] = useState<'B.Pharm' | 'Pharm.D'>('B.Pharm');
   const [adminStatusFilter, setAdminStatusFilter] = useState<'All' | 'Draft' | 'Active' | 'Approved'>('All');
   const [filterRegulation, setFilterRegulation] = useState<string>('All');
+  const [expandedYearGroups, setExpandedYearGroups] = useState<Record<string, boolean>>({});
   
   // Modals / Form state
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -615,147 +617,167 @@ export default function AdminDashboard({
                 }
               });
 
+              const isExpanded = !!expandedYearGroups[group.label];
+              const toggleExpand = () => {
+                setExpandedYearGroups(prev => ({
+                  ...prev,
+                  [group.label]: !prev[group.label]
+                }));
+              };
+
               return (
-                <div key={group.label} className="border border-gray-100 rounded-2xl overflow-hidden shadow-sm bg-white">
+                <div key={group.label} className="border border-gray-100 rounded-2xl overflow-hidden shadow-sm bg-white transition-all">
                   {/* Group Header Bar */}
-                  <div className="bg-gray-50/70 border-b border-gray-100 px-4 py-3 flex items-center justify-between">
+                  <div 
+                    onClick={toggleExpand}
+                    className="bg-gray-50/70 border-b border-gray-100 px-4 py-3 flex items-center justify-between cursor-pointer select-none hover:bg-gray-100/50 transition-colors"
+                  >
                     <span className="font-display font-extrabold text-xs text-gray-800 tracking-tight flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full bg-[#8B1E3F]" />
+                      <span className={`w-2 h-2 rounded-full ${isExpanded ? 'bg-[#8B1E3F]' : 'bg-gray-450'}`} />
                       {group.label}
                     </span>
-                    <span className="text-[10px] font-bold text-gray-500 bg-gray-200/60 px-2.5 py-0.5 rounded-full">
-                      {matchedCourses.length} {matchedCourses.length === 1 ? 'Subject Shell' : 'Subject Shells'}
-                    </span>
+                    <div className="flex items-center gap-3">
+                      <span className="text-[10px] font-bold text-gray-500 bg-gray-200/60 px-2.5 py-0.5 rounded-full">
+                        {matchedCourses.length} {matchedCourses.length === 1 ? 'Subject Shell' : 'Subject Shells'}
+                      </span>
+                      {isExpanded ? (
+                        <ChevronUp className="w-4 h-4 text-gray-500 shrink-0" />
+                      ) : (
+                        <ChevronDown className="w-4 h-4 text-gray-400 shrink-0" />
+                      )}
+                    </div>
                   </div>
 
                   {/* Group Table */}
-                  <div className="overflow-x-auto w-full">
-                    <table className="min-w-full divide-y divide-gray-100 text-left text-xs">
-                      <thead className="bg-gray-50/30 text-[10px] font-bold uppercase tracking-wider text-gray-400">
-                        <tr>
-                          <th className="px-4 py-2">Code & Name</th>
-                          {'semesters' in group && <th className="px-4 py-2">Semester</th>}
-                          <th className="px-4 py-2">Type & Credits</th>
-                          <th className="px-4 py-2">Assigned Faculty</th>
-                          <th className="px-4 py-2 text-center">Status</th>
-                          <th className="px-4 py-2 text-right">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-gray-100 bg-white">
-                        {matchedCourses.length > 0 ? (
-                          matchedCourses.map((course) => (
-                            <tr key={course.subjectCode} className="hover:bg-gray-50/50 transition-all">
-                              {/* Code & Name */}
-                              <td className="px-4 py-3">
-                                <div className="flex flex-col">
-                                  <div className="flex items-center gap-1.5 flex-wrap mb-1">
-                                    <span className="font-mono font-bold text-gray-900 bg-gray-100 px-2 py-0.5 rounded text-[10px] w-max">
-                                      {course.subjectCode}
-                                    </span>
-                                    <span className="text-[10px] font-extrabold text-[#CD4368] bg-[#CD4368]/10 border border-[#CD4368]/20 px-2 py-0.5 rounded">
-                                      {course.regulation || 'PCI 2017'}
-                                    </span>
-                                  </div>
-                                  <span className="font-bold text-gray-800 text-xs leading-snug">{course.courseName}</span>
-                                </div>
-                              </td>
-
-                              {/* Semester */}
-                              {'semesters' in group && (
+                  {isExpanded && (
+                    <div className="overflow-x-auto w-full">
+                      <table className="min-w-full divide-y divide-gray-100 text-left text-xs">
+                        <thead className="bg-gray-50/30 text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                          <tr>
+                            <th className="px-4 py-2">Code & Name</th>
+                            {'semesters' in group && <th className="px-4 py-2">Semester</th>}
+                            <th className="px-4 py-2">Type & Credits</th>
+                            <th className="px-4 py-2">Assigned Faculty</th>
+                            <th className="px-4 py-2 text-center">Status</th>
+                            <th className="px-4 py-2 text-right">Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-100 bg-white">
+                          {matchedCourses.length > 0 ? (
+                            matchedCourses.map((course) => (
+                              <tr key={course.subjectCode} className="hover:bg-gray-50/50 transition-all">
+                                {/* Code & Name */}
                                 <td className="px-4 py-3">
-                                  <span className="font-semibold text-gray-700">Sem {course.semester}</span>
-                                </td>
-                              )}
-
-                              {/* Type & Credits */}
-                              <td className="px-4 py-3">
-                                <div className="flex flex-col">
-                                  <div className="flex items-center gap-1.5">
-                                    <span className={`text-[10px] font-bold px-1.5 py-0.2 rounded ${
-                                      course.subjectType === 'Theory' 
-                                        ? 'bg-purple-50 text-purple-600' 
-                                        : 'bg-green-50 text-green-600'
-                                    }`}>
-                                      {course.subjectType}
-                                    </span>
-                                    <span className="font-semibold text-gray-700">{course.credits} Credits</span>
+                                  <div className="flex flex-col">
+                                    <div className="flex items-center gap-1.5 flex-wrap mb-1">
+                                      <span className="font-mono font-bold text-gray-900 bg-gray-100 px-2 py-0.5 rounded text-[10px] w-max">
+                                        {course.subjectCode}
+                                      </span>
+                                      <span className="text-[10px] font-extrabold text-[#CD4368] bg-[#CD4368]/10 border border-[#CD4368]/20 px-2 py-0.5 rounded">
+                                        {course.regulation || 'PCI 2017'}
+                                      </span>
+                                    </div>
+                                    <span className="font-bold text-gray-800 text-xs leading-snug">{course.courseName}</span>
                                   </div>
-                                  <span className="text-[10px] text-gray-400 font-bold mt-0.5">{course.hours} Hours</span>
-                                </div>
-                              </td>
+                                </td>
 
-                              {/* Faculty */}
-                              <td className="px-4 py-3">
-                                {course.facultyAssigned && course.facultyAssigned !== 'Unassigned' ? (
-                                  <span className="font-bold text-[#8B1E3F] bg-rose-50/70 px-2.5 py-1 rounded-full text-[10px] inline-block">
-                                    {course.facultyAssigned}
-                                  </span>
-                                ) : (
-                                  <button
-                                    type="button"
-                                    onClick={() => handleOpenEdit(course)}
-                                    className="font-bold text-amber-600 bg-amber-50 hover:bg-amber-100 px-2.5 py-1 rounded-full text-[10px] transition-all"
-                                    title="Click to quick assign faculty"
-                                  >
-                                    Assign Faculty
-                                  </button>
+                                {/* Semester */}
+                                {'semesters' in group && (
+                                  <td className="px-4 py-3">
+                                    <span className="font-semibold text-gray-700">Sem {course.semester}</span>
+                                  </td>
                                 )}
-                              </td>
 
-                              {/* Status */}
-                              <td className="px-4 py-3 text-center">
-                                <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider
-                                  ${course.status === 'Approved' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 
-                                    course.status === 'Active' ? 'bg-blue-50 text-blue-600 border border-blue-100' : 
-                                    course.status === 'Draft' ? 'bg-amber-50 text-amber-600 border border-amber-100' : 
-                                    'bg-gray-100 text-gray-500'}
-                                `}>
-                                  {course.status}
-                                </span>
-                              </td>
+                                {/* Type & Credits */}
+                                <td className="px-4 py-3">
+                                  <div className="flex flex-col">
+                                    <div className="flex items-center gap-1.5">
+                                      <span className={`text-[10px] font-bold px-1.5 py-0.2 rounded ${
+                                        course.subjectType === 'Theory' 
+                                          ? 'bg-purple-50 text-purple-600' 
+                                          : 'bg-green-50 text-green-600'
+                                      }`}>
+                                        {course.subjectType}
+                                      </span>
+                                      <span className="font-semibold text-gray-700">{course.credits} Credits</span>
+                                    </div>
+                                    <span className="text-[10px] text-gray-400 font-bold mt-0.5">{course.hours} Hours</span>
+                                  </div>
+                                </td>
 
-                              {/* Actions */}
-                              <td className="px-4 py-3 text-right">
-                                <div className="flex items-center justify-end gap-1.5">
-                                  <button 
-                                    title="Manage Course Chapters, Topics, Recommended Books & Import Options (Full Access)"
-                                    onClick={() => {
-                                      onGoToSubject(course.subjectCode);
-                                      onGoToScreen('faculty-subject-management'); // Redirects to fully editable Course Manager view
-                                    }}
-                                    className="p-1 rounded-lg bg-[#8B1E3F]/5 hover:bg-[#8B1E3F] text-[#8B1E3F] hover:text-white transition-all flex items-center gap-1 font-bold text-[9px] px-2 py-1"
-                                  >
-                                    <Sliders className="w-3 h-3" />
-                                    Manage
-                                  </button>
-                                  <button 
-                                    title="Quick Edit Metadata"
-                                    onClick={() => handleOpenEdit(course)}
-                                    className="p-1 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-600 transition-all"
-                                  >
-                                    <Edit2 className="w-3 h-3" />
-                                  </button>
-                                  <button 
-                                    title="Delete Curriculum"
-                                    onClick={() => handleDeleteCourse(course.subjectCode, course.courseName)}
-                                    className="p-1 rounded-lg bg-red-50 hover:bg-red-600 text-red-600 hover:text-white transition-all"
-                                  >
-                                    <Trash2 className="w-3 h-3" />
-                                  </button>
-                                </div>
+                                {/* Faculty */}
+                                <td className="px-4 py-3">
+                                  {course.facultyAssigned && course.facultyAssigned !== 'Unassigned' ? (
+                                    <span className="font-bold text-[#8B1E3F] bg-rose-50/70 px-2.5 py-1 rounded-full text-[10px] inline-block">
+                                      {course.facultyAssigned}
+                                    </span>
+                                  ) : (
+                                    <button
+                                      type="button"
+                                      onClick={() => handleOpenEdit(course)}
+                                      className="font-bold text-amber-600 bg-amber-50 hover:bg-amber-100 px-2.5 py-1 rounded-full text-[10px] transition-all"
+                                      title="Click to quick assign faculty"
+                                    >
+                                      Assign Faculty
+                                    </button>
+                                  )}
+                                </td>
+
+                                {/* Status */}
+                                <td className="px-4 py-3 text-center">
+                                  <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider
+                                    ${course.status === 'Approved' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 
+                                      course.status === 'Active' ? 'bg-blue-50 text-blue-600 border border-blue-100' : 
+                                      course.status === 'Draft' ? 'bg-amber-50 text-amber-600 border border-amber-100' : 
+                                      'bg-gray-100 text-gray-500'}
+                                  `}>
+                                    {course.status}
+                                  </span>
+                                </td>
+
+                                {/* Actions */}
+                                <td className="px-4 py-3 text-right">
+                                  <div className="flex items-center justify-end gap-1.5">
+                                    <button 
+                                      title="Manage Course Chapters, Topics, Recommended Books & Import Options (Full Access)"
+                                      onClick={() => {
+                                        onGoToSubject(course.subjectCode);
+                                        onGoToScreen('faculty-subject-management'); // Redirects to fully editable Course Manager view
+                                      }}
+                                      className="p-1 rounded-lg bg-[#8B1E3F]/5 hover:bg-[#8B1E3F] text-[#8B1E3F] hover:text-white transition-all flex items-center gap-1 font-bold text-[9px] px-2 py-1"
+                                    >
+                                      <Sliders className="w-3 h-3" />
+                                      Manage
+                                    </button>
+                                    <button 
+                                      title="Quick Edit Metadata"
+                                      onClick={() => handleOpenEdit(course)}
+                                      className="p-1 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-600 transition-all"
+                                    >
+                                      <Edit2 className="w-3 h-3" />
+                                    </button>
+                                    <button 
+                                      title="Delete Curriculum"
+                                      onClick={() => handleDeleteCourse(course.subjectCode, course.courseName)}
+                                      className="p-1 rounded-lg bg-red-50 hover:bg-red-600 text-red-600 hover:text-white transition-all"
+                                    >
+                                      <Trash2 className="w-3 h-3" />
+                                    </button>
+                                  </div>
+                                </td>
+                              </tr>
+                            ))
+                          ) : (
+                            <tr>
+                              <td colSpan={'semesters' in group ? 6 : 5} className="px-4 py-6 text-center text-gray-400 font-medium">
+                                No active courses allotted for this year.
                               </td>
                             </tr>
-                          ))
-                        ) : (
-                          <tr>
-                            <td colSpan={'semesters' in group ? 6 : 5} className="px-4 py-6 text-center text-gray-400 font-medium">
-                              No active courses allotted for this year.
-                            </td>
-                          </tr>
-                        )}
-                      </tbody>
-                    </table>
-                  </div>
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
                 </div>
               );
             })}

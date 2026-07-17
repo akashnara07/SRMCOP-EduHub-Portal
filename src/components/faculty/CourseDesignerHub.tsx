@@ -1570,38 +1570,8 @@ export default function CourseDesignerHub({
           {/* Page Title & Breadcrumbs */}
           <div className="flex flex-col gap-1.5 pl-1 mb-2 mt-4">
             <h1 className="font-sans font-black text-2xl md:text-3xl text-gray-950 tracking-tight leading-none">
-              Curriculum Manager
+              {readOnly ? 'Curriculum Manager' : 'Course Manager'}
             </h1>
-            <div className="flex items-center gap-1.5 text-[11px] font-bold text-gray-400">
-              <span className="cursor-pointer hover:text-gray-700 transition-colors flex items-center gap-1" onClick={() => {
-                setSelectedSemesterFilter('All');
-                setSelectedYearLevelFilter('All');
-              }}>
-                <Home className="w-3.5 h-3.5" />
-              </span>
-              <ChevronRight className="w-3 h-3 text-gray-300 shrink-0" />
-              <span className="cursor-pointer hover:text-gray-700 transition-colors" onClick={() => {
-                setSelectedSemesterFilter('All');
-                setSelectedYearLevelFilter('All');
-              }}>
-                {programmeFilter}
-              </span>
-              <ChevronRight className="w-3 h-3 text-gray-300 shrink-0" />
-              <span className="cursor-pointer hover:text-gray-700 transition-colors">
-                {selectedRegulation}
-              </span>
-              <ChevronRight className="w-3 h-3 text-gray-300 shrink-0" />
-              <span className="cursor-pointer hover:text-gray-700 transition-colors">
-                AY {selectedYear}
-              </span>
-              <ChevronRight className="w-3 h-3 text-gray-300 shrink-0" />
-              <span className="text-gray-800 font-extrabold">
-                {programmeFilter === 'B.Pharm'
-                  ? selectedSemesterFilter === 'All' ? 'All Semesters' : `Semester ${selectedSemesterFilter}`
-                  : selectedYearLevelFilter === 'All' ? 'All Years' : `Year ${selectedYearLevelFilter}`
-                }
-              </span>
-            </div>
           </div>
 
           {/* CURRICULUM CONTEXT CARD (Matches Screenshot perfectly, redesigned for perfect spacing) */}

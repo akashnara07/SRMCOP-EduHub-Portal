@@ -290,29 +290,16 @@ export default function FacultyDashboard({
                           <span className="text-[10px] font-extrabold text-gray-500 whitespace-nowrap">Sess III</span>
                         </div>
                       )}
-
-                      {/* Bar 4: Semester Exam */}
-                      <div className="flex flex-col items-center gap-1 h-full justify-end w-20 group">
-                        <span className="text-[10px] font-black text-emerald-700">
-                          {avgSemesterExam.toFixed(1)}/75
-                        </span>
-                        <div 
-                          className="w-10 bg-gradient-to-t from-emerald-500 to-emerald-600 rounded-t-lg shadow-sm transition-all duration-300 hover:scale-105" 
-                          style={{ height: `${semesterExamPct}%` }}
-                        />
-                        <span className="text-[10px] font-extrabold text-emerald-700 whitespace-nowrap">Sem Exam</span>
-                      </div>
                     </div>
 
                     {/* Horizontal Labels */}
                     <div className="flex justify-between items-center text-[9px] font-extrabold text-gray-400 font-mono px-2 mt-2 border-t border-gray-100 pt-1.5">
                       <span>Max Sessional: 30 Marks</span>
-                      <span>Max Semester Exam: 75 Marks</span>
                     </div>
                   </div>
 
                   {/* Summary section with dynamic grid columns */}
-                  <div className={`grid grid-cols-1 ${isPharmD ? 'sm:grid-cols-4' : 'sm:grid-cols-3'} gap-4`}>
+                  <div className={`grid grid-cols-1 ${isPharmD ? 'sm:grid-cols-3' : 'sm:grid-cols-2'} gap-4`}>
                     {/* Panel 1 */}
                     <div className="p-3 bg-gray-50 border border-gray-150/50 rounded-2xl">
                       <span className="text-[9px] font-black uppercase text-gray-400 block tracking-wider">Avg I Sessional</span>
@@ -341,22 +328,6 @@ export default function FacultyDashboard({
                         </div>
                       </div>
                     )}
-
-                    {/* Panel 4: Semester Exam */}
-                    <div className="p-3 bg-emerald-50/20 border border-emerald-100 rounded-2xl">
-                      <span className="text-[9px] font-black uppercase text-emerald-600 block tracking-wider font-mono">Avg Semester Grade</span>
-                      <p className="text-sm font-extrabold text-emerald-800 mt-0.5">{avgSemesterExam.toFixed(1)} <span className="text-[10px] text-emerald-400 font-medium font-mono">/ 75 Max</span></p>
-                      <div className="w-full bg-emerald-100 h-1 rounded-full mt-1.5 overflow-hidden">
-                        <div className="bg-emerald-600 h-full rounded-full" style={{ width: `${semesterExamPct}%` }} />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Class Sessional Average Indicator */}
-                  <div className="flex justify-between items-center mt-2 border-t border-gray-100 pt-3">
-                    <span className="text-xs text-gray-500 font-semibold">
-                      Class Sessional Average: <span className="font-extrabold text-[#8B1E3F]">{classSessionalAvg} / 30</span> ({isPharmD ? 'Best of 2' : 'Average'} Compliance Confirmed).
-                    </span>
                   </div>
                 </div>
               );

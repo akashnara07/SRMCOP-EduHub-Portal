@@ -43,6 +43,7 @@ import ManageFaculty from './components/admin/ManageFaculty';
 import AcademicYears from './components/admin/AcademicYears';
 import ManageStudents from './components/admin/ManageStudents';
 import AcademicCalendarModule from './components/AcademicCalendarModule';
+import AdminAnalytics from './components/admin/AdminAnalytics';
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
@@ -185,6 +186,7 @@ export default function App() {
               setCurrentScreen('student-subject-home');
             }}
             searchQuery={searchQuery}
+            studentProgress={mockStudentProgress}
           />
         );
       case 'student-subject-home':
@@ -376,6 +378,8 @@ export default function App() {
         );
       case 'admin-permissions':
         return <ManageFaculty onBack={() => setCurrentScreen('admin-dashboard')} />;
+      case 'admin-analytics':
+        return <AdminAnalytics subjects={subjects} />;
       case 'academic-calendar':
         return <AcademicCalendarModule role={currentRole} />;
 

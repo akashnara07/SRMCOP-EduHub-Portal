@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BookOpen, Users, Download, ArrowLeft, BarChart3, ChevronRight, Award, GraduationCap, FileSpreadsheet } from 'lucide-react';
+import { BookOpen, Users, Download, ArrowLeft, BarChart3, ChevronRight, Award, GraduationCap, FileSpreadsheet, Clock, Layers } from 'lucide-react';
 import GlassCard from '../GlassCard';
 import { Subject, FacultyProfile } from '../../types';
 
@@ -388,34 +388,98 @@ export default function FacultyAnalytics({
 
   // Primary list view
   return (
-    <div className="flex flex-col gap-6 w-full max-w-4xl mx-auto">
+    <div className="flex flex-col gap-6 w-full max-w-5xl mx-auto">
       <div>
         <h1 className="font-display font-extrabold text-2xl text-gray-900 tracking-tight">Handled Subjects Analytics</h1>
-        <p className="text-xs text-gray-500">Monitor candidate performance, access evaluation scorecards, and download spreadsheets for your allotted courses.</p>
+        <p className="text-xs text-gray-500 mt-1">Select a course to view detailed student evaluation sheets and performance analytics</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-2">
         {mySubjects.map((sub) => {
           const scores = mockPerformanceData[sub.id] || [];
+          const credits = (sub.code && sub.code.endsWith('P')) ? 2 : 4;
+          const hours = (sub.code && sub.code.endsWith('P')) ? 30 : 45;
+          const activeAccent = sub.programme === 'B.Pharm' ? 'border-maroon-100 hover:border-[#8B1E3F]/30 hover:shadow-maroon-900/10' : 'border-teal-100 hover:border-[#0F766E]/30 hover:shadow-teal-900/10';
+          const progBadgeStyle = sub.programme === 'B.Pharm' 
+            ? 'bg-maroon-50 text-[#8B1E3F] border-maroon-100/40' 
+            : 'bg-teal-50 text-[#0F766E] border-teal-100/40';
+
           return (
             <GlassCard
               key={sub.id}
               hoverLift
               onClick={() => setSelectedSubjectId(sub.id)}
-              className="p-6 cursor-pointer flex flex-col justify-between h-48 border-t-4 border-t-[#8B1E3F] hover:shadow-md transition-all"
+              className={`p-6 relative cursor-pointer flex flex-col justify-between border-2 ${activeAccent} hover:shadow-2xl transition-all duration-300 rounded-[32px] overflow-hidden group bg-white`}
             >
+              {/* Decorative background gradient */}
+              <div className={`absolute top-0 right-0 w-32 h-32 rounded-full blur-3xl opacity-20 -mr-10 -mt-10 transition-colors duration-500 ${
+                sub.programme === 'B.Pharm' ? 'bg-[#8B1E3F]' : 'bg-[#0F766E]'
+              }`} />
+
               <div>
-                <div className="flex justify-between items-start">
-                  <span className="text-[10px] font-mono font-bold text-gray-400 uppercase tracking-wider">{sub.code}</span>
-                  <span className="text-[9px] font-bold bg-[#8B1E3F]/5 text-[#8B1E3F] px-2.5 py-0.5 rounded-full uppercase">
-                    {sub.programme}
-                  </span>
+                {/* Top Tag Row */}
+                <div className="flex justify-between items-center mb-4">
+                  <div className="flex items-center gap-2">
+                    <span className={`px-2.5 py-1 text-[10px] font-mono font-extrabold tracking-wider rounded-lg ${
+                      sub.programme === 'B.Pharm'
+                        ? 'bg-[#8B1E3F]/5 text-[#8B1E3F]'
+                        : 'bg-[#0F766E]/5 text-[#0F766E]'
+                    }`}>
+                      {sub.code}
+                    </span>
+                    <span className="text-[9px] font-bold uppercase text-gray-400">
+                      {sub.regulation || 'PCI 2017'}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-1.5">
+                    <span className={`text-[9px] font-black px-2.5 py-1 rounded-full uppercase border ${progBadgeStyle}`}>
+                      {sub.programme} • {sub.semester ? `Sem ${sub.semester}` : `Year ${sub.year}`}
+                    </span>
+                  </div>
                 </div>
-                <h3 className="font-display font-bold text-base text-gray-950 leading-tight mt-1 line-clamp-1">{sub.name}</h3>
-                <p className="text-xs text-gray-400 font-semibold mt-1">Year {sub.year} • Semester {sub.semester}</p>
+
+                {/* Subject Title */}
+                <h3 className="font-display font-black text-xl text-gray-900 leading-snug tracking-tight mb-4 pr-6 transition-colors duration-300 group-hover:text-[#8B1E3F]">
+                  {sub.name}
+                </h3>
+
+                {/* Quick Stats Grid */}
+                <div className="grid grid-cols-3 gap-3 py-3.5 border-y border-gray-100 my-4 text-[10px] font-semibold text-gray-500 bg-gray-50/50 rounded-2xl px-4">
+                  <div className="flex flex-col gap-1 border-r border-gray-150/40 pr-1">
+                    <span className="text-gray-400 text-[8px] uppercase font-black tracking-wider flex items-center gap-1">
+                      <Award className="w-3 h-3 text-amber-500" />
+                      Credits
+                    </span>
+                    <span className="font-extrabold text-gray-800 text-xs">{credits} Credits</span>
+                  </div>
+                  <div className="flex flex-col gap-1 border-r border-gray-150/40 pr-1">
+                    <span className="text-gray-400 text-[8px] uppercase font-black tracking-wider flex items-center gap-1">
+                      <Clock className="w-3 h-3 text-indigo-500" />
+                      Hours
+                    </span>
+                    <span className="font-extrabold text-gray-800 text-xs">{hours} Hrs Required</span>
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <span className="text-gray-400 text-[8px] uppercase font-black tracking-wider flex items-center gap-1">
+                      <Layers className="w-3 h-3 text-rose-500" />
+                      Regulation
+                    </span>
+                    <span className="font-extrabold text-gray-800 text-xs">{sub.regulation || 'PCI 2017'}</span>
+                  </div>
+                </div>
+
+                {/* Secondary Metadata Info */}
+                <div className="space-y-2 text-[10px] font-bold text-gray-500 mt-2 pl-1 bg-gray-50/30 p-3 rounded-2xl border border-gray-100">
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-400 font-extrabold uppercase text-[8px]">Faculty Assigned:</span>
+                    <span className="text-gray-800 font-black">{sub.facultyName || 'Dr. V. Chitra'}</span>
+                  </div>
+                </div>
               </div>
 
-              <div className="flex justify-between items-center border-t border-gray-100 pt-3 mt-4">
+              {/* Redesigned Card Footer Workspace */}
+              <div className="border-t border-gray-150/40 pt-4 mt-5 flex justify-between items-center">
                 <span className="text-xs text-gray-500 font-bold flex items-center gap-1.5">
                   <Users className="w-4 h-4 text-[#8B1E3F]" /> {scores.length} Active Students
                 </span>

@@ -144,7 +144,6 @@ export default function ProfileView({
       <div className="flex flex-col gap-6 w-full max-w-5xl mx-auto">
         <div>
           <h1 className="font-display font-extrabold text-2xl text-gray-900 tracking-tight">Faculty Profile</h1>
-          <p className="text-xs text-gray-500 font-medium">Manage your academic profile, departments, and allotted subject configurations</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
@@ -455,7 +454,6 @@ export default function ProfileView({
       <div className="flex justify-between items-center">
         <div>
           <h1 className="font-display font-extrabold text-2xl text-gray-900 tracking-tight">Student Profile</h1>
-          <p className="text-xs text-gray-500 font-medium">Manage your active university enrollments, academic clearances, and credentials</p>
         </div>
         
         <button
