@@ -1,7 +1,7 @@
 import { db } from './src/lib/firebase-node';
 import { collection, doc, setDoc, getDocs } from 'firebase/firestore';
 
-interface EventInput {
+export interface EventInput {
   academicYear: string;
   programme: string;
   regulation: string;
@@ -18,7 +18,7 @@ interface EventInput {
   remarks?: string;
 }
 
-function generateDeterministicEventId(event: any) {
+export function generateDeterministicEventId(event: any) {
   const academicYear = (event.academicYear || '').trim().toLowerCase();
   const normalizedTitle = (event.title || '')
     .trim()
@@ -40,7 +40,7 @@ function generateDeterministicEventId(event: any) {
   return `cal-${safeId}`.substring(0, 120).toLowerCase();
 }
 
-const pdfEvents: EventInput[] = [
+export const pdfEvents: EventInput[] = [
   // ==================== HOLIDAYS (2026 - 2027) ====================
   {
     academicYear: "2026-2027",

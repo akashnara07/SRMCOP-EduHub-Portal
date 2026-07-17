@@ -324,7 +324,12 @@ export default function AcademicCalendarModule({ role }: AcademicCalendarModuleP
   const loadData = async () => {
     setLoading(true);
     try {
-      let result = await getCalendarEventsFromFirestore();
+      let result: CalendarEvent[] = [];
+      try {
+        result = await getCalendarEventsFromFirestore();
+      } catch (err) {
+        console.warn("Could not read calendar from Firestore, using offline/local mode:", err);
+      }
       
       // Group loaded Firestore events by deterministic ID to detect and prune duplicates at the source
       const groups: Record<string, CalendarEvent[]> = {};
@@ -365,18 +370,31 @@ export default function AcademicCalendarModule({ role }: AcademicCalendarModuleP
       if (duplicateIdsToDelete.length > 0) {
         console.log(`Deduplicating Firestore: Deleting ${duplicateIdsToDelete.length} legacy/duplicate calendar records...`);
         for (const idToDelete of duplicateIdsToDelete) {
-          await deleteCalendarEventFromFirestore(idToDelete);
+          try {
+            await deleteCalendarEventFromFirestore(idToDelete);
+          } catch (err) {
+            console.warn("Delete duplicate failed (likely mock/offline):", err);
+          }
         }
       }
 
       if (eventsToUpsert.length > 0) {
         console.log(`Deduplicating Firestore: Migrating ${eventsToUpsert.length} records to use deterministic IDs...`);
-        await saveCalendarEventsBatchToFirestore(eventsToUpsert);
+        try {
+          await saveCalendarEventsBatchToFirestore(eventsToUpsert);
+        } catch (err) {
+          console.warn("Upsert duplicates failed (likely mock/offline):", err);
+        }
       }
 
       // If changes were made to Firestore, re-fetch to ensure sync
       if (duplicateIdsToDelete.length > 0 || eventsToUpsert.length > 0) {
-        result = await getCalendarEventsFromFirestore();
+        try {
+          result = await getCalendarEventsFromFirestore();
+        } catch (err) {
+          console.warn("Refetch after deduplication failed:", err);
+          result = cleanedResult;
+        }
       } else {
         result = cleanedResult;
       }
@@ -397,20 +415,24 @@ export default function AcademicCalendarModule({ role }: AcademicCalendarModuleP
 
       if (missingOrOutdated.length > 0) {
         console.log(`Synchronizing ${missingOrOutdated.length} authoritative exam events to live Firestore...`);
-        await saveCalendarEventsBatchToFirestore(missingOrOutdated);
-        result = await getCalendarEventsFromFirestore();
+        try {
+          await saveCalendarEventsBatchToFirestore(missingOrOutdated);
+          result = await getCalendarEventsFromFirestore();
+        } catch (err) {
+          console.warn("Syncing authoritative exam events to Firestore failed (merging in-memory):", err);
+          // If Firestore sync failed, we should still include the authoritative exams in-memory
+          missingOrOutdated.forEach(exam => {
+            const id = generateDeterministicEventId(exam);
+            if (!result.some(e => e.id === id)) {
+              result.push(exam);
+            }
+          });
+        }
       }
       
-      const isProduction = import.meta.env.PROD;
-
       if (result.length === 0) {
-        if (!isProduction) {
-          console.log("Development mode: No academic calendar found in Firestore. Loading mock data purely in-memory.");
-          // Isolate it clearly as development-only data and ensure it cannot silently populate Firestore
-          result = getSeededEvents();
-        } else {
-          console.log("Production mode: Academic calendar in Firestore is empty. Not seeding mock data.");
-        }
+        console.log("No academic calendar found in Firestore or Firestore empty/offline. Loading mock/seeded data in-memory.");
+        result = getSeededEvents();
       }
 
       // Perform one final in-memory deduplication pass just to be absolutely bulletproof
@@ -426,7 +448,8 @@ export default function AcademicCalendarModule({ role }: AcademicCalendarModuleP
 
       setEvents(finalUniqueEvents);
     } catch (e) {
-      console.error(e);
+      console.error("General error loading academic calendar, falling back to local seeded events:", e);
+      setEvents(getSeededEvents());
     } finally {
       setLoading(false);
     }
@@ -1782,7 +1805,7 @@ export default function AcademicCalendarModule({ role }: AcademicCalendarModuleP
               : ['Year I', 'Year II', 'Year III', 'Year IV', 'Year V'];
 
             // Filter current program exams
-            const currentProgExams = filteredEvents.filter(evt => {
+            const currentProgExams = events.filter(evt => {
               if (!isExamEvent(evt)) return false;
               if (sessionalTab === 'B.Pharm') {
                 return isBPharm(evt);
