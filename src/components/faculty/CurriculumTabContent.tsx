@@ -203,7 +203,7 @@ export default function CurriculumTabContent({
             credits: Number(editInfoCredits),
             hours: Number(editInfoHours),
             subjectType: editInfoType as any,
-            facultyAssigned: subjectInfo?.facultyAssigned || 'Dr. V. Chitra',
+            facultyAssigned: subjectInfo?.facultyAssigned || 'Not Assigned',
             importVersion: subjectInfo?.importVersion || '1.0',
             status: subjectInfo?.status || 'Active'
           }

@@ -300,35 +300,7 @@ export const mockSubjects: Subject[] = [
   }
 ];
 
-export const mockAnnouncements: Announcement[] = [
-  {
-    id: 'ann-1',
-    title: 'Semester End Theory Examinations - Schedule Released',
-    content: 'The Office of the Controller of Examinations has officially announced the B.Pharm First and Second Year Semester End Examination Schedule starting August 3, 2026. Hall tickets will be downloadable via SRMCOP EduHub from July 25 onwards. Ensure all pending library dues are cleared.',
-    date: 'July 8, 2026',
-    sender: 'Dr. G. Sivakumar, Dean Academic',
-    role: 'Admin',
-    category: 'exam'
-  },
-  {
-    id: 'ann-2',
-    title: 'Guest Lecture: AI & Quantum Computing in Drug Discovery',
-    content: 'We are honored to host Dr. V. Prasanna from Novartis Research Labs for a special lecture on "Quantum Machine Learning Models for Targeted Oncology Formulation Design". Attendance is mandatory for M.Pharm and final year Pharm.D scholars. Date: July 12, 10:00 AM at the Main Auditorium.',
-    date: 'July 7, 2026',
-    sender: 'Prof. S. J. Vardhan, HOD Pharm. Chemistry',
-    role: 'Faculty',
-    category: 'event'
-  },
-  {
-    id: 'ann-3',
-    title: 'GPAT 2027 Comprehensive Mock Test Series',
-    content: 'The Department of Pharmacology will host a weekly GPAT practice test every Sunday starting next week on the EduHub platform. Top 5 ranking students will receive personalized mentorship under senior faculty advisors.',
-    date: 'July 5, 2026',
-    sender: 'Dr. V. Chitra, PG Coordinator',
-    role: 'Faculty',
-    category: 'academic'
-  }
-];
+export const mockAnnouncements: Announcement[] = [];
 
 export const sampleQuiz: Quiz = {
   id: 'quiz-hap-1',

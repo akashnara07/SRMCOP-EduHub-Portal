@@ -1,5 +1,6 @@
 import * as XLSX from 'xlsx';
 import { Subject, Resource } from '../types';
+import { DEFAULT_FACULTY, resolveFacultyForCourse } from './facultyRegistry';
 
 export interface CourseInformation {
   subjectCode: string;
@@ -1234,6 +1235,23 @@ export const getAppSubjects = (): Subject[] => {
   const seenIds = new Set<string>();
   const uniqueSubjects: Subject[] = [];
   
+  // Dynamic faculty lookup from the Admin's Faculty Registry
+  let facultyRegistry: any[] = [];
+  if (typeof window !== 'undefined') {
+    const saved = localStorage.getItem('srm_lms_faculty_registry');
+    if (saved) {
+      try {
+        facultyRegistry = JSON.parse(saved);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    if (!facultyRegistry || facultyRegistry.length < DEFAULT_FACULTY.length) {
+      facultyRegistry = DEFAULT_FACULTY;
+      localStorage.setItem('srm_lms_faculty_registry', JSON.stringify(DEFAULT_FACULTY));
+    }
+  }
+  
   db.courseInformation.forEach((info, idx) => {
     const code = info.subjectCode;
     const resources = getTeachingResources(code);
@@ -1255,6 +1273,16 @@ export const getAppSubjects = (): Subject[] => {
     
     if (!seenIds.has(id)) {
       seenIds.add(id);
+      
+      // Determine faculty assigned using centralized resolver as the single source of truth
+      const resolvedFacultyName = resolveFacultyForCourse({
+        academicYear: info.academicYear || '2025-2026',
+        programme: info.programme,
+        regulation: info.regulation || 'PCI 2017',
+        semesterOrYear: info.semester || info.year,
+        subjectCode: code
+      });
+
       uniqueSubjects.push({
         id: id, // Unique combination where needed, legacy remains exact to prevent breaking lookups
         code: code,
@@ -1264,7 +1292,7 @@ export const getAppSubjects = (): Subject[] => {
         semester: info.semester,
         academicYear: info.academicYear || '2025-2026',
         regulation: info.regulation || 'PCI 2017',
-        facultyName: info.facultyAssigned || 'Dr. V. Chitra',
+        facultyName: resolvedFacultyName,
         progress: progress,
         color: colors[idx % colors.length],
         resources: resources

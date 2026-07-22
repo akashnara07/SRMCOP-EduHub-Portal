@@ -12,6 +12,7 @@ interface SidebarProps {
   currentScreen: string;
   onChangeScreen: (screen: string) => void;
   onLogout?: () => void;
+  activeUser?: { name: string; subtext: string };
 }
 
 export default function Sidebar({
@@ -20,6 +21,7 @@ export default function Sidebar({
   currentScreen,
   onChangeScreen,
   onLogout,
+  activeUser,
 }: SidebarProps) {
   
   // Menu items config for each role
@@ -159,14 +161,17 @@ export default function Sidebar({
         <div className="flex items-center gap-3 bg-white/40 border border-white/20 p-2.5 rounded-full justify-between">
           <div className="flex items-center gap-2.5 min-w-0 flex-1">
             <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-[#8B1E3F] to-rose-400 flex items-center justify-center text-white font-bold text-xs shadow-inner shrink-0">
-              {currentRole === 'Student' ? 'JA' : currentRole === 'Faculty' ? 'VC' : 'JN'}
+              {activeUser 
+                ? activeUser.name.replace('Dr. ', '').replace('Prof. ', '').split(' ').map(p => p[0]).filter(Boolean).join('').substring(0, 2).toUpperCase()
+                : (currentRole === 'Student' ? 'JA' : currentRole === 'Faculty' ? 'VC' : 'JN')
+              }
             </div>
             <div className="flex-1 min-w-0">
               <h4 className="text-xs font-semibold text-gray-900 truncate">
-                {currentRole === 'Student' ? 'J. Akash' : currentRole === 'Faculty' ? 'Dr. V. Chitra' : 'Dr. J. Narayanan'}
+                {activeUser ? activeUser.name : (currentRole === 'Student' ? 'J. Akash' : currentRole === 'Faculty' ? 'Dr. V. Chitra' : 'Dr. J. Narayanan')}
               </h4>
               <p className="text-[10px] text-gray-500 truncate">
-                {currentRole === 'Student' ? 'Year I (B.Pharm)' : currentRole === 'Faculty' ? 'Professor Pharmacology' : 'Emp ID: 1805447'}
+                {activeUser ? activeUser.subtext : (currentRole === 'Student' ? 'Year I (B.Pharm)' : currentRole === 'Faculty' ? 'Professor Pharmacology' : 'Emp ID: 1805447')}
               </p>
             </div>
           </div>

@@ -8,6 +8,7 @@ import {
 import GlassCard from '../GlassCard';
 import CurriculumTabContent from './CurriculumTabContent';
 import { Subject, Resource } from '../../types';
+import { resolveFacultyForCourse } from '../../data/facultyRegistry';
 import { db } from '../../lib/firebase';
 import { doc, setDoc } from 'firebase/firestore';
 import { 
@@ -533,7 +534,15 @@ export default function SubjectManagement({
                   </div>
                   <div className="p-3 bg-gray-50 rounded-xl">
                     <span className="text-[8px] font-black uppercase text-gray-400 block mb-0.5">Faculty Lead</span>
-                    <span className="text-gray-800">{subjectInfo?.facultyAssigned || 'Dr. V. Chitra'}</span>
+                    <span className="text-gray-800">
+                      {subjectInfo ? resolveFacultyForCourse({
+                        academicYear: subjectInfo.academicYear,
+                        programme: subjectInfo.programme,
+                        regulation: subjectInfo.regulation,
+                        semesterOrYear: subjectInfo.semester || subjectInfo.year,
+                        subjectCode: subjectInfo.subjectCode
+                      }) : 'Not Assigned'}
+                    </span>
                   </div>
                 </div>
               </GlassCard>

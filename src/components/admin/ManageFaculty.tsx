@@ -7,17 +7,7 @@ import {
 import GlassCard from '../GlassCard';
 import * as XLSX from 'xlsx';
 import { getCurriculumDb } from '../../data/curriculumDb';
-
-interface FacultyMember {
-  id: string;
-  name: string;
-  empId: string;
-  dept: string;
-  email: string;
-  phone: string;
-  coursesAllotted: string[]; // List of subject codes
-  status: 'Authorized' | 'Suspended';
-}
+import { FacultyMember, DEFAULT_FACULTY } from '../../data/facultyRegistry';
 
 interface ManageFacultyProps {
   onBack: () => void;
@@ -32,13 +22,6 @@ const DEPARTMENTS = [
   'Department of Pharmaceutical Quality Assurance',
   'Department of Pharmaceutical Regulatory affairs',
   'Department of Pharmaceutical Chemistry'
-];
-
-const DEFAULT_FACULTY: FacultyMember[] = [
-  { id: '1', name: 'Dr. V. Chitra', empId: '1805101', dept: 'Department of Pharmacology', email: 'chitra.v@srmcop.edu.in', phone: '9876543210', coursesAllotted: ['BP101T'], status: 'Authorized' },
-  { id: '2', name: 'Dr. Meena Swaminathan, M.Pharm.', empId: '1805102', dept: 'Department of Pharmaceutical Chemistry', email: 'meena.s@srmcop.edu.in', phone: '9876543211', coursesAllotted: ['BP102T'], status: 'Authorized' },
-  { id: '3', name: 'Prof. S. J. Vardhan, Ph.D.', empId: '1805103', dept: 'Department of Pharmaceutical Chemistry', email: 'vardhan.sj@srmcop.edu.in', phone: '9876543212', coursesAllotted: [], status: 'Authorized' },
-  { id: '4', name: 'Prof. Elizabeth Mathew, Ph.D.', empId: '1805104', dept: 'Department of Pharmacy Practice', email: 'elizabeth.m@srmcop.edu.in', phone: '9876543213', coursesAllotted: [], status: 'Authorized' }
 ];
 
 export default function ManageFaculty({ onBack }: ManageFacultyProps) {
@@ -58,7 +41,18 @@ export default function ManageFaculty({ onBack }: ManageFacultyProps) {
 
   const [faculty, setFaculty] = useState<FacultyMember[]>(() => {
     const saved = localStorage.getItem('srm_lms_faculty_registry');
-    return saved ? JSON.parse(saved) : DEFAULT_FACULTY;
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (parsed && parsed.length >= DEFAULT_FACULTY.length) {
+          return parsed;
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    localStorage.setItem('srm_lms_faculty_registry', JSON.stringify(DEFAULT_FACULTY));
+    return DEFAULT_FACULTY;
   });
 
   const [search, setSearch] = useState('');
@@ -688,11 +682,17 @@ export default function ManageFaculty({ onBack }: ManageFacultyProps) {
                   Search Results:
                 </span>
                 {(() => {
+                  const seenCodes = new Set<string>();
                   const filtered = createdCourses.filter(c => {
                     const matchesSearch = c.courseName.toLowerCase().includes(allotSearchQuery.toLowerCase()) ||
                                           c.subjectCode.toLowerCase().includes(allotSearchQuery.toLowerCase());
                     const matchesProg = allotFilterProg === 'All' || c.programme === allotFilterProg;
-                    return matchesSearch && matchesProg;
+                    const isNew = !seenCodes.has(c.subjectCode);
+                    if (isNew && matchesSearch && matchesProg) {
+                      seenCodes.add(c.subjectCode);
+                      return true;
+                    }
+                    return false;
                   });
 
                   if (filtered.length === 0) {

@@ -15,6 +15,7 @@ import {
   deleteCourseFromDb
 } from '../../data/curriculumDb';
 import { Subject } from '../../types';
+import { resolveFacultyForCourse } from '../../data/facultyRegistry';
 
 interface AdminDashboardProps {
   onGoToScreen: (screenId: string) => void;
@@ -277,9 +278,16 @@ export default function AdminDashboard({
 
   // Filtered lists grouping
   const filteredCourses = curriculumDb.courseInformation.filter(course => {
+    const resolvedFacultyName = resolveFacultyForCourse({
+      academicYear: course.academicYear || filterAcademicYear,
+      programme: course.programme,
+      regulation: course.regulation || 'PCI 2017',
+      semesterOrYear: course.semester || course.year,
+      subjectCode: course.subjectCode
+    });
     const matchesSearch = course.subjectCode.toLowerCase().includes(searchQuery.toLowerCase()) || 
                           course.courseName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          course.facultyAssigned.toLowerCase().includes(searchQuery.toLowerCase());
+                          resolvedFacultyName.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesProg = filterProgramme === 'All' || course.programme === filterProgramme;
     const matchesYear = filterYear === 'All' || course.year === filterYear;
     return matchesSearch && matchesProg && matchesYear;
@@ -579,9 +587,16 @@ export default function AdminDashboard({
             ]).map((group) => {
               const matchedCourses = curriculumDb.courseInformation.filter(course => {
                 const matchesAcademicYear = !course.academicYear || course.academicYear === filterAcademicYear;
+                const resolvedFacultyName = resolveFacultyForCourse({
+                  academicYear: course.academicYear || filterAcademicYear,
+                  programme: course.programme,
+                  regulation: course.regulation || 'PCI 2017',
+                  semesterOrYear: course.semester || course.year,
+                  subjectCode: course.subjectCode
+                });
                 const matchesSearch = course.subjectCode.toLowerCase().includes(searchQuery.toLowerCase()) || 
                                       course.courseName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                                      (course.facultyAssigned && course.facultyAssigned.toLowerCase().includes(searchQuery.toLowerCase()));
+                                      resolvedFacultyName.toLowerCase().includes(searchQuery.toLowerCase());
                 const matchesProg = course.programme === curriculumActiveTab;
                 const matchesYear = course.year === group.year;
                 const matchesSem = 'semesters' in group && group.semesters ? group.semesters.includes(course.semester) : true;
@@ -707,20 +722,27 @@ export default function AdminDashboard({
 
                                 {/* Faculty */}
                                 <td className="px-4 py-3">
-                                  {course.facultyAssigned && course.facultyAssigned !== 'Unassigned' ? (
-                                    <span className="font-bold text-[#8B1E3F] bg-rose-50/70 px-2.5 py-1 rounded-full text-[10px] inline-block">
-                                      {course.facultyAssigned}
-                                    </span>
-                                  ) : (
-                                    <button
-                                      type="button"
-                                      onClick={() => handleOpenEdit(course)}
-                                      className="font-bold text-amber-600 bg-amber-50 hover:bg-amber-100 px-2.5 py-1 rounded-full text-[10px] transition-all"
-                                      title="Click to quick assign faculty"
-                                    >
-                                      Assign Faculty
-                                    </button>
-                                  )}
+                                  {(() => {
+                                    const facName = resolveFacultyForCourse({
+                                      academicYear: course.academicYear || filterAcademicYear,
+                                      programme: course.programme,
+                                      regulation: course.regulation || 'PCI 2017',
+                                      semesterOrYear: course.semester || course.year,
+                                      subjectCode: course.subjectCode
+                                    });
+                                    if (facName !== 'Not Assigned') {
+                                      return (
+                                        <span className="font-bold text-[#8B1E3F] bg-rose-50/70 px-2.5 py-1 rounded-full text-[10px] inline-block">
+                                          {facName}
+                                        </span>
+                                      );
+                                    }
+                                    return (
+                                      <span className="font-semibold text-gray-400 text-[10px] italic">
+                                        Not Assigned
+                                      </span>
+                                    );
+                                  })()}
                                 </td>
 
                                 {/* Status */}

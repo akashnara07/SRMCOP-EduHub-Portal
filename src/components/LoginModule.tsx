@@ -16,11 +16,13 @@ import {
   CheckCircle2, 
   Info,
   ShieldAlert,
-  AlertCircle
+  AlertCircle,
+  Search
 } from 'lucide-react';
+import { DEFAULT_FACULTY } from '../data/facultyRegistry';
 
 interface LoginModuleProps {
-  onLogin: (role: 'Student' | 'Faculty' | 'Admin') => void;
+  onLogin: (role: 'Student' | 'Faculty' | 'Admin', nameOrEmail?: string) => void;
 }
 
 export default function LoginModule({ onLogin }: LoginModuleProps) {
@@ -52,6 +54,7 @@ export default function LoginModule({ onLogin }: LoginModuleProps) {
   
   // Forgot Password States
   const [forgotEmail, setForgotEmail] = useState('');
+  const [facultySearch, setFacultySearch] = useState('');
   
   // Show/Hide password toggles
   const [showPassword, setShowPassword] = useState(false);
@@ -77,7 +80,7 @@ export default function LoginModule({ onLogin }: LoginModuleProps) {
     
     // TODO: DEVELOPMENT MODE ONLY
     // Replace temporary role-based login bypass with Firebase Authentication before production release.
-    onLogin(loginRole);
+    onLogin(loginRole, email);
   };
 
   // Registration handler
@@ -378,6 +381,74 @@ export default function LoginModule({ onLogin }: LoginModuleProps) {
                     SIGN IN <ArrowRight className="w-4 h-4" />
                   </button>
                 </form>
+
+                {loginRole === 'Faculty' && (
+                  <div className="space-y-2 mt-4 pt-4 border-t border-gray-100 animate-fade-in" id="faculty-quick-login-panel">
+                    <div className="flex flex-col gap-1 sm:flex-row sm:items-center justify-between pl-1">
+                      <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                        Quick Access: Allotted Faculty ({DEFAULT_FACULTY.length})
+                      </label>
+                      <span className="text-[9px] text-[#8B1E3F] font-bold">
+                        Click to autofill & login
+                      </span>
+                    </div>
+
+                    <div className="relative" id="faculty-quick-search-container">
+                      <Search className="absolute left-2.5 top-2 h-3.5 w-3.5 text-gray-400" />
+                      <input
+                        type="text"
+                        placeholder="Search by name, course code, dept..."
+                        value={facultySearch}
+                        onChange={(e) => setFacultySearch(e.target.value)}
+                        className="w-full pl-8 pr-3 py-1.5 bg-gray-50 border border-gray-200 focus:border-[#8B1E3F]/30 rounded-xl text-[10px] focus:outline-none focus:ring-1 focus:ring-[#8B1E3F]/20"
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2 max-h-[180px] overflow-y-auto pr-1 thin-scrollbar" id="faculty-quick-list-scroll">
+                      {DEFAULT_FACULTY.filter(fac => {
+                        const query = facultySearch.toLowerCase();
+                        return (
+                          fac.name.toLowerCase().includes(query) ||
+                          fac.dept.toLowerCase().includes(query) ||
+                          fac.email.toLowerCase().includes(query) ||
+                          fac.coursesAllotted.some(code => code.toLowerCase().includes(query))
+                        );
+                      }).map((fac) => (
+                        <button
+                          type="button"
+                          key={fac.id}
+                          onClick={() => {
+                            setEmail(fac.email);
+                            setPassword('srmcop123');
+                            onLogin('Faculty', fac.email);
+                          }}
+                          className="flex flex-col text-left p-2 bg-gray-50/70 hover:bg-pink-50/40 border border-gray-100 hover:border-[#8B1E3F]/20 rounded-xl transition-all cursor-pointer"
+                          id={`quick-login-faculty-${fac.id}`}
+                          title={`${fac.name} - ${fac.dept}`}
+                        >
+                          <span className="text-[10px] font-black text-gray-800 truncate w-full">{fac.name}</span>
+                          <span className="text-[8px] text-gray-400 truncate w-full">{fac.dept.replace('Department of ', '')}</span>
+                          <span className="text-[8px] text-[#8B1E3F] font-black mt-0.5 truncate w-full">
+                            Allotted: {fac.coursesAllotted.join(', ')}
+                          </span>
+                        </button>
+                      ))}
+                      {DEFAULT_FACULTY.filter(fac => {
+                        const query = facultySearch.toLowerCase();
+                        return (
+                          fac.name.toLowerCase().includes(query) ||
+                          fac.dept.toLowerCase().includes(query) ||
+                          fac.email.toLowerCase().includes(query) ||
+                          fac.coursesAllotted.some(code => code.toLowerCase().includes(query))
+                        );
+                      }).length === 0 && (
+                        <div className="col-span-2 py-4 text-center text-[10px] text-gray-400 font-bold">
+                          No matching faculty found.
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
 
                 {/* CREATE ACCOUNT OPTION - HIDDEN WHEN ADMIN IS SELECTED */}
                 {loginRole !== 'Admin' && (

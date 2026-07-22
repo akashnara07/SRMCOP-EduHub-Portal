@@ -473,7 +473,7 @@ export default function FacultyAnalytics({
                 <div className="space-y-2 text-[10px] font-bold text-gray-500 mt-2 pl-1 bg-gray-50/30 p-3 rounded-2xl border border-gray-100">
                   <div className="flex justify-between items-center">
                     <span className="text-gray-400 font-extrabold uppercase text-[8px]">Faculty Assigned:</span>
-                    <span className="text-gray-800 font-black">{sub.facultyName || 'Dr. V. Chitra'}</span>
+                    <span className="text-gray-800 font-black">{sub.facultyName || 'Not Assigned'}</span>
                   </div>
                 </div>
               </div>

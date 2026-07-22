@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import GlassCard from '../GlassCard';
 import { Subject, FacultyProfile } from '../../types';
+import { resolveFacultyForCourse } from '../../data/facultyRegistry';
 import CurriculumExplorer from './CurriculumExplorer';
 import CourseListTable from './CourseListTable';
 
@@ -865,7 +866,7 @@ export default function CourseDesignerHub({
   const isPCI2026 = programmeFilter === 'B.Pharm' && selectedRegulation === 'PCI 2026';
 
   // Convert fetchedCourses to Subject list
-  const fetchedSubjects: Subject[] = fetchedCourses.map((c, idx) => {
+  const fetchedSubjectsRaw: Subject[] = fetchedCourses.map((c, idx) => {
     const code = c.courseCode;
     const reg = c.regulation || selectedRegulation;
     const isLegacy = (code === 'BP101T' && reg === 'PCI 2017') ||
@@ -889,15 +890,28 @@ export default function CourseDesignerHub({
       semester: c.semester,
       academicYear: selectedYear,
       regulation: c.regulation || selectedRegulation,
-      facultyName: c.importedBy || 'Dr. V. Chitra',
+      facultyName: resolveFacultyForCourse({
+        academicYear: selectedYear,
+        programme: c.programme,
+        regulation: c.regulation || selectedRegulation,
+        semesterOrYear: c.semester,
+        subjectCode: c.courseCode
+      }),
       progress: matchingSub ? matchingSub.progress : 0,
       color: ['bg-rose-500', 'bg-blue-500', 'bg-amber-500', 'bg-emerald-500'][idx % 4],
       resources: matchingSub ? matchingSub.resources : []
     };
   });
 
+  const seenFetchedSubjectIds = new Set<string>();
+  const fetchedSubjects = fetchedSubjectsRaw.filter(s => {
+    if (seenFetchedSubjectIds.has(s.id)) return false;
+    seenFetchedSubjectIds.add(s.id);
+    return true;
+  });
+
   // Convert allFetchedCourses to Subject list for counts in CurriculumExplorer
-  const allFetchedSubjects: Subject[] = allFetchedCourses.map((c, idx) => {
+  const allFetchedSubjectsRaw: Subject[] = allFetchedCourses.map((c, idx) => {
     const code = c.courseCode;
     const reg = c.regulation || selectedRegulation;
     const isLegacy = (code === 'BP101T' && reg === 'PCI 2017') ||
@@ -922,11 +936,24 @@ export default function CourseDesignerHub({
       semester: c.semester,
       academicYear: yr,
       regulation: c.regulation || selectedRegulation,
-      facultyName: c.importedBy || 'Dr. V. Chitra',
+      facultyName: resolveFacultyForCourse({
+        academicYear: yr,
+        programme: c.programme,
+        regulation: c.regulation || selectedRegulation,
+        semesterOrYear: c.semester,
+        subjectCode: c.courseCode
+      }),
       progress: matchingSub ? matchingSub.progress : 0,
       color: ['bg-rose-500', 'bg-blue-500', 'bg-amber-500', 'bg-emerald-500'][idx % 4],
       resources: matchingSub ? matchingSub.resources : []
     };
+  });
+
+  const seenAllFetchedSubjectIds = new Set<string>();
+  const allFetchedSubjects = allFetchedSubjectsRaw.filter(s => {
+    if (seenAllFetchedSubjectIds.has(s.id)) return false;
+    seenAllFetchedSubjectIds.add(s.id);
+    return true;
   });
 
   const explorerSubjects = allFetchedSubjects.length > 0 ? allFetchedSubjects : subjects;
@@ -942,9 +969,10 @@ export default function CourseDesignerHub({
     } else {
       isSemOrYearMatch = selectedYearLevelFilter === 'All' || s.year === selectedYearLevelFilter;
     }
-    return isStatusMatch && isSemOrYearMatch;
+    const isAllotted = isAdmin ? true : facultyProfile.subjects.includes(s.id);
+    return isAllotted && isStatusMatch && isSemOrYearMatch;
   }) : subjects.filter((s) => {
-    const isAllotted = true; // Let both faculty and admin view all curriculum courses in the hub
+    const isAllotted = isAdmin ? true : facultyProfile.subjects.includes(s.id);
     const isYearMatch = s.academicYear === selectedYear;
     const isProgMatch = s.programme === programmeFilter;
     
@@ -1035,7 +1063,7 @@ export default function CourseDesignerHub({
     setEditYear(sub.year);
     setEditRegulation(sub.regulation || 'PCI 2017');
     setEditAcademicYear(sub.academicYear || '2025-2026');
-    setEditFacultyName(sub.facultyName || 'Dr. V. Chitra');
+    setEditFacultyName(sub.facultyName || 'Not Assigned');
     
     // Retrieve credits & hours from master database
     const db = getCurriculumDb();
@@ -2132,7 +2160,7 @@ export default function CourseDesignerHub({
                           <div className="space-y-2 text-[10px] font-bold text-gray-500 mt-2 pl-1 bg-gray-50/30 p-3 rounded-2xl border border-gray-100">
                             <div className="flex justify-between items-center">
                               <span className="text-gray-400 font-extrabold uppercase text-[8px]">Faculty Assigned:</span>
-                              <span className="text-gray-800 font-black">{sub.facultyName || 'Dr. V. Chitra'}</span>
+                              <span className="text-gray-800 font-black">{sub.facultyName || 'Not Assigned'}</span>
                             </div>
 
                           </div>

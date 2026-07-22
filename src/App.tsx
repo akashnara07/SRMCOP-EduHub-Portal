@@ -8,6 +8,7 @@ import { mockAnnouncements, mockStudentProgress, mockFacultyProfile, sampleQuiz 
 import { Subject, Resource, Announcement, QuizQuestion } from './types';
 import { getAppSubjects } from './data/curriculumDb';
 import { downloadFirestoreToLocal } from './lib/firebase';
+import { DEFAULT_FACULTY } from './data/facultyRegistry';
 
 // UI components
 import Sidebar from './components/Sidebar';
@@ -53,14 +54,39 @@ export default function App() {
   const [selectedProgramme, setSelectedProgramme] = useState<'B.Pharm' | 'Pharm.D'>('B.Pharm');
   const [searchQuery, setSearchQuery] = useState('');
 
-  const handleLogin = (role: 'Student' | 'Faculty' | 'Admin') => {
+  const handleLogin = (role: 'Student' | 'Faculty' | 'Admin', nameOrEmail?: string) => {
     setCurrentRole(role);
     setCurrentScreen(`${role.toLowerCase()}-dashboard`);
     setIsLoggedIn(true);
+    if (role === 'Faculty' && nameOrEmail) {
+      // Find matching faculty member by email
+      let facultyRegistry: any[] = [];
+      const saved = localStorage.getItem('srm_lms_faculty_registry');
+      if (saved) {
+        try {
+          facultyRegistry = JSON.parse(saved);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+      if (!facultyRegistry || facultyRegistry.length < DEFAULT_FACULTY.length) {
+        facultyRegistry = DEFAULT_FACULTY;
+        localStorage.setItem('srm_lms_faculty_registry', JSON.stringify(DEFAULT_FACULTY));
+      }
+      const member = facultyRegistry.find(f => f.email.toLowerCase() === nameOrEmail.toLowerCase().trim() || f.name.toLowerCase().includes(nameOrEmail.toLowerCase().trim()));
+      if (member) {
+        setImpersonatedUser({ role: 'Faculty', name: member.name });
+      } else {
+        setImpersonatedUser({ role: 'Faculty', name: 'Dr. K. Gayathiri' });
+      }
+    } else {
+      setImpersonatedUser(null);
+    }
   };
 
   const handleLogout = () => {
     setIsLoggedIn(false);
+    setImpersonatedUser(null);
   };
 
   // Persistent database simulation
@@ -91,6 +117,57 @@ export default function App() {
     setCurrentScreen(`${role.toLowerCase()}-dashboard`);
   };
 
+  // Dynamic faculty profile computation based on active/impersonated faculty user
+  const getFacultyProfile = (): any => {
+    const activeName = (impersonatedUser && impersonatedUser.role === 'Faculty') 
+      ? impersonatedUser.name 
+      : 'Dr. K. Gayathiri';
+    
+    let facultyRegistry: any[] = [];
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('srm_lms_faculty_registry');
+      if (saved) {
+        try {
+          facultyRegistry = JSON.parse(saved);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+      if (!facultyRegistry || facultyRegistry.length < DEFAULT_FACULTY.length) {
+        facultyRegistry = DEFAULT_FACULTY;
+        localStorage.setItem('srm_lms_faculty_registry', JSON.stringify(DEFAULT_FACULTY));
+      }
+    }
+    
+    const member = facultyRegistry.find(f => f.name === activeName || f.email === activeName);
+    
+    if (member) {
+      const subjectIds = subjects
+        .filter(s => member.coursesAllotted && member.coursesAllotted.some((c: string) => c.toUpperCase() === s.code.toUpperCase()))
+        .map(s => s.id);
+        
+      return {
+        name: member.name,
+        designation: member.name.includes('Chitra') || member.name.includes('Narayanan') ? 'Professor & Head' : member.name.includes('Prof.') ? 'Professor' : 'Associate Professor',
+        department: member.dept,
+        email: member.email,
+        subjects: subjectIds,
+        phone: member.phone
+      };
+    }
+    
+    return {
+      name: 'Dr. K. Gayathiri',
+      designation: 'Associate Professor',
+      department: 'Department of Pharmacology',
+      email: 'gayathik@srmist.edu.in',
+      subjects: subjects.filter(s => s.code === 'BP101T' || s.code === 'BP201T').map(s => s.id),
+      phone: '9876540019'
+    };
+  };
+
+  const facultyProfile = getFacultyProfile();
+
   // Update a subject's resource timeline list (called from Faculty resource manager)
   const handleUpdateSubjectResources = (subId: string, updatedRes: Resource[]) => {
     setSubjects(subjects.map((sub) => {
@@ -113,7 +190,7 @@ export default function App() {
       title,
       content,
       date: 'Today',
-      sender: currentRole === 'Faculty' ? mockFacultyProfile.name : 'University Admin Office',
+      sender: currentRole === 'Faculty' ? facultyProfile.name : 'University Admin Office',
       role: currentRole === 'Faculty' ? 'Faculty' : 'Admin',
       category
     };
@@ -238,7 +315,7 @@ export default function App() {
       case 'faculty-dashboard':
         return (
           <FacultyDashboard
-            facultyProfile={mockFacultyProfile}
+            facultyProfile={facultyProfile}
             subjects={subjects}
             announcements={announcements}
             onCreateAnnouncement={handleCreateAnnouncement}
@@ -252,7 +329,7 @@ export default function App() {
       case 'faculty-courses':
         return (
           <CourseDesignerHub
-            facultyProfile={mockFacultyProfile}
+            facultyProfile={facultyProfile}
             subjects={subjects}
             readOnly={true}
             isAdmin={currentRole === 'Admin'}
@@ -287,7 +364,7 @@ export default function App() {
       case 'faculty-subjects':
         return (
           <CourseDesignerHub
-            facultyProfile={mockFacultyProfile}
+            facultyProfile={facultyProfile}
             subjects={subjects}
             isAdmin={currentRole === 'Admin'}
             onGoToSubject={(subId) => {
@@ -328,12 +405,12 @@ export default function App() {
       case 'faculty-assignments':
         return <FacultyAssignments onBack={() => setCurrentScreen('faculty-dashboard')} />;
       case 'faculty-analytics':
-        return <FacultyAnalytics facultyProfile={mockFacultyProfile} subjects={subjects} />;
+        return <FacultyAnalytics facultyProfile={facultyProfile} subjects={subjects} />;
       case 'faculty-profile':
         return (
           <ProfileView
             role="Faculty"
-            facultyProfile={mockFacultyProfile}
+            facultyProfile={facultyProfile}
             subjects={subjects}
             onGoToSubject={setActiveSubjectId}
             onGoToScreen={setCurrentScreen}
@@ -419,6 +496,18 @@ export default function App() {
           currentScreen={currentScreen}
           onChangeScreen={setCurrentScreen}
           onLogout={handleLogout}
+          activeUser={{
+            name: currentRole === 'Student' 
+              ? 'J. Akash' 
+              : currentRole === 'Faculty' 
+                ? facultyProfile.name 
+                : 'Dr. J. Narayanan',
+            subtext: currentRole === 'Student' 
+              ? 'Year I (B.Pharm)' 
+              : currentRole === 'Faculty' 
+                ? facultyProfile.department 
+                : 'System Administrator'
+          }}
         />
 
         {/* Content Container (Header + Routed Screens) */}

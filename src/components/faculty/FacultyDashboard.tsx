@@ -46,7 +46,7 @@ export default function FacultyDashboard({
   const bPharmStudents = bPharmCoursesCount * 6;
   const pharmDStudents = pharmDCoursesCount * 6;
 
-  const displayName = facultyProfile.name.includes('Chitra') ? 'Dr. V. Chitra' : facultyProfile.name;
+  const displayName = facultyProfile.name;
 
   return (
     <div className="flex flex-col gap-6 w-full">

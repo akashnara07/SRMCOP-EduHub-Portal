@@ -256,7 +256,7 @@ export default function VideoPlayer({
                   {courseInfo.subjectCode}
                 </span>
                 <span className="text-xs text-gray-400 font-medium">•</span>
-                <span className="text-xs text-gray-500 font-medium">Faculty: {courseInfo.facultyAssigned || subject.facultyName}</span>
+                <span className="text-xs text-gray-500 font-medium">Faculty: {subject.facultyName}</span>
               </div>
             </div>
           </div>

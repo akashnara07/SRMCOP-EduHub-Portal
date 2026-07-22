@@ -391,8 +391,8 @@ export default function StudentProgress({ selectedProgramme }: StudentProgressPr
                 </tr>
               </thead>
               <tbody>
-                {currentStudentProgress.map((sub) => (
-                  <tr key={sub.code} className="border-b border-gray-50 hover:bg-gray-50/30 transition-all font-semibold text-gray-700">
+                {currentStudentProgress.map((sub, index) => (
+                  <tr key={`${sub.code}-sessional-${index}`} className="border-b border-gray-50 hover:bg-gray-50/30 transition-all font-semibold text-gray-700">
                     <td className="p-4 font-mono font-bold text-[#8B1E3F]">{sub.code}</td>
                     <td className="p-4 text-gray-900 font-extrabold">{sub.name}</td>
                     <td className="p-4 text-center font-mono font-bold text-gray-500">{sub.sessionalI}</td>
@@ -427,8 +427,8 @@ export default function StudentProgress({ selectedProgramme }: StudentProgressPr
                 </tr>
               </thead>
               <tbody>
-                {currentStudentProgress.map((sub) => (
-                  <tr key={sub.code} className="border-b border-gray-50 hover:bg-gray-50/30 transition-all font-semibold text-gray-700">
+                {currentStudentProgress.map((sub, index) => (
+                  <tr key={`${sub.code}-semester-${index}`} className="border-b border-gray-50 hover:bg-gray-50/30 transition-all font-semibold text-gray-700">
                     <td className="p-4 font-mono font-bold text-[#8B1E3F]">{sub.code}</td>
                     <td className="p-4 text-gray-900 font-extrabold">{sub.name}</td>
                     <td className="p-4 text-center">

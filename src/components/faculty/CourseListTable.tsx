@@ -193,7 +193,7 @@ export default function CourseListTable({
                             {sub.name}
                           </span>
                           <span className="text-[10px] text-gray-400 font-semibold mt-0.5">
-                            Assigned: {sub.facultyName || 'Dr. V. Chitra'} • {sub.regulation}
+                            Assigned: {sub.facultyName || 'Not Assigned'} • {sub.regulation}
                           </span>
                         </div>
                       </td>
