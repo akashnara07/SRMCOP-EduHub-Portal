@@ -1,6 +1,7 @@
 import * as XLSX from 'xlsx';
 import { Subject, Resource } from '../types';
 import { DEFAULT_FACULTY, resolveFacultyForCourse } from './facultyRegistry';
+import { initialFullMasterCurriculumDb } from './fullCurriculumData';
 
 export interface CourseInformation {
   subjectCode: string;
@@ -89,8 +90,10 @@ export interface MasterCurriculumDb {
   }[];
 }
 
-// Default initial data for BP101T and BP102T to simulate an already imported curriculum database
-const defaultCurriculumDb: MasterCurriculumDb = {
+// Master Curriculum Database loaded from complete PCI curriculum dataset
+export const defaultCurriculumDb: MasterCurriculumDb = initialFullMasterCurriculumDb;
+
+const legacyCurriculumDb: any = {
   courseInformation: [
     {
       subjectCode: 'PD101',
@@ -503,6 +506,33 @@ const defaultCurriculumDb: MasterCurriculumDb = {
   ]
 };
 
+export function deduplicateCourseInfo(courses: CourseInformation[]): CourseInformation[] {
+  if (!courses || !Array.isArray(courses)) return [];
+  const map = new Map<string, CourseInformation>();
+
+  // Sort courses so preferred academicYear ('2025-2026') and standard regulation ('PCI 2017' / 'PCI 2008') come first
+  const sorted = [...courses].sort((a, b) => {
+    const aYearScore = a.academicYear === '2025-2026' ? 2 : (a.academicYear === '2026-2027' ? 1 : 0);
+    const bYearScore = b.academicYear === '2025-2026' ? 2 : (b.academicYear === '2026-2027' ? 1 : 0);
+    if (aYearScore !== bYearScore) return bYearScore - aYearScore;
+
+    const aRegScore = (a.regulation === 'PCI 2017' || a.regulation === 'PCI 2008') ? 2 : 1;
+    const bRegScore = (b.regulation === 'PCI 2017' || b.regulation === 'PCI 2008') ? 2 : 1;
+    return bRegScore - aRegScore;
+  });
+
+  sorted.forEach(c => {
+    if (!c.subjectCode) return;
+    const prog = c.programme || 'B.Pharm';
+    const key = `${prog}-${c.subjectCode}`;
+    if (!map.has(key)) {
+      map.set(key, c);
+    }
+  });
+
+  return Array.from(map.values());
+}
+
 // Initialize or read from localStorage
 export const getCurriculumDb = (): MasterCurriculumDb => {
   const deletedData = localStorage.getItem('srmcop_deleted_subjects');
@@ -522,6 +552,7 @@ export const getCurriculumDb = (): MasterCurriculumDb => {
       initialDb.referenceBooks = initialDb.referenceBooks.filter(b => !deletedList.includes(b.subjectCode));
       initialDb.assessmentPattern = initialDb.assessmentPattern.filter(a => !deletedList.includes(a.subjectCode));
     }
+    initialDb.courseInformation = deduplicateCourseInfo(initialDb.courseInformation);
     localStorage.setItem('srmcop_curriculum_db', JSON.stringify(initialDb));
     return initialDb;
   }
@@ -572,30 +603,24 @@ export const getCurriculumDb = (): MasterCurriculumDb => {
       });
     }
 
-    // Purge outdated PCI 2026 courses from parsed db to ensure it starts clean (only BP101T is the allowed test subject)
-    if (parsed.courseInformation) {
-      const originalLength = parsed.courseInformation.length;
-      parsed.courseInformation = parsed.courseInformation.filter(c => {
-        if (c.regulation === 'PCI 2026') {
-          return c.subjectCode === 'BP101T' && c.academicYear === '2026-2027';
-        }
-        return true;
-      });
-      if (parsed.courseInformation.length !== originalLength) {
-        updated = true;
-      }
+    // Deduplicate courseInformation
+    const prevCount = parsed.courseInformation.length;
+    parsed.courseInformation = deduplicateCourseInfo(parsed.courseInformation);
+    if (parsed.courseInformation.length !== prevCount) {
+      updated = true;
     }
 
     // Check if default subjects are present in courseInformation, if not add them (skip deleted ones)
     defaultCurriculumDb.courseInformation.forEach(c => {
       if (deletedList.includes(c.subjectCode)) return;
-      if (!parsed.courseInformation.some(existing => existing.subjectCode === c.subjectCode && (existing.regulation || 'PCI 2017') === c.regulation)) {
+      if (!parsed.courseInformation.some(existing => existing.subjectCode === c.subjectCode && (existing.programme || 'B.Pharm') === (c.programme || 'B.Pharm'))) {
         parsed.courseInformation.push(c);
         updated = true;
       }
     });
 
     if (updated) {
+      parsed.courseInformation = deduplicateCourseInfo(parsed.courseInformation);
       // Merge all other key sheets so they are not missing (skip deleted ones)
       const sheetsToMerge = [
         'scope', 'objectives', 'courseOutcomes', 'units', 
@@ -1232,7 +1257,7 @@ const colors = [
 // Reconstruct Subject list from Excel Course Information DB dynamically
 export const getAppSubjects = (): Subject[] => {
   const db = getCurriculumDb();
-  const seenIds = new Set<string>();
+  const seenKeys = new Set<string>();
   const uniqueSubjects: Subject[] = [];
   
   // Dynamic faculty lookup from the Admin's Faculty Registry
@@ -1251,47 +1276,38 @@ export const getAppSubjects = (): Subject[] => {
       localStorage.setItem('srm_lms_faculty_registry', JSON.stringify(DEFAULT_FACULTY));
     }
   }
-  
-  db.courseInformation.forEach((info, idx) => {
+
+  const cleanCourses = deduplicateCourseInfo(db.courseInformation);
+
+  cleanCourses.forEach((info, idx) => {
     const code = info.subjectCode;
-    const resources = getTeachingResources(code);
-    
-    // Calculate course progress based on completed items in resources
-    const completedRes = resources.filter(r => r.status === 'completed').length;
-    const progress = resources.length > 0 ? Math.round((completedRes / resources.length) * 100) : 0;
-    
-    const reg = info.regulation || 'PCI 2017';
-    const isLegacy = (code === 'BP101T' && reg === 'PCI 2017') ||
-                     (code === 'PD101' && reg === 'PCI 2008') ||
-                     (code === 'BP201T' && reg === 'PCI 2017') ||
-                     (code === 'BP103T' && reg === 'PCI 2026');
-    
-    // If it's legacy and matches active year, keep it exact. Otherwise, make it unique.
-    const id = isLegacy
-      ? (info.academicYear === '2025-2026' ? code : `${code}-${info.academicYear}`)
-      : `${code}-${reg}-${info.academicYear || '2025-2026'}`;
-    
-    if (!seenIds.has(id)) {
-      seenIds.add(id);
+    const prog = info.programme || 'B.Pharm';
+    const key = `${prog}-${code}`;
+
+    if (!seenKeys.has(key)) {
+      seenKeys.add(key);
       
-      // Determine faculty assigned using centralized resolver as the single source of truth
+      const resources = getTeachingResources(code);
+      const completedRes = resources.filter(r => r.status === 'completed').length;
+      const progress = resources.length > 0 ? Math.round((completedRes / resources.length) * 100) : 0;
+      
       const resolvedFacultyName = resolveFacultyForCourse({
         academicYear: info.academicYear || '2025-2026',
         programme: info.programme,
-        regulation: info.regulation || 'PCI 2017',
+        regulation: info.regulation || (info.programme === 'Pharm.D' ? 'PCI 2008' : 'PCI 2017'),
         semesterOrYear: info.semester || info.year,
         subjectCode: code
       });
 
       uniqueSubjects.push({
-        id: id, // Unique combination where needed, legacy remains exact to prevent breaking lookups
+        id: code,
         code: code,
         name: info.courseName,
         programme: info.programme as any,
         year: info.year,
         semester: info.semester,
         academicYear: info.academicYear || '2025-2026',
-        regulation: info.regulation || 'PCI 2017',
+        regulation: info.regulation || (info.programme === 'Pharm.D' ? 'PCI 2008' : 'PCI 2017'),
         facultyName: resolvedFacultyName,
         progress: progress,
         color: colors[idx % colors.length],

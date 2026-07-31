@@ -12,17 +12,6 @@ interface StudentDashboardProps {
   onGoToScreen: (screenId: string) => void;
 }
 
-// Fixed marks database matching the curriculum evaluation standards
-const marksLookup: Record<string, { sessionalI: number; sessionalII: number; sessionalIII?: number; semesterExam: number; maxSessional: number; maxSemester: number }> = {
-  'BP101T': { sessionalI: 26, sessionalII: 28, semesterExam: 64, maxSessional: 30, maxSemester: 75 },
-  'BP102T': { sessionalI: 24, sessionalII: 25, semesterExam: 59, maxSessional: 30, maxSemester: 75 },
-  'BP103T': { sessionalI: 28, sessionalII: 29, semesterExam: 68, maxSessional: 30, maxSemester: 75 },
-  'BP104T': { sessionalI: 23, sessionalII: 24, semesterExam: 58, maxSessional: 30, maxSemester: 75 },
-  'BP105T': { sessionalI: 29, sessionalII: 28, semesterExam: 71, maxSessional: 30, maxSemester: 75 },
-  'PD101': { sessionalI: 27, sessionalII: 26, sessionalIII: 28, semesterExam: 62, maxSessional: 30, maxSemester: 75 },
-  'BP201T': { sessionalI: 25, sessionalII: 27, semesterExam: 65, maxSessional: 30, maxSemester: 75 },
-};
-
 export default function StudentDashboard({
   studentProgress,
   subjects,
@@ -36,56 +25,59 @@ export default function StudentDashboard({
   const totalResourcesCount = subjects.reduce((acc, sub) => acc + sub.resources.length, 0);
 
   const activeSubject = subjects[activeSubjectIdx] || null;
-  const getStudentMarks = (subjectCode: string, registerNumber: string, programme: string) => {
+  const getStudentMarks = (subjectCode: string, registerNumber: string) => {
     const saved = localStorage.getItem(`sessional_marks_${subjectCode}`);
     if (saved) {
       try {
         const cohort = JSON.parse(saved);
         const student = cohort.find((s: any) => s.registerNumber === registerNumber);
-        if (student) {
+        if (student && student.sessionalI !== undefined && student.sessionalI !== null && student.sessionalI !== '') {
+          const s1 = Number(student.sessionalI);
+          const s2 = Number(student.sessionalII || 0);
+          const s3 = Number(student.sessionalIII || 0);
           return {
-            sessionalI: student.sessionalI,
-            sessionalII: student.sessionalII,
-            sessionalIII: student.sessionalIII || 0,
-            semesterExam: Math.round(((student.gpa || 8.0) / 10) * 75),
+            sessionalI: s1,
+            sessionalII: s2,
+            sessionalIII: s3,
+            semesterExam: student.semesterExam !== undefined && student.semesterExam !== null ? Number(student.semesterExam) : null,
             maxSessional: 30,
-            maxSemester: 75
+            maxSemester: 75,
+            hasMarks: true
           };
         }
       } catch (e) {
         console.error(e);
       }
     }
-    // Fallback to static marksLookup or general default
-    const fallback = marksLookup[subjectCode] || { sessionalI: 22, sessionalII: 24, sessionalIII: 25, semesterExam: 56, maxSessional: 30, maxSemester: 75 };
     return {
-      sessionalI: fallback.sessionalI,
-      sessionalII: fallback.sessionalII,
-      sessionalIII: fallback.sessionalIII || 0,
-      semesterExam: fallback.semesterExam,
-      maxSessional: fallback.maxSessional,
-      maxSemester: fallback.maxSemester
+      sessionalI: null,
+      sessionalII: null,
+      sessionalIII: null,
+      semesterExam: null,
+      maxSessional: 30,
+      maxSemester: 75,
+      hasMarks: false
     };
   };
 
   const currentMarks = activeSubject
-    ? getStudentMarks(activeSubject.code, studentProgress.registerNumber, activeSubject.programme)
-    : { sessionalI: 0, sessionalII: 0, sessionalIII: 0, semesterExam: 0, maxSessional: 30, maxSemester: 75 };
+    ? getStudentMarks(activeSubject.code, studentProgress.registerNumber)
+    : { sessionalI: null, sessionalII: null, sessionalIII: null, semesterExam: null, maxSessional: 30, maxSemester: 75, hasMarks: false };
 
   const isPharmD = activeSubject?.programme === 'Pharm.D' || activeSubject?.code.startsWith('PD');
-  const sessionalIIIVal = currentMarks.sessionalIII ?? (isPharmD ? 25 : 0);
+  const sessionalIIIVal = currentMarks.sessionalIII;
 
-  const sessionalIPct = (currentMarks.sessionalI / currentMarks.maxSessional) * 100;
-  const sessionalIIPct = (currentMarks.sessionalII / currentMarks.maxSessional) * 100;
-  const sessionalIIIPct = (sessionalIIIVal / currentMarks.maxSessional) * 100;
-  const semesterExamPct = (currentMarks.semesterExam / currentMarks.maxSemester) * 100;
+  const sessionalIPct = currentMarks.sessionalI !== null ? (currentMarks.sessionalI / currentMarks.maxSessional) * 100 : 0;
+  const sessionalIIPct = currentMarks.sessionalII !== null ? (currentMarks.sessionalII / currentMarks.maxSessional) * 100 : 0;
+  const sessionalIIIPct = sessionalIIIVal !== null ? (sessionalIIIVal / currentMarks.maxSessional) * 100 : 0;
 
   const calculatedSessionalAvg = (() => {
+    if (!currentMarks.hasMarks || currentMarks.sessionalI === null) return '-';
     if (isPharmD) {
-      const vals = [currentMarks.sessionalI, currentMarks.sessionalII, sessionalIIIVal].sort((a, b) => b - a);
+      const vals = [currentMarks.sessionalI, currentMarks.sessionalII || 0, sessionalIIIVal || 0].sort((a, b) => b - a);
       return ((vals[0] + vals[1]) / 2).toFixed(1);
     } else {
-      return ((currentMarks.sessionalI + currentMarks.sessionalII) / 2).toFixed(1);
+      return (((currentMarks.sessionalI || 0) + (currentMarks.sessionalII || 0)) / 2).toFixed(1);
     }
   })();
 
@@ -441,19 +433,20 @@ export default function StudentDashboard({
               const badgeText = sub.programme === 'B.Pharm' ? `Semester ${sub.semester}` : `Year ${sub.year}`;
 
               // Calculate actual sessional marks average out of 30
-              const marks = getStudentMarks(sub.code, studentProgress.registerNumber, sub.programme);
+              const marks = getStudentMarks(sub.code, studentProgress.registerNumber);
               const subIsPharmD = sub.programme === 'Pharm.D' || sub.code.startsWith('PD');
               const sessionalAvg = (() => {
+                if (!marks.hasMarks || marks.sessionalI === null) return null;
                 const s3 = marks.sessionalIII ?? 0;
                 if (subIsPharmD) {
-                  const vals = [marks.sessionalI, marks.sessionalII, s3].sort((a, b) => b - a);
+                  const vals = [marks.sessionalI, marks.sessionalII || 0, s3].sort((a, b) => b - a);
                   return ((vals[0] + vals[1]) / 2);
                 } else {
-                  return ((marks.sessionalI + marks.sessionalII) / 2);
+                  return (((marks.sessionalI || 0) + (marks.sessionalII || 0)) / 2);
                 }
               })();
-              const sessionalAvgStr = sessionalAvg.toFixed(1);
-              const sessionalAvgPct = (sessionalAvg / 30) * 100;
+              const sessionalAvgStr = sessionalAvg !== null ? sessionalAvg.toFixed(1) : '-';
+              const sessionalAvgPct = sessionalAvg !== null ? (sessionalAvg / 30) * 100 : 0;
 
               return (
                 <GlassCard key={sub.id} hoverLift className="p-6 flex flex-col justify-between h-56">

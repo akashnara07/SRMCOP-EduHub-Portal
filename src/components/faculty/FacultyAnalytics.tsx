@@ -3,6 +3,8 @@ import { BookOpen, Users, Download, ArrowLeft, BarChart3, ChevronRight, Award, G
 import GlassCard from '../GlassCard';
 import { Subject, FacultyProfile } from '../../types';
 
+import { getStudentsMaster } from '../../data/studentRegistry';
+
 interface FacultyAnalyticsProps {
   facultyProfile: FacultyProfile;
   subjects: Subject[];
@@ -19,41 +21,45 @@ interface StudentPerformance {
   semesterAttainment: number; // out of 3 (OBE scale)
 }
 
-// Generate some rich, deterministic mock scores for student progress tracking
-const mockPerformanceData: Record<string, StudentPerformance[]> = {
-  'bpharm-y1-s1-p1': [
-    { id: '1', name: 'J. Akash', registerNumber: 'SRM2026PH7810', sessionalIMark: 26, sessionalIIMark: 27, sessionalIIIMark: 25, internalAttainment: 2.6, semesterAttainment: 2.5 },
-    { id: '2', name: 'Meera Patel', registerNumber: 'SRM2026PH7812', sessionalIMark: 22, sessionalIIMark: 24, sessionalIIIMark: 21, internalAttainment: 2.2, semesterAttainment: 2.4 },
-    { id: '3', name: 'Rahul Sharma', registerNumber: 'SRM2026PH7815', sessionalIMark: 29, sessionalIIMark: 28, sessionalIIIMark: 28, internalAttainment: 2.9, semesterAttainment: 2.8 },
-    { id: '4', name: 'Priyesh Sen', registerNumber: 'SRM2026PH7830', sessionalIMark: 20, sessionalIIMark: 21, sessionalIIIMark: 22, internalAttainment: 2.0, semesterAttainment: 2.1 },
-    { id: '5', name: 'Anjali Rao', registerNumber: 'SRM2026PH7831', sessionalIMark: 27, sessionalIIMark: 26, sessionalIIIMark: 24, internalAttainment: 2.5, semesterAttainment: 2.7 },
-    { id: '6', name: 'Siddharth Nair', registerNumber: 'SRM2026PH7845', sessionalIMark: 25, sessionalIIMark: 23, sessionalIIIMark: 26, internalAttainment: 2.4, semesterAttainment: 2.5 },
-  ],
-  'pharmd-y1-p1': [
-    { id: '1', name: 'J. Akash', registerNumber: 'SRM2026PH7810', sessionalIMark: 25, sessionalIIMark: 24, sessionalIIIMark: 26, internalAttainment: 2.5, semesterAttainment: 2.5 },
-    { id: '2', name: 'Meera Patel', registerNumber: 'SRM2026PH7812', sessionalIMark: 24, sessionalIIMark: 23, sessionalIIIMark: 22, internalAttainment: 2.4, semesterAttainment: 2.4 },
-    { id: '3', name: 'Rahul Sharma', registerNumber: 'SRM2026PH7815', sessionalIMark: 28, sessionalIIMark: 29, sessionalIIIMark: 27, internalAttainment: 2.8, semesterAttainment: 2.7 },
-    { id: '4', name: 'Priyesh Sen', registerNumber: 'SRM2026PH7830', sessionalIMark: 22, sessionalIIMark: 21, sessionalIIIMark: 20, internalAttainment: 2.1, semesterAttainment: 2.1 },
-    { id: '5', name: 'Anjali Rao', registerNumber: 'SRM2026PH7831', sessionalIMark: 26, sessionalIIMark: 25, sessionalIIIMark: 24, internalAttainment: 2.5, semesterAttainment: 2.5 },
-    { id: '6', name: 'Siddharth Nair', registerNumber: 'SRM2026PH7845', sessionalIMark: 24, sessionalIIMark: 26, sessionalIIIMark: 25, internalAttainment: 2.5, semesterAttainment: 2.6 },
-  ],
-  'bpharm-y1-s2-p1': [
-    { id: '1', name: 'J. Akash', registerNumber: 'SRM2026PH7810', sessionalIMark: 21, sessionalIIMark: 22, sessionalIIIMark: 23, internalAttainment: 2.1, semesterAttainment: 2.2 },
-    { id: '2', name: 'Meera Patel', registerNumber: 'SRM2026PH7812', sessionalIMark: 19, sessionalIIMark: 20, sessionalIIIMark: 18, internalAttainment: 1.9, semesterAttainment: 2.0 },
-    { id: '3', name: 'Rahul Sharma', registerNumber: 'SRM2026PH7815', sessionalIMark: 25, sessionalIIMark: 26, sessionalIIIMark: 24, internalAttainment: 2.5, semesterAttainment: 2.5 },
-    { id: '4', name: 'Priyesh Sen', registerNumber: 'SRM2026PH7830', sessionalIMark: 23, sessionalIIMark: 21, sessionalIIIMark: 22, internalAttainment: 2.2, semesterAttainment: 2.1 },
-    { id: '5', name: 'Anjali Rao', registerNumber: 'SRM2026PH7831', sessionalIMark: 24, sessionalIIMark: 25, sessionalIIIMark: 23, internalAttainment: 2.4, semesterAttainment: 2.4 },
-    { id: '6', name: 'Siddharth Nair', registerNumber: 'SRM2026PH7845', sessionalIMark: 26, sessionalIIMark: 24, sessionalIIIMark: 25, internalAttainment: 2.5, semesterAttainment: 2.5 },
-  ],
-  'bpharm-y1-s1-p3': [
-    { id: '1', name: 'J. Akash', registerNumber: 'SRM2026PH7810', sessionalIMark: 28, sessionalIIMark: 28, sessionalIIIMark: 29, internalAttainment: 2.8, semesterAttainment: 2.8 },
-    { id: '2', name: 'Meera Patel', registerNumber: 'SRM2026PH7812', sessionalIMark: 23, sessionalIIMark: 22, sessionalIIIMark: 24, internalAttainment: 2.3, semesterAttainment: 2.4 },
-    { id: '3', name: 'Rahul Sharma', registerNumber: 'SRM2026PH7815', sessionalIMark: 27, sessionalIIMark: 29, sessionalIIIMark: 28, internalAttainment: 2.7, semesterAttainment: 2.7 },
-    { id: '4', name: 'Priyesh Sen', registerNumber: 'SRM2026PH7830', sessionalIMark: 24, sessionalIIMark: 23, sessionalIIIMark: 25, internalAttainment: 2.4, semesterAttainment: 2.4 },
-    { id: '5', name: 'Anjali Rao', registerNumber: 'SRM2026PH7831', sessionalIMark: 29, sessionalIIMark: 28, sessionalIIIMark: 27, internalAttainment: 2.8, semesterAttainment: 2.8 },
-    { id: '6', name: 'Siddharth Nair', registerNumber: 'SRM2026PH7845', sessionalIMark: 25, sessionalIIMark: 26, sessionalIIIMark: 24, internalAttainment: 2.5, semesterAttainment: 2.5 },
-  ]
-};
+function getSubjectStudentScores(subject?: Subject): StudentPerformance[] {
+  if (!subject) return [];
+  const masterStudents = getStudentsMaster();
+  const enrolled = masterStudents.filter(s => s.programme === subject.programme);
+  const list = enrolled.length > 0 ? enrolled : masterStudents;
+
+  // Try reading saved sessional marks from localStorage
+  const codeKey = subject.code.replace(/\s+/g, '');
+  let savedMarksMap: Record<string, any> = {};
+  try {
+    const raw1 = localStorage.getItem(`sessional_marks_${subject.code}`);
+    const raw2 = localStorage.getItem(`sessional_marks_${codeKey}`);
+    if (raw1) savedMarksMap = JSON.parse(raw1);
+    else if (raw2) savedMarksMap = JSON.parse(raw2);
+  } catch (e) {
+    console.error('Error reading saved marks for faculty analytics:', e);
+  }
+
+  return list.map((std) => {
+    const record = savedMarksMap[std.regNo] || savedMarksMap[std.id] || {};
+    const s1 = Number(record.sessional1 || record.sessionalI || 0);
+    const s2 = Number(record.sessional2 || record.sessionalII || 0);
+    const s3 = Number(record.sessional3 || record.sessionalIII || 0);
+    
+    const internalAtt = (s1 || s2 || s3) ? parseFloat(((s1 + s2) / 20).toFixed(1)) : 0;
+    const semAtt = internalAtt ? parseFloat((internalAtt * 0.95).toFixed(1)) : 0;
+
+    return {
+      id: std.id,
+      name: std.name,
+      registerNumber: std.regNo,
+      sessionalIMark: s1,
+      sessionalIIMark: s2,
+      sessionalIIIMark: s3,
+      internalAttainment: internalAtt,
+      semesterAttainment: semAtt
+    };
+  });
+}
 
 export default function FacultyAnalytics({
   facultyProfile,
@@ -64,7 +70,7 @@ export default function FacultyAnalytics({
   const [selectedSubjectId, setSelectedSubjectId] = useState<string | null>(null);
 
   const selectedSubject = subjects.find((s) => s.id === selectedSubjectId);
-  const studentScores = selectedSubjectId ? (mockPerformanceData[selectedSubjectId] || mockPerformanceData['bpharm-y1-s1-p1'] || []) : [];
+  const studentScores = getSubjectStudentScores(selectedSubject);
 
   // Downloader for detailed reports as Web-Printable formatted PDFs
   const handleDownloadReport = (sub: Subject, data: StudentPerformance[]) => {
@@ -284,6 +290,41 @@ export default function FacultyAnalytics({
 
   // If a subject is selected, show details
   if (selectedSubject) {
+    const hasAnyMarks = studentScores.some(s => s.sessionalIMark > 0 || s.sessionalIIMark > 0 || s.sessionalIIIMark > 0);
+
+    if (!hasAnyMarks) {
+      return (
+        <div className="flex flex-col gap-6 w-full max-w-5xl mx-auto">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setSelectedSubjectId(null)}
+              className="w-10 h-10 rounded-full bg-white/60 border border-white/40 hover:bg-white flex items-center justify-center text-gray-700 transition-all shadow-sm"
+            >
+              <ArrowLeft className="w-5 h-5" />
+            </button>
+            <div>
+              <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block">
+                {selectedSubject.code} • Analytics
+              </span>
+              <h1 className="font-display font-extrabold text-xl text-gray-900 tracking-tight">
+                {selectedSubject.name}
+              </h1>
+            </div>
+          </div>
+
+          <div className="p-12 bg-white border border-gray-150/40 rounded-3xl flex flex-col items-center justify-center text-center gap-3 shadow-sm my-4">
+            <div className="w-12 h-12 rounded-2xl bg-[#8B1E3F]/5 border border-[#8B1E3F]/10 flex items-center justify-center text-[#8B1E3F]">
+              <BarChart3 className="w-6 h-6" />
+            </div>
+            <h3 className="font-display font-bold text-base text-gray-900 mt-1">No OBE Analytics Available</h3>
+            <p className="text-xs text-gray-500 max-w-lg leading-relaxed font-medium">
+              OBE analytics will be generated automatically once CIA, practical, and semester examination marks have been entered and mapped to Course Outcomes (COs).
+            </p>
+          </div>
+        </div>
+      );
+    }
+
     // Calculate stats
     const averageSessionalI = (studentScores.reduce((acc, s) => acc + s.sessionalIMark, 0) / studentScores.length).toFixed(1);
     const averageSessionalII = (studentScores.reduce((acc, s) => acc + s.sessionalIIMark, 0) / studentScores.length).toFixed(1);
@@ -396,7 +437,7 @@ export default function FacultyAnalytics({
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-2">
         {mySubjects.map((sub) => {
-          const scores = mockPerformanceData[sub.id] || [];
+          const scores = getSubjectStudentScores(sub);
           const credits = (sub.code && sub.code.endsWith('P')) ? 2 : 4;
           const hours = (sub.code && sub.code.endsWith('P')) ? 30 : 45;
           const activeAccent = sub.programme === 'B.Pharm' ? 'border-maroon-100 hover:border-[#8B1E3F]/30 hover:shadow-maroon-900/10' : 'border-teal-100 hover:border-[#0F766E]/30 hover:shadow-teal-900/10';

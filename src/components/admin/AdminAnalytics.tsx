@@ -4,6 +4,7 @@ import {
 } from 'lucide-react';
 import GlassCard from '../GlassCard';
 import { Subject } from '../../types';
+import { getStudentsMaster } from '../../data/studentRegistry';
 
 interface AdminAnalyticsProps {
   subjects: Subject[];
@@ -32,50 +33,44 @@ export default function AdminAnalytics({ subjects }: AdminAnalyticsProps) {
   const [filterSubject, setFilterSubject] = useState<string>('');
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Comprehensive static student marks database for all unique combinations to ensure 100% real looking data!
+  // Student analytics database reading actual entered marks from database / localStorage
   const allStudentAnalyticsData = useMemo<StudentAnalyticsRow[]>(() => {
-    // Basic students list
-    const students = [
-      { name: 'J. Akash', regNo: 'SRM2026PH7810' },
-      { name: 'Meera Patel', regNo: 'SRM2026PH7812' },
-      { name: 'Rahul Sharma', regNo: 'SRM2026PH7815' },
-      { name: 'Priyesh Sen', regNo: 'SRM2026PH7830' },
-      { name: 'Anjali Rao', regNo: 'SRM2026PH7831' },
-      { name: 'Siddharth Nair', regNo: 'SRM2026PH7845' },
-      { name: 'Kiran G.', regNo: 'SRM2026PH7852' },
-      { name: 'Harish Mehta', regNo: 'SRM2026PH7856' },
-      { name: 'Sneha Reddy', regNo: 'SRM2026PH7860' },
-      { name: 'Pooja Iyer', regNo: 'SRM2026PH7875' },
-    ];
-
     const rows: StudentAnalyticsRow[] = [];
 
-    // Map through subjects and multiply by students with pseudo-random deterministic marks
-    subjects.forEach((sub, sIdx) => {
-      students.forEach((stu, stuIdx) => {
-        // Deterministic pseudo-randomness based on subject code and student name
-        const seed = (sub.code.charCodeAt(2) || 0) + (stu.name.charCodeAt(0) || 0) + stuIdx + sIdx;
-        const s1 = 20 + (seed % 11); // 20 to 30
-        const s2 = 18 + ((seed + 3) % 13); // 18 to 30
-        const s3 = sub.programme === 'Pharm.D' ? 19 + ((seed + 7) % 12) : 0; // 19 to 30 for Pharm.D only
-        const semExam = 45 + ((seed * 11) % 31); // 45 to 75
+    subjects.forEach((sub) => {
+      const saved = localStorage.getItem(`sessional_marks_${sub.code}`);
+      if (!saved) return;
+      try {
+        const cohort = JSON.parse(saved);
+        if (Array.isArray(cohort)) {
+          cohort.forEach((stu: any) => {
+            const s1 = stu.sessionalI !== undefined && stu.sessionalI !== null && stu.sessionalI !== '' ? Number(stu.sessionalI) : null;
+            const s2 = stu.sessionalII !== undefined && stu.sessionalII !== null && stu.sessionalII !== '' ? Number(stu.sessionalII) : null;
+            const s3 = stu.sessionalIII !== undefined && stu.sessionalIII !== null && stu.sessionalIII !== '' ? Number(stu.sessionalIII) : null;
+            const sem = stu.semesterExam !== undefined && stu.semesterExam !== null && stu.semesterExam !== '' ? Number(stu.semesterExam) : null;
 
-        rows.push({
-          studentName: stu.name,
-          regNo: stu.regNo,
-          program: sub.programme as 'B.Pharm' | 'Pharm.D',
-          year: sub.year,
-          semester: sub.semester,
-          subjectCode: sub.code,
-          subjectName: sub.name,
-          sessionalI: s1,
-          sessionalII: s2,
-          sessionalIII: s3,
-          semesterExam: semExam,
-          maxSessional: 30,
-          maxSemester: 75
-        });
-      });
+            if (s1 !== null || s2 !== null || sem !== null) {
+              rows.push({
+                studentName: stu.name || stu.studentName || 'Student',
+                regNo: stu.registerNumber || stu.regNo || 'N/A',
+                program: sub.programme as 'B.Pharm' | 'Pharm.D',
+                year: sub.year,
+                semester: sub.semester,
+                subjectCode: sub.code,
+                subjectName: sub.name,
+                sessionalI: s1 || 0,
+                sessionalII: s2 || 0,
+                sessionalIII: s3 || 0,
+                semesterExam: sem || 0,
+                maxSessional: 30,
+                maxSemester: 75
+              });
+            }
+          });
+        }
+      } catch (e) {
+        console.error(e);
+      }
     });
 
     return rows;
@@ -553,8 +548,8 @@ export default function AdminAnalytics({ subjects }: AdminAnalyticsProps) {
             <tbody className="divide-y divide-gray-100">
               {filteredData.length === 0 ? (
                 <tr>
-                  <td colSpan={10} className="py-12 text-center text-gray-400 font-medium">
-                    No student analytics record found matching the current selections. Please ensure an Allotted Course is selected.
+                  <td colSpan={10} className="py-12 text-center text-gray-500 font-medium">
+                    OBE analytics will be generated automatically once CIA, practical, and semester examination marks have been entered and mapped to Course Outcomes (COs).
                   </td>
                 </tr>
               ) : (

@@ -1,7 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Search, Bell, ShieldCheck, ChevronRight, HelpCircle } from 'lucide-react';
 import GlassCard from './GlassCard';
-import { mockAnnouncements } from '../data/mockData';
 
 interface HeaderProps {
   currentRole: 'Student' | 'Faculty' | 'Admin';
@@ -23,6 +22,16 @@ export default function Header({
   onGoToScreen,
 }: HeaderProps) {
   const [showNotifications, setShowNotifications] = useState(false);
+
+  // Read actual saved announcements from localStorage
+  const announcements = (() => {
+    try {
+      const saved = localStorage.getItem('srm_announcements');
+      return saved ? JSON.parse(saved) : [];
+    } catch (e) {
+      return [];
+    }
+  })();
 
   // Simple Breadcrumb label determination
   const getBreadcrumb = () => {
@@ -96,9 +105,9 @@ export default function Header({
             <div className="flex items-center justify-center h-full w-full">
               <div className="relative">
                 <Bell className="w-5 h-5 text-gray-700" />
-                {mockAnnouncements.length > 0 && (
+                {announcements.length > 0 && (
                   <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-[#8B1E3F] border border-white text-[9px] font-bold text-white flex items-center justify-center">
-                    {mockAnnouncements.length}
+                    {announcements.length}
                   </span>
                 )}
               </div>
@@ -115,12 +124,12 @@ export default function Header({
                 </span>
               </div>
               <div className="flex flex-col gap-3 max-h-72 overflow-y-auto">
-                {mockAnnouncements.length === 0 ? (
+                {announcements.length === 0 ? (
                   <div className="py-8 text-center text-xs text-gray-400 font-medium">
                     No new notifications.
                   </div>
                 ) : (
-                  mockAnnouncements.map((ann) => (
+                  announcements.map((ann: any) => (
                     <div 
                       key={ann.id} 
                       className="p-2.5 rounded-xl hover:bg-gray-50/80 cursor-pointer border border-transparent hover:border-gray-100 transition-all duration-200"

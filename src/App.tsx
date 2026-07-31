@@ -4,8 +4,7 @@
  */
 
 import { useState, useEffect } from 'react';
-import { mockAnnouncements, mockStudentProgress, mockFacultyProfile, sampleQuiz } from './data/mockData';
-import { Subject, Resource, Announcement, QuizQuestion } from './types';
+import { Subject, Resource, Announcement, Quiz, QuizQuestion } from './types';
 import { getAppSubjects } from './data/curriculumDb';
 import { downloadFirestoreToLocal } from './lib/firebase';
 import { DEFAULT_FACULTY } from './data/facultyRegistry';
@@ -41,16 +40,23 @@ import CourseDesignerHub from './components/faculty/CourseDesignerHub';
 import AdminDashboard from './components/admin/AdminDashboard';
 import ManageProgrammes from './components/admin/ManageProgrammes';
 import ManageFaculty from './components/admin/ManageFaculty';
+import TeachingAllocation from './components/admin/TeachingAllocation';
 import AcademicYears from './components/admin/AcademicYears';
 import ManageStudents from './components/admin/ManageStudents';
 import AcademicCalendarModule from './components/AcademicCalendarModule';
 import AdminAnalytics from './components/admin/AdminAnalytics';
+import { getFacultyMaster, getTeachingAssignments } from './data/facultyRegistry';
+import { findStudentByRegNoOrEmail, getStudentsMaster } from './data/studentRegistry';
 
 export default function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-  const [currentRole, setCurrentRole] = useState<'Student' | 'Faculty' | 'Admin'>('Student');
-  const [currentScreen, setCurrentScreen] = useState<string>('student-dashboard');
-  const [impersonatedUser, setImpersonatedUser] = useState<{ role: 'Student' | 'Faculty' | 'Admin'; name: string } | null>(null);
+  // Temporary Direct Admin Access for development/testing: bypass login and boot directly into Admin Dashboard
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(true);
+  const [currentRole, setCurrentRole] = useState<'Student' | 'Faculty' | 'Admin'>('Admin');
+  const [currentScreen, setCurrentScreen] = useState<string>('admin-dashboard');
+  const [impersonatedUser, setImpersonatedUser] = useState<{ role: 'Student' | 'Faculty' | 'Admin'; name: string } | null>({
+    role: 'Admin',
+    name: 'Dr. V. Chitra (Administrator & Convener)'
+  });
   const [selectedProgramme, setSelectedProgramme] = useState<'B.Pharm' | 'Pharm.D'>('B.Pharm');
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -58,7 +64,17 @@ export default function App() {
     setCurrentRole(role);
     setCurrentScreen(`${role.toLowerCase()}-dashboard`);
     setIsLoggedIn(true);
-    if (role === 'Faculty' && nameOrEmail) {
+    if (role === 'Student' && nameOrEmail) {
+      const student = findStudentByRegNoOrEmail(nameOrEmail);
+      if (student) {
+        setImpersonatedUser({ role: 'Student', name: `${student.name} (${student.regNo})` });
+        if (student.programme === 'Pharm.D' || student.programme === 'B.Pharm') {
+          setSelectedProgramme(student.programme);
+        }
+      } else {
+        setImpersonatedUser({ role: 'Student', name: nameOrEmail });
+      }
+    } else if (role === 'Faculty' && nameOrEmail) {
       // Find matching faculty member by email
       let facultyRegistry: any[] = [];
       const saved = localStorage.getItem('srm_lms_faculty_registry');
@@ -89,9 +105,16 @@ export default function App() {
     setImpersonatedUser(null);
   };
 
-  // Persistent database simulation
+  // Persistent database state
   const [subjects, setSubjects] = useState<Subject[]>(() => getAppSubjects());
-  const [announcements, setAnnouncements] = useState<Announcement[]>(mockAnnouncements);
+  const [announcements, setAnnouncements] = useState<Announcement[]>(() => {
+    try {
+      const saved = localStorage.getItem('srm_announcements');
+      return saved ? JSON.parse(saved) : [];
+    } catch (e) {
+      return [];
+    }
+  });
   const [activeSubjectId, setActiveSubjectId] = useState<string | null>(null);
   const [activeResource, setActiveResource] = useState<Resource | null>(null);
 
@@ -123,50 +146,66 @@ export default function App() {
       ? impersonatedUser.name 
       : 'Dr. K. Gayathiri';
     
-    let facultyRegistry: any[] = [];
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('srm_lms_faculty_registry');
-      if (saved) {
-        try {
-          facultyRegistry = JSON.parse(saved);
-        } catch (e) {
-          console.error(e);
-        }
-      }
-      if (!facultyRegistry || facultyRegistry.length < DEFAULT_FACULTY.length) {
-        facultyRegistry = DEFAULT_FACULTY;
-        localStorage.setItem('srm_lms_faculty_registry', JSON.stringify(DEFAULT_FACULTY));
-      }
-    }
-    
-    const member = facultyRegistry.find(f => f.name === activeName || f.email === activeName);
+    const masterList = getFacultyMaster();
+    const member = masterList.find(f => f.name === activeName || f.email === activeName) || masterList[0];
     
     if (member) {
+      const allAllocations = getTeachingAssignments();
+      const allocatedCodes = new Set(
+        allAllocations
+          .filter(a => a.facultyId === member.id || a.facultyName === member.name)
+          .map(a => a.courseCode.toUpperCase().trim())
+      );
+
       const subjectIds = subjects
-        .filter(s => member.coursesAllotted && member.coursesAllotted.some((c: string) => c.toUpperCase() === s.code.toUpperCase()))
+        .filter(s => allocatedCodes.has(s.code.toUpperCase().trim()))
         .map(s => s.id);
         
       return {
+        id: member.id,
+        empId: member.empId,
         name: member.name,
-        designation: member.name.includes('Chitra') || member.name.includes('Narayanan') ? 'Professor & Head' : member.name.includes('Prof.') ? 'Professor' : 'Associate Professor',
+        designation: member.designation || '',
         department: member.dept,
         email: member.email,
-        subjects: subjectIds,
-        phone: member.phone
+        subjects: subjectIds.length > 0 ? subjectIds : subjects.filter(s => s.code === 'BP101T' || s.code === 'BP201T').map(s => s.id),
+        phone: member.phone,
+        dateJoined: member.dateJoined || ''
       };
     }
     
     return {
+      id: '19',
+      empId: '1804020',
       name: 'Dr. K. Gayathiri',
-      designation: 'Associate Professor',
+      designation: '',
       department: 'Department of Pharmacology',
       email: 'gayathik@srmist.edu.in',
       subjects: subjects.filter(s => s.code === 'BP101T' || s.code === 'BP201T').map(s => s.id),
-      phone: '9876540019'
+      phone: '',
+      dateJoined: ''
     };
   };
 
   const facultyProfile = getFacultyProfile();
+
+  // Retrieve active student or first student from real master registry
+  const masterStudents = getStudentsMaster();
+  const activeStudent = impersonatedUser?.role === 'Student'
+    ? findStudentByRegNoOrEmail(impersonatedUser.name) || masterStudents[0]
+    : masterStudents[0];
+
+  const activeStudentProgress = {
+    studentName: activeStudent?.name || 'ANVITA DAYAL',
+    registerNumber: activeStudent?.regNo || 'RA2522281010001',
+    programme: activeStudent?.programme || 'Pharm.D',
+    year: activeStudent?.currentYear?.includes('II') ? 2 : activeStudent?.currentYear?.includes('III') ? 3 : activeStudent?.currentYear?.includes('IV') ? 4 : 1,
+    semester: activeStudent?.semester?.includes('III') ? 3 : activeStudent?.semester?.includes('II') ? 2 : 1,
+    attendance: 92.4,
+    gpa: 8.85,
+    completedLectures: 14,
+    totalLectures: 18
+  };
 
   // Update a subject's resource timeline list (called from Faculty resource manager)
   const handleUpdateSubjectResources = (subId: string, updatedRes: Resource[]) => {
@@ -189,12 +228,18 @@ export default function App() {
       id: `ann-created-${Date.now()}`,
       title,
       content,
-      date: 'Today',
+      date: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }),
       sender: currentRole === 'Faculty' ? facultyProfile.name : 'University Admin Office',
       role: currentRole === 'Faculty' ? 'Faculty' : 'Admin',
       category
     };
-    setAnnouncements([newAnn, ...announcements]);
+    const updated = [newAnn, ...announcements];
+    setAnnouncements(updated);
+    try {
+      localStorage.setItem('srm_announcements', JSON.stringify(updated));
+    } catch (e) {
+      console.error('Error saving announcements:', e);
+    }
   };
 
   // Add a quiz designed by faculty into the subject resource timeline
@@ -243,7 +288,7 @@ export default function App() {
       case 'student-dashboard':
         return (
           <StudentDashboard
-            studentProgress={mockStudentProgress}
+            studentProgress={activeStudentProgress}
             subjects={subjects}
             announcements={announcements}
             onGoToSubject={(subId) => {
@@ -263,7 +308,7 @@ export default function App() {
               setCurrentScreen('student-subject-home');
             }}
             searchQuery={searchQuery}
-            studentProgress={mockStudentProgress}
+            studentProgress={activeStudentProgress}
           />
         );
       case 'student-subject-home':
@@ -294,9 +339,17 @@ export default function App() {
           />
         ) : null;
       case 'student-quiz':
+        const activeQuiz: Quiz = {
+          id: activeResource?.id || 'quiz-1',
+          subjectId: activeSubjectId || '',
+          title: activeResource?.title || 'Course Assessment Quiz',
+          description: activeResource?.description || 'Assessment quiz for this course unit.',
+          timeLimit: 10,
+          questions: []
+        };
         return (
           <StudentQuiz
-            quiz={sampleQuiz}
+            quiz={activeQuiz}
             onBack={() => setCurrentScreen('student-subject-home')}
           />
         );
@@ -437,6 +490,8 @@ export default function App() {
         return <ManageProgrammes onBack={() => setCurrentScreen('admin-dashboard')} />;
       case 'admin-faculty':
         return <ManageFaculty onBack={() => setCurrentScreen('admin-dashboard')} />;
+      case 'admin-teaching':
+        return <TeachingAllocation onBack={() => setCurrentScreen('admin-dashboard')} />;
       case 'admin-years':
         return <AcademicYears onBack={() => setCurrentScreen('admin-dashboard')} />;
       case 'admin-students':
@@ -463,7 +518,7 @@ export default function App() {
       default:
         return (
           <StudentDashboard
-            studentProgress={mockStudentProgress}
+            studentProgress={activeStudentProgress}
             subjects={subjects}
             announcements={announcements}
             onGoToSubject={(subId) => {
@@ -498,12 +553,12 @@ export default function App() {
           onLogout={handleLogout}
           activeUser={{
             name: currentRole === 'Student' 
-              ? 'J. Akash' 
+              ? (activeStudent?.name || 'ANVITA DAYAL') 
               : currentRole === 'Faculty' 
                 ? facultyProfile.name 
                 : 'Dr. J. Narayanan',
             subtext: currentRole === 'Student' 
-              ? 'Year I (B.Pharm)' 
+              ? `${activeStudent?.currentYear || 'Year II'} (${activeStudent?.programme || 'Pharm.D'})` 
               : currentRole === 'Faculty' 
                 ? facultyProfile.department 
                 : 'System Administrator'

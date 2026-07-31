@@ -20,6 +20,7 @@ import {
   Search
 } from 'lucide-react';
 import { DEFAULT_FACULTY } from '../data/facultyRegistry';
+import { findStudentByRegNoOrEmail, getStudentsMaster } from '../data/studentRegistry';
 
 interface LoginModuleProps {
   onLogin: (role: 'Student' | 'Faculty' | 'Admin', nameOrEmail?: string) => void;
@@ -52,9 +53,11 @@ export default function LoginModule({ onLogin }: LoginModuleProps) {
   const [facultyPassword, setFacultyPassword] = useState('');
   const [facultyConfirmPassword, setFacultyConfirmPassword] = useState('');
   
-  // Forgot Password States
+  // Forgot Password & Search States
   const [forgotEmail, setForgotEmail] = useState('');
   const [facultySearch, setFacultySearch] = useState('');
+  const [studentSearch, setStudentSearch] = useState('');
+  const [studentFilterProg, setStudentFilterProg] = useState<'All' | 'Pharm.D' | 'B.Pharm'>('All');
   
   // Show/Hide password toggles
   const [showPassword, setShowPassword] = useState(false);
@@ -77,10 +80,32 @@ export default function LoginModule({ onLogin }: LoginModuleProps) {
   // Login handler
   const handleSignInSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // TODO: DEVELOPMENT MODE ONLY
-    // Replace temporary role-based login bypass with Firebase Authentication before production release.
-    onLogin(loginRole, email);
+    const userInput = email.trim();
+
+    if (!userInput) {
+      triggerNotification('error', loginRole === 'Student' ? 'Please enter your Registration Number or Mail ID.' : 'Please enter your Email or User ID.');
+      return;
+    }
+
+    if (loginRole === 'Student') {
+      // Validate password if provided. All student passwords are set to 'srm123'
+      if (password.trim() && password.trim() !== 'srm123') {
+        triggerNotification('error', 'Incorrect password. Default password for all students is "srm123".');
+        return;
+      }
+
+      const student = findStudentByRegNoOrEmail(userInput);
+      if (student) {
+        // Authenticate student using official email, personal email, or registration number
+        const loginIdentifier = student.officialEmail || student.regNo || student.name;
+        onLogin('Student', loginIdentifier);
+      } else {
+        // Fallback for direct student registration/email input
+        onLogin('Student', userInput);
+      }
+    } else {
+      onLogin(loginRole, userInput);
+    }
   };
 
   // Registration handler
@@ -305,18 +330,18 @@ export default function LoginModule({ onLogin }: LoginModuleProps) {
 
                 {/* LOGIN FORM */}
                 <form onSubmit={handleSignInSubmit} className="space-y-4">
-                  {/* Email Input */}
+                  {/* Email / Username Input */}
                   <div className="space-y-1.5">
                     <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest pl-1">
-                      Institutional Email / User ID
+                      {loginRole === 'Student' ? 'Registration Number / Official Mail ID' : 'Institutional Email / User ID'}
                     </label>
                     <div className="relative">
                       <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
-                        <Mail className="w-4 h-4" />
+                        {loginRole === 'Student' ? <IdCard className="w-4 h-4" /> : <Mail className="w-4 h-4" />}
                       </div>
                       <input
                         type="text"
-                        placeholder="Ex: akash.j@srmcop.edu.in"
+                        placeholder={loginRole === 'Student' ? "Enter Reg. No (e.g. RA2522281010001) or Mail ID" : "Ex: dr.gayathiri@srmcop.edu.in"}
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         className="w-full bg-gray-100/50 border border-gray-200/60 hover:border-gray-300 focus:border-[#8B1E3F] pl-10 pr-4 py-3 rounded-2xl text-xs font-semibold text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#8B1E3F]/20 transition-all"
@@ -326,16 +351,23 @@ export default function LoginModule({ onLogin }: LoginModuleProps) {
 
                   {/* Password Input */}
                   <div className="space-y-1.5">
-                    <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest pl-1">
-                      Password
-                    </label>
+                    <div className="flex items-center justify-between">
+                      <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest pl-1">
+                        Password
+                      </label>
+                      {loginRole === 'Student' && (
+                        <span className="text-[10px] font-black text-[#8B1E3F] bg-pink-50 px-2 py-0.5 rounded-full border border-pink-200/80">
+                          Default Password: srm123
+                        </span>
+                      )}
+                    </div>
                     <div className="relative">
                       <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
                         <Lock className="w-4 h-4" />
                       </div>
                       <input
                         type={showPassword ? 'text' : 'password'}
-                        placeholder="••••••••••••"
+                        placeholder={loginRole === 'Student' ? "Default password: srm123" : "••••••••••••"}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         className="w-full bg-gray-100/50 border border-gray-200/60 hover:border-gray-300 focus:border-[#8B1E3F] pl-10 pr-10 py-3 rounded-2xl text-xs font-semibold text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#8B1E3F]/20 transition-all"
@@ -382,6 +414,84 @@ export default function LoginModule({ onLogin }: LoginModuleProps) {
                   </button>
                 </form>
 
+                {/* STUDENT QUICK ACCESS LIST */}
+                {loginRole === 'Student' && (
+                  <div className="space-y-2 mt-4 pt-4 border-t border-gray-100 animate-fade-in" id="student-quick-login-panel">
+                    <div className="flex flex-col gap-1 sm:flex-row sm:items-center justify-between pl-1">
+                      <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                        Quick Access: Enrolled Students ({getStudentsMaster().length})
+                      </label>
+                      <span className="text-[9px] text-[#8B1E3F] font-bold">
+                        Click student to autofill & login (srm123)
+                      </span>
+                    </div>
+
+                    <div className="flex gap-2 items-center" id="student-quick-search-container">
+                      <div className="relative flex-1">
+                        <Search className="absolute left-2.5 top-2 h-3.5 w-3.5 text-gray-400" />
+                        <input
+                          type="text"
+                          placeholder="Search Reg No, Name, Section..."
+                          value={studentSearch}
+                          onChange={(e) => setStudentSearch(e.target.value)}
+                          className="w-full pl-8 pr-3 py-1.5 bg-gray-50 border border-gray-200 focus:border-[#8B1E3F]/30 rounded-xl text-[10px] focus:outline-none focus:ring-1 focus:ring-[#8B1E3F]/20"
+                        />
+                      </div>
+                      <div className="flex gap-1 bg-gray-100 p-0.5 rounded-xl text-[9px] font-bold shrink-0">
+                        {(['All', 'Pharm.D', 'B.Pharm'] as const).map(p => (
+                          <button
+                            key={p}
+                            type="button"
+                            onClick={() => setStudentFilterProg(p)}
+                            className={`px-2 py-0.5 rounded-lg transition-all ${
+                              studentFilterProg === p ? 'bg-[#8B1E3F] text-white' : 'text-gray-600 hover:text-gray-900'
+                            }`}
+                          >
+                            {p}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2 max-h-[180px] overflow-y-auto pr-1 thin-scrollbar" id="student-quick-list-scroll">
+                      {getStudentsMaster()
+                        .filter(s => {
+                          if (studentFilterProg !== 'All' && s.programme !== studentFilterProg) return false;
+                          if (!studentSearch.trim()) return true;
+                          const query = studentSearch.toLowerCase();
+                          return (
+                            s.name.toLowerCase().includes(query) ||
+                            s.regNo.toLowerCase().includes(query) ||
+                            (s.officialEmail && s.officialEmail.toLowerCase().includes(query)) ||
+                            s.section.toLowerCase().includes(query) ||
+                            s.currentYear.toLowerCase().includes(query)
+                          );
+                        })
+                        .slice(0, 60)
+                        .map((std) => (
+                          <button
+                            type="button"
+                            key={std.id}
+                            onClick={() => {
+                              setEmail(std.regNo);
+                              setPassword('srm123');
+                              onLogin('Student', std.officialEmail || std.regNo);
+                            }}
+                            className="flex flex-col text-left p-2 bg-gray-50/70 hover:bg-pink-50/40 border border-gray-100 hover:border-[#8B1E3F]/20 rounded-xl transition-all cursor-pointer"
+                            id={`quick-login-student-${std.id}`}
+                            title={`${std.name} (${std.regNo})`}
+                          >
+                            <span className="text-[10px] font-black text-gray-800 truncate w-full">{std.name}</span>
+                            <span className="text-[8px] text-[#8B1E3F] font-bold truncate w-full">{std.regNo}</span>
+                            <span className="text-[8px] text-gray-400 truncate w-full mt-0.5">
+                              {std.programme} • {std.currentYear}, {std.section}
+                            </span>
+                          </button>
+                        ))}
+                    </div>
+                  </div>
+                )}
+
                 {loginRole === 'Faculty' && (
                   <div className="space-y-2 mt-4 pt-4 border-t border-gray-100 animate-fade-in" id="faculty-quick-login-panel">
                     <div className="flex flex-col gap-1 sm:flex-row sm:items-center justify-between pl-1">
@@ -411,7 +521,7 @@ export default function LoginModule({ onLogin }: LoginModuleProps) {
                           fac.name.toLowerCase().includes(query) ||
                           fac.dept.toLowerCase().includes(query) ||
                           fac.email.toLowerCase().includes(query) ||
-                          fac.coursesAllotted.some(code => code.toLowerCase().includes(query))
+                          (fac.designation && fac.designation.toLowerCase().includes(query))
                         );
                       }).map((fac) => (
                         <button
@@ -429,7 +539,7 @@ export default function LoginModule({ onLogin }: LoginModuleProps) {
                           <span className="text-[10px] font-black text-gray-800 truncate w-full">{fac.name}</span>
                           <span className="text-[8px] text-gray-400 truncate w-full">{fac.dept.replace('Department of ', '')}</span>
                           <span className="text-[8px] text-[#8B1E3F] font-black mt-0.5 truncate w-full">
-                            Allotted: {fac.coursesAllotted.join(', ')}
+                            {fac.designation || fac.email}
                           </span>
                         </button>
                       ))}
@@ -439,7 +549,7 @@ export default function LoginModule({ onLogin }: LoginModuleProps) {
                           fac.name.toLowerCase().includes(query) ||
                           fac.dept.toLowerCase().includes(query) ||
                           fac.email.toLowerCase().includes(query) ||
-                          fac.coursesAllotted.some(code => code.toLowerCase().includes(query))
+                          (fac.designation && fac.designation.toLowerCase().includes(query))
                         );
                       }).length === 0 && (
                         <div className="col-span-2 py-4 text-center text-[10px] text-gray-400 font-bold">
@@ -537,7 +647,7 @@ export default function LoginModule({ onLogin }: LoginModuleProps) {
                       <input
                         type="text"
                         required
-                        placeholder="Ex: Akash J"
+                        placeholder="Ex: ANVITA DAYAL"
                         value={registerRole === 'Student' ? studentName : facultyName}
                         onChange={(e) => registerRole === 'Student' ? setStudentName(e.target.value) : setFacultyName(e.target.value)}
                         className="w-full bg-gray-100/50 border border-gray-200/60 hover:border-gray-300 focus:border-[#8B1E3F] pl-10 pr-4 py-2.5 rounded-2xl text-xs font-semibold text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#8B1E3F]/20 transition-all"
@@ -558,7 +668,7 @@ export default function LoginModule({ onLogin }: LoginModuleProps) {
                         <input
                           type="text"
                           required
-                          placeholder="Ex: SRM2026PH7810"
+                          placeholder="Ex: RA2522281010001"
                           value={studentRegNo}
                           onChange={(e) => setStudentRegNo(e.target.value)}
                           className="w-full bg-gray-100/50 border border-gray-200/60 hover:border-gray-300 focus:border-[#8B1E3F] pl-10 pr-4 py-2.5 rounded-2xl text-xs font-semibold text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#8B1E3F]/20 transition-all"

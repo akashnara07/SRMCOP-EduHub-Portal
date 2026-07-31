@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { BookOpen, Users, Award, Calendar, BellRing, Clipboard, ChevronRight, ChevronLeft, BarChart3, Plus, ArrowRight } from 'lucide-react';
 import GlassCard from '../GlassCard';
 import { Subject, Announcement, FacultyProfile } from '../../types';
+import { getStudentsMaster } from '../../data/studentRegistry';
 
 interface FacultyDashboardProps {
   facultyProfile: FacultyProfile;
@@ -202,33 +203,46 @@ export default function FacultyDashboard({
                     console.error(e);
                   }
                 }
-                // Default fallback cohort list
-                return [
-                  { sNo: 1, name: 'J. Akash', registerNumber: 'SRM2026PH7810', programme, attendance: 92.4, gpa: 8.85, status: 'Active', sessionalI: 24, sessionalII: 25, sessionalIII: 23 },
-                  { sNo: 2, name: 'Meera Patel', registerNumber: 'SRM2026PH7812', programme, attendance: 88.5, gpa: 8.12, status: 'Active', sessionalI: 19, sessionalII: 22, sessionalIII: 20 },
-                  { sNo: 3, name: 'Rahul Sharma', registerNumber: 'SRM2026PH7815', programme, attendance: 95.0, gpa: 9.20, status: 'Active', sessionalI: 28, sessionalII: 29, sessionalIII: 28 },
-                  { sNo: 4, name: 'Anjali Rao', registerNumber: 'SRM2026PH7831', programme, attendance: 94.0, gpa: 8.75, status: 'Active', sessionalI: 26, sessionalII: 24, sessionalIII: 25 },
-                  { sNo: 5, name: 'Priyesh Sen', registerNumber: 'SRM2026PH7830', programme, attendance: 91.5, gpa: 8.20, status: 'Active', sessionalI: 22, sessionalII: 23, sessionalIII: 24 },
-                  { sNo: 6, name: 'Vignesh Nair', registerNumber: 'SRM2026PH7832', programme, attendance: 86.2, gpa: 7.90, status: 'Active', sessionalI: 18, sessionalII: 20, sessionalIII: 21 }
-                ];
+                // Default fallback cohort list using real student master without mock marks
+                const masterList = getStudentsMaster();
+                const filtered = masterList.filter(s => s.programme === programme);
+                const studentSource = filtered.length > 0 ? filtered : masterList;
+
+                return studentSource.slice(0, 30).map((std, idx) => {
+                  return {
+                    sNo: idx + 1,
+                    name: std.name,
+                    registerNumber: std.regNo,
+                    programme,
+                    attendance: 100,
+                    gpa: undefined,
+                    status: 'Active',
+                    sessionalI: null,
+                    sessionalII: null,
+                    sessionalIII: null
+                  };
+                });
               };
 
               const cohort = getSessionalCohort(activeSub.code, activeSub.programme);
 
               // Calculate averages
               const count = cohort.length || 1;
-              const avgSessionalI = cohort.reduce((acc, s) => acc + s.sessionalI, 0) / count;
-              const avgSessionalII = cohort.reduce((acc, s) => acc + s.sessionalII, 0) / count;
+              const avgSessionalI = cohort.reduce((acc, s) => acc + (s.sessionalI || 0), 0) / count;
+              const avgSessionalII = cohort.reduce((acc, s) => acc + (s.sessionalII || 0), 0) / count;
               const avgSessionalIII = isPharmD 
                 ? (cohort.reduce((acc, s) => acc + (s.sessionalIII || 0), 0) / count) 
                 : 0;
-              const avgSemesterExam = cohort.reduce((acc, s) => acc + Math.round(((s.gpa || 8.0) / 10) * 75), 0) / count;
+              const avgSemesterExam = 0;
 
-              const getSessionalAvgForStudent = (s1: number, s2: number, s3: number, isPharm: boolean) => {
+              const getSessionalAvgForStudent = (s1: number | null, s2: number | null, s3: number | null, isPharm: boolean) => {
+                const val1 = s1 || 0;
+                const val2 = s2 || 0;
+                const val3 = s3 || 0;
                 if (!isPharm) {
-                  return (s1 + s2) / 2;
+                  return (val1 + val2) / 2;
                 }
-                const vals = [s1, s2, s3].sort((a, b) => b - a);
+                const vals = [val1, val2, val3].sort((a, b) => b - a);
                 return (vals[0] + vals[1]) / 2;
               };
 

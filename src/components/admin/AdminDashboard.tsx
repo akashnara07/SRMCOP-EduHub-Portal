@@ -337,13 +337,13 @@ export default function AdminDashboard({
                 <span className="text-[9px] font-bold uppercase tracking-wider text-blue-600 bg-blue-100/50 px-2.5 py-0.5 rounded-full">
                   B.Pharm Student
                 </span>
-                <span className="text-[10px] text-gray-400 font-bold">ID: PH7810</span>
+                <span className="text-[10px] text-gray-400 font-bold">ID: RA2522281010001</span>
               </div>
-              <h3 className="font-display font-bold text-sm text-gray-900 mt-2">J. Akash</h3>
-              <p className="text-[11px] text-gray-500 mt-0.5">Year 1 • B.Pharm • GPA: 8.85 • Attendance: 92.4%</p>
+              <h3 className="font-display font-bold text-sm text-gray-900 mt-2">ANVITA DAYAL</h3>
+              <p className="text-[11px] text-gray-500 mt-0.5">Year 2 • Pharm.D • Reg: RA2522281010001</p>
             </div>
             <button 
-              onClick={() => handleSwitchUser('Student', 'J. Akash')}
+              onClick={() => handleSwitchUser('Student', 'ANVITA DAYAL')}
               className="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs py-2 rounded-xl active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 shadow-sm"
             >
               <UserCheck className="w-3.5 h-3.5" />
@@ -361,7 +361,7 @@ export default function AdminDashboard({
                 <span className="text-[10px] text-gray-400 font-bold">ID: PH7811</span>
               </div>
               <h3 className="font-display font-bold text-sm text-gray-900 mt-2">Priya Sharma</h3>
-              <p className="text-[11px] text-gray-500 mt-0.5">Year 1 • Pharm.D • GPA: 9.10 • Attendance: 94.2%</p>
+              <p className="text-[11px] text-gray-500 mt-0.5">Year 1 • Pharm.D • Reg: PH7811</p>
             </div>
             <button 
               onClick={() => handleSwitchUser('Student', 'Priya Sharma')}
@@ -837,22 +837,19 @@ export default function AdminDashboard({
           <GlassCard className="p-6 flex-1 flex flex-col justify-between">
             <div>
               <h3 className="font-display font-bold text-sm text-gray-900 border-b border-gray-100 pb-3 mb-4 flex items-center justify-between">
-                <span>Console Audit Log</span>
-                <RefreshCw className="w-3.5 h-3.5 text-gray-400 animate-spin-slow" />
+                <span>Database & Curriculum Compliance</span>
+                <Database className="w-4 h-4 text-[#8B1E3F]" />
               </h3>
 
               <div className="flex flex-col gap-3">
-                {logs.map((log) => (
-                  <div key={log.id} className="p-2.5 rounded-xl bg-gray-50/60 border border-white/40 flex flex-col gap-1">
-                    <div className="flex items-center gap-1.5">
-                      <span className={`w-1.5 h-1.5 rounded-full ${
-                        log.type === 'success' ? 'bg-emerald-500' : log.type === 'warning' ? 'bg-red-500' : 'bg-blue-500'
-                      }`} />
-                      <span className="text-[10px] font-bold text-gray-800 leading-tight">{log.action}</span>
-                    </div>
-                    <p className="text-[9px] text-gray-400 font-bold ml-3">{log.target} • {log.time}</p>
-                  </div>
-                ))}
+                <div className="p-3 rounded-2xl bg-emerald-50/60 border border-emerald-100/60 flex flex-col gap-1">
+                  <span className="text-xs font-bold text-emerald-900">Database Synchronization</span>
+                  <p className="text-[11px] text-emerald-700">Connected to live Firestore & local database. All assessment records are derived directly from real inputs.</p>
+                </div>
+                <div className="p-3 rounded-2xl bg-gray-50 border border-gray-100 flex flex-col gap-1">
+                  <span className="text-xs font-bold text-gray-800">PCI & Outcome-Based Education</span>
+                  <p className="text-[11px] text-gray-500">OBE analytics are computed automatically from entered CIA & semester exam marks.</p>
+                </div>
               </div>
             </div>
 

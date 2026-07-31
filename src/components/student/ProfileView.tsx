@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { User, Mail, Shield, Award, Calendar, BookOpen, ChevronRight, Filter, BookOpenCheck, FileSpreadsheet, Download, Loader2, AlertCircle, Check, Upload, Edit, Phone } from 'lucide-react';
 import GlassCard from '../GlassCard';
 import { Subject, FacultyProfile } from '../../types';
+import { getFacultyMaster, saveFacultyMaster } from '../../data/facultyRegistry';
+import { getStudentsMaster } from '../../data/studentRegistry';
 
 interface ProfileViewProps {
   role?: 'Student' | 'Faculty' | 'Admin';
@@ -18,14 +20,24 @@ export default function ProfileView({
   onGoToSubject,
   onGoToScreen,
 }: ProfileViewProps) {
+  // Get active student from real registry
+  const defaultStd = getStudentsMaster()[0] || {
+    name: 'ANVITA DAYAL',
+    regNo: 'RA2522281010001',
+    programme: 'Pharm.D',
+    currentYear: 'Year II',
+    semester: 'Semester III',
+    officialEmail: 'RA2522281010001@srmcop.edu.in'
+  };
+
   // Student Profile editable states
-  const [studentName, setStudentName] = useState('J. Akash');
-  const [studentRegNumber, setStudentRegNumber] = useState('SRM2026PH7810');
-  const [studentCourse, setStudentCourse] = useState('B.Pharm');
-  const [studentYear, setStudentYear] = useState('Year I');
-  const [studentSem, setStudentSem] = useState('Semester 1');
-  const [studentEmail, setStudentEmail] = useState('akash.j@srmcop.edu.in');
-  const [studentPhone, setStudentPhone] = useState('+91 98765 43210');
+  const [studentName, setStudentName] = useState(defaultStd.name);
+  const [studentRegNumber, setStudentRegNumber] = useState(defaultStd.regNo);
+  const [studentCourse, setStudentCourse] = useState(defaultStd.programme);
+  const [studentYear, setStudentYear] = useState(defaultStd.currentYear);
+  const [studentSem, setStudentSem] = useState(defaultStd.semester);
+  const [studentEmail, setStudentEmail] = useState(defaultStd.officialEmail || `${defaultStd.regNo.toLowerCase()}@srmcop.edu.in`);
+  const [studentPhone, setStudentPhone] = useState((defaultStd as { phone?: string }).phone || '');
   const [isEditingStudent, setIsEditingStudent] = useState(false);
   const [studentSaveSuccess, setStudentSaveSuccess] = useState(false);
 
@@ -33,7 +45,33 @@ export default function ProfileView({
   const [selectedYear, setSelectedYear] = useState<string>('2025-2026');
   const [selectedSem, setSelectedSem] = useState<number>(1);
   const [department, setDepartment] = useState(facultyProfile?.department || 'Department of Pharmacology');
-  const [phoneNumber, setPhoneNumber] = useState(facultyProfile?.phone || '+91 94440 12345');
+  const [phoneNumber, setPhoneNumber] = useState(facultyProfile?.phone || '');
+  const [designation, setDesignation] = useState(facultyProfile?.designation || '');
+  const [dateJoined, setDateJoined] = useState(facultyProfile?.dateJoined || '');
+  const [facultySaveSuccess, setFacultySaveSuccess] = useState(false);
+
+  const handleSaveFacultyParticulars = () => {
+    const list = getFacultyMaster();
+    const updated = list.map(f => {
+      if (
+        (facultyProfile?.email && f.email.toLowerCase() === facultyProfile.email.toLowerCase()) ||
+        (facultyProfile?.name && f.name.toLowerCase() === facultyProfile.name.toLowerCase()) ||
+        (facultyProfile?.id && f.id === facultyProfile.id)
+      ) {
+        return {
+          ...f,
+          dept: department,
+          phone: phoneNumber,
+          designation: designation.trim(),
+          dateJoined: dateJoined
+        };
+      }
+      return f;
+    });
+    saveFacultyMaster(updated);
+    setFacultySaveSuccess(true);
+    setTimeout(() => setFacultySaveSuccess(false), 3000);
+  };
 
   // Roster import states
   const [isImporting, setIsImporting] = useState(false);
@@ -155,7 +193,7 @@ export default function ProfileView({
             <div>
               <h2 className="font-display font-bold text-lg text-gray-900 leading-tight">{facultyProfile.name}</h2>
               <p className="text-[10px] text-[#8B1E3F] font-bold uppercase tracking-wider mt-1 bg-pink-50 border border-pink-100/50 px-2.5 py-0.5 rounded-full inline-block">
-                {facultyProfile.designation}
+                {designation || <span className="italic text-gray-400 font-normal normal-case">No designation set</span>}
               </p>
             </div>
 
@@ -170,7 +208,11 @@ export default function ProfileView({
               </div>
               <div className="flex justify-between items-center">
                 <span className="font-semibold">Emp ID:</span>
-                <span className="text-gray-900 font-mono text-[10px]">SRM-FAC-1004</span>
+                <span className="text-gray-900 font-mono text-[10px]">{facultyProfile.empId || 'SRM-FAC-1004'}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="font-semibold">Date Joined:</span>
+                <span className="text-gray-900 font-medium text-[11px]">{dateJoined || 'Not set'}</span>
               </div>
             </div>
           </GlassCard>
@@ -178,9 +220,16 @@ export default function ProfileView({
           {/* Details & Allotted Subjects card */}
           <div className="md:col-span-2 flex flex-col gap-6">
             <GlassCard className="p-6 flex flex-col gap-5">
-              <h3 className="font-display font-bold text-sm text-gray-900 border-b border-gray-100 pb-3">
-                Official Faculty Particulars
-              </h3>
+              <div className="flex items-center justify-between border-b border-gray-100 pb-3">
+                <h3 className="font-display font-bold text-sm text-gray-900">
+                  Official Faculty Particulars
+                </h3>
+                {facultySaveSuccess && (
+                  <span className="text-xs font-bold text-emerald-600 bg-emerald-50 border border-emerald-100 px-3 py-1 rounded-full flex items-center gap-1.5 animate-fadeIn">
+                    <Check className="w-3.5 h-3.5" /> Particulars Saved
+                  </span>
+                )}
+              </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="flex items-center gap-3 sm:col-span-2">
@@ -190,6 +239,39 @@ export default function ProfileView({
                   <div>
                     <span className="text-[9px] text-gray-400 block font-semibold">EMAIL</span>
                     <p className="text-xs font-bold text-gray-800">{facultyProfile.email}</p>
+                  </div>
+                </div>
+
+                {/* Editable Designation */}
+                <div className="flex items-center gap-3 sm:col-span-2 border-t border-gray-100 pt-3">
+                  <div className="w-9 h-9 rounded-full bg-purple-500/10 text-purple-600 flex items-center justify-center shrink-0">
+                    <Award className="w-4.5 h-4.5" />
+                  </div>
+                  <div className="flex-1">
+                    <span className="text-[9px] text-gray-400 block font-semibold">DESIGNATION (EDITABLE)</span>
+                    <input
+                      type="text"
+                      value={designation}
+                      onChange={(e) => setDesignation(e.target.value)}
+                      placeholder="e.g. Assistant Professor, Associate Professor, etc."
+                      className="w-full bg-gray-100/60 border border-transparent hover:border-gray-200 focus:border-[#8B1E3F] text-xs font-bold text-gray-800 px-2.5 py-1.5 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#8B1E3F]/30"
+                    />
+                  </div>
+                </div>
+
+                {/* Editable Date Joined */}
+                <div className="flex items-center gap-3 sm:col-span-2 border-t border-gray-100 pt-3">
+                  <div className="w-9 h-9 rounded-full bg-emerald-500/10 text-emerald-600 flex items-center justify-center shrink-0">
+                    <Calendar className="w-4.5 h-4.5" />
+                  </div>
+                  <div className="flex-1">
+                    <span className="text-[9px] text-gray-400 block font-semibold">DATE JOINED (EDITABLE)</span>
+                    <input
+                      type="date"
+                      value={dateJoined}
+                      onChange={(e) => setDateJoined(e.target.value)}
+                      className="w-full bg-gray-100/60 border border-transparent hover:border-gray-200 focus:border-[#8B1E3F] text-xs font-bold text-gray-800 px-2.5 py-1.5 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#8B1E3F]/30"
+                    />
                   </div>
                 </div>
 
@@ -210,7 +292,7 @@ export default function ProfileView({
 
                 <div className="flex items-center gap-3 sm:col-span-2 border-t border-gray-100 pt-3">
                   <div className="w-9 h-9 rounded-full bg-amber-500/10 text-amber-600 flex items-center justify-center shrink-0">
-                    <User className="w-4.5 h-4.5" />
+                    <Phone className="w-4.5 h-4.5" />
                   </div>
                   <div className="flex-1">
                     <span className="text-[9px] text-gray-400 block font-semibold">PHONE NUMBER (EDITABLE)</span>
@@ -222,6 +304,16 @@ export default function ProfileView({
                     />
                   </div>
                 </div>
+              </div>
+
+              <div className="pt-2 border-t border-gray-100 flex justify-end">
+                <button
+                  type="button"
+                  onClick={handleSaveFacultyParticulars}
+                  className="px-5 py-2 bg-[#8B1E3F] hover:bg-[#7A1936] text-white text-xs font-extrabold rounded-xl shadow-md transition-all cursor-pointer flex items-center gap-2"
+                >
+                  <Check className="w-4 h-4" /> Save Particulars
+                </button>
               </div>
             </GlassCard>
 
@@ -618,11 +710,12 @@ export default function ProfileView({
                     <input 
                       type="text" 
                       value={studentPhone}
+                      placeholder="Enter Phone Number"
                       onChange={(e) => setStudentPhone(e.target.value)}
                       className="w-full bg-gray-50 border border-gray-200 hover:border-gray-300 focus:border-[#8B1E3F] px-3 py-1.5 rounded-xl text-xs font-bold text-gray-800 focus:outline-none focus:ring-1 focus:ring-[#8B1E3F]/30"
                     />
                   ) : (
-                    <p className="text-xs font-black text-gray-800">{studentPhone}</p>
+                    <p className="text-xs font-black text-gray-800">{studentPhone || 'Not Provided'}</p>
                   )}
                 </div>
               </div>

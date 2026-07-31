@@ -72,12 +72,15 @@ export interface StudentProgress {
 }
 
 export interface FacultyProfile {
+  id?: string;
+  empId?: string;
   name: string;
   designation: string;
   department: string;
   email: string;
   subjects: string[]; // subject IDs
   phone?: string;
+  dateJoined?: string;
 }
 
 export interface AcademicYear {

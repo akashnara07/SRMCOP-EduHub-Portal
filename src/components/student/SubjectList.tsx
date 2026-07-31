@@ -70,7 +70,7 @@ export default function SubjectList({
           {!isBPharm ? (
             <div className="flex items-center gap-1.5 bg-gray-100/60 p-1 rounded-full border border-white/20">
               <span className="text-[10px] font-bold text-gray-500 px-2">Year:</span>
-              {([ 'all', 1, 2, 3, 4, 5 ] as const).map((year) => (
+              {([ 'all', 1, 2, 3, 4, 5, 6 ] as const).map((year) => (
                 <button
                   key={year}
                   onClick={() => setSelectedYear(year)}

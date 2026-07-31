@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { ArrowLeft, User, Check, Edit2, FileText, Download, Award, ChevronRight } from 'lucide-react';
 import GlassCard from '../GlassCard';
+import { getStudentsMaster } from '../../data/studentRegistry';
 
 interface FacultyAssignmentsProps {
   onBack: () => void;
@@ -9,10 +10,15 @@ interface FacultyAssignmentsProps {
 export default function FacultyAssignments({
   onBack,
 }: FacultyAssignmentsProps) {
+  const masterStudents = getStudentsMaster();
+  const std1 = masterStudents[0] || { name: 'ANVITA DAYAL', regNo: 'RA2522281010001' };
+  const std2 = masterStudents[1] || { name: 'A.R.S SHANMUGASRINIVAS', regNo: 'RA2522281010002' };
+  const std3 = masterStudents[2] || { name: 'ABHINAV C.S', regNo: 'RA2522281010003' };
+
   const [submissions, setSubmissions] = useState([
-    { id: '1', studentName: 'J. Akash', reg: 'SRM2026PH7810', task: 'Histological Classification of Muscular Tissue', date: 'July 8, 2026', file: 'histology_muscle_akash.pdf', grade: 'Pending' },
-    { id: '2', studentName: 'Priya Sharma', reg: 'SRM2026PH7812', task: 'Histological Classification of Muscular Tissue', date: 'July 7, 2026', file: 'muscle_histology_sharma.pdf', grade: 'A+' },
-    { id: '3', studentName: 'Siddharth Roy', reg: 'SRM2026PH7815', task: 'Non-Aqueous Titration Lab Report', date: 'July 5, 2026', file: 'non_aq_titr_sid.pdf', grade: 'A' },
+    { id: '1', studentName: std1.name, reg: std1.regNo, task: 'Histological Classification of Muscular Tissue', date: 'July 8, 2026', file: 'histology_muscle_submission.pdf', grade: 'Pending' },
+    { id: '2', studentName: std2.name, reg: std2.regNo, task: 'Histological Classification of Muscular Tissue', date: 'July 7, 2026', file: 'muscle_histology_lab.pdf', grade: 'A+' },
+    { id: '3', studentName: std3.name, reg: std3.regNo, task: 'Non-Aqueous Titration Lab Report', date: 'July 5, 2026', file: 'non_aq_titr_report.pdf', grade: 'A' },
   ]);
 
   const [activeGradingId, setActiveGradingId] = useState<string | null>(null);

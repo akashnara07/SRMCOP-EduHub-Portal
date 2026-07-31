@@ -9,6 +9,7 @@ import GlassCard from '../GlassCard';
 import CurriculumTabContent from './CurriculumTabContent';
 import { Subject, Resource } from '../../types';
 import { resolveFacultyForCourse } from '../../data/facultyRegistry';
+import { getStudentsMaster } from '../../data/studentRegistry';
 import { db } from '../../lib/firebase';
 import { doc, setDoc } from 'firebase/firestore';
 import { 
@@ -39,11 +40,11 @@ interface EnrolledStudent {
   registerNumber: string;
   programme: string;
   attendance: number;
-  gpa: number;
+  gpa?: number;
   status: 'Active' | 'Imported' | 'On Hold';
-  sessionalI: number;
-  sessionalII: number;
-  sessionalIII: number;
+  sessionalI?: number | string;
+  sessionalII?: number | string;
+  sessionalIII?: number | string;
 }
 
 export default function SubjectManagement({
@@ -104,16 +105,25 @@ export default function SubjectManagement({
         console.error(e);
       }
     } else {
-      const defaultList: EnrolledStudent[] = [
-        { sNo: 1, name: 'J. Akash', registerNumber: 'SRM2026PH7810', programme: subject.programme, attendance: 92.4, gpa: 8.85, status: 'Active', sessionalI: 24, sessionalII: 25, sessionalIII: 23 },
-        { sNo: 2, name: 'Meera Patel', registerNumber: 'SRM2026PH7812', programme: subject.programme, attendance: 88.5, gpa: 8.12, status: 'Active', sessionalI: 19, sessionalII: 22, sessionalIII: 20 },
-        { sNo: 3, name: 'Rahul Sharma', registerNumber: 'SRM2026PH7815', programme: subject.programme, attendance: 95.0, gpa: 9.20, status: 'Active', sessionalI: 28, sessionalII: 29, sessionalIII: 28 },
-        { sNo: 4, name: 'Anjali Rao', registerNumber: 'SRM2026PH7831', programme: subject.programme, attendance: 94.0, gpa: 8.75, status: 'Active', sessionalI: 26, sessionalII: 24, sessionalIII: 25 },
-        { sNo: 5, name: 'Priyesh Sen', registerNumber: 'SRM2026PH7830', programme: subject.programme, attendance: 91.5, gpa: 8.20, status: 'Active', sessionalI: 22, sessionalII: 23, sessionalIII: 24 },
-        { sNo: 6, name: 'Vignesh Nair', registerNumber: 'SRM2026PH7832', programme: subject.programme, attendance: 86.2, gpa: 7.90, status: 'Active', sessionalI: 18, sessionalII: 20, sessionalIII: 21 }
-      ];
+      const masterList = getStudentsMaster();
+      const filtered = masterList.filter(s => s.programme === subject.programme);
+      const studentSource = filtered.length > 0 ? filtered : masterList;
+
+      const defaultList: EnrolledStudent[] = studentSource.map((std, idx) => {
+        return {
+          sNo: idx + 1,
+          name: std.name,
+          registerNumber: std.regNo,
+          programme: std.programme,
+          attendance: 100,
+          gpa: undefined,
+          status: 'Active',
+          sessionalI: '',
+          sessionalII: '',
+          sessionalIII: ''
+        };
+      });
       setCohort(defaultList);
-      localStorage.setItem(`sessional_marks_${subject.code}`, JSON.stringify(defaultList));
     }
   }, [subject.code, subject.programme]);
 
@@ -877,95 +887,98 @@ export default function SubjectManagement({
               </div>
             </div>
 
-            {/* Direct Attainment grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              
-              <GlassCard className="lg:col-span-2 p-6">
-                <h4 className="font-display font-bold text-sm text-gray-900 uppercase tracking-wider mb-4">Syllabus Outcome-Based Education (OBE) Attainment Matrix</h4>
-                
-                <div className="overflow-x-auto border border-gray-100 rounded-2xl">
-                  <table className="w-full text-left border-collapse text-[11px] font-semibold text-gray-700">
-                    <thead>
-                      <tr className="bg-gray-50/50 border-b border-gray-100 text-[9px] uppercase font-bold text-gray-400">
-                        <th className="p-3">Student Candidate</th>
-                        <th className="p-3 text-center">Internal Target (Scale 3.0)</th>
-                        <th className="p-3 text-center">Internal Attainment Achieved (/3.0)</th>
-                        <th className="p-3 text-center">Semester Target (Scale 3.0)</th>
-                        <th className="p-3 text-center">Semester Attainment Achieved (/3.0)</th>
-                        <th className="p-3 text-right">OBE Status</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {cohort.map((student) => {
-                        const isStudentPharmD = subject.programme === 'Pharm.D';
-                        const avg = calculateSessionalAvg(student.sessionalI, student.sessionalII, student.sessionalIII || 0, isStudentPharmD);
-                        const intAtt = (parseFloat(avg) / 30 * 3.0).toFixed(2);
-                        const semAtt = (student.gpa / 10 * 3.0).toFixed(2);
-                        const isExceeded = parseFloat(intAtt) >= 2.4 && parseFloat(semAtt) >= 2.4;
-                        
-                        return (
-                          <tr key={student.registerNumber} className="border-b border-gray-50 hover:bg-gray-50/30 transition-all">
-                            <td className="p-3">
-                              <span className="font-extrabold text-gray-900 block">{student.name}</span>
-                              <span className="text-[9.5px] text-[#8B1E3F] font-mono font-bold leading-tight">{student.registerNumber}</span>
-                            </td>
-                            <td className="p-3 text-center font-mono text-gray-500">2.00</td>
-                            <td className="p-3 text-center font-mono font-black text-emerald-600">{intAtt}</td>
-                            <td className="p-3 text-center font-mono text-gray-500">2.00</td>
-                            <td className="p-3 text-center font-mono font-black text-emerald-600">{semAtt}</td>
-                            <td className="p-3 text-right">
-                              <span className={`text-[8px] font-black px-2.5 py-0.5 rounded-full uppercase ${
-                                isExceeded 
-                                  ? 'bg-blue-50 text-blue-600' 
-                                  : 'bg-emerald-50 text-emerald-600'
-                              }`}>
-                                {isExceeded ? 'Target Exceeded' : 'Target Met'}
-                              </span>
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </div>
-              </GlassCard>
+            {(() => {
+              const hasAssessmentData = cohort.some(s => 
+                (s.sessionalI !== '' && s.sessionalI !== undefined && s.sessionalI !== null && Number(s.sessionalI) > 0) ||
+                (s.sessionalII !== '' && s.sessionalII !== undefined && s.sessionalII !== null && Number(s.sessionalII) > 0)
+              );
 
-              {/* Attainment scorecard summaries */}
-              <div className="flex flex-col gap-4">
-                <GlassCard className="p-5 flex flex-col gap-3">
-                  <h4 className="text-[10px] font-black uppercase tracking-wider text-gray-400 mb-2 pb-2 border-b border-gray-100">
-                    Cohort Performance KPIs
-                  </h4>
-
-                  <div className="flex flex-col gap-3">
-                    <div className="p-3 bg-gray-50 rounded-xl">
-                      <span className="text-[8px] font-black text-gray-400 block uppercase mb-0.5">Continuous Internal Assessment Level</span>
-                      <div className="flex justify-between items-baseline">
-                        <span className="text-xl font-black text-gray-900">2.50 / 3.0</span>
-                        <span className="text-[9px] text-emerald-600 font-extrabold uppercase bg-emerald-50 px-2 py-0.5 rounded">Level 3 (High)</span>
-                      </div>
+              if (!hasAssessmentData) {
+                return (
+                  <div className="p-12 bg-white border border-gray-150/40 rounded-3xl flex flex-col items-center justify-center text-center gap-3 shadow-sm my-2">
+                    <div className="w-12 h-12 rounded-2xl bg-[#8B1E3F]/5 border border-[#8B1E3F]/10 flex items-center justify-center text-[#8B1E3F]">
+                      <BarChart3 className="w-6 h-6" />
                     </div>
-
-                    <div className="p-3 bg-gray-50 rounded-xl">
-                      <span className="text-[8px] font-black text-gray-400 block uppercase mb-0.5">End-Semester Exam Attainment Level</span>
-                      <div className="flex justify-between items-baseline">
-                        <span className="text-xl font-black text-gray-900">2.40 / 3.0</span>
-                        <span className="text-[9px] text-emerald-600 font-extrabold uppercase bg-emerald-50 px-2 py-0.5 rounded">Level 3 (High)</span>
-                      </div>
-                    </div>
-
-                    <div className="p-3 bg-[#8B1E3F]/5 rounded-xl border border-[#8B1E3F]/15">
-                      <span className="text-[8px] font-black text-[#8B1E3F] block uppercase mb-0.5">Direct Overall Subject Mapped index</span>
-                      <div className="flex justify-between items-baseline">
-                        <span className="text-xl font-black text-[#8B1E3F]">2.43 / 3.0</span>
-                        <span className="text-[9px] text-pink-700 font-black uppercase bg-[#8B1E3F]/10 px-2 py-0.5 rounded">Met</span>
-                      </div>
-                    </div>
+                    <h3 className="font-display font-bold text-base text-gray-900 mt-1">No OBE Analytics Available</h3>
+                    <p className="text-xs text-gray-500 max-w-lg leading-relaxed font-medium">
+                      OBE analytics will be generated automatically once CIA, practical, and semester examination marks have been entered and mapped to Course Outcomes (COs).
+                    </p>
                   </div>
-                </GlassCard>
-              </div>
+                );
+              }
 
-            </div>
+              return (
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                  <GlassCard className="lg:col-span-2 p-6">
+                    <h4 className="font-display font-bold text-sm text-gray-900 uppercase tracking-wider mb-4">Syllabus Outcome-Based Education (OBE) Attainment Matrix</h4>
+                    
+                    <div className="overflow-x-auto border border-gray-100 rounded-2xl">
+                      <table className="w-full text-left border-collapse text-[11px] font-semibold text-gray-700">
+                        <thead>
+                          <tr className="bg-gray-50/50 border-b border-gray-100 text-[9px] uppercase font-bold text-gray-400">
+                            <th className="p-3">Student Candidate</th>
+                            <th className="p-3 text-center">Internal Target (Scale 3.0)</th>
+                            <th className="p-3 text-center">Internal Attainment Achieved (/3.0)</th>
+                            <th className="p-3 text-center">Semester Target (Scale 3.0)</th>
+                            <th className="p-3 text-center">Semester Attainment Achieved (/3.0)</th>
+                            <th className="p-3 text-right">OBE Status</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {cohort.filter(s => (s.sessionalI || s.sessionalII)).map((student) => {
+                            const isStudentPharmD = subject.programme === 'Pharm.D';
+                            const avg = calculateSessionalAvg(student.sessionalI, student.sessionalII, student.sessionalIII || 0, isStudentPharmD);
+                            const intAtt = (parseFloat(avg) / 30 * 3.0).toFixed(2);
+                            const semAtt = student.gpa ? (student.gpa / 10 * 3.0).toFixed(2) : '-';
+                            const isExceeded = parseFloat(intAtt) >= 2.4;
+                            
+                            return (
+                              <tr key={student.registerNumber} className="border-b border-gray-50 hover:bg-gray-50/30 transition-all">
+                                <td className="p-3">
+                                  <span className="font-extrabold text-gray-900 block">{student.name}</span>
+                                  <span className="text-[9.5px] text-[#8B1E3F] font-mono font-bold leading-tight">{student.registerNumber}</span>
+                                </td>
+                                <td className="p-3 text-center font-mono text-gray-500">2.00</td>
+                                <td className="p-3 text-center font-mono font-black text-emerald-600">{intAtt}</td>
+                                <td className="p-3 text-center font-mono text-gray-500">2.00</td>
+                                <td className="p-3 text-center font-mono font-black text-emerald-600">{semAtt}</td>
+                                <td className="p-3 text-right">
+                                  <span className={`text-[8px] font-black px-2.5 py-0.5 rounded-full uppercase ${
+                                    isExceeded 
+                                      ? 'bg-blue-50 text-blue-600' 
+                                      : 'bg-emerald-50 text-emerald-600'
+                                  }`}>
+                                    {isExceeded ? 'Target Exceeded' : 'Target Met'}
+                                  </span>
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
+                  </GlassCard>
+
+                  <div className="flex flex-col gap-4">
+                    <GlassCard className="p-5 flex flex-col gap-3">
+                      <h4 className="text-[10px] font-black uppercase tracking-wider text-gray-400 mb-2 pb-2 border-b border-gray-100">
+                        Cohort Performance Summary
+                      </h4>
+
+                      <div className="flex flex-col gap-3">
+                        <div className="p-3 bg-gray-50 rounded-xl">
+                          <span className="text-[8px] font-black text-gray-400 block uppercase mb-0.5">Continuous Internal Assessment Level</span>
+                          <div className="flex justify-between items-baseline">
+                            <span className="text-xl font-black text-gray-900">Computed from CIA</span>
+                            <span className="text-[9px] text-emerald-600 font-extrabold uppercase bg-emerald-50 px-2 py-0.5 rounded">Active</span>
+                          </div>
+                        </div>
+                      </div>
+                    </GlassCard>
+                  </div>
+                </div>
+              );
+            })()}
 
           </div>
         )}
