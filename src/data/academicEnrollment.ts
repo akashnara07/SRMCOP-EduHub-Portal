@@ -2,6 +2,8 @@ import { ProgrammeType, StudentMaster } from './studentRegistry';
 
 export type EnrollmentStatus = 
   | 'Active' 
+  | 'Completed'
+  | 'Promoted'
   | 'Held Back' 
   | 'Repeater' 
   | 'Graduated' 
@@ -56,7 +58,7 @@ export const PROGRAMME_PROMOTION_RULES: Record<ProgrammeType, { year: string; se
 const STORAGE_KEY_ENROLLMENTS = 'srm_lms_academic_enrollments_v1';
 
 export const DEFAULT_ACADEMIC_ENROLLMENTS: AcademicEnrollment[] = [
-  // J. Akash (std-1, B.Pharm 2023-2027)
+  // Student std-1 (B.Pharm 2023-2027)
   {
     id: 'ae-std-1-2023-2024',
     studentId: 'std-1',
@@ -109,7 +111,7 @@ export const DEFAULT_ACADEMIC_ENROLLMENTS: AcademicEnrollment[] = [
     academicYear: '2024-2025',
     programme: 'Pharm.D',
     currentYear: 'Year III',
-    semester: 'Semester V',
+    semester: '',
     section: 'Section B',
     enrollmentStatus: 'Active',
     facultyAdvisor: 'Prof. Elizabeth Mathew'
@@ -120,7 +122,7 @@ export const DEFAULT_ACADEMIC_ENROLLMENTS: AcademicEnrollment[] = [
     academicYear: '2025-2026',
     programme: 'Pharm.D',
     currentYear: 'Year IV',
-    semester: 'Semester VII',
+    semester: '',
     section: 'Section B',
     enrollmentStatus: 'Active',
     facultyAdvisor: 'Prof. Elizabeth Mathew'
@@ -131,7 +133,7 @@ export const DEFAULT_ACADEMIC_ENROLLMENTS: AcademicEnrollment[] = [
     academicYear: '2026-2027',
     programme: 'Pharm.D',
     currentYear: 'Year V',
-    semester: 'Semester IX',
+    semester: '',
     section: 'Section B',
     enrollmentStatus: 'Active',
     facultyAdvisor: 'Dr. V. Chitra'
@@ -179,7 +181,7 @@ export const DEFAULT_ACADEMIC_ENROLLMENTS: AcademicEnrollment[] = [
     academicYear: '2025-2026',
     programme: 'Pharm.D',
     currentYear: 'Year V',
-    semester: 'Semester IX',
+    semester: '',
     section: 'Section A',
     enrollmentStatus: 'Active',
     facultyAdvisor: 'Dr. J. Narayanan'
@@ -189,8 +191,8 @@ export const DEFAULT_ACADEMIC_ENROLLMENTS: AcademicEnrollment[] = [
     studentId: 'std-4',
     academicYear: '2026-2027',
     programme: 'Pharm.D',
-    currentYear: 'Internship',
-    semester: 'Internship',
+    currentYear: 'Year VI',
+    semester: '',
     section: 'Section A',
     enrollmentStatus: 'Active',
     facultyAdvisor: 'Dr. J. Narayanan'
@@ -256,27 +258,161 @@ export const DEFAULT_ACADEMIC_ENROLLMENTS: AcademicEnrollment[] = [
   }
 ];
 
-export function getAcademicEnrollments(): AcademicEnrollment[] {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY_ENROLLMENTS);
-    if (raw) {
-      const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+// Generate academic enrollments for the 30 official Pharm.D Year V students across 3 academic years
+export const PHARMD_5_ENROLLMENTS: AcademicEnrollment[] = Array.from({ length: 30 }, (_, i): AcademicEnrollment[] => {
+  const stdId = `std-pd5-${i + 1}`;
+  return [
+    {
+      id: `ae-${stdId}-2024-2025`,
+      studentId: stdId,
+      academicYear: '2024-2025',
+      programme: 'Pharm.D',
+      currentYear: 'Year III',
+      semester: '',
+      section: 'Section A',
+      enrollmentStatus: 'Completed',
+      facultyAdvisor: 'Dr. M. Senthil'
+    },
+    {
+      id: `ae-${stdId}-2025-2026`,
+      studentId: stdId,
+      academicYear: '2025-2026',
+      programme: 'Pharm.D',
+      currentYear: 'Year IV',
+      semester: '',
+      section: 'Section A',
+      enrollmentStatus: 'Completed',
+      facultyAdvisor: 'Dr. M. Senthil'
+    },
+    {
+      id: `ae-${stdId}-2026-2027`,
+      studentId: stdId,
+      academicYear: '2026-2027',
+      programme: 'Pharm.D',
+      currentYear: 'Year V',
+      semester: '',
+      section: 'Section A',
+      enrollmentStatus: 'Active',
+      facultyAdvisor: 'Dr. M. Senthil'
     }
-  } catch (e) {
-    console.error('Error loading academic enrollments:', e);
+  ];
+}).flat();
+
+// Generate academic enrollments for the 29 official Pharm.D Year VI students across 3 academic years
+export const PHARMD_6_ENROLLMENTS: AcademicEnrollment[] = Array.from({ length: 29 }, (_, i): AcademicEnrollment[] => {
+  const stdId = `std-pd6-${i + 1}`;
+  return [
+    {
+      id: `ae-${stdId}-2024-2025`,
+      studentId: stdId,
+      academicYear: '2024-2025',
+      programme: 'Pharm.D',
+      currentYear: 'Year IV',
+      semester: '',
+      section: 'Section A',
+      enrollmentStatus: 'Completed',
+      facultyAdvisor: 'Dr. J. Narayanan'
+    },
+    {
+      id: `ae-${stdId}-2025-2026`,
+      studentId: stdId,
+      academicYear: '2025-2026',
+      programme: 'Pharm.D',
+      currentYear: 'Year V',
+      semester: '',
+      section: 'Section A',
+      enrollmentStatus: 'Completed',
+      facultyAdvisor: 'Dr. J. Narayanan'
+    },
+    {
+      id: `ae-${stdId}-2026-2027`,
+      studentId: stdId,
+      academicYear: '2026-2027',
+      programme: 'Pharm.D',
+      currentYear: 'Year VI',
+      semester: '',
+      section: 'Section A',
+      enrollmentStatus: 'Active',
+      facultyAdvisor: 'Dr. J. Narayanan'
+    }
+  ];
+}).flat();
+
+DEFAULT_ACADEMIC_ENROLLMENTS.push(...PHARMD_5_ENROLLMENTS, ...PHARMD_6_ENROLLMENTS);
+
+export const BPHARM_2026_ENROLLMENTS: AcademicEnrollment[] = Array.from({ length: 30 }).map((_, i) => {
+  const stdId = `std-bp-26-${i + 1}`;
+  return {
+    id: `ae-${stdId}-2026-2027`,
+    studentId: stdId,
+    academicYear: '2026-2027',
+    programme: 'B.Pharm',
+    currentYear: 'First Year',
+    semester: 'Semester I',
+    section: 'Section A',
+    enrollmentStatus: 'Active',
+    facultyAdvisor: 'Dr. V. Chitra'
+  };
+});
+
+export const PHARMD_1_ENROLLMENTS: AcademicEnrollment[] = Array.from({ length: 30 }).map((_, i) => {
+  const stdId = `std-pd-1-${i + 1}`;
+  return {
+    id: `ae-${stdId}-2026-2027`,
+    studentId: stdId,
+    academicYear: '2026-2027',
+    programme: 'Pharm.D',
+    currentYear: 'Year I',
+    semester: '',
+    section: 'Section A',
+    enrollmentStatus: 'Active',
+    facultyAdvisor: 'Dr. J. Narayanan'
+  };
+});
+
+DEFAULT_ACADEMIC_ENROLLMENTS.push(...BPHARM_2026_ENROLLMENTS, ...PHARMD_1_ENROLLMENTS);
+
+export function getAcademicEnrollments(): AcademicEnrollment[] {
+  let list: AcademicEnrollment[] = DEFAULT_ACADEMIC_ENROLLMENTS;
+  if (typeof localStorage !== 'undefined') {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY_ENROLLMENTS);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          list = parsed;
+        }
+      }
+    } catch (e) {
+      console.error('Error loading academic enrollments:', e);
+    }
   }
-  
-  // Default fallback and save
-  saveAcademicEnrollments(DEFAULT_ACADEMIC_ENROLLMENTS);
-  return DEFAULT_ACADEMIC_ENROLLMENTS;
+
+  // Ensure all Pharm.D and B.Pharm enrollments are present in list without duplicates
+  let modified = false;
+  const mergedList = [...list];
+  [...PHARMD_5_ENROLLMENTS, ...PHARMD_6_ENROLLMENTS, ...BPHARM_2026_ENROLLMENTS, ...PHARMD_1_ENROLLMENTS].forEach(pEnc => {
+    const exists = mergedList.some(e => e.id === pEnc.id || (e.studentId === pEnc.studentId && e.academicYear === pEnc.academicYear));
+    if (!exists) {
+      mergedList.push(pEnc);
+      modified = true;
+    }
+  });
+
+  if (modified && typeof localStorage !== 'undefined') {
+    saveAcademicEnrollments(mergedList);
+  }
+
+  return mergedList;
 }
 
 export function saveAcademicEnrollments(list: AcademicEnrollment[]): void {
-  try {
-    localStorage.setItem(STORAGE_KEY_ENROLLMENTS, JSON.stringify(list));
-  } catch (e) {
-    console.error('Error saving academic enrollments:', e);
+  if (typeof localStorage !== 'undefined') {
+    try {
+      localStorage.setItem(STORAGE_KEY_ENROLLMENTS, JSON.stringify(list));
+    } catch (e) {
+      console.error('Error saving academic enrollments:', e);
+    }
   }
 }
 

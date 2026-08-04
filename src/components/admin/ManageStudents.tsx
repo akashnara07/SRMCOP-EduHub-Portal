@@ -9,6 +9,8 @@ import {
   FileBadge, BookMarked, ChevronDown, CheckCircle, RefreshCw
 } from 'lucide-react';
 import GlassCard from '../GlassCard';
+import AcademicSessionWorkspace from '../AcademicSessionWorkspace';
+import { useAcademicYear } from '../../context/AcademicYearContext';
 import * as XLSX from 'xlsx';
 import { 
   StudentMaster, 
@@ -17,12 +19,14 @@ import {
   StudentStatus,
   ProgrammeType,
   getStudentsMaster, 
+  getStudentsForAcademicSession,
   saveStudentsMaster, 
   getAcademicRecords, 
   saveAcademicRecords,
   getStudentAcademicHistory,
   updateStudentOfficialEmail,
-  promoteStudentInMaster
+  promoteStudentInMaster,
+  getEnrolledCoursesForStudent
 } from '../../data/studentRegistry';
 import { 
   AcademicEnrollment,
@@ -224,8 +228,17 @@ const StudentTable = ({
 };
 
 export default function ManageStudents({ onBack }: ManageStudentsProps) {
+  // Active Academic Year from Global Context
+  const { activeAcademicYear, setActiveAcademicYear } = useAcademicYear();
+
   // Master Student Registry state
-  const [students, setStudents] = useState<StudentMaster[]>(() => getStudentsMaster());
+  const [masterStudents, setMasterStudents] = useState<StudentMaster[]>(() => getStudentsMaster());
+  
+  // Dynamically project master students into active session dataset
+  const students = useMemo(() => {
+    return getStudentsForAcademicSession(activeAcademicYear, masterStudents);
+  }, [activeAcademicYear, masterStudents]);
+
   const [academicRecords, setAcademicRecords] = useState<StudentAcademicRecord[]>(() => getAcademicRecords());
   const [enrollments, setEnrollments] = useState<AcademicEnrollment[]>(() => getAcademicEnrollments());
   
@@ -386,9 +399,6 @@ export default function ManageStudents({ onBack }: ManageStudentsProps) {
     'profile' | 'academic' | 'auth' | 'marks' | 'learning' | 'portfolio'
   >('profile');
 
-  // Active Academic Year in Dedicated View
-  const [activeAcademicYear, setActiveAcademicYear] = useState<string>('2026-2027');
-
   // Dropdown & Modal States
   const [showBulkDropdown, setShowBulkDropdown] = useState(false);
   const [showImportStudentsModal, setShowImportStudentsModal] = useState(false);
@@ -453,7 +463,7 @@ interface StudentImportRow {
 
   // Sync state helpers
   const handleSaveStudents = (newList: StudentMaster[]) => {
-    setStudents(newList);
+    setMasterStudents(newList);
     saveStudentsMaster(newList);
   };
 
@@ -1023,19 +1033,13 @@ interface StudentImportRow {
             <ArrowLeft className="w-5 h-5" />
           </button>
           <div>
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-bold text-[#8B1E3F] bg-pink-100/60 px-3 py-1 rounded-full border border-pink-200/50">
-                Master Student Database
-              </span>
-              <span className="text-xs text-gray-400">• Permanent Student Primary Identifier</span>
-            </div>
-            <h1 className="text-2xl font-display font-extrabold text-gray-900 mt-1 flex items-center gap-2">
+            <h1 className="text-2xl font-display font-extrabold text-gray-900 flex items-center gap-2">
               🎓 Student Registry
             </h1>
             <p className="text-xs text-gray-500 font-medium">
               {selectedStudent 
-                ? `Viewing master profile & dynamic modules for ${selectedStudent.name} (${selectedStudent.regNo})` 
-                : 'Permanent master database displaying each student once with Registration Number as primary key.'}
+                ? `Viewing student profile & dynamic modules for ${selectedStudent.name} (${selectedStudent.regNo})` 
+                : 'Manage student records by programme, year and semester.'}
             </p>
           </div>
         </div>
@@ -1124,6 +1128,11 @@ interface StudentImportRow {
       {/* ========================================================= */}
       {!selectedStudent ? (
         <div className="space-y-6">
+          {/* ACADEMIC SESSION WORKSPACE SELECTOR */}
+          <AcademicSessionWorkspace
+            moduleName="STUDENT ACADEMIC SESSION WORKSPACE"
+          />
+
           {/* Live Dynamic Summary Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
             <GlassCard className="p-4 rounded-3xl border border-white/40 shadow-sm bg-gradient-to-br from-white/90 to-pink-50/40">
@@ -1171,47 +1180,22 @@ interface StudentImportRow {
                   />
                 </div>
 
-                {/* View Mode & Expand Controls */}
-                <div className="flex items-center gap-2 shrink-0">
-                  <div className="bg-gray-100 p-1 rounded-xl flex items-center border border-gray-200">
-                    <button
-                      onClick={() => setViewMode('grouped')}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-extrabold transition-all cursor-pointer flex items-center gap-1.5 ${
-                        viewMode === 'grouped' ? 'bg-[#8B1E3F] text-white shadow-xs' : 'text-gray-600 hover:text-gray-900'
-                      }`}
-                    >
-                      <Layers className="w-3.5 h-3.5" />
-                      Grouped Hierarchy
-                    </button>
-                    <button
-                      onClick={() => setViewMode('table')}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-extrabold transition-all cursor-pointer flex items-center gap-1.5 ${
-                        viewMode === 'table' ? 'bg-[#8B1E3F] text-white shadow-xs' : 'text-gray-600 hover:text-gray-900'
-                      }`}
-                    >
-                      <BarChart3 className="w-3.5 h-3.5" />
-                      Flat Registry Table
-                    </button>
-                  </div>
-
-                  {viewMode === 'grouped' && (
-                    <div className="flex items-center gap-1.5">
-                      <button
-                        onClick={expandAllNodes}
-                        className="px-2.5 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold text-xs rounded-xl border border-gray-200 transition-all cursor-pointer"
-                        title="Expand all hierarchy sections"
-                      >
-                        Expand All
-                      </button>
-                      <button
-                        onClick={collapseAllNodes}
-                        className="px-2.5 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold text-xs rounded-xl border border-gray-200 transition-all cursor-pointer"
-                        title="Collapse all hierarchy sections"
-                      >
-                        Collapse All
-                      </button>
-                    </div>
-                  )}
+                {/* Expand & Collapse Controls */}
+                <div className="flex items-center gap-1.5 shrink-0">
+                  <button
+                    onClick={expandAllNodes}
+                    className="px-2.5 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold text-xs rounded-xl border border-gray-200 transition-all cursor-pointer"
+                    title="Expand all hierarchy sections"
+                  >
+                    Expand All
+                  </button>
+                  <button
+                    onClick={collapseAllNodes}
+                    className="px-2.5 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold text-xs rounded-xl border border-gray-200 transition-all cursor-pointer"
+                    title="Collapse all hierarchy sections"
+                  >
+                    Collapse All
+                  </button>
                 </div>
               </div>
 
@@ -1336,19 +1320,6 @@ interface StudentImportRow {
                 Reset All Filters
               </button>
             </GlassCard>
-          ) : viewMode === 'table' ? (
-            /* FLAT TABLE VIEW WITH S.NO. */
-            <GlassCard className="p-0 rounded-3xl border border-white/40 overflow-hidden shadow-sm bg-white/80">
-              <StudentTable
-                studentList={filteredStudents}
-                startIndex={0}
-                onSelectStudent={(student) => {
-                  setSelectedStudent(student);
-                  setSelectedTab('profile');
-                  setActiveAcademicYear(student.academicYear || '2026-2027');
-                }}
-              />
-            </GlassCard>
           ) : (
             /* GROUPED HIERARCHICAL ACCORDION VIEW */
             <div className="space-y-6">
@@ -1430,51 +1401,65 @@ interface StudentImportRow {
                                 </div>
                               </div>
 
-                              {/* Year Body: Semesters */}
+                              {/* Year Body: Semesters (B.Pharm / M.Pharm) or Direct Student Table (Pharm.D) */}
                               {isYearExpanded && (
-                                <div className="mt-3 space-y-4 pl-2">
-                                  {semsList.filter(sem => filterSemester === 'All' || filterSemester === sem).map(sem => {
-                                    const semStudents = yearStudents.filter(s => normalizeSemester(s.semester, p, y) === sem);
-                                    if (semStudents.length === 0) return null;
+                                <div className="mt-3 space-y-4 pl-1">
+                                  {p === 'Pharm.D' ? (
+                                    <div className="bg-white p-3 rounded-xl border border-gray-200/80 shadow-2xs">
+                                      <StudentTable
+                                        studentList={yearStudents}
+                                        startIndex={0}
+                                        onSelectStudent={(student) => {
+                                          setSelectedStudent(student);
+                                          setSelectedTab('profile');
+                                          setActiveAcademicYear(student.academicYear || '2026-2027');
+                                        }}
+                                      />
+                                    </div>
+                                  ) : (
+                                    semsList.filter(sem => filterSemester === 'All' || filterSemester === sem).map(sem => {
+                                      const semStudents = yearStudents.filter(s => normalizeSemester(s.semester, p, y) === sem);
+                                      if (semStudents.length === 0) return null;
 
-                                    const semNodeId = `sem-${p}-${y}-${sem}`;
-                                    const isSemExpanded = expandedNodes[semNodeId] !== false;
+                                      const semNodeId = `sem-${p}-${y}-${sem}`;
+                                      const isSemExpanded = expandedNodes[semNodeId] !== false;
 
-                                    return (
-                                      <div key={sem} className="bg-white p-3 rounded-xl border border-gray-200/80 shadow-2xs">
-                                        {/* Semester Level Header */}
-                                        <div
-                                          onClick={() => toggleNode(semNodeId)}
-                                          className="flex items-center justify-between cursor-pointer select-none py-1 mb-2 border-b border-gray-100"
-                                        >
-                                          <div className="flex items-center gap-2">
-                                            <button className="w-5 h-5 rounded bg-gray-100 text-gray-600 flex items-center justify-center">
-                                              {isSemExpanded ? <ChevronDown className="w-3.5 h-3.5" /> : <ChevronRight className="w-3.5 h-3.5" />}
-                                            </button>
-                                            <span className="text-xs font-bold text-[#8B1E3F]">
-                                              📖 {sem}
-                                            </span>
-                                            <span className="text-[10px] font-extrabold bg-pink-50 text-[#8B1E3F] px-2 py-0.2 rounded-full border border-pink-100">
-                                              {semStudents.length} Students
-                                            </span>
+                                      return (
+                                        <div key={sem} className="bg-white p-3 rounded-xl border border-gray-200/80 shadow-2xs">
+                                          {/* Semester Level Header */}
+                                          <div
+                                            onClick={() => toggleNode(semNodeId)}
+                                            className="flex items-center justify-between cursor-pointer select-none py-1 mb-2 border-b border-gray-100"
+                                          >
+                                            <div className="flex items-center gap-2">
+                                              <button className="w-5 h-5 rounded bg-gray-100 text-gray-600 flex items-center justify-center">
+                                                {isSemExpanded ? <ChevronDown className="w-3.5 h-3.5" /> : <ChevronRight className="w-3.5 h-3.5" />}
+                                              </button>
+                                              <span className="text-xs font-bold text-[#8B1E3F]">
+                                                📖 {sem}
+                                              </span>
+                                              <span className="text-[10px] font-extrabold bg-pink-50 text-[#8B1E3F] px-2 py-0.2 rounded-full border border-pink-100">
+                                                {semStudents.length} Students
+                                              </span>
+                                            </div>
                                           </div>
-                                        </div>
 
-                                        {/* Semester Table */}
-                                        {isSemExpanded && (
-                                          <StudentTable
-                                            studentList={semStudents}
-                                            startIndex={0}
-                                            onSelectStudent={(student) => {
-                                              setSelectedStudent(student);
-                                              setSelectedTab('profile');
-                                              setActiveAcademicYear(student.academicYear || '2026-2027');
-                                            }}
-                                          />
-                                        )}
-                                      </div>
-                                    );
-                                  })}
+                                          {/* Semester Table */}
+                                          {isSemExpanded && (
+                                            <StudentTable
+                                              studentList={semStudents}
+                                              startIndex={0}
+                                              onSelectStudent={(student) => {
+                                                setSelectedStudent(student);
+                                                setSelectedTab('profile');
+                                                setActiveAcademicYear(student.academicYear || '2026-2027');
+                                              }}
+                                            />
+                                          )}
+                                        </div>
+                                      );
+                                    })
+                                  )}
                                 </div>
                               )}
                             </div>
@@ -1512,7 +1497,7 @@ interface StudentImportRow {
                     </span>
                   </div>
                   <p className="text-xs text-[#8B1E3F] font-bold mt-1">
-                    {selectedStudent.programme} • <span className="text-gray-600">{selectedStudent.currentYear} ({selectedStudent.semester})</span> • <span className="text-gray-400">{selectedStudent.regulation || 'PCI-2020'}</span>
+                    {selectedStudent.programme} • <span className="text-gray-600">{selectedStudent.programme === 'Pharm.D' ? (selectedStudent.currentYear || 'Year II') : `${selectedStudent.currentYear} (${selectedStudent.semester})`}</span> • <span className="text-gray-400">{selectedStudent.regulation || 'PCI 2017'}</span>
                   </p>
                   <p className="text-[11px] text-gray-500 font-mono mt-0.5">
                     Registration No: <span className="font-bold text-gray-900">{selectedStudent.regNo}</span> | Official Email: <span className="font-bold text-gray-900">{selectedStudent.officialEmail || 'Pending'}</span>
@@ -1682,21 +1667,30 @@ interface StudentImportRow {
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-2 gap-2">
+                      {selectedStudent.programme === 'Pharm.D' ? (
                         <div>
-                          <label className="text-[10px] font-extrabold uppercase text-gray-400 block mb-1">Current Year</label>
+                          <label className="text-[10px] font-extrabold uppercase text-gray-400 block mb-1">Current Academic Year</label>
                           <div className="bg-gray-100 border border-gray-200 rounded-xl px-3 py-2 font-extrabold text-gray-800">
-                            {selectedStudent.currentYear || 'Year I'}
+                            {selectedStudent.currentYear || 'Year II'}
                           </div>
                         </div>
+                      ) : (
+                        <div className="grid grid-cols-2 gap-2">
+                          <div>
+                            <label className="text-[10px] font-extrabold uppercase text-gray-400 block mb-1">Current Year</label>
+                            <div className="bg-gray-100 border border-gray-200 rounded-xl px-3 py-2 font-extrabold text-gray-800">
+                              {selectedStudent.currentYear || 'Year I'}
+                            </div>
+                          </div>
 
-                        <div>
-                          <label className="text-[10px] font-extrabold uppercase text-gray-400 block mb-1">Semester</label>
-                          <div className="bg-gray-100 border border-gray-200 rounded-xl px-3 py-2 font-extrabold text-gray-800">
-                            {selectedStudent.semester || 'Semester I'}
+                          <div>
+                            <label className="text-[10px] font-extrabold uppercase text-gray-400 block mb-1">Semester</label>
+                            <div className="bg-gray-100 border border-gray-200 rounded-xl px-3 py-2 font-extrabold text-gray-800">
+                              {selectedStudent.semester || 'Semester I'}
+                            </div>
                           </div>
                         </div>
-                      </div>
+                      )}
 
                       <div className="grid grid-cols-2 gap-2">
                         <div>
@@ -1709,7 +1703,7 @@ interface StudentImportRow {
                         <div>
                           <label className="text-[10px] font-extrabold uppercase text-gray-400 block mb-1">Regulation</label>
                           <div className="bg-gray-100 border border-gray-200 rounded-xl px-3 py-2 font-extrabold text-gray-800">
-                            {selectedStudent.regulation || 'PCI-2020'}
+                            {selectedStudent.programme === 'B.Pharm' ? 'PCI 2017' : (selectedStudent.regulation || 'PCI 2017')}
                           </div>
                         </div>
                       </div>
@@ -1719,32 +1713,42 @@ interface StudentImportRow {
                   {/* Right Column: Enrolled Courses */}
                   <GlassCard className="p-5 rounded-2xl border border-gray-200/80 bg-white lg:col-span-2 space-y-4">
                     <h4 className="text-xs font-black uppercase text-gray-400 tracking-wider">
-                      Enrolled Subject Modules ({selectedStudent.semester || 'Semester VII'})
+                      {selectedStudent.programme === 'Pharm.D'
+                        ? `Enrolled Subjects (${selectedStudent.currentYear || 'Year II'})`
+                        : `Enrolled Subject Modules (${selectedStudent.semester || 'Semester III'})`}
                     </h4>
 
                     <div className="divide-y divide-gray-100 text-xs">
-                      {activeRecord && activeRecord.registeredCourses && activeRecord.registeredCourses.length > 0 ? (
-                        activeRecord.registeredCourses.map(c => (
-                          <div key={c.id} className="py-2.5 flex items-center justify-between">
-                            <div className="flex items-center gap-3">
-                              <span className="font-mono text-xs font-black bg-gray-100 text-gray-900 px-2.5 py-1 rounded-lg border border-gray-200">
-                                {c.courseCode}
-                              </span>
-                              <div>
-                                <div className="font-extrabold text-gray-900">{c.courseName}</div>
-                                <span className="text-[10px] font-bold text-[#8B1E3F]">Semester {c.semester} • {c.type || 'Core'}</span>
+                      {(() => {
+                        const enrolled = getEnrolledCoursesForStudent(selectedStudent);
+                        if (enrolled && enrolled.length > 0) {
+                          return enrolled.map(c => (
+                            <div key={c.id} className="py-2.5 flex items-center justify-between">
+                              <div className="flex items-center gap-3">
+                                <span className="font-mono text-xs font-black bg-gray-100 text-gray-900 px-2.5 py-1 rounded-lg border border-gray-200">
+                                  {c.courseCode}
+                                </span>
+                                <div>
+                                  <div className="font-extrabold text-gray-900">{c.courseName}</div>
+                                  <span className="text-[10px] font-bold text-[#8B1E3F]">
+                                    {selectedStudent.programme === 'Pharm.D'
+                                      ? `${selectedStudent.currentYear || 'Year II'} • ${c.type || 'Core'}`
+                                      : `Semester ${c.semester} • ${c.type || 'Core'}`}
+                                  </span>
+                                </div>
                               </div>
+                              <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
+                                Enrolled
+                              </span>
                             </div>
-                            <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
-                              Enrolled
-                            </span>
+                          ));
+                        }
+                        return (
+                          <div className="py-6 text-center text-gray-400 font-medium">
+                            No subjects assigned for {selectedStudent.programme} {selectedStudent.programme === 'Pharm.D' ? (selectedStudent.currentYear || 'Year II') : (selectedStudent.semester || 'Semester III')}.
                           </div>
-                        ))
-                      ) : (
-                        <div className="py-6 text-center text-gray-400 font-medium">
-                          Default curriculum subjects assigned for {selectedStudent.programme} {selectedStudent.semester || 'Semester VII'}.
-                        </div>
-                      )}
+                        );
+                      })()}
                     </div>
                   </GlassCard>
                 </div>
@@ -2020,7 +2024,7 @@ interface StudentImportRow {
                     type="text"
                     value={formName}
                     onChange={(e) => setFormName(e.target.value)}
-                    placeholder="e.g. Akash J."
+                    placeholder="e.g. Full Student Name"
                     className="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs font-bold text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#8B1E3F]/30"
                     required
                   />

@@ -361,7 +361,9 @@ export default function SubjectHome({
           </button>
           <div>
             <span className="text-[10px] font-bold text-[#8B1E3F] uppercase tracking-widest bg-[#8B1E3F]/5 border border-[#8B1E3F]/10 px-2.5 py-0.5 rounded-full">
-              {subject.code} • Year {subject.year} • Semester {subject.semester}
+              {subject.programme === 'Pharm.D'
+                ? `${subject.code} • Year ${subject.year === 1 ? 'I' : subject.year === 2 ? 'II' : subject.year === 3 ? 'III' : subject.year === 4 ? 'IV' : subject.year === 5 ? 'V' : 'VI'}`
+                : `${subject.code} • Semester ${subject.semester}`}
             </span>
             <h1 className="font-display font-extrabold text-2xl text-gray-900 tracking-tight mt-1">
               {subject.name}

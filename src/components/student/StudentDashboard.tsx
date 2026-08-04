@@ -3,6 +3,7 @@ import { BookOpen, Award, Clock, ArrowRight, ArrowLeft, ChevronRight, Play, Cale
 import GlassCard from '../GlassCard';
 import { Subject, Announcement, StudentProgress } from '../../types';
 import { CANONICAL_SCHEDULES } from '../AcademicCalendarModule';
+import { getSemesterTheme } from '../../lib/semesterColors';
 
 interface StudentDashboardProps {
   studentProgress: StudentProgress;
@@ -100,12 +101,16 @@ export default function StudentDashboard({
     return `Year ${roman[yr - 1] || yr}`;
   };
 
+  const [scheduleCategoryFilter, setScheduleCategoryFilter] = useState<string>('All');
+
   const studentSemOrYr = studentProgress.programme === 'B.Pharm'
     ? getSemesterString(studentProgress.semester)
     : getYearString(studentProgress.year);
 
   const studentSchedule = CANONICAL_SCHEDULES.find(
     s => s.programme === studentProgress.programme && s.semesterOrYear === studentSemOrYr
+  ) || CANONICAL_SCHEDULES.find(
+    s => s.programme === studentProgress.programme
   );
 
   interface SessionalEvent {
@@ -123,7 +128,7 @@ export default function StudentDashboard({
       { title: 'II Sessional Practical', type: 'Practical', date: studentSchedule.sessionalII.practical, category: 'II Sessional' },
       { title: 'II Sessional Theory', type: 'Theory', date: studentSchedule.sessionalII.theory, category: 'II Sessional' }
     );
-    if (studentSchedule.programme === 'Pharm.D' && studentSchedule.sessionalIII) {
+    if ((studentSchedule.programme === 'Pharm.D' || studentProgress.programme === 'Pharm.D') && studentSchedule.sessionalIII) {
       studentEvents.push(
         { title: 'III Sessional Practical', type: 'Practical', date: studentSchedule.sessionalIII.practical, category: 'III Sessional' },
         { title: 'III Sessional Theory', type: 'Theory', date: studentSchedule.sessionalIII.theory, category: 'III Sessional' }
@@ -138,6 +143,7 @@ export default function StudentDashboard({
   const todayStr = '2026-07-16'; // System current local date
   const upcomingEvents = studentEvents
     .filter(evt => evt.date >= todayStr)
+    .filter(evt => scheduleCategoryFilter === 'All' || evt.category === scheduleCategoryFilter)
     .sort((a, b) => a.date.localeCompare(b.date));
 
   return (
@@ -161,7 +167,7 @@ export default function StudentDashboard({
 
       {/* 2. Upcoming Sessional & CIA Schedule Track */}
       <div className="flex flex-col gap-4" id="upcoming_sessional_section">
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <h2 className="font-display font-extrabold text-lg text-gray-900 flex items-center gap-2">
               <Calendar className="w-5 h-5 text-[#8B1E3F]" />
@@ -169,17 +175,33 @@ export default function StudentDashboard({
             </h2>
             <p className="text-xs text-gray-500">Official examination timetable mapped for {studentProgress.programme} {studentSemOrYr}</p>
           </div>
-          <button 
-            onClick={() => onGoToScreen('academic-calendar')}
-            className="text-xs font-bold text-[#8B1E3F] hover:underline"
-          >
-            Full Academic Calendar
-          </button>
+          
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0">
+            {['All', 'I Sessional', 'II Sessional', 'III Sessional', 'University Exam'].map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setScheduleCategoryFilter(cat)}
+                className={`px-3 py-1 rounded-full text-[10px] font-extrabold whitespace-nowrap transition-all ${
+                  scheduleCategoryFilter === cat
+                    ? 'bg-[#8B1E3F] text-white shadow-sm'
+                    : 'bg-white/80 text-gray-600 hover:bg-gray-100 border border-gray-200'
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+            <button 
+              onClick={() => onGoToScreen('academic-calendar')}
+              className="text-xs font-bold text-[#8B1E3F] hover:underline shrink-0 ml-2"
+            >
+              Full Calendar
+            </button>
+          </div>
         </div>
 
         {upcomingEvents.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {upcomingEvents.slice(0, 4).map((evt, idx) => {
+            {upcomingEvents.map((evt, idx) => {
               // Calculate countdown
               const target = new Date(evt.date);
               const current = new Date(todayStr);
@@ -192,15 +214,17 @@ export default function StudentDashboard({
               const isSessionalIII = evt.category === 'III Sessional';
               
               const badgeColors = isSessionalI 
-                ? 'bg-blue-50 text-blue-700 border-blue-100' 
+                ? 'bg-blue-50 text-blue-700 border-blue-200' 
                 : isSessionalII 
-                ? 'bg-purple-50 text-purple-700 border-purple-100'
+                ? 'bg-purple-50 text-purple-700 border-purple-200'
                 : isSessionalIII
-                ? 'bg-amber-50 text-amber-700 border-amber-100'
-                : 'bg-emerald-50 text-emerald-700 border-emerald-100';
+                ? 'bg-amber-50 text-amber-700 border-amber-200'
+                : 'bg-emerald-50 text-emerald-700 border-emerald-200';
+
+              const cardBorder = isSessionalIII ? 'border-l-amber-500' : isSessionalI ? 'border-l-blue-600' : isSessionalII ? 'border-l-purple-600' : 'border-l-emerald-600';
 
               return (
-                <GlassCard key={idx} hoverLift className="p-5 flex flex-col justify-between border-l-4 border-l-[#8B1E3F]">
+                <GlassCard key={idx} hoverLift className={`p-5 flex flex-col justify-between border-l-4 ${cardBorder}`}>
                   <div className="flex flex-col gap-2.5">
                     <div className="flex items-center justify-between gap-2">
                       <span className={`text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full border ${badgeColors}`}>
@@ -287,92 +311,106 @@ export default function StudentDashboard({
                   </span>
                 </div>
 
-                {/* Custom bar graph for Sessional assessments */}
-                <div className="h-44 w-full relative bg-gray-50/50 rounded-2xl border border-white p-4 flex flex-col justify-between overflow-hidden">
-                  {/* Background Grid Lines */}
-                  <div className="absolute inset-x-4 top-4 bottom-12 flex flex-col justify-between pointer-events-none">
-                    <div className="border-b border-gray-100/70 w-full h-0" />
-                    <div className="border-b border-gray-100/70 w-full h-0" />
-                    <div className="border-b border-gray-100/70 w-full h-0" />
-                    <div className="border-b border-gray-200 w-full h-0" />
+                {/* Custom bar graph or Empty state for Sessional assessments */}
+                {!currentMarks.hasMarks ? (
+                  <div className="p-8 bg-gray-50/50 rounded-2xl border border-gray-150/60 flex flex-col items-center justify-center text-center gap-2">
+                    <div className="w-10 h-10 rounded-xl bg-[#8B1E3F]/5 border border-[#8B1E3F]/10 flex items-center justify-center text-[#8B1E3F]">
+                      <Award className="w-5 h-5" />
+                    </div>
+                    <p className="text-xs font-bold text-gray-800 mt-1">No assessment data available</p>
+                    <p className="text-[11px] text-gray-500 max-w-sm">
+                      Sessional and semester examination marks will appear here once entered and published by faculty.
+                    </p>
                   </div>
-                  
-                  {/* Bars Container */}
-                  <div className="relative z-10 flex h-28 items-end justify-around px-2">
-                    {/* Bar 1: Sessional I */}
-                    <div className="flex flex-col items-center gap-1.5 h-full justify-end w-20 group">
-                      <span className="text-[10px] font-black text-[#8B1E3F]">
-                        {currentMarks.sessionalI}/30
-                      </span>
-                      <div 
-                        className="w-8 bg-gradient-to-t from-[#8B1E3F]/80 to-[#8B1E3F] rounded-t-lg shadow-sm transition-all duration-300 hover:scale-105" 
-                        style={{ height: `${sessionalIPct}%` }}
-                      />
-                      <span className="text-[10px] font-bold text-gray-500 whitespace-nowrap">Sess I</span>
-                    </div>
-
-                    {/* Bar 2: Sessional II */}
-                    <div className="flex flex-col items-center gap-1.5 h-full justify-end w-20 group">
-                      <span className="text-[10px] font-black text-[#8B1E3F]">
-                        {currentMarks.sessionalII}/30
-                      </span>
-                      <div 
-                        className="w-8 bg-gradient-to-t from-[#8B1E3F]/80 to-[#8B1E3F] rounded-t-lg shadow-sm transition-all duration-300 hover:scale-105" 
-                        style={{ height: `${sessionalIIPct}%` }}
-                      />
-                      <span className="text-[10px] font-bold text-gray-500 whitespace-nowrap">Sess II</span>
-                    </div>
-
-                    {/* Bar 3: Sessional III (Pharm.D Only) */}
-                    {isPharmD && (
-                      <div className="flex flex-col items-center gap-1.5 h-full justify-end w-20 group">
-                        <span className="text-[10px] font-black text-[#8B1E3F]">
-                          {sessionalIIIVal}/30
-                        </span>
-                        <div 
-                          className="w-8 bg-gradient-to-t from-[#8B1E3F]/80 to-[#8B1E3F] rounded-t-lg shadow-sm transition-all duration-300 hover:scale-105" 
-                          style={{ height: `${sessionalIIIPct}%` }}
-                        />
-                        <span className="text-[10px] font-bold text-gray-500 whitespace-nowrap">Sess III</span>
+                ) : (
+                  <>
+                    <div className="h-44 w-full relative bg-gray-50/50 rounded-2xl border border-white p-4 flex flex-col justify-between overflow-hidden">
+                      {/* Background Grid Lines */}
+                      <div className="absolute inset-x-4 top-4 bottom-12 flex flex-col justify-between pointer-events-none">
+                        <div className="border-b border-gray-100/70 w-full h-0" />
+                        <div className="border-b border-gray-100/70 w-full h-0" />
+                        <div className="border-b border-gray-100/70 w-full h-0" />
+                        <div className="border-b border-gray-200 w-full h-0" />
                       </div>
-                    )}
+                      
+                      {/* Bars Container */}
+                      <div className="relative z-10 flex h-28 items-end justify-around px-2">
+                        {/* Bar 1: Sessional I */}
+                        <div className="flex flex-col items-center gap-1.5 h-full justify-end w-20 group">
+                          <span className="text-[10px] font-black text-[#8B1E3F]">
+                            {currentMarks.sessionalI}/30
+                          </span>
+                          <div 
+                            className="w-8 bg-gradient-to-t from-[#8B1E3F]/80 to-[#8B1E3F] rounded-t-lg shadow-sm transition-all duration-300 hover:scale-105" 
+                            style={{ height: `${sessionalIPct}%` }}
+                          />
+                          <span className="text-[10px] font-bold text-gray-500 whitespace-nowrap">Sess I</span>
+                        </div>
 
-                  </div>
+                        {/* Bar 2: Sessional II */}
+                        <div className="flex flex-col items-center gap-1.5 h-full justify-end w-20 group">
+                          <span className="text-[10px] font-black text-[#8B1E3F]">
+                            {currentMarks.sessionalII}/30
+                          </span>
+                          <div 
+                            className="w-8 bg-gradient-to-t from-[#8B1E3F]/80 to-[#8B1E3F] rounded-t-lg shadow-sm transition-all duration-300 hover:scale-105" 
+                            style={{ height: `${sessionalIIPct}%` }}
+                          />
+                          <span className="text-[10px] font-bold text-gray-500 whitespace-nowrap">Sess II</span>
+                        </div>
 
-                  {/* Horizontal Labels */}
-                  <div className="flex justify-between items-center text-[9px] font-extrabold text-gray-400 font-mono px-2 mt-2 border-t border-gray-100 pt-1.5">
-                    <span>Max Sessional: 30 Marks</span>
-                  </div>
-                </div>
+                        {/* Bar 3: Sessional III (Pharm.D Only) */}
+                        {isPharmD && (
+                          <div className="flex flex-col items-center gap-1.5 h-full justify-end w-20 group">
+                            <span className="text-[10px] font-black text-[#8B1E3F]">
+                              {sessionalIIIVal}/30
+                            </span>
+                            <div 
+                              className="w-8 bg-gradient-to-t from-[#8B1E3F]/80 to-[#8B1E3F] rounded-t-lg shadow-sm transition-all duration-300 hover:scale-105" 
+                              style={{ height: `${sessionalIIIPct}%` }}
+                            />
+                            <span className="text-[10px] font-bold text-gray-500 whitespace-nowrap">Sess III</span>
+                          </div>
+                        )}
 
-                {/* Score breakdown metrics list */}
-                <div className={`grid grid-cols-1 ${isPharmD ? 'sm:grid-cols-3' : 'sm:grid-cols-2'} gap-4`}>
-                  <div className="p-3 bg-gray-50/50 border border-white rounded-2xl">
-                    <span className="text-[9px] font-black uppercase text-gray-400 block">Sessional I</span>
-                    <p className="text-base font-extrabold text-gray-800 mt-0.5">{currentMarks.sessionalI} <span className="text-xs text-gray-400 font-medium">/ 30 Max</span></p>
-                    <div className="w-full bg-gray-100 h-1.5 rounded-full mt-2 overflow-hidden">
-                      <div className="bg-[#8B1E3F] h-full rounded-full" style={{ width: `${sessionalIPct}%` }} />
-                    </div>
-                  </div>
+                      </div>
 
-                  <div className="p-3 bg-gray-50/50 border border-white rounded-2xl">
-                    <span className="text-[9px] font-black uppercase text-gray-400 block">Sessional II</span>
-                    <p className="text-base font-extrabold text-gray-800 mt-0.5">{currentMarks.sessionalII} <span className="text-xs text-gray-400 font-medium">/ 30 Max</span></p>
-                    <div className="w-full bg-gray-100 h-1.5 rounded-full mt-2 overflow-hidden">
-                      <div className="bg-[#8B1E3F] h-full rounded-full" style={{ width: `${sessionalIIPct}%` }} />
-                    </div>
-                  </div>
-
-                  {isPharmD && (
-                    <div className="p-3 bg-gray-50/50 border border-white rounded-2xl">
-                      <span className="text-[9px] font-black uppercase text-gray-400 block">Sessional III</span>
-                      <p className="text-base font-extrabold text-gray-800 mt-0.5">{sessionalIIIVal} <span className="text-xs text-gray-400 font-medium">/ 30 Max</span></p>
-                      <div className="w-full bg-gray-100 h-1.5 rounded-full mt-2 overflow-hidden">
-                        <div className="bg-[#8B1E3F] h-full rounded-full" style={{ width: `${sessionalIIIPct}%` }} />
+                      {/* Horizontal Labels */}
+                      <div className="flex justify-between items-center text-[9px] font-extrabold text-gray-400 font-mono px-2 mt-2 border-t border-gray-100 pt-1.5">
+                        <span>Max Sessional: 30 Marks</span>
                       </div>
                     </div>
-                  )}
-                </div>
+
+                    {/* Score breakdown metrics list */}
+                    <div className={`grid grid-cols-1 ${isPharmD ? 'sm:grid-cols-3' : 'sm:grid-cols-2'} gap-4`}>
+                      <div className="p-3 bg-gray-50/50 border border-white rounded-2xl">
+                        <span className="text-[9px] font-black uppercase text-gray-400 block">Sessional I</span>
+                        <p className="text-base font-extrabold text-gray-800 mt-0.5">{currentMarks.sessionalI !== null ? currentMarks.sessionalI : '-'} <span className="text-xs text-gray-400 font-medium">/ 30 Max</span></p>
+                        <div className="w-full bg-gray-100 h-1.5 rounded-full mt-2 overflow-hidden">
+                          <div className="bg-[#8B1E3F] h-full rounded-full" style={{ width: `${sessionalIPct}%` }} />
+                        </div>
+                      </div>
+
+                      <div className="p-3 bg-gray-50/50 border border-white rounded-2xl">
+                        <span className="text-[9px] font-black uppercase text-gray-400 block">Sessional II</span>
+                        <p className="text-base font-extrabold text-gray-800 mt-0.5">{currentMarks.sessionalII !== null ? currentMarks.sessionalII : '-'} <span className="text-xs text-gray-400 font-medium">/ 30 Max</span></p>
+                        <div className="w-full bg-gray-100 h-1.5 rounded-full mt-2 overflow-hidden">
+                          <div className="bg-[#8B1E3F] h-full rounded-full" style={{ width: `${sessionalIIPct}%` }} />
+                        </div>
+                      </div>
+
+                      {isPharmD && (
+                        <div className="p-3 bg-gray-50/50 border border-white rounded-2xl">
+                          <span className="text-[9px] font-black uppercase text-gray-400 block">Sessional III</span>
+                          <p className="text-base font-extrabold text-gray-800 mt-0.5">{sessionalIIIVal !== null ? sessionalIIIVal : '-'} <span className="text-xs text-gray-400 font-medium">/ 30 Max</span></p>
+                          <div className="w-full bg-gray-100 h-1.5 rounded-full mt-2 overflow-hidden">
+                            <div className="bg-[#8B1E3F] h-full rounded-full" style={{ width: `${sessionalIIIPct}%` }} />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </>
+                )}
 
               </div>
             ) : (
@@ -430,7 +468,13 @@ export default function StudentDashboard({
             return activeSemesterSubjects.slice(0, 3).map((sub) => {
               const completedCount = sub.resources.filter(r => r.status === 'completed').length;
               const totalCount = sub.resources.length;
-              const badgeText = sub.programme === 'B.Pharm' ? `Semester ${sub.semester}` : `Year ${sub.year}`;
+              const semNum = sub.programme === 'Pharm.D' ? (sub.year || 1) : (sub.semester || 1);
+              const semTheme = getSemesterTheme(sub.programme, semNum);
+              const getRomanYear = (y: number) => {
+                const r = ['I', 'II', 'III', 'IV', 'V', 'VI'];
+                return r[y - 1] || String(y);
+              };
+              const badgeText = sub.programme === 'Pharm.D' ? `Year ${getRomanYear(sub.year)}` : `Semester ${sub.semester}`;
 
               // Calculate actual sessional marks average out of 30
               const marks = getStudentMarks(sub.code, studentProgress.registerNumber);
@@ -449,45 +493,53 @@ export default function StudentDashboard({
               const sessionalAvgPct = sessionalAvg !== null ? (sessionalAvg / 30) * 100 : 0;
 
               return (
-                <GlassCard key={sub.id} hoverLift className="p-6 flex flex-col justify-between h-56">
+                <div 
+                  key={sub.id} 
+                  className={`relative p-6 flex flex-col justify-between h-60 rounded-3xl border bg-gradient-to-br transition-all duration-300 hover:shadow-lg overflow-hidden ${semTheme.cardBg} ${semTheme.cardBorder}`}
+                >
+                  {/* Top accent bar */}
+                  <div className={`h-1.5 w-full ${semTheme.accentStrip} absolute top-0 left-0 right-0`} />
+
                   <div>
-                    {/* Card Header with frosted tag */}
-                    <div className="flex justify-between items-start mb-3">
-                      <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{sub.code}</span>
-                      <span className="text-[10px] font-bold bg-[#8B1E3F]/5 text-[#8B1E3F] px-2.5 py-1 rounded-full border border-[#8B1E3F]/10">
+                    {/* Card Header */}
+                    <div className="flex justify-between items-start mb-3 mt-1">
+                      <span className={`text-[10px] font-mono font-black tracking-widest px-2 py-0.5 rounded-lg border ${semTheme.codeChip}`}>
+                        {sub.code}
+                      </span>
+                      <span className={`text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full border shadow-sm ${semTheme.badge}`}>
                         {badgeText}
                       </span>
                     </div>
 
-                    <h3 className="font-display font-bold text-base text-gray-900 line-clamp-1 mb-1">{sub.name}</h3>
-                    <p className="text-xs text-gray-500 mb-4">{sub.facultyName}</p>
+                    <h3 className="font-display font-extrabold text-base text-gray-900 line-clamp-1 mb-1">{sub.name}</h3>
+                    <p className="text-xs text-gray-500 font-medium mb-3">{sub.facultyName}</p>
 
                     {/* Sessional average indicator */}
-                    <div className="flex flex-col gap-1.5 mb-4">
+                    <div className="flex flex-col gap-1.5 mb-3">
                       <div className="flex justify-between text-[10px] font-bold text-gray-500">
                         <span>Sessional Mark Average</span>
-                        <span className="text-[#8B1E3F] font-black">{sessionalAvgStr} <span className="text-[9px] font-normal text-gray-400">/ 30 Max</span></span>
+                        <span className={`font-black ${semTheme.text}`}>{sessionalAvgStr} <span className="text-[9px] font-normal text-gray-400">/ 30 Max</span></span>
                       </div>
-                      <div className="w-full bg-gray-100 h-1.5 rounded-full overflow-hidden mt-1">
-                        <div className="bg-[#8B1E3F] h-full rounded-full transition-all duration-500" style={{ width: `${sessionalAvgPct}%` }} />
+                      <div className="w-full bg-gray-100 h-1.5 rounded-full overflow-hidden border border-gray-200/50">
+                        <div className={`h-full ${semTheme.accentStrip} rounded-full transition-all duration-500`} style={{ width: `${sessionalAvgPct}%` }} />
                       </div>
                     </div>
                   </div>
 
                   {/* Footer details with Action button */}
-                  <div className="flex justify-between items-center border-t border-gray-100 pt-3">
+                  <div className="flex justify-between items-center border-t border-gray-200/50 pt-3">
                     <span className="text-[10px] font-bold text-gray-400">
                       {completedCount}/{totalCount} Completed
                     </span>
                     
                     <button
                       onClick={() => onGoToSubject(sub.id)}
-                      className="flex items-center gap-1.5 text-xs font-bold text-[#8B1E3F] hover:text-[#b32a4e] transition-colors bg-[#8B1E3F]/10 hover:bg-[#8B1E3F]/20 px-3 py-1.5 rounded-full"
+                      className={`flex items-center gap-1.5 text-xs font-black px-3 py-1.5 rounded-full cursor-pointer ${semTheme.buttonStyle}`}
                     >
                       Resume <Play className="w-3 h-3 fill-current" />
                     </button>
                   </div>
-                </GlassCard>
+                </div>
               );
             });
           })()}

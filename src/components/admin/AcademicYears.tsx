@@ -5,6 +5,7 @@ import {
   Layers, ShieldCheck, Filter, RefreshCw, CheckCircle2, ChevronRight
 } from 'lucide-react';
 import GlassCard from '../GlassCard';
+import { useAcademicYear } from '../../context/AcademicYearContext';
 import { getStudentsMaster } from '../../data/studentRegistry';
 import { 
   AcademicEnrollment, 
@@ -19,6 +20,9 @@ interface AcademicYearsProps {
 }
 
 export default function AcademicYears({ onBack }: AcademicYearsProps) {
+  // Global Academic Year context
+  const { setActiveAcademicYear } = useAcademicYear();
+
   // Navigation tab state: 'sessions' | 'promotion'
   const [activeTab, setActiveTab] = useState<'sessions' | 'promotion'>('sessions');
 
@@ -50,6 +54,13 @@ export default function AcademicYears({ onBack }: AcademicYearsProps) {
 
   const handleSetActive = (id: string) => {
     setYears(years.map((y) => ({ ...y, isActive: y.id === id })));
+    const target = years.find(y => y.id === id);
+    if (target) {
+      const match = target.name.match(/\d{4}-\d{4}/);
+      if (match) {
+        setActiveAcademicYear(match[0]);
+      }
+    }
   };
 
   // =========================================================================

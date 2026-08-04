@@ -3,6 +3,7 @@ import {
   BarChart3, Search, Filter, Download, RefreshCw
 } from 'lucide-react';
 import GlassCard from '../GlassCard';
+import AcademicSessionWorkspace from '../AcademicSessionWorkspace';
 import { Subject } from '../../types';
 import { getStudentsMaster } from '../../data/studentRegistry';
 
@@ -414,6 +415,11 @@ export default function AdminAnalytics({ subjects }: AdminAnalyticsProps) {
         </div>
       </div>
 
+      {/* OBE ACADEMIC SESSION WORKSPACE */}
+      <AcademicSessionWorkspace
+        moduleName="OBE ACADEMIC SESSION WORKSPACE"
+      />
+
       {/* FILTER CONTROL PANEL */}
       <GlassCard className="p-6">
         <div className="flex items-center gap-2 mb-4">
@@ -513,20 +519,24 @@ export default function AdminAnalytics({ subjects }: AdminAnalyticsProps) {
         <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/20">
           <div>
             <h3 className="font-display font-extrabold text-md text-gray-900 uppercase tracking-wide">
-              Detailed Student Marks Sheet ({filteredData.length} records found)
+              Detailed Student Marks Sheet ({filteredData.length} Records Found)
             </h3>
             <p className="text-[11px] text-gray-400 font-medium">
               Live score compilation of sessionals and terminal college tests for the selected course
             </p>
           </div>
-          {filteredData.length > 0 && (
-            <div className="text-right">
-              <span className="text-[11px] font-black text-slate-400 uppercase tracking-wider block">Estimated Pass Rate</span>
+          <div className="text-right">
+            <span className="text-[11px] font-black text-slate-400 uppercase tracking-wider block">Estimated Pass Rate</span>
+            {filteredData.length > 0 ? (
               <span className="font-mono text-sm font-black text-emerald-600 bg-emerald-50 border border-emerald-100 px-2.5 py-0.5 rounded-full inline-block mt-0.5">
                 {stats.passRate.toFixed(1)}%
               </span>
-            </div>
-          )}
+            ) : (
+              <span className="font-mono text-xs font-bold text-gray-400 bg-gray-100 border border-gray-200 px-2.5 py-0.5 rounded-full inline-block mt-0.5">
+                N/A
+              </span>
+            )}
+          </div>
         </div>
 
         <div className="overflow-x-auto">
@@ -549,7 +559,12 @@ export default function AdminAnalytics({ subjects }: AdminAnalyticsProps) {
               {filteredData.length === 0 ? (
                 <tr>
                   <td colSpan={10} className="py-12 text-center text-gray-500 font-medium">
-                    OBE analytics will be generated automatically once CIA, practical, and semester examination marks have been entered and mapped to Course Outcomes (COs).
+                    <div className="flex flex-col items-center justify-center gap-2">
+                      <p className="text-sm font-bold text-gray-800">No student marks available for this course.</p>
+                      <p className="text-xs text-gray-500 max-w-md mx-auto">
+                        No examination data has been entered for the selected academic session. Analytics will be generated after marks are uploaded.
+                      </p>
+                    </div>
                   </td>
                 </tr>
               ) : (

@@ -6,6 +6,7 @@ import {
   Search, ExternalLink, Calendar, HelpCircle, Check, Loader2, Info, Edit, Layers, Library
 } from 'lucide-react';
 import GlassCard from '../GlassCard';
+import AcademicSessionWorkspace from '../AcademicSessionWorkspace';
 import CurriculumTabContent from './CurriculumTabContent';
 import { Subject, Resource } from '../../types';
 import { resolveFacultyForCourse } from '../../data/facultyRegistry';
@@ -106,8 +107,19 @@ export default function SubjectManagement({
       }
     } else {
       const masterList = getStudentsMaster();
-      const filtered = masterList.filter(s => s.programme === subject.programme);
-      const studentSource = filtered.length > 0 ? filtered : masterList;
+      const filtered = masterList.filter(s => {
+        const progMatch = s.programme === subject.programme;
+        let semMatch = true;
+        if (subject.semester) {
+          const semNumStr = String(subject.semester).replace(/\D/g, '');
+          const stdSemNumStr = String(s.semester || '').replace(/\D/g, '');
+          if (semNumStr && stdSemNumStr) {
+            semMatch = semNumStr === stdSemNumStr;
+          }
+        }
+        return progMatch && semMatch;
+      });
+      const studentSource = filtered.length > 0 ? filtered : masterList.filter(s => s.programme === subject.programme);
 
       const defaultList: EnrolledStudent[] = studentSource.map((std, idx) => {
         return {
@@ -147,6 +159,26 @@ export default function SubjectManagement({
   const [resDesc, setResDesc] = useState('');
   const [resMeta, setResMeta] = useState(''); // e.g. "45 mins" or "3.5 MB"
   const [resUrl, setResUrl] = useState('');
+
+  // Rich Video Authoring Metadata
+  const [resSpeaker, setResSpeaker] = useState('');
+  const [resOverview, setResOverview] = useState('');
+  const [resObjectives, setResObjectives] = useState('');
+  const [resOutcomes, setResOutcomes] = useState('');
+  const [resConcepts, setResConcepts] = useState('');
+  const [resPrerequisites, setResPrerequisites] = useState('');
+  const [resSuggestedReading, setResSuggestedReading] = useState('');
+  const [resReferences, setResReferences] = useState('');
+  const [resBeforeWatching, setResBeforeWatching] = useState('');
+  const [resAfterWatching, setResAfterWatching] = useState('');
+  const [resSelfAssessment, setResSelfAssessment] = useState('');
+  const [resPracticeActivities, setResPracticeActivities] = useState('');
+  const [resPptUrl, setResPptUrl] = useState('');
+  const [resPdfNotesUrl, setResPdfNotesUrl] = useState('');
+  const [resHandoutUrl, setResHandoutUrl] = useState('');
+  const [resExternalRefUrl, setResExternalRefUrl] = useState('');
+  const [resCourseOutcomes, setResCourseOutcomes] = useState('CO1');
+  const [resDifficulty, setResDifficulty] = useState<'Beginner' | 'Intermediate' | 'Advanced'>('Intermediate');
 
   // Excel Workbook Live Import States (within Settings Tab)
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -204,11 +236,31 @@ export default function SubjectManagement({
       id: `res-added-${Date.now()}`,
       type: resType as any,
       title: resTitle.trim(),
-      description: resDesc || `Supplementary resource for topic ${topic?.topicName || selectedTopicCode}`,
+      description: resDesc || resOverview || `Supplementary resource for topic ${topic?.topicName || selectedTopicCode}`,
       status: 'not-started',
       unit: selectedTopicUnit || 'Unit I',
       topicCode: selectedTopicCode,
-      url: resUrl || 'https://www.w3schools.com/html/mov_bbb.mp4'
+      url: resUrl || 'https://www.w3schools.com/html/mov_bbb.mp4',
+
+      speaker: resSpeaker || subject.facultyName,
+      topic: topic?.topicName || selectedTopicCode,
+      overview: resOverview || resDesc,
+      learningObjectives: resObjectives,
+      learningOutcomes: resOutcomes,
+      keyConcepts: resConcepts,
+      prerequisites: resPrerequisites,
+      suggestedReading: resSuggestedReading,
+      references: resReferences,
+      beforeWatching: resBeforeWatching,
+      afterWatching: resAfterWatching,
+      selfAssessment: resSelfAssessment,
+      practiceActivities: resPracticeActivities,
+      pptUrl: resPptUrl,
+      pdfNotesUrl: resPdfNotesUrl,
+      handoutUrl: resHandoutUrl,
+      externalRefUrl: resExternalRefUrl,
+      courseOutcomes: resCourseOutcomes,
+      difficultyLevel: resDifficulty,
     };
 
     if (resType === 'Video') {
@@ -229,6 +281,22 @@ export default function SubjectManagement({
     setResDesc('');
     setResMeta('');
     setResUrl('');
+    setResSpeaker('');
+    setResOverview('');
+    setResObjectives('');
+    setResOutcomes('');
+    setResConcepts('');
+    setResPrerequisites('');
+    setResSuggestedReading('');
+    setResReferences('');
+    setResBeforeWatching('');
+    setResAfterWatching('');
+    setResSelfAssessment('');
+    setResPracticeActivities('');
+    setResPptUrl('');
+    setResPdfNotesUrl('');
+    setResHandoutUrl('');
+    setResExternalRefUrl('');
     setShowAddResourceModal(false);
     triggerToast(`Published material to topic ${selectedTopicCode} successfully.`);
   };
@@ -462,12 +530,19 @@ export default function SubjectManagement({
               <ArrowLeft className="w-4 h-4" /> Back to Curriculum Directory
             </button>
             <div className="flex flex-wrap items-center gap-2">
-              <span className="text-[10px] font-bold uppercase tracking-widest text-pink-100 bg-white/10 px-3 py-1 rounded-full">
-                PCI Subject Frame
-              </span>
               <span className="text-xs font-mono font-bold bg-white/10 text-pink-150 px-2.5 py-0.5 rounded-full">
                 {subject.code}
               </span>
+              {(subject.academicYear === '2026-2027' || !subject.academicYear) ? (
+                <span className="inline-flex items-center gap-1.5 bg-emerald-500/20 text-emerald-100 border border-emerald-400/30 font-bold px-2.5 py-0.5 rounded-full text-[10px]">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  🟢 Current Academic Session
+                </span>
+              ) : (
+                <span className="text-[10px] font-bold bg-white/10 text-gray-200 border border-white/20 px-2.5 py-0.5 rounded-full font-mono">
+                  AY {subject.academicYear}
+                </span>
+              )}
               <span className="text-[10px] font-bold bg-emerald-500/20 text-emerald-100 border border-emerald-500/30 px-2.5 py-0.5 rounded-full uppercase font-mono">
                 {subjectInfo?.status || 'Approved'}
               </span>
@@ -475,12 +550,17 @@ export default function SubjectManagement({
             <h1 className="font-display font-extrabold text-2.5xl tracking-tight mt-1.5 leading-tight">
               {subjectInfo?.courseName || subject.name}
             </h1>
-            <p className="text-xs text-pink-100/90 max-w-xl leading-relaxed font-medium mt-1">
-              Active Syllabus: {subjectInfo?.regulation || 'PCI 2017'} — Year {subjectInfo?.year || subject.year}, Semester {subjectInfo?.semester || subject.semester}
+            <p className="text-xs text-pink-100/90 max-w-2xl leading-relaxed font-medium mt-1">
+              Programme: <strong>{subject.programme}</strong> • {subject.programme === 'Pharm.D' ? `Year ${subject.year}` : `Semester ${subject.semester || subject.year}`} • Session: <strong>AY {subject.academicYear || '2026–2027'}</strong> • Regulation: <strong>{subject.regulation || 'PCI 2017'}</strong>
             </p>
           </div>
         </div>
       </div>
+
+      {/* ATTENDANCE & ASSESSMENT ACADEMIC SESSION WORKSPACE */}
+      <AcademicSessionWorkspace
+        moduleName="ATTENDANCE & ASSESSMENT ACADEMIC SESSION WORKSPACE"
+      />
 
       {/* Navigation tabs */}
       <div className="border-b border-gray-150/60 pb-1.5 flex flex-wrap gap-2">
@@ -543,7 +623,7 @@ export default function SubjectManagement({
                     <span className="text-gray-800">{subjectInfo?.subjectType || 'Theory'} Class</span>
                   </div>
                   <div className="p-3 bg-gray-50 rounded-xl">
-                    <span className="text-[8px] font-black uppercase text-gray-400 block mb-0.5">Faculty Lead</span>
+                    <span className="text-[8px] font-black uppercase text-gray-400 block mb-0.5">Subject In Charge</span>
                     <span className="text-gray-800">
                       {subjectInfo ? resolveFacultyForCourse({
                         academicYear: subjectInfo.academicYear,
@@ -606,8 +686,8 @@ export default function SubjectManagement({
                     <span className="text-emerald-600 font-black uppercase">{subjectInfo?.status || 'Approved'}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Class Size:</span>
-                    <span className="text-gray-800 font-extrabold">{cohort.length} Registered</span>
+                    <span>Enrolled Students:</span>
+                    <span className="text-gray-800 font-extrabold">{cohort.length} Enrolled</span>
                   </div>
                 </div>
               </GlassCard>
@@ -638,10 +718,6 @@ export default function SubjectManagement({
                   onChange={(e) => setResourceSearch(e.target.value)}
                   className="w-full bg-white border border-gray-200/80 rounded-full pl-10 pr-4 py-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-[#8B1E3F] focus:border-[#8B1E3F] font-semibold"
                 />
-              </div>
-
-              <div className="p-3 bg-gray-50 border border-gray-100 rounded-xl text-[11px] font-bold text-gray-500">
-                LMS Hierarchy: Course Unit ➔ Curriculum Topic ➔ Supplemental Resources
               </div>
             </div>
 
@@ -899,9 +975,9 @@ export default function SubjectManagement({
                     <div className="w-12 h-12 rounded-2xl bg-[#8B1E3F]/5 border border-[#8B1E3F]/10 flex items-center justify-center text-[#8B1E3F]">
                       <BarChart3 className="w-6 h-6" />
                     </div>
-                    <h3 className="font-display font-bold text-base text-gray-900 mt-1">No OBE Analytics Available</h3>
+                    <h3 className="font-display font-bold text-base text-gray-900 mt-1">No student marks available for this course</h3>
                     <p className="text-xs text-gray-500 max-w-lg leading-relaxed font-medium">
-                      OBE analytics will be generated automatically once CIA, practical, and semester examination marks have been entered and mapped to Course Outcomes (COs).
+                      No examination data has been entered for the selected academic session. Analytics will be generated after marks are uploaded.
                     </p>
                   </div>
                 );
@@ -1188,19 +1264,19 @@ export default function SubjectManagement({
 
       {/* Add Supplementary Resource Modal */}
       {showAddResourceModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/40 backdrop-blur-sm">
-          <GlassCard className="max-w-lg w-full p-6 border border-gray-150 shadow-2xl animate-scaleIn">
-            <h3 className="font-display font-black text-base text-gray-900 mb-1 flex items-center gap-2">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/40 backdrop-blur-sm overflow-y-auto">
+          <GlassCard className="max-w-2xl w-full p-6 my-8 border border-gray-150 shadow-2xl animate-scaleIn max-h-[88vh] flex flex-col">
+            <h3 className="font-display font-black text-base text-gray-900 mb-1 flex items-center gap-2 shrink-0">
               <Play className="w-5 h-5 text-[#8B1E3F]" />
               Publish Materials to Topic {selectedTopicCode}
             </h3>
-            <p className="text-[11px] text-gray-400 font-bold uppercase tracking-wide border-b border-gray-100 pb-3 mb-4">
-              Teaching Workspace — LMS supplemental materials stream
+            <p className="text-[11px] text-gray-400 font-bold uppercase tracking-wide border-b border-gray-100 pb-3 mb-4 shrink-0">
+              Teaching Workspace — LMS supplemental materials & Video Authoring Hub
             </p>
 
-            <form onSubmit={handleAddResourceSubmit} className="flex flex-col gap-4 text-xs font-bold text-gray-700">
+            <form onSubmit={handleAddResourceSubmit} className="flex flex-col gap-4 text-xs font-bold text-gray-700 overflow-y-auto pr-2">
               
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-gray-400 text-[10px] uppercase tracking-wide mb-1">Resource Category</label>
                   <select 
@@ -1230,41 +1306,208 @@ export default function SubjectManagement({
                 </div>
               </div>
 
-              <div>
-                <label className="block text-gray-400 text-[10px] uppercase tracking-wide mb-1">Material Title</label>
-                <input 
-                  type="text"
-                  required
-                  placeholder="e.g. Structure & Histology of Osseous Tissues"
-                  value={resTitle}
-                  onChange={(e) => setResTitle(e.target.value)}
-                  className="w-full bg-gray-50 border border-gray-200 rounded-xl p-2.5 focus:ring-1 focus:ring-[#8B1E3F] outline-none"
-                />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-gray-400 text-[10px] uppercase tracking-wide mb-1">Material Title</label>
+                  <input 
+                    type="text"
+                    required
+                    placeholder="e.g. Structure & Histology of Osseous Tissues"
+                    value={resTitle}
+                    onChange={(e) => setResTitle(e.target.value)}
+                    className="w-full bg-gray-50 border border-gray-200 rounded-xl p-2.5 focus:ring-1 focus:ring-[#8B1E3F] outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-gray-400 text-[10px] uppercase tracking-wide mb-1">Speaker / Faculty Name</label>
+                  <input 
+                    type="text"
+                    placeholder={`Default: ${subject.facultyName}`}
+                    value={resSpeaker}
+                    onChange={(e) => setResSpeaker(e.target.value)}
+                    className="w-full bg-gray-50 border border-gray-200 rounded-xl p-2.5 focus:ring-1 focus:ring-[#8B1E3F] outline-none"
+                  />
+                </div>
               </div>
 
               <div>
-                <label className="block text-gray-400 text-[10px] uppercase tracking-wide mb-1">Study Description</label>
-                <textarea 
-                  placeholder="Key concepts, homework topics, or slide notes references..."
-                  rows={3}
-                  value={resDesc}
-                  onChange={(e) => setResDesc(e.target.value)}
-                  className="w-full bg-gray-50 border border-gray-200 rounded-xl p-2.5 focus:ring-1 focus:ring-[#8B1E3F] outline-none font-semibold text-gray-600"
-                />
-              </div>
-
-              <div>
-                <label className="block text-gray-400 text-[10px] uppercase tracking-wide mb-1">Access URL / Resource Link</label>
+                <label className="block text-gray-400 text-[10px] uppercase tracking-wide mb-1">Video Stream / Access URL</label>
                 <input 
                   type="text"
                   placeholder="e.g. https://www.w3schools.com/html/mov_bbb.mp4"
                   value={resUrl}
                   onChange={(e) => setResUrl(e.target.value)}
-                  className="w-full bg-gray-50 border border-gray-200 rounded-xl p-2.5 focus:ring-1 focus:ring-[#8B1E3F] outline-none"
+                  className="w-full bg-gray-50 border border-gray-200 rounded-xl p-2.5 focus:ring-1 focus:ring-[#8B1E3F] outline-none font-mono text-[11px]"
                 />
               </div>
 
-              <div className="flex justify-end gap-2.5 border-t border-gray-100 pt-4 mt-2">
+              {/* Extended Video Lecture Metadata Fields */}
+              {resType === 'Video' && (
+                <div className="flex flex-col gap-4 border-t border-gray-100 pt-4 mt-1">
+                  <span className="text-[10px] font-black uppercase tracking-wider text-[#8B1E3F] bg-rose-50 border border-rose-100 px-3 py-1 rounded-full w-max">
+                    Video Lecture Academic Metadata
+                  </span>
+
+                  <div>
+                    <label className="block text-gray-500 text-[10px] uppercase tracking-wide mb-1">Lecture Overview</label>
+                    <textarea 
+                      placeholder="High-level description of the lecture topic, clinical context, and scope..."
+                      rows={2}
+                      value={resOverview}
+                      onChange={(e) => setResOverview(e.target.value)}
+                      className="w-full bg-gray-50 border border-gray-200 rounded-xl p-2.5 focus:ring-1 focus:ring-[#8B1E3F] outline-none font-medium text-gray-700"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-gray-500 text-[10px] uppercase tracking-wide mb-1">Learning Objectives (One per line)</label>
+                      <textarea 
+                        placeholder="e.g. Understand osteon structure&#10;Explain bone remodeling pathways&#10;Identify mineral matrix components"
+                        rows={3}
+                        value={resObjectives}
+                        onChange={(e) => setResObjectives(e.target.value)}
+                        className="w-full bg-gray-50 border border-gray-200 rounded-xl p-2.5 focus:ring-1 focus:ring-[#8B1E3F] outline-none font-medium text-gray-700"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-gray-500 text-[10px] uppercase tracking-wide mb-1">Key Concepts Covered (One per line)</label>
+                      <textarea 
+                        placeholder="e.g. Osteoclasts & Osteoblasts&#10;Haversian Canals&#10;Calcium Homeostasis"
+                        rows={3}
+                        value={resConcepts}
+                        onChange={(e) => setResConcepts(e.target.value)}
+                        className="w-full bg-gray-50 border border-gray-200 rounded-xl p-2.5 focus:ring-1 focus:ring-[#8B1E3F] outline-none font-medium text-gray-700"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-gray-500 text-[10px] uppercase tracking-wide mb-1">Prerequisites</label>
+                      <input 
+                        type="text"
+                        placeholder="e.g. General Cell Biology & High School Chemistry"
+                        value={resPrerequisites}
+                        onChange={(e) => setResPrerequisites(e.target.value)}
+                        className="w-full bg-gray-50 border border-gray-200 rounded-xl p-2.5 focus:ring-1 focus:ring-[#8B1E3F] outline-none"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-gray-500 text-[10px] uppercase tracking-wide mb-1">Course Outcome Tag</label>
+                      <input 
+                        type="text"
+                        placeholder="e.g. CO1, CO2"
+                        value={resCourseOutcomes}
+                        onChange={(e) => setResCourseOutcomes(e.target.value)}
+                        className="w-full bg-gray-50 border border-gray-200 rounded-xl p-2.5 focus:ring-1 focus:ring-[#8B1E3F] outline-none font-mono"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Guidance Section */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-gray-500 text-[10px] uppercase tracking-wide mb-1">Before Watching Guidance</label>
+                      <input 
+                        type="text"
+                        placeholder="e.g. Review Unit I diagrams on tissue classification"
+                        value={resBeforeWatching}
+                        onChange={(e) => setResBeforeWatching(e.target.value)}
+                        className="w-full bg-gray-50 border border-gray-200 rounded-xl p-2.5 focus:ring-1 focus:ring-[#8B1E3F] outline-none"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-gray-500 text-[10px] uppercase tracking-wide mb-1">After Watching Guidance</label>
+                      <input 
+                        type="text"
+                        placeholder="e.g. Attempt Self-Assessment Q1-Q5 in study manual"
+                        value={resAfterWatching}
+                        onChange={(e) => setResAfterWatching(e.target.value)}
+                        className="w-full bg-gray-50 border border-gray-200 rounded-xl p-2.5 focus:ring-1 focus:ring-[#8B1E3F] outline-none"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Attachments Section */}
+                  <div className="p-3 bg-gray-50 border border-gray-150 rounded-2xl flex flex-col gap-3">
+                    <span className="text-[10px] font-black uppercase text-gray-500">Resource Links & Attachments</span>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-gray-400 text-[9px] uppercase tracking-wide mb-0.5">PPT / Slides URL</label>
+                        <input 
+                          type="text"
+                          placeholder="e.g. https://example.com/slides.pptx"
+                          value={resPptUrl}
+                          onChange={(e) => setResPptUrl(e.target.value)}
+                          className="w-full bg-white border border-gray-200 rounded-lg p-2 font-mono text-[10px]"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-gray-400 text-[9px] uppercase tracking-wide mb-0.5">PDF Notes Download URL</label>
+                        <input 
+                          type="text"
+                          placeholder="e.g. https://example.com/notes.pdf"
+                          value={resPdfNotesUrl}
+                          onChange={(e) => setResPdfNotesUrl(e.target.value)}
+                          className="w-full bg-white border border-gray-200 rounded-lg p-2 font-mono text-[10px]"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-gray-400 text-[9px] uppercase tracking-wide mb-0.5">Handout / Worksheet URL</label>
+                        <input 
+                          type="text"
+                          placeholder="e.g. https://example.com/handout.pdf"
+                          value={resHandoutUrl}
+                          onChange={(e) => setResHandoutUrl(e.target.value)}
+                          className="w-full bg-white border border-gray-200 rounded-lg p-2 font-mono text-[10px]"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-gray-400 text-[9px] uppercase tracking-wide mb-0.5">External Reference Link</label>
+                        <input 
+                          type="text"
+                          placeholder="e.g. https://pubmed.ncbi.nlm.nih.gov/..."
+                          value={resExternalRefUrl}
+                          onChange={(e) => setResExternalRefUrl(e.target.value)}
+                          className="w-full bg-white border border-gray-200 rounded-lg p-2 font-mono text-[10px]"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-gray-500 text-[10px] uppercase tracking-wide mb-1">Recommended References</label>
+                    <input 
+                      type="text"
+                      placeholder="e.g. Ross & Wilson Anatomy and Physiology (13th Ed)"
+                      value={resReferences}
+                      onChange={(e) => setResReferences(e.target.value)}
+                      className="w-full bg-gray-50 border border-gray-200 rounded-xl p-2.5 focus:ring-1 focus:ring-[#8B1E3F] outline-none"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* Standard Study Description for non-video */}
+              {resType !== 'Video' && (
+                <div>
+                  <label className="block text-gray-400 text-[10px] uppercase tracking-wide mb-1">Study Description</label>
+                  <textarea 
+                    placeholder="Key concepts, homework topics, or slide notes references..."
+                    rows={3}
+                    value={resDesc}
+                    onChange={(e) => setResDesc(e.target.value)}
+                    className="w-full bg-gray-50 border border-gray-200 rounded-xl p-2.5 focus:ring-1 focus:ring-[#8B1E3F] outline-none font-semibold text-gray-600"
+                  />
+                </div>
+              )}
+
+              <div className="flex justify-end gap-2.5 border-t border-gray-100 pt-4 mt-2 shrink-0">
                 <button 
                   type="button"
                   onClick={() => setShowAddResourceModal(false)}
@@ -1274,7 +1517,7 @@ export default function SubjectManagement({
                 </button>
                 <button 
                   type="submit"
-                  className="px-4 py-2 bg-[#8B1E3F] hover:bg-[#a12349] text-white text-xs font-bold rounded-full transition-all shadow"
+                  className="px-5 py-2 bg-[#8B1E3F] hover:bg-[#a12349] text-white text-xs font-bold rounded-full transition-all shadow"
                 >
                   Publish Material
                 </button>

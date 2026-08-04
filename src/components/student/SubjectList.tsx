@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Search, Filter, BookOpen, GraduationCap, ArrowRight, CheckCircle2 } from 'lucide-react';
 import GlassCard from '../GlassCard';
 import { Subject, ProgrammeType, StudentProgress } from '../../types';
+import { getSemesterTheme } from '../../lib/semesterColors';
 
 interface SubjectListProps {
   subjects: Subject[];
@@ -13,23 +14,24 @@ interface SubjectListProps {
 
 export default function SubjectList({
   subjects,
-  selectedProgramme,
+  selectedProgramme = 'B.Pharm',
   onGoToSubject,
   searchQuery,
   studentProgress,
 }: SubjectListProps) {
-  const isBPharm = selectedProgramme === 'B.Pharm';
+  const isPharmD = selectedProgramme === 'Pharm.D';
+  const isMPharm = selectedProgramme === 'M.Pharm';
 
   // Initialize filters based on student's active semester or year if applicable, else 'all'
   const [selectedYear, setSelectedYear] = useState<number | 'all'>(() => {
-    if (studentProgress && studentProgress.programme === selectedProgramme && !isBPharm) {
+    if (studentProgress && studentProgress.programme === selectedProgramme && isPharmD) {
       return studentProgress.year;
     }
     return 'all';
   });
 
   const [selectedSemester, setSelectedSemester] = useState<number | 'all'>(() => {
-    if (studentProgress && studentProgress.programme === selectedProgramme && isBPharm) {
+    if (studentProgress && studentProgress.programme === selectedProgramme && !isPharmD) {
       return studentProgress.semester;
     }
     return 'all';
@@ -44,14 +46,12 @@ export default function SubjectList({
         sub.facultyName.toLowerCase().includes(searchQuery.toLowerCase())
       : true;
     
-    if (isBPharm) {
-      // B.Pharm uses Semesters 1-8
-      const matchesSem = selectedSemester === 'all' ? true : sub.semester === selectedSemester;
-      return matchesProg && matchesSearch && matchesSem;
-    } else {
-      // Pharm.D uses Years 1-5
+    if (isPharmD) {
       const matchesYear = selectedYear === 'all' ? true : sub.year === selectedYear;
       return matchesProg && matchesSearch && matchesYear;
+    } else {
+      const matchesSem = selectedSemester === 'all' ? true : sub.semester === selectedSemester;
+      return matchesProg && matchesSearch && matchesSem;
     }
   });
 
@@ -60,50 +60,95 @@ export default function SubjectList({
       {/* Search and Filters Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="font-display font-extrabold text-2xl text-gray-900 tracking-tight">
-            Academic Subjects ({selectedProgramme})
+          <h1 className="font-display font-extrabold text-2xl text-gray-900 tracking-tight flex items-center gap-2 flex-wrap">
+            <span>Academic Subjects</span>
+            <span className="text-xs bg-[#8B1E3F]/10 text-[#8B1E3F] px-2.5 py-0.5 rounded-full font-black border border-[#8B1E3F]/20">
+              {selectedProgramme}
+            </span>
+            <span className="text-xs bg-gray-100 text-gray-700 px-2.5 py-0.5 rounded-full font-bold border border-gray-200">
+              {isPharmD 
+                ? (selectedYear === 'all' ? 'All Years' : `Year ${selectedYear === 1 ? 'I' : selectedYear === 2 ? 'II' : selectedYear === 3 ? 'III' : selectedYear === 4 ? 'IV' : selectedYear === 5 ? 'V' : 'VI'}`)
+                : (selectedSemester === 'all' ? 'All Semesters' : `Semester ${selectedSemester === 1 ? 'I' : selectedSemester === 2 ? 'II' : selectedSemester === 3 ? 'III' : selectedSemester === 4 ? 'IV' : selectedSemester === 5 ? 'V' : selectedSemester === 6 ? 'VI' : selectedSemester === 7 ? 'VII' : 'VIII'}`)
+              }
+            </span>
           </h1>
+          <p className="text-xs text-gray-500 font-medium mt-0.5">
+            {isPharmD ? 'Annual curriculum subjects & clinical modules' : 'Semester-wise curriculum subjects'}
+          </p>
         </div>
 
         {/* Apple Segmented Controls for Years & Semesters */}
         <GlassCard className="p-2 flex flex-wrap gap-2 items-center h-auto">
-          {!isBPharm ? (
-            <div className="flex items-center gap-1.5 bg-gray-100/60 p-1 rounded-full border border-white/20">
-              <span className="text-[10px] font-bold text-gray-500 px-2">Year:</span>
-              {([ 'all', 1, 2, 3, 4, 5, 6 ] as const).map((year) => (
-                <button
-                  key={year}
-                  onClick={() => setSelectedYear(year)}
-                  className={`
-                    text-[10px] font-bold px-3 py-1 rounded-full transition-all duration-200
-                    ${selectedYear === year 
-                      ? 'bg-white text-gray-900 shadow-sm' 
-                      : 'text-gray-500 hover:text-gray-900'
-                    }
-                  `}
-                >
-                  {year === 'all' ? 'All' : `Yr ${year}`}
-                </button>
-              ))}
+          {isPharmD ? (
+            <div className="flex items-center gap-1 bg-gray-100/60 p-1 rounded-full border border-white/20">
+              <span className="text-[10px] font-bold text-gray-500 px-2">Academic Year:</span>
+              {([ 1, 2, 3, 4, 5, 6, 'all' ] as const).map((year) => {
+                const isSel = selectedYear === year;
+                const theme = year !== 'all' ? getSemesterTheme('Pharm.D', year) : null;
+                const labelMap: Record<number, string> = { 1: 'Year I', 2: 'Year II', 3: 'Year III', 4: 'Year IV', 5: 'Year V', 6: 'Year VI' };
+                const label = year === 'all' ? 'All Years' : labelMap[year];
+                return (
+                  <button
+                    key={year}
+                    onClick={() => setSelectedYear(year)}
+                    className={`
+                      text-[10px] font-extrabold px-3 py-1 rounded-full transition-all duration-200 border cursor-pointer
+                      ${isSel 
+                        ? theme ? `${theme.badge} shadow-sm ring-1 ring-current` : 'bg-white text-gray-900 border-gray-300 shadow-sm' 
+                        : 'bg-transparent text-gray-500 border-transparent hover:text-gray-900'
+                      }
+                    `}
+                  >
+                    {label}
+                  </button>
+                );
+              })}
+            </div>
+          ) : isMPharm ? (
+            <div className="flex items-center gap-1 bg-gray-100/60 p-1 rounded-full border border-white/20">
+              <span className="text-[10px] font-bold text-gray-500 px-2">Semester:</span>
+              {([ 'all', 1, 2, 3, 4 ] as const).map((sem) => {
+                const isSel = selectedSemester === sem;
+                const theme = sem !== 'all' ? getSemesterTheme('M.Pharm', sem) : null;
+                return (
+                  <button
+                    key={sem}
+                    onClick={() => setSelectedSemester(sem)}
+                    className={`
+                      text-[10px] font-extrabold px-3 py-1 rounded-full transition-all duration-200 border cursor-pointer
+                      ${isSel 
+                        ? theme ? `${theme.badge} shadow-sm ring-1 ring-current` : 'bg-white text-gray-900 border-gray-300 shadow-sm' 
+                        : 'bg-transparent text-gray-500 border-transparent hover:text-gray-900'
+                      }
+                    `}
+                  >
+                    {sem === 'all' ? 'All' : `Sem ${sem}`}
+                  </button>
+                );
+              })}
             </div>
           ) : (
-            <div className="flex items-center gap-1.5 bg-gray-100/60 p-1 rounded-full border border-white/20">
+            <div className="flex items-center gap-1 bg-gray-100/60 p-1 rounded-full border border-white/20">
               <span className="text-[10px] font-bold text-gray-500 px-2">Semester:</span>
-              {([ 'all', 1, 2, 3, 4, 5, 6, 7, 8 ] as const).map((sem) => (
-                <button
-                  key={sem}
-                  onClick={() => setSelectedSemester(sem)}
-                  className={`
-                    text-[10px] font-bold px-3 py-1 rounded-full transition-all duration-200
-                    ${selectedSemester === sem 
-                      ? 'bg-white text-gray-900 shadow-sm' 
-                      : 'text-gray-500 hover:text-gray-900'
-                    }
-                  `}
-                >
-                  {sem === 'all' ? 'All' : `Sem ${sem}`}
-                </button>
-              ))}
+              {([ 'all', 1, 2, 3, 4, 5, 6, 7, 8 ] as const).map((sem) => {
+                const isSel = selectedSemester === sem;
+                const theme = sem !== 'all' ? getSemesterTheme('B.Pharm', sem) : null;
+                return (
+                  <button
+                    key={sem}
+                    onClick={() => setSelectedSemester(sem)}
+                    className={`
+                      text-[10px] font-extrabold px-3 py-1 rounded-full transition-all duration-200 border cursor-pointer
+                      ${isSel 
+                        ? theme ? `${theme.badge} shadow-sm ring-1 ring-current` : 'bg-white text-gray-900 border-gray-300 shadow-sm' 
+                        : 'bg-transparent text-gray-500 border-transparent hover:text-gray-900'
+                      }
+                    `}
+                  >
+                    {sem === 'all' ? 'All' : `Sem ${sem}`}
+                  </button>
+                );
+              })}
             </div>
           )}
         </GlassCard>
@@ -123,70 +168,81 @@ export default function SubjectList({
           {filteredSubjects.map((sub) => {
             const completedLectures = sub.resources.filter(r => r.status === 'completed').length;
             const totalLectures = sub.resources.length;
+            const semNum = sub.programme === 'Pharm.D' ? (sub.year || 1) : (sub.semester || 1);
+            const semTheme = getSemesterTheme(sub.programme, semNum);
 
             return (
-              <GlassCard 
+              <div 
                 key={sub.id} 
-                hoverLift 
-                className="group relative p-6 flex flex-col justify-between h-64 border border-white/60 bg-white/40 hover:bg-white/60 shadow-[8px_8px_16px_rgba(163,177,198,0.18),-8px_-8px_16px_rgba(255,255,255,0.75)] hover:shadow-[12px_12px_20px_rgba(163,177,198,0.22),-12px_-12px_20px_rgba(255,255,255,0.85)] rounded-2xl transition-all duration-300 cursor-pointer overflow-hidden"
                 onClick={() => onGoToSubject(sub.id)}
+                className={`
+                  group relative p-6 flex flex-col justify-between h-72 rounded-3xl border bg-gradient-to-br transition-all duration-300 cursor-pointer overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1
+                  ${semTheme.cardBg} ${semTheme.cardBorder} ${semTheme.hoverRing}
+                `}
               >
+                {/* Top Accent Strip */}
+                <div className={`h-1.5 w-full ${semTheme.accentStrip} absolute top-0 left-0 right-0`} />
+
                 <div>
-                  {/* Subtle Top Meta Row */}
-                  <div className="flex justify-between items-center">
-                    <span className="text-[10px] font-extrabold tracking-widest text-[#8B1E3F]/80 font-mono">
+                  {/* Meta Row */}
+                  <div className="flex justify-between items-center mt-1">
+                    <span className={`text-[10px] font-black tracking-widest px-2 py-0.5 rounded-lg border font-mono ${semTheme.codeChip}`}>
                       {sub.code}
                     </span>
-                    <span className="text-[9px] font-extrabold uppercase tracking-wider text-gray-400 bg-white/50 px-2.5 py-0.5 rounded-md border border-white/80 shadow-[inset_1px_1px_2px_rgba(0,0,0,0.02)]">
-                      {sub.programme === 'B.Pharm' ? `Sem ${sub.semester}` : `Yr ${sub.year}`}
+                    <span className={`text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full border shadow-sm ${semTheme.badge}`}>
+                      {sub.programme === 'Pharm.D' 
+                        ? `Year ${sub.year === 1 ? 'I' : sub.year === 2 ? 'II' : sub.year === 3 ? 'III' : sub.year === 4 ? 'IV' : sub.year === 5 ? 'V' : 'VI'}` 
+                        : `Sem ${sub.semester}`}
                     </span>
                   </div>
 
                   {/* Redesigned Subject Name */}
-                  <h3 className="mt-4 font-display font-extrabold text-base text-gray-900 group-hover:text-[#8B1E3F] transition-colors duration-300 line-clamp-2 leading-snug">
+                  <h3 className="mt-3 font-display font-extrabold text-base text-gray-900 group-hover:text-gray-950 transition-colors duration-300 line-clamp-2 leading-snug">
                     {sub.name}
                   </h3>
 
-                  {/* Elegant minimal Subject-In-Charge detail */}
+                  {/* Subject-In-Charge detail */}
                   <div className="mt-3 flex items-center gap-2">
-                    <div className="w-5.5 h-5.5 rounded-full bg-white/60 border border-white/80 flex items-center justify-center shadow-[inset_1px_1px_2px_rgba(0,0,0,0.05)]">
-                      <GraduationCap className="w-3.5 h-3.5 text-[#8B1E3F]/70" />
+                    <div className={`w-6 h-6 rounded-full ${semTheme.bg} border ${semTheme.border} flex items-center justify-center shrink-0`}>
+                      <GraduationCap className={`w-3.5 h-3.5 ${semTheme.text}`} />
                     </div>
                     <div className="flex flex-col">
                       <span className="text-[8px] font-bold text-gray-400 uppercase tracking-wider">Subject-In-Charge</span>
-                      <span className="text-[11px] font-bold text-gray-600 leading-none mt-0.5">{sub.facultyName}</span>
+                      <span className="text-[11px] font-bold text-gray-700 leading-none mt-0.5">{sub.facultyName}</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Progress bar and Footer */}
-                <div className="mt-4 pt-4 border-t border-white/40">
+                <div className="mt-4 pt-3 border-t border-gray-200/50">
                   <div className="flex flex-col gap-1.5">
                     <div className="flex justify-between items-center text-[10px] font-bold">
-                      <span className="text-gray-400 flex items-center gap-1">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-[#8B1E3F]/80" />
+                      <span className="text-gray-500 flex items-center gap-1">
+                        <CheckCircle2 className={`w-3.5 h-3.5 ${semTheme.text}`} />
                         {completedLectures}/{totalLectures} Resources Finished
                       </span>
-                      <span className="text-[#8B1E3F] font-black">{sub.progress}%</span>
+                      <span className={`font-black ${semTheme.text}`}>{sub.progress}%</span>
                     </div>
-                    {/* Soft Neomorphic Groove Progress Bar */}
-                    <div className="h-1.5 w-full bg-[#eef2f7] rounded-full overflow-hidden shadow-[inset_1px_1px_3px_rgba(0,0,0,0.06),inset_-1px_-1px_3px_rgba(255,255,255,0.7)]">
+                    {/* Progress Bar with Semester Accent */}
+                    <div className="h-1.5 w-full bg-gray-100 rounded-full overflow-hidden border border-gray-200/60">
                       <div 
-                        className="h-full bg-gradient-to-r from-[#8B1E3F] to-[#CD4368] rounded-full transition-all duration-500" 
+                        className={`h-full ${semTheme.accentStrip} rounded-full transition-all duration-500`} 
                         style={{ width: `${sub.progress}%` }}
                       />
                     </div>
                   </div>
 
                   {/* Clean Interactive Action link */}
-                  <div className="mt-4 flex items-center justify-between text-[10px] font-extrabold uppercase tracking-wider text-[#8B1E3F]">
-                    <span className="group-hover:translate-x-1 transition-transform duration-300">Enter Course Classroom</span>
-                    <div className="w-6 h-6 rounded-full bg-white/80 shadow-[2px_2px_4px_rgba(163,177,198,0.15),-2px_-2px_4px_rgba(255,255,255,0.8)] border border-white/60 flex items-center justify-center text-[#8B1E3F] group-hover:bg-[#8B1E3F] group-hover:text-white group-hover:shadow-[inset_1px_1px_3px_rgba(0,0,0,0.2)] transition-all duration-300">
-                      <ArrowRight className="w-3 h-3" />
+                  <div className="mt-3 flex items-center justify-between text-[10px] font-black uppercase tracking-wider">
+                    <span className={`${semTheme.text} group-hover:translate-x-1 transition-transform duration-300`}>
+                      Enter Course Classroom
+                    </span>
+                    <div className={`w-7 h-7 rounded-xl ${semTheme.buttonStyle} flex items-center justify-center transition-all duration-300`}>
+                      <ArrowRight className="w-3.5 h-3.5" />
                     </div>
                   </div>
                 </div>
-              </GlassCard>
+              </div>
             );
           })}
         </div>

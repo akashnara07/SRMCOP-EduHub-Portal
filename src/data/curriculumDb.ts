@@ -510,21 +510,22 @@ export function deduplicateCourseInfo(courses: CourseInformation[]): CourseInfor
   if (!courses || !Array.isArray(courses)) return [];
   const map = new Map<string, CourseInformation>();
 
-  // Sort courses so preferred academicYear ('2025-2026') and standard regulation ('PCI 2017' / 'PCI 2008') come first
+  // Sort courses so preferred academicYear ('2026-2027') comes first
   const sorted = [...courses].sort((a, b) => {
-    const aYearScore = a.academicYear === '2025-2026' ? 2 : (a.academicYear === '2026-2027' ? 1 : 0);
-    const bYearScore = b.academicYear === '2025-2026' ? 2 : (b.academicYear === '2026-2027' ? 1 : 0);
+    const aYearScore = a.academicYear === '2026-2027' ? 2 : (a.academicYear === '2025-2026' ? 1 : 0);
+    const bYearScore = b.academicYear === '2026-2027' ? 2 : (b.academicYear === '2025-2026' ? 1 : 0);
     if (aYearScore !== bYearScore) return bYearScore - aYearScore;
 
-    const aRegScore = (a.regulation === 'PCI 2017' || a.regulation === 'PCI 2008') ? 2 : 1;
-    const bRegScore = (b.regulation === 'PCI 2017' || b.regulation === 'PCI 2008') ? 2 : 1;
+    const aRegScore = (a.regulation === 'PCI 2017' || a.regulation === 'PCI 2008' || a.regulation === 'PCI 2026') ? 2 : 1;
+    const bRegScore = (b.regulation === 'PCI 2017' || b.regulation === 'PCI 2008' || b.regulation === 'PCI 2026') ? 2 : 1;
     return bRegScore - aRegScore;
   });
 
   sorted.forEach(c => {
     if (!c.subjectCode) return;
     const prog = c.programme || 'B.Pharm';
-    const key = `${prog}-${c.subjectCode}`;
+    const reg = c.regulation ? String(c.regulation).trim() : 'PCI 2017';
+    const key = `${prog}-${reg}-${c.subjectCode}`;
     if (!map.has(key)) {
       map.set(key, c);
     }
@@ -535,6 +536,12 @@ export function deduplicateCourseInfo(courses: CourseInformation[]): CourseInfor
 
 // Initialize or read from localStorage
 export const getCurriculumDb = (): MasterCurriculumDb => {
+  if (typeof localStorage === 'undefined') {
+    const initialDb = { ...defaultCurriculumDb };
+    initialDb.courseInformation = deduplicateCourseInfo(initialDb.courseInformation);
+    return initialDb;
+  }
+
   const deletedData = localStorage.getItem('srmcop_deleted_subjects');
   const deletedList = deletedData ? (JSON.parse(deletedData) as string[]) : [];
 
@@ -560,13 +567,20 @@ export const getCurriculumDb = (): MasterCurriculumDb => {
     const parsed = JSON.parse(data) as MasterCurriculumDb;
     let updated = false;
 
-    // Filter out deleted items from parsed db just in case
-    if (deletedList.length > 0) {
-      const originalInfoLength = parsed.courseInformation?.length || 0;
-      parsed.courseInformation = parsed.courseInformation?.filter(c => !deletedList.includes(c.subjectCode)) || [];
-      if (parsed.courseInformation.length !== originalInfoLength) {
+    // Filter out deleted items and legacy placeholder PCI 2026 courses
+    const initialCourseCount = parsed.courseInformation?.length || 0;
+    if (parsed.courseInformation) {
+      parsed.courseInformation = parsed.courseInformation.filter(c => {
+        if (deletedList.includes(c.subjectCode)) return false;
+        // Purge placeholder/mock B.Pharm PCI 2026 courses
+        if ((c.programme === 'B.Pharm' || !c.programme) && c.regulation === 'PCI 2026') return false;
+        return true;
+      });
+      if (parsed.courseInformation.length !== initialCourseCount) {
         updated = true;
       }
+    }
+    if (deletedList.length > 0) {
       parsed.scope = parsed.scope?.filter(s => !deletedList.includes(s.subjectCode)) || [];
       parsed.objectives = parsed.objectives?.filter(o => !deletedList.includes(o.subjectCode)) || [];
       parsed.courseOutcomes = parsed.courseOutcomes?.filter(o => !deletedList.includes(o.subjectCode)) || [];
@@ -586,11 +600,11 @@ export const getCurriculumDb = (): MasterCurriculumDb => {
             r = 'PCI 2008';
             updated = true;
           }
+        } else if (c.programme === 'M.Pharm') {
+          if (!r) r = 'PCI 2017 PG';
         } else {
           // B.Pharm
-          if (!r || r === 'PCI Regulation 2020' || r === 'PCI Regulation 2008' || r === 'PCI 2020' || r === 'PCI 2008' || r === 'PCI 2017') {
-            r = 'PCI 2017';
-          } else if (r === 'PCI2026' || r === 'PCI Regulation 2026' || r === 'PCI 2026') {
+          if (r === 'PCI2026' || r === 'PCI Regulation 2026' || r === 'PCI 2026') {
             r = 'PCI 2026';
           } else {
             r = 'PCI 2017';
@@ -613,7 +627,13 @@ export const getCurriculumDb = (): MasterCurriculumDb => {
     // Check if default subjects are present in courseInformation, if not add them (skip deleted ones)
     defaultCurriculumDb.courseInformation.forEach(c => {
       if (deletedList.includes(c.subjectCode)) return;
-      if (!parsed.courseInformation.some(existing => existing.subjectCode === c.subjectCode && (existing.programme || 'B.Pharm') === (c.programme || 'B.Pharm'))) {
+      const cReg = c.regulation || 'PCI 2017';
+      const cProg = c.programme || 'B.Pharm';
+      if (!parsed.courseInformation.some(existing => 
+        existing.subjectCode === c.subjectCode && 
+        (existing.programme || 'B.Pharm') === cProg &&
+        (existing.regulation || 'PCI 2017') === cReg
+      )) {
         parsed.courseInformation.push(c);
         updated = true;
       }
@@ -674,7 +694,9 @@ export const getCurriculumDb = (): MasterCurriculumDb => {
 
 // Save to localStorage
 export const saveCurriculumDb = (db: MasterCurriculumDb) => {
-  localStorage.setItem('srmcop_curriculum_db', JSON.stringify(db));
+  if (typeof localStorage !== 'undefined') {
+    localStorage.setItem('srmcop_curriculum_db', JSON.stringify(db));
+  }
   
   // Sync to Firestore
   import('../lib/firebase').then(({ addCourseToFirestore }) => {
@@ -686,11 +708,13 @@ export const saveCurriculumDb = (db: MasterCurriculumDb) => {
 
 // Permanently delete course across all collections
 export const deleteCourseFromDb = (code: string) => {
-  const deletedData = localStorage.getItem('srmcop_deleted_subjects');
-  const deletedList = deletedData ? (JSON.parse(deletedData) as string[]) : [];
-  if (!deletedList.includes(code)) {
-    deletedList.push(code);
-    localStorage.setItem('srmcop_deleted_subjects', JSON.stringify(deletedList));
+  if (typeof localStorage !== 'undefined') {
+    const deletedData = localStorage.getItem('srmcop_deleted_subjects');
+    const deletedList = deletedData ? (JSON.parse(deletedData) as string[]) : [];
+    if (!deletedList.includes(code)) {
+      deletedList.push(code);
+      localStorage.setItem('srmcop_deleted_subjects', JSON.stringify(deletedList));
+    }
   }
 
   const db = getCurriculumDb();
@@ -705,7 +729,9 @@ export const deleteCourseFromDb = (code: string) => {
   db.assessmentPattern = db.assessmentPattern.filter(a => a.subjectCode !== code);
 
   saveCurriculumDb(db);
-  localStorage.removeItem(`srmcop_teaching_res_${code}`);
+  if (typeof localStorage !== 'undefined') {
+    localStorage.removeItem(`srmcop_teaching_res_${code}`);
+  }
 
   // Sync delete to Firestore
   import('../lib/firebase').then(({ deleteCourseFromFirestore }) => {
@@ -1219,6 +1245,9 @@ const defaultTeachingResources: Record<string, Resource[]> = {
 
 // Get teaching resources for a specific subject
 export const getTeachingResources = (subjectCode: string): Resource[] => {
+  if (typeof localStorage === 'undefined') {
+    return defaultTeachingResources[subjectCode] || [];
+  }
   const data = localStorage.getItem(`srmcop_teaching_res_${subjectCode}`);
   if (!data) {
     const defaults = defaultTeachingResources[subjectCode] || [];
@@ -1234,7 +1263,9 @@ export const getTeachingResources = (subjectCode: string): Resource[] => {
 
 // Save teaching resources for a specific subject
 export const saveTeachingResources = (subjectCode: string, resources: Resource[]) => {
-  localStorage.setItem(`srmcop_teaching_res_${subjectCode}`, JSON.stringify(resources));
+  if (typeof localStorage !== 'undefined') {
+    localStorage.setItem(`srmcop_teaching_res_${subjectCode}`, JSON.stringify(resources));
+  }
 
   // Sync to Firestore
   import('../lib/firebase').then(({ saveResourceToFirestore }) => {

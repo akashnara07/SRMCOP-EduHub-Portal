@@ -1,7 +1,7 @@
 import React from 'react';
 import { 
   ArrowLeft, CheckCircle2, ChevronLeft, ChevronRight, 
-  BookOpen, Layers, Award, Clock, Circle, Play
+  BookOpen, Layers, Award, Clock, Circle, Play, FileText, ExternalLink
 } from 'lucide-react';
 import GlassCard from '../GlassCard';
 import { Resource, Subject } from '../../types';
@@ -231,8 +231,12 @@ export default function VideoPlayer({
           <span>{courseInfo.regulation}</span>
           <span>&gt;</span>
           <span>Year {getRomanYear(courseInfo.year)}</span>
-          <span>&gt;</span>
-          <span>Semester {getRomanSem(courseInfo.semester)}</span>
+          {courseInfo.programme !== 'Pharm.D' && (
+            <>
+              <span>&gt;</span>
+              <span>Semester {getRomanSem(courseInfo.semester)}</span>
+            </>
+          )}
           <span>&gt;</span>
           <span className="text-[#8B1E3F] font-extrabold">{courseInfo.subjectCode}</span>
         </div>
@@ -280,10 +284,12 @@ export default function VideoPlayer({
             <span className="text-[9px] uppercase tracking-wider text-gray-400 font-black">Year</span>
             <span className="text-xs font-extrabold text-gray-800 mt-0.5 truncate">Year {getRomanYear(courseInfo.year)}</span>
           </div>
-          <div className="flex flex-col p-2 bg-white/70 rounded-xl border border-gray-100">
-            <span className="text-[9px] uppercase tracking-wider text-gray-400 font-black">Semester</span>
-            <span className="text-xs font-extrabold text-gray-800 mt-0.5 truncate">Sem {getRomanSem(courseInfo.semester)}</span>
-          </div>
+          {courseInfo.programme !== 'Pharm.D' && (
+            <div className="flex flex-col p-2 bg-white/70 rounded-xl border border-gray-100">
+              <span className="text-[9px] uppercase tracking-wider text-gray-400 font-black">Semester</span>
+              <span className="text-xs font-extrabold text-gray-800 mt-0.5 truncate">Sem {getRomanSem(courseInfo.semester)}</span>
+            </div>
+          )}
           <div className="flex flex-col p-2 bg-white/70 rounded-xl border border-gray-100">
             <span className="text-[9px] uppercase tracking-wider text-gray-400 font-black">Unit</span>
             <span className="text-xs font-extrabold text-gray-800 mt-0.5 truncate" title={unitText}>{unitText}</span>
@@ -336,64 +342,231 @@ export default function VideoPlayer({
           </div>
 
           {/* ==================================================
-              4. INFORMATION CARDS BELOW VIDEO
+              4. INFORMATION CARDS BELOW VIDEO (Faculty Metadata Stream)
               ================================================== */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="flex flex-col gap-6">
             
-            {/* A. Lecture Overview */}
-            <GlassCard className="p-5 flex flex-col gap-3 min-h-[180px] shadow-sm hover:shadow-md transition-shadow">
-              <div className="flex items-center gap-2 text-[#8B1E3F] border-b border-gray-100 pb-2">
-                <BookOpen className="w-4 h-4 shrink-0" />
-                <h4 className="font-display font-extrabold text-xs tracking-wider uppercase text-gray-900">Lecture Overview</h4>
-              </div>
-              <p className="text-[11px] text-gray-500 leading-relaxed">
-                {resource.description || 'Comprehensive learning material detailing cellular pathways and associated biological properties.'}
-              </p>
-            </GlassCard>
-
-            {/* B. Learning Objectives */}
-            <GlassCard className="p-5 flex flex-col gap-3 min-h-[180px] shadow-sm hover:shadow-md transition-shadow">
-              <div className="flex items-center gap-2 text-[#8B1E3F] border-b border-gray-100 pb-2">
-                <Layers className="w-4 h-4 shrink-0" />
-                <h4 className="font-display font-extrabold text-xs tracking-wider uppercase text-gray-900">Learning Objectives</h4>
-              </div>
-              {objectivesList.length === 0 ? (
-                <p className="text-[11px] text-gray-400">Standard syllabus learning objectives are pending faculty mapping.</p>
-              ) : (
-                <ul className="flex flex-col gap-2 overflow-y-auto max-h-[160px] pr-1">
-                  {objectivesList.map((obj, index) => (
-                    <li key={index} className="text-[11px] text-gray-500 leading-relaxed flex items-start gap-1.5">
-                      <span className="font-black text-[#8B1E3F] shrink-0">{obj.order || index + 1}.</span>
-                      <span>{obj.objectiveText}</span>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </GlassCard>
-
-            {/* C. Course Outcome(s) */}
-            <GlassCard className="p-5 flex flex-col gap-3 min-h-[180px] shadow-sm hover:shadow-md transition-shadow">
-              <div className="flex items-center gap-2 text-[#8B1E3F] border-b border-gray-100 pb-2">
-                <Award className="w-4 h-4 shrink-0" />
-                <h4 className="font-display font-extrabold text-xs tracking-wider uppercase text-gray-900">Course Outcome(s)</h4>
-              </div>
-              {mappedOutcomes.length === 0 ? (
-                <p className="text-[11px] text-gray-400">No Course Outcomes currently mapped to this module.</p>
-              ) : (
-                <div className="flex flex-col gap-3 overflow-y-auto max-h-[160px] pr-1">
-                  {mappedOutcomes.map((co, index) => (
-                    <div key={index} className="flex flex-col gap-1.5">
-                      <span className="text-[9px] font-black tracking-widest text-[#8B1E3F] bg-rose-50 border border-rose-100 px-2 py-0.5 rounded-full w-max">
-                        {co.coCode}
-                      </span>
-                      <p className="text-[11px] text-gray-500 leading-relaxed font-semibold">
-                        {co.coText}
-                      </p>
-                    </div>
-                  ))}
+            {/* Top Grid: Overview, Objectives, Course Outcomes */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              
+              {/* A. Lecture Overview */}
+              <GlassCard className="p-5 flex flex-col gap-3 shadow-sm hover:shadow-md transition-shadow">
+                <div className="flex items-center gap-2 text-[#8B1E3F] border-b border-gray-100 pb-2">
+                  <BookOpen className="w-4 h-4 shrink-0" />
+                  <h4 className="font-display font-extrabold text-xs tracking-wider uppercase text-gray-900">Lecture Overview</h4>
                 </div>
-              )}
-            </GlassCard>
+                <p className="text-[11px] text-gray-600 leading-relaxed font-medium">
+                  {resource.overview || resource.description || 'Comprehensive learning material detailing cellular pathways and associated biological properties.'}
+                </p>
+                {resource.speaker && (
+                  <div className="mt-auto pt-2 border-t border-gray-50 flex items-center gap-1.5 text-[10px] text-gray-500 font-bold">
+                    <span>Delivered by:</span>
+                    <span className="text-[#8B1E3F]">{resource.speaker}</span>
+                  </div>
+                )}
+              </GlassCard>
+
+              {/* B. Learning Objectives */}
+              <GlassCard className="p-5 flex flex-col gap-3 shadow-sm hover:shadow-md transition-shadow">
+                <div className="flex items-center gap-2 text-[#8B1E3F] border-b border-gray-100 pb-2">
+                  <Layers className="w-4 h-4 shrink-0" />
+                  <h4 className="font-display font-extrabold text-xs tracking-wider uppercase text-gray-900">Learning Objectives</h4>
+                </div>
+                {resource.learningObjectives ? (
+                  <ul className="flex flex-col gap-2 overflow-y-auto max-h-[180px] pr-1">
+                    {resource.learningObjectives.split('\n').filter(Boolean).map((obj, index) => (
+                      <li key={index} className="text-[11px] text-gray-600 leading-relaxed flex items-start gap-1.5 font-medium">
+                        <span className="font-black text-[#8B1E3F] shrink-0">•</span>
+                        <span>{obj}</span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : objectivesList.length > 0 ? (
+                  <ul className="flex flex-col gap-2 overflow-y-auto max-h-[180px] pr-1">
+                    {objectivesList.map((obj, index) => (
+                      <li key={index} className="text-[11px] text-gray-600 leading-relaxed flex items-start gap-1.5 font-medium">
+                        <span className="font-black text-[#8B1E3F] shrink-0">{obj.order || index + 1}.</span>
+                        <span>{obj.objectiveText}</span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-[11px] text-gray-400">Standard syllabus learning objectives are pending faculty mapping.</p>
+                )}
+              </GlassCard>
+
+              {/* C. Course Outcome(s) */}
+              <GlassCard className="p-5 flex flex-col gap-3 shadow-sm hover:shadow-md transition-shadow">
+                <div className="flex items-center gap-2 text-[#8B1E3F] border-b border-gray-100 pb-2">
+                  <Award className="w-4 h-4 shrink-0" />
+                  <h4 className="font-display font-extrabold text-xs tracking-wider uppercase text-gray-900">Course Outcome(s)</h4>
+                </div>
+                {resource.courseOutcomes && (
+                  <div className="mb-1">
+                    <span className="text-[10px] font-black tracking-widest text-[#8B1E3F] bg-rose-50 border border-rose-100 px-2.5 py-1 rounded-full uppercase">
+                      Target Outcome: {resource.courseOutcomes}
+                    </span>
+                  </div>
+                )}
+                {mappedOutcomes.length === 0 ? (
+                  <p className="text-[11px] text-gray-400">No Course Outcomes currently mapped to this module.</p>
+                ) : (
+                  <div className="flex flex-col gap-3 overflow-y-auto max-h-[180px] pr-1">
+                    {mappedOutcomes.map((co, index) => (
+                      <div key={index} className="flex flex-col gap-1">
+                        <span className="text-[9px] font-black tracking-widest text-[#8B1E3F] bg-rose-50 border border-rose-100 px-2 py-0.5 rounded-full w-max">
+                          {co.coCode}
+                        </span>
+                        <p className="text-[11px] text-gray-600 leading-relaxed font-medium">
+                          {co.coText}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </GlassCard>
+
+            </div>
+
+            {/* Middle Grid: Key Concepts & Prerequisites */}
+            {(resource.keyConcepts || resource.prerequisites) && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {resource.keyConcepts && (
+                  <GlassCard className="p-5 flex flex-col gap-3">
+                    <h4 className="font-display font-extrabold text-xs tracking-wider uppercase text-gray-900 text-[#8B1E3F] border-b border-gray-100 pb-2">
+                      Key Concepts Covered
+                    </h4>
+                    <div className="flex flex-wrap gap-2">
+                      {resource.keyConcepts.split('\n').filter(Boolean).map((concept, idx) => (
+                        <span key={idx} className="text-[11px] font-bold text-gray-700 bg-gray-100 border border-gray-200 px-3 py-1 rounded-xl">
+                          {concept}
+                        </span>
+                      ))}
+                    </div>
+                  </GlassCard>
+                )}
+
+                {resource.prerequisites && (
+                  <GlassCard className="p-5 flex flex-col gap-3">
+                    <h4 className="font-display font-extrabold text-xs tracking-wider uppercase text-gray-900 text-[#8B1E3F] border-b border-gray-100 pb-2">
+                      Prerequisites & Required Knowledge
+                    </h4>
+                    <p className="text-[11px] text-gray-600 leading-relaxed font-medium">
+                      {resource.prerequisites}
+                    </p>
+                  </GlassCard>
+                )}
+              </div>
+            )}
+
+            {/* Resources / Attachments Section */}
+            {(resource.pptUrl || resource.pdfNotesUrl || resource.handoutUrl || resource.externalRefUrl || resource.url) && (
+              <GlassCard className="p-5 flex flex-col gap-4 shadow-sm">
+                <div className="flex items-center justify-between border-b border-gray-100 pb-2.5">
+                  <h4 className="font-display font-extrabold text-xs tracking-wider uppercase text-gray-900 flex items-center gap-2">
+                    <FileText className="w-4 h-4 text-[#8B1E3F]" />
+                    Resources & Study Attachments
+                  </h4>
+                  <span className="text-[10px] font-bold text-gray-400">Published by Course Faculty</span>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                  {resource.pdfNotesUrl && (
+                    <a 
+                      href={resource.pdfNotesUrl} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="p-3 bg-rose-50/50 hover:bg-rose-100/50 border border-rose-200/60 rounded-2xl flex items-center gap-3 transition-all group"
+                    >
+                      <div className="w-9 h-9 rounded-xl bg-[#8B1E3F] text-white flex items-center justify-center shrink-0">
+                        <FileText className="w-4 h-4" />
+                      </div>
+                      <div className="flex flex-col min-w-0">
+                        <span className="text-xs font-black text-gray-900 group-hover:text-[#8B1E3F] truncate">Download PDF Notes</span>
+                        <span className="text-[10px] font-bold text-rose-700">Course Notes</span>
+                      </div>
+                    </a>
+                  )}
+
+                  {resource.pptUrl && (
+                    <a 
+                      href={resource.pptUrl} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="p-3 bg-amber-50/50 hover:bg-amber-100/50 border border-amber-200/60 rounded-2xl flex items-center gap-3 transition-all group"
+                    >
+                      <div className="w-9 h-9 rounded-xl bg-amber-600 text-white flex items-center justify-center shrink-0">
+                        <Layers className="w-4 h-4" />
+                      </div>
+                      <div className="flex flex-col min-w-0">
+                        <span className="text-xs font-black text-gray-900 group-hover:text-amber-800 truncate">PPT Slide Deck</span>
+                        <span className="text-[10px] font-bold text-amber-700">Presentation</span>
+                      </div>
+                    </a>
+                  )}
+
+                  {resource.handoutUrl && (
+                    <a 
+                      href={resource.handoutUrl} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="p-3 bg-blue-50/50 hover:bg-blue-100/50 border border-blue-200/60 rounded-2xl flex items-center gap-3 transition-all group"
+                    >
+                      <div className="w-9 h-9 rounded-xl bg-blue-600 text-white flex items-center justify-center shrink-0">
+                        <BookOpen className="w-4 h-4" />
+                      </div>
+                      <div className="flex flex-col min-w-0">
+                        <span className="text-xs font-black text-gray-900 group-hover:text-blue-800 truncate">Handout / Worksheet</span>
+                        <span className="text-[10px] font-bold text-blue-700">Study Guide</span>
+                      </div>
+                    </a>
+                  )}
+
+                  {resource.externalRefUrl && (
+                    <a 
+                      href={resource.externalRefUrl} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="p-3 bg-emerald-50/50 hover:bg-emerald-100/50 border border-emerald-200/60 rounded-2xl flex items-center gap-3 transition-all group"
+                    >
+                      <div className="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0">
+                        <ExternalLink className="w-4 h-4" />
+                      </div>
+                      <div className="flex flex-col min-w-0">
+                        <span className="text-xs font-black text-gray-900 group-hover:text-emerald-800 truncate">External Literature</span>
+                        <span className="text-[10px] font-bold text-emerald-700">Reference Link</span>
+                      </div>
+                    </a>
+                  )}
+                </div>
+              </GlassCard>
+            )}
+
+            {/* Student Guidance & References */}
+            {(resource.beforeWatching || resource.afterWatching || resource.references) && (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {resource.beforeWatching && (
+                  <GlassCard className="p-5 flex flex-col gap-2">
+                    <span className="text-[10px] font-black uppercase text-[#8B1E3F]">Before Watching</span>
+                    <p className="text-[11px] text-gray-600 leading-relaxed font-medium">{resource.beforeWatching}</p>
+                  </GlassCard>
+                )}
+
+                {resource.afterWatching && (
+                  <GlassCard className="p-5 flex flex-col gap-2">
+                    <span className="text-[10px] font-black uppercase text-[#8B1E3F]">After Watching</span>
+                    <p className="text-[11px] text-gray-600 leading-relaxed font-medium">{resource.afterWatching}</p>
+                  </GlassCard>
+                )}
+
+                {resource.references && (
+                  <GlassCard className="p-5 flex flex-col gap-2">
+                    <span className="text-[10px] font-black uppercase text-[#8B1E3F]">References</span>
+                    <p className="text-[11px] text-gray-600 leading-relaxed font-medium">{resource.references}</p>
+                  </GlassCard>
+                )}
+              </div>
+            )}
 
           </div>
 

@@ -47,8 +47,9 @@ import AcademicCalendarModule from './components/AcademicCalendarModule';
 import AdminAnalytics from './components/admin/AdminAnalytics';
 import { getFacultyMaster, getTeachingAssignments } from './data/facultyRegistry';
 import { findStudentByRegNoOrEmail, getStudentsMaster } from './data/studentRegistry';
+import { AcademicYearProvider, useAcademicYear } from './context/AcademicYearContext';
 
-export default function App() {
+function AppContent() {
   // Temporary Direct Admin Access for development/testing: bypass login and boot directly into Admin Dashboard
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(true);
   const [currentRole, setCurrentRole] = useState<'Student' | 'Faculty' | 'Admin'>('Admin');
@@ -57,7 +58,7 @@ export default function App() {
     role: 'Admin',
     name: 'Dr. V. Chitra (Administrator & Convener)'
   });
-  const [selectedProgramme, setSelectedProgramme] = useState<'B.Pharm' | 'Pharm.D'>('B.Pharm');
+  const { selectedProgramme, setSelectedProgramme } = useAcademicYear();
   const [searchQuery, setSearchQuery] = useState('');
 
   const handleLogin = (role: 'Student' | 'Faculty' | 'Admin', nameOrEmail?: string) => {
@@ -356,7 +357,7 @@ export default function App() {
       case 'student-calendar':
         return <StudentCalendar />;
       case 'student-progress':
-        return <StudentProgress selectedProgramme={selectedProgramme} />;
+        return <StudentProgress selectedProgramme={activeStudentProgress?.programme || selectedProgramme} />;
       case 'student-library':
         return <LibraryView />;
       case 'student-announcements':
@@ -614,5 +615,13 @@ export default function App() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <AcademicYearProvider>
+      <AppContent />
+    </AcademicYearProvider>
   );
 }

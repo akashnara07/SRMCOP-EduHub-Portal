@@ -41,8 +41,10 @@ export default function FacultyDashboard({
   // Filter subjects taught by this professor
   const mySubjects = subjects.filter(s => facultyProfile.subjects.includes(s.id));
 
-  const bPharmCoursesCount = mySubjects.filter(s => s.programme === 'B.Pharm').length;
-  const pharmDCoursesCount = mySubjects.filter(s => s.programme === 'Pharm.D').length;
+  // Current session subjects (2026-2027)
+  const currentSessionSubjects = mySubjects.filter(s => (s.academicYear === '2026-2027' || !s.academicYear));
+  const bPharmCoursesCount = currentSessionSubjects.filter(s => s.programme === 'B.Pharm').length;
+  const pharmDCoursesCount = currentSessionSubjects.filter(s => s.programme === 'Pharm.D').length;
   const activeSubject = mySubjects[currentSubIdx];
   const bPharmStudents = bPharmCoursesCount * 6;
   const pharmDStudents = pharmDCoursesCount * 6;
@@ -87,9 +89,11 @@ export default function FacultyDashboard({
               <span className="text-3xl font-display font-black text-gray-900 tracking-tight mt-1">
                 {bPharmCoursesCount}
               </span>
-              <span className="text-[10px] font-medium text-gray-400 mt-1">Instructing sessional programs</span>
+              <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200/60 px-2 py-0.5 rounded-full w-max mt-1">
+                🟢 Current Academic Session
+              </span>
             </div>
-            <div className="w-11 h-11 rounded-full flex items-center justify-center text-blue-500 bg-blue-500/10 border border-white/40 shadow-sm">
+            <div className="w-11 h-11 rounded-full flex items-center justify-center text-blue-500 bg-blue-500/10 border border-white/40 shadow-sm shrink-0">
               <BookOpen className="w-5 h-5" />
             </div>
           </div>
@@ -103,9 +107,11 @@ export default function FacultyDashboard({
               <span className="text-3xl font-display font-black text-gray-900 tracking-tight mt-1">
                 {pharmDCoursesCount}
               </span>
-              <span className="text-[10px] font-medium text-gray-400 mt-1">Instructing doctoral programs</span>
+              <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200/60 px-2 py-0.5 rounded-full w-max mt-1">
+                🟢 Current Academic Session
+              </span>
             </div>
-            <div className="w-11 h-11 rounded-full flex items-center justify-center text-purple-500 bg-purple-500/10 border border-white/40 shadow-sm">
+            <div className="w-11 h-11 rounded-full flex items-center justify-center text-purple-500 bg-purple-500/10 border border-white/40 shadow-sm shrink-0">
               <BookOpen className="w-5 h-5" />
             </div>
           </div>
@@ -117,17 +123,15 @@ export default function FacultyDashboard({
             <div className="flex flex-col gap-1 w-full font-semibold">
               <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Active Students</span>
               <span className="text-3xl font-display font-black text-[#8B1E3F] tracking-tight mt-1">
-                {bPharmStudents + pharmDStudents}
+                {bPharmStudents + pharmDStudents} Students
               </span>
-              <div className="flex flex-col gap-1 mt-2.5 pt-2 border-t border-gray-100 text-[10px] font-bold text-gray-500">
-                <div className="flex justify-between items-center">
-                  <span className="uppercase tracking-wider">B.Pharm:</span>
-                  <span className="text-gray-900 font-extrabold">{bPharmStudents} Students</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="uppercase tracking-wider">Pharm.D:</span>
-                  <span className="text-gray-900 font-extrabold">{pharmDStudents} Students</span>
-                </div>
+              <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200/60 px-2 py-0.5 rounded-full w-max mt-0.5">
+                Current Academic Session
+              </span>
+              <div className="flex items-center gap-3 mt-2 pt-2 border-t border-gray-100 text-[10px] font-bold text-gray-500">
+                <span>B.Pharm : <strong className="text-gray-900">{bPharmStudents}</strong></span>
+                <span>•</span>
+                <span>Pharm.D : <strong className="text-gray-900">{pharmDStudents}</strong></span>
               </div>
             </div>
             <div className="w-11 h-11 rounded-full flex items-center justify-center text-[#8B1E3F] bg-[#8B1E3F]/10 border border-white/40 shadow-sm shrink-0">
@@ -142,14 +146,14 @@ export default function FacultyDashboard({
         {/* Subject Performance dynamic switcher (2 Columns) */}
         <GlassCard className="lg:col-span-2 p-6 flex flex-col justify-between">
           <div>
-            <div className="flex justify-between items-center mb-6">
+            <div className="flex justify-between items-center mb-4">
               <div>
                 <h3 className="font-display font-bold text-base text-gray-900">Subject Performance</h3>
                 <p className="text-xs text-gray-500">Sessional grade metrics for the active course roster</p>
               </div>
               
               <div className="flex items-center gap-2">
-                <span className="text-[10px] font-bold text-[#8B1E3F] bg-[#8B1E3F]/5 border border-[#8B1E3F]/10 px-2.5 py-1 rounded-full uppercase">
+                <span className="text-xs font-bold text-[#8B1E3F] bg-[#8B1E3F]/5 border border-[#8B1E3F]/10 px-2.5 py-1 rounded-full uppercase">
                   {mySubjects[currentSubIdx]?.code || 'Allotted Subjects'}
                 </span>
                 
@@ -176,13 +180,26 @@ export default function FacultyDashboard({
 
             {/* Display active course context */}
             {mySubjects.length > 0 ? (
-              <div className="mb-4">
-                <h4 className="text-sm font-black text-gray-800 leading-tight">
-                  {mySubjects[currentSubIdx]?.name}
-                </h4>
-                <p className="text-[10px] text-gray-400 font-semibold uppercase mt-0.5">
-                  Semester {mySubjects[currentSubIdx]?.semester} • {mySubjects[currentSubIdx]?.programme} Class
-                </p>
+              <div className="mb-4 flex flex-wrap items-center justify-between gap-2 bg-gray-50/70 p-3 rounded-2xl border border-gray-150/50">
+                <div>
+                  <h4 className="text-sm font-black text-gray-850 leading-tight">
+                    {mySubjects[currentSubIdx]?.name}
+                  </h4>
+                  <p className="text-[10px] text-gray-500 font-semibold uppercase mt-0.5">
+                    {mySubjects[currentSubIdx]?.programme} • {mySubjects[currentSubIdx]?.programme === 'Pharm.D' ? `Year ${mySubjects[currentSubIdx]?.year}` : `Semester ${mySubjects[currentSubIdx]?.semester}`} • {mySubjects[currentSubIdx]?.regulation || 'PCI 2017'}
+                  </p>
+                </div>
+
+                {(mySubjects[currentSubIdx]?.academicYear === '2026-2027' || !mySubjects[currentSubIdx]?.academicYear) ? (
+                  <span className="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-700 border border-emerald-200/80 font-bold px-2.5 py-1 rounded-full text-[10px]">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                    🟢 Current Academic Session
+                  </span>
+                ) : (
+                  <span className="text-[10px] font-semibold text-gray-600 bg-gray-100 border border-gray-200 px-2.5 py-1 rounded-md font-mono">
+                    AY {mySubjects[currentSubIdx]?.academicYear}
+                  </span>
+                )}
               </div>
             ) : null}
 
@@ -193,7 +210,6 @@ export default function FacultyDashboard({
 
               const isPharmD = activeSub.programme === 'Pharm.D';
 
-              // Helper function to load student sessional cohort marks
               const getSessionalCohort = (subjectCode: string, programme: string) => {
                 const saved = localStorage.getItem(`sessional_marks_${subjectCode}`);
                 if (saved) {
@@ -203,7 +219,6 @@ export default function FacultyDashboard({
                     console.error(e);
                   }
                 }
-                // Default fallback cohort list using real student master without mock marks
                 const masterList = getStudentsMaster();
                 const filtered = masterList.filter(s => s.programme === programme);
                 const studentSource = filtered.length > 0 ? filtered : masterList;
@@ -225,121 +240,107 @@ export default function FacultyDashboard({
               };
 
               const cohort = getSessionalCohort(activeSub.code, activeSub.programme);
+              const hasMarks = cohort.some((s: any) =>
+                (s.sessionalI !== null && s.sessionalI !== '' && Number(s.sessionalI) > 0) ||
+                (s.sessionalII !== null && s.sessionalII !== '' && Number(s.sessionalII) > 0) ||
+                (s.sessionalIII !== null && s.sessionalIII !== '' && Number(s.sessionalIII) > 0)
+              );
 
-              // Calculate averages
-              const count = cohort.length || 1;
-              const avgSessionalI = cohort.reduce((acc, s) => acc + (s.sessionalI || 0), 0) / count;
-              const avgSessionalII = cohort.reduce((acc, s) => acc + (s.sessionalII || 0), 0) / count;
-              const avgSessionalIII = isPharmD 
-                ? (cohort.reduce((acc, s) => acc + (s.sessionalIII || 0), 0) / count) 
+              const count = cohort.length || 0;
+              const avgSessionalI = hasMarks ? (cohort.reduce((acc, s) => acc + (Number(s.sessionalI) || 0), 0) / (count || 1)) : 0;
+              const avgSessionalII = hasMarks ? (cohort.reduce((acc, s) => acc + (Number(s.sessionalII) || 0), 0) / (count || 1)) : 0;
+              const avgSessionalIII = (hasMarks && isPharmD) 
+                ? (cohort.reduce((acc, s) => acc + (Number(s.sessionalIII) || 0), 0) / (count || 1)) 
                 : 0;
-              const avgSemesterExam = 0;
-
-              const getSessionalAvgForStudent = (s1: number | null, s2: number | null, s3: number | null, isPharm: boolean) => {
-                const val1 = s1 || 0;
-                const val2 = s2 || 0;
-                const val3 = s3 || 0;
-                if (!isPharm) {
-                  return (val1 + val2) / 2;
-                }
-                const vals = [val1, val2, val3].sort((a, b) => b - a);
-                return (vals[0] + vals[1]) / 2;
-              };
-
-              const classSessionalAvg = (cohort.reduce((acc, s) => acc + getSessionalAvgForStudent(s.sessionalI, s.sessionalII, s.sessionalIII || 0, isPharmD), 0) / count).toFixed(1);
 
               const sessionalIPct = (avgSessionalI / 30) * 100;
               const sessionalIIPct = (avgSessionalII / 30) * 100;
               const sessionalIIIPct = (avgSessionalIII / 30) * 100;
-              const semesterExamPct = (avgSemesterExam / 75) * 100;
 
               return (
-                <div className="flex flex-col gap-5">
+                <div className="flex flex-col gap-4">
                   {/* Subject Marks Performance Bar Graph */}
-                  <div className="h-44 w-full relative bg-gray-50/50 rounded-2xl border border-gray-150/40 p-4 flex flex-col justify-between overflow-hidden" id="subject_marks_performance_chart">
-                    {/* Background Grid Lines */}
-                    <div className="absolute inset-x-4 top-4 bottom-12 flex flex-col justify-between pointer-events-none">
-                      <div className="border-b border-gray-100/75 w-full h-0" />
-                      <div className="border-b border-gray-100/75 w-full h-0" />
-                      <div className="border-b border-gray-100/75 w-full h-0" />
-                      <div className="border-b border-gray-200 w-full h-0" />
+                  {!hasMarks ? (
+                    <div className="h-40 w-full relative bg-gray-50/50 rounded-2xl border border-gray-150/40 p-4 flex flex-col items-center justify-center text-center gap-1.5" id="subject_marks_performance_chart">
+                      <BarChart3 className="w-6 h-6 text-gray-300" />
+                      <p className="text-xs font-bold text-gray-700">No Data Available</p>
+                      <p className="text-[11px] text-gray-500 max-w-sm">
+                        No student marks available for this course. Analytics will be generated after marks are uploaded.
+                      </p>
                     </div>
-
-                    {/* Bars Container */}
-                    <div className="relative z-10 flex h-28 items-end justify-around px-2">
-                      {/* Bar 1: Sessional I */}
-                      <div className="flex flex-col items-center gap-1 h-full justify-end w-20 group">
-                        <span className="text-[10px] font-black text-[#8B1E3F]">
-                          {avgSessionalI.toFixed(1)}/30
-                        </span>
-                        <div 
-                          className="w-10 bg-gradient-to-t from-[#8B1E3F]/80 to-[#8B1E3F] rounded-t-lg shadow-sm transition-all duration-300 hover:scale-105" 
-                          style={{ height: `${sessionalIPct}%` }}
-                        />
-                        <span className="text-[10px] font-extrabold text-gray-500 whitespace-nowrap">Sess I</span>
+                  ) : (
+                    <div className="h-40 w-full relative bg-gray-50/50 rounded-2xl border border-gray-150/40 p-3 flex flex-col justify-between overflow-hidden" id="subject_marks_performance_chart">
+                      {/* Background Grid Lines */}
+                      <div className="absolute inset-x-4 top-4 bottom-10 flex flex-col justify-between pointer-events-none">
+                        <div className="border-b border-gray-100/75 w-full h-0" />
+                        <div className="border-b border-gray-100/75 w-full h-0" />
+                        <div className="border-b border-gray-200 w-full h-0" />
                       </div>
 
-                      {/* Bar 2: Sessional II */}
-                      <div className="flex flex-col items-center gap-1 h-full justify-end w-20 group">
-                        <span className="text-[10px] font-black text-[#8B1E3F]">
-                          {avgSessionalII.toFixed(1)}/30
-                        </span>
-                        <div 
-                          className="w-10 bg-gradient-to-t from-[#8B1E3F]/80 to-[#8B1E3F] rounded-t-lg shadow-sm transition-all duration-300 hover:scale-105" 
-                          style={{ height: `${sessionalIIPct}%` }}
-                        />
-                        <span className="text-[10px] font-extrabold text-gray-500 whitespace-nowrap">Sess II</span>
-                      </div>
-
-                      {/* Bar 3: Sessional III (Pharm.D Only) */}
-                      {isPharmD && (
-                        <div className="flex flex-col items-center gap-1 h-full justify-end w-20 group">
+                      {/* Bars Container */}
+                      <div className="relative z-10 flex h-24 items-end justify-around px-2">
+                        {/* Bar 1: Sessional I */}
+                        <div className="flex flex-col items-center gap-1 h-full justify-end w-16 group">
                           <span className="text-[10px] font-black text-[#8B1E3F]">
-                            {avgSessionalIII.toFixed(1)}/30
+                            {avgSessionalI.toFixed(1)}/30
                           </span>
                           <div 
-                            className="w-10 bg-gradient-to-t from-[#8B1E3F]/80 to-[#8B1E3F] rounded-t-lg shadow-sm transition-all duration-300 hover:scale-105" 
-                            style={{ height: `${sessionalIIIPct}%` }}
+                            className="w-8 bg-gradient-to-t from-[#8B1E3F]/80 to-[#8B1E3F] rounded-t-lg shadow-sm transition-all duration-300 hover:scale-105" 
+                            style={{ height: `${sessionalIPct}%` }}
                           />
-                          <span className="text-[10px] font-extrabold text-gray-500 whitespace-nowrap">Sess III</span>
+                          <span className="text-[10px] font-extrabold text-gray-500 whitespace-nowrap">Sess I</span>
                         </div>
-                      )}
-                    </div>
 
-                    {/* Horizontal Labels */}
-                    <div className="flex justify-between items-center text-[9px] font-extrabold text-gray-400 font-mono px-2 mt-2 border-t border-gray-100 pt-1.5">
-                      <span>Max Sessional: 30 Marks</span>
-                    </div>
-                  </div>
+                        {/* Bar 2: Sessional II */}
+                        <div className="flex flex-col items-center gap-1 h-full justify-end w-16 group">
+                          <span className="text-[10px] font-black text-[#8B1E3F]">
+                            {avgSessionalII.toFixed(1)}/30
+                          </span>
+                          <div 
+                            className="w-8 bg-gradient-to-t from-[#8B1E3F]/80 to-[#8B1E3F] rounded-t-lg shadow-sm transition-all duration-300 hover:scale-105" 
+                            style={{ height: `${sessionalIIPct}%` }}
+                          />
+                          <span className="text-[10px] font-extrabold text-gray-500 whitespace-nowrap">Sess II</span>
+                        </div>
 
-                  {/* Summary section with dynamic grid columns */}
-                  <div className={`grid grid-cols-1 ${isPharmD ? 'sm:grid-cols-3' : 'sm:grid-cols-2'} gap-4`}>
-                    {/* Panel 1 */}
+                        {/* Bar 3: Sessional III (Pharm.D Only) */}
+                        {isPharmD && (
+                          <div className="flex flex-col items-center gap-1 h-full justify-end w-16 group">
+                            <span className="text-[10px] font-black text-[#8B1E3F]">
+                              {avgSessionalIII.toFixed(1)}/30
+                            </span>
+                            <div 
+                              className="w-8 bg-gradient-to-t from-[#8B1E3F]/80 to-[#8B1E3F] rounded-t-lg shadow-sm transition-all duration-300 hover:scale-105" 
+                              style={{ height: `${sessionalIIIPct}%` }}
+                            />
+                            <span className="text-[10px] font-extrabold text-gray-500 whitespace-nowrap">Sess III</span>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="flex justify-between items-center text-[9px] font-extrabold text-gray-400 font-mono px-2 border-t border-gray-100 pt-1.5">
+                        <span>Max Sessional: 30 Marks</span>
+                        <span>Class Size: {count} Students</span>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Summary section */}
+                  <div className={`grid grid-cols-1 ${isPharmD ? 'sm:grid-cols-3' : 'sm:grid-cols-2'} gap-3`}>
                     <div className="p-3 bg-gray-50 border border-gray-150/50 rounded-2xl">
                       <span className="text-[9px] font-black uppercase text-gray-400 block tracking-wider">Avg I Sessional</span>
                       <p className="text-sm font-extrabold text-gray-850 mt-0.5">{avgSessionalI.toFixed(1)} <span className="text-[10px] text-gray-400 font-medium font-mono">/ 30 Max</span></p>
-                      <div className="w-full bg-gray-150 h-1 rounded-full mt-1.5 overflow-hidden">
-                        <div className="bg-[#8B1E3F] h-full rounded-full" style={{ width: `${sessionalIPct}%` }} />
-                      </div>
                     </div>
 
-                    {/* Panel 2 */}
                     <div className="p-3 bg-gray-50 border border-gray-150/50 rounded-2xl">
                       <span className="text-[9px] font-black uppercase text-gray-400 block tracking-wider">Avg II Sessional</span>
                       <p className="text-sm font-extrabold text-gray-850 mt-0.5">{avgSessionalII.toFixed(1)} <span className="text-[10px] text-gray-400 font-medium font-mono">/ 30 Max</span></p>
-                      <div className="w-full bg-gray-150 h-1 rounded-full mt-1.5 overflow-hidden">
-                        <div className="bg-[#8B1E3F] h-full rounded-full" style={{ width: `${sessionalIIPct}%` }} />
-                      </div>
                     </div>
 
-                    {/* Panel 3 (Pharm.D Only) */}
                     {isPharmD && (
                       <div className="p-3 bg-gray-50 border border-gray-150/50 rounded-2xl">
                         <span className="text-[9px] font-black uppercase text-gray-400 block tracking-wider">Avg III Sessional</span>
                         <p className="text-sm font-extrabold text-gray-850 mt-0.5">{avgSessionalIII.toFixed(1)} <span className="text-[10px] text-gray-400 font-medium font-mono">/ 30 Max</span></p>
-                        <div className="w-full bg-gray-150 h-1 rounded-full mt-1.5 overflow-hidden">
-                          <div className="bg-[#8B1E3F] h-full rounded-full" style={{ width: `${sessionalIIIPct}%` }} />
-                        </div>
                       </div>
                     )}
                   </div>
@@ -348,8 +349,8 @@ export default function FacultyDashboard({
             })()}
           </div>
 
-          <div className="flex justify-between items-center mt-4 border-t border-gray-100 pt-4">
-            <span className="text-xs text-gray-500">Aggregate metrics correspond to continuous internal evaluations and exam averages across the class.</span>
+          <div className="flex justify-between items-center mt-4 border-t border-gray-100 pt-3">
+            <span className="text-xs text-gray-500">Continuous internal evaluation performance across class.</span>
             <button 
               onClick={() => onGoToScreen('faculty-analytics')}
               className="text-xs font-bold text-[#8B1E3F] flex items-center gap-1 hover:underline"
@@ -359,115 +360,159 @@ export default function FacultyDashboard({
           </div>
         </GlassCard>
 
-        {/* Dynamic Announcements panel (replaces broadcaster console) */}
-        <GlassCard className="p-6">
-          <div className="mb-4">
-            <h3 className="font-display font-bold text-base text-gray-900 flex items-center gap-2">
-              <BellRing className="w-5 h-5 text-[#8B1E3F] shrink-0" />
-              Announcements
-            </h3>
-            {mySubjects[currentSubIdx] && (
-              <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mt-0.5">
-                Targeted to: {mySubjects[currentSubIdx].code} ({mySubjects[currentSubIdx].name})
-              </p>
-            )}
-          </div>
-
-          <form onSubmit={handleBroadcast} className="flex flex-col gap-3">
-            <div>
-              <label className="text-[9px] font-bold text-gray-400 uppercase tracking-widest block mb-1">Title</label>
-              <input
-                type="text"
-                placeholder="Ex. Syllabus completion review..."
-                value={announcementTitle}
-                onChange={(e) => setAnnouncementTitle(e.target.value)}
-                className="w-full bg-gray-100/60 border border-transparent hover:border-gray-200 focus:border-[#8B1E3F] text-xs text-gray-800 p-2.5 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#8B1E3F]/30"
-              />
+        {/* Staff Announcements Panel */}
+        <GlassCard className="p-6 flex flex-col justify-between">
+          <div>
+            <div className="mb-4">
+              <h3 className="font-display font-bold text-base text-gray-900 flex items-center gap-2">
+                <BellRing className="w-5 h-5 text-[#8B1E3F] shrink-0" />
+                Staff Announcements
+              </h3>
             </div>
 
-            <div>
-              <label className="text-[9px] font-bold text-gray-400 uppercase tracking-widest block mb-1">Announcement Content</label>
-              <textarea
-                placeholder="Ex. All physical copies of laboratory folders must be signed by..."
-                value={announcementContent}
-                rows={3}
-                onChange={(e) => setAnnouncementContent(e.target.value)}
-                className="w-full bg-gray-100/60 border border-transparent hover:border-gray-200 focus:border-[#8B1E3F] text-xs text-gray-800 p-2.5 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#8B1E3F]/30 resize-none"
-              />
+            {/* Announcement List */}
+            <div className="mb-4 flex flex-col gap-2">
+              <h4 className="text-xs font-bold text-gray-700 uppercase tracking-wider border-b border-gray-100 pb-2">Announcement List</h4>
+              {announcements && announcements.length > 0 ? (
+                <div className="space-y-2.5 max-h-48 overflow-y-auto pr-1">
+                  {announcements.map((ann) => (
+                    <div key={ann.id} className="p-3 bg-gray-50/70 border border-gray-150/60 rounded-2xl flex flex-col gap-1">
+                      <span className="text-xs font-extrabold text-gray-900">{ann.title}</span>
+                      <p className="text-xs text-gray-600 font-medium leading-relaxed">{ann.content}</p>
+                      <div className="flex items-center justify-between text-[10px] text-gray-400 mt-1 pt-1 border-t border-gray-100/60 font-semibold">
+                        <span>Sender: {ann.sender}</span>
+                        <span>{ann.date}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="p-4 bg-gray-50/50 rounded-2xl border border-gray-150/50 text-center text-xs text-gray-400 font-medium">
+                  No active staff announcements posted yet.
+                </div>
+              )}
             </div>
 
-            <div className="flex justify-between items-center mt-1">
-              {/* Type Category selection bubble */}
-              <div className="flex gap-1">
-                {(['academic', 'exam', 'event'] as const).map((cat) => (
+            {/* Post Announcement Panel */}
+            <div className="pt-4 border-t border-gray-100">
+              <form onSubmit={handleBroadcast} className="flex flex-col gap-3">
+                <div>
+                  <label className="text-[9px] font-bold text-gray-400 uppercase tracking-widest block mb-1">Title</label>
+                  <input
+                    type="text"
+                    placeholder="Ex. Syllabus completion review..."
+                    value={announcementTitle}
+                    onChange={(e) => setAnnouncementTitle(e.target.value)}
+                    className="w-full bg-gray-100/60 border border-transparent hover:border-gray-200 focus:border-[#8B1E3F] text-xs text-gray-800 p-2.5 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#8B1E3F]/30"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-[9px] font-bold text-gray-400 uppercase tracking-widest block mb-1">Announcement Content</label>
+                  <textarea
+                    placeholder="Ex. All physical copies of laboratory folders must be signed by..."
+                    value={announcementContent}
+                    rows={3}
+                    onChange={(e) => setAnnouncementContent(e.target.value)}
+                    className="w-full bg-gray-100/60 border border-transparent hover:border-gray-200 focus:border-[#8B1E3F] text-xs text-gray-800 p-2.5 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#8B1E3F]/30 resize-none"
+                  />
+                </div>
+
+                <div className="flex justify-end items-center mt-1">
                   <button
-                    key={cat}
-                    type="button"
-                    onClick={() => setAnnouncementCat(cat)}
-                    className={`
-                      text-[9px] font-bold px-2 py-1 rounded-full border transition-all capitalize
-                      \${announcementCat === cat 
-                        ? 'bg-gray-900 text-white border-gray-900 shadow-sm' 
-                        : 'bg-white/40 border-gray-200 text-gray-500'
-                      }
-                    `}
+                    type="submit"
+                    disabled={!announcementTitle.trim() || !announcementContent.trim()}
+                    className="px-4 py-2 bg-[#8B1E3F] hover:bg-[#b32a4e] text-white text-xs font-bold rounded-full transition-all shadow-md shadow-maroon-900/10 disabled:opacity-50"
                   >
-                    {cat}
+                    Post Announcement
                   </button>
-                ))}
-              </div>
+                </div>
+              </form>
 
-              <button
-                type="submit"
-                disabled={!announcementTitle.trim() || !announcementContent.trim()}
-                className="px-4 py-2 bg-[#8B1E3F] hover:bg-[#b32a4e] text-white text-[11px] font-bold rounded-full transition-all shadow-md shadow-maroon-900/10 disabled:opacity-50"
-              >
-                Post Announcement
-              </button>
+              {showBroadcastConfirm && (
+                <div className="mt-3 text-center text-xs font-bold text-emerald-600 bg-emerald-50 border border-emerald-100 p-2 rounded-xl animate-fade-in">
+                  ✓ Announcement posted successfully!
+                </div>
+              )}
             </div>
-          </form>
-
-          {showBroadcastConfirm && (
-            <div className="mt-3 text-center text-xs font-bold text-emerald-600 bg-emerald-50 border border-emerald-100 p-2 rounded-xl animate-fade-in">
-              ✓ Announcement posted successfully for {mySubjects[currentSubIdx]?.code || 'subject'}!
-            </div>
-          )}
+          </div>
         </GlassCard>
       </div>
 
-      {/* 4. My Courses section */}
+      {/* 4. Classroom Subjects Hub Section */}
       <div className="flex flex-col gap-4">
         <div>
           <h2 className="font-display font-bold text-lg text-gray-900">Classroom Subjects Hub</h2>
-          <p className="text-xs text-gray-500">Edit, manage, and arrange curricular content for your subjects</p>
+          <p className="text-xs text-gray-500">Active and historical subjects under your faculty teaching profile</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {mySubjects.map((sub) => (
-            <GlassCard key={sub.id} hoverLift className="p-6 flex flex-col justify-between h-48 border-t-4 border-t-[#8B1E3F]">
-              <div>
-                <div className="flex justify-between items-start mb-2">
-                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{sub.code}</span>
-                  <span className="text-[10px] font-bold bg-[#8B1E3F]/5 text-[#8B1E3F] px-2.5 py-1 rounded-full">
-                    {sub.programme} • Year {sub.year}
-                  </span>
-                </div>
-                <h3 className="font-display font-bold text-base text-gray-900 line-clamp-1 mb-1">{sub.name}</h3>
-                <p className="text-xs text-gray-500 mb-2">Curriculum timeline features {sub.resources.length} active resources</p>
-              </div>
+        {(() => {
+          // Sort subjects so Current Academic Session subjects always appear FIRST
+          const isCurrentSession = (s: Subject) => {
+            const ay = s.academicYear || '2026-2027';
+            return ay === '2026-2027';
+          };
 
-              <div className="flex justify-between items-center border-t border-gray-100 pt-3 mt-2">
-                <span className="text-[10px] font-bold text-gray-400">PCI Compliant Syllabus</span>
-                <button
-                  onClick={() => onGoToSubject(sub.id)}
-                  className="flex items-center gap-1.5 text-xs font-bold text-[#8B1E3F] bg-[#8B1E3F]/10 hover:bg-[#8B1E3F]/20 px-3.5 py-1.5 rounded-full transition-all"
-                >
-                  Manage Subject <ArrowRight className="w-3.5 h-3.5" />
-                </button>
-              </div>
-            </GlassCard>
-          ))}
-        </div>
+          const sortedSubjects = [...mySubjects].sort((a, b) => {
+            const aCurr = isCurrentSession(a);
+            const bCurr = isCurrentSession(b);
+            if (aCurr && !bCurr) return -1;
+            if (!aCurr && bCurr) return 1;
+            return 0;
+          });
+
+          return (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {sortedSubjects.map((sub) => {
+                const isCurrent = isCurrentSession(sub);
+                const ayStr = sub.academicYear || (isCurrent ? '2026–2027' : '2025–2026');
+
+                return (
+                  <GlassCard 
+                    key={sub.id} 
+                    hoverLift 
+                    className="p-6 flex flex-col justify-between h-52 border-t-4 border-t-[#8B1E3F]"
+                  >
+                    <div>
+                      <div className="flex justify-between items-start mb-2">
+                        <div className="flex items-center gap-2">
+                          <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{sub.code}</span>
+                          <span className="text-[10px] font-bold bg-[#8B1E3F]/5 text-[#8B1E3F] px-2.5 py-0.5 rounded-full">
+                            {sub.programme} • {sub.programme === 'Pharm.D' ? `Year ${sub.year}` : `Semester ${sub.semester || sub.year}`}
+                          </span>
+                        </div>
+                        {isCurrent ? (
+                          <span className="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-700 border border-emerald-200/80 font-bold px-2.5 py-0.5 rounded-full text-[10px]">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                            🟢 Current Academic Session
+                          </span>
+                        ) : (
+                          <span className="text-[10px] font-semibold text-gray-600 bg-gray-100 border border-gray-200/80 px-2 py-0.5 rounded-md font-mono">
+                            AY {ayStr}
+                          </span>
+                        )}
+                      </div>
+                      <h3 className="font-display font-bold text-base text-gray-900 line-clamp-1 mb-1">{sub.name}</h3>
+                      <p className="text-xs text-gray-500 mb-2">
+                        Curriculum timeline features {sub.resources?.length || 0} active resources • Regulation: {sub.regulation || 'PCI 2017'}
+                      </p>
+                    </div>
+
+                    <div className="flex justify-between items-center border-t border-gray-100 pt-3 mt-2">
+                      <span className="text-[10px] font-bold text-gray-400">PCI Compliant Syllabus</span>
+                      <button
+                        onClick={() => onGoToSubject(sub.id)}
+                        className="flex items-center gap-1.5 text-xs font-bold text-[#8B1E3F] bg-[#8B1E3F]/10 hover:bg-[#8B1E3F]/20 px-3.5 py-1.5 rounded-full transition-all"
+                      >
+                        Manage Subject <ArrowRight className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </GlassCard>
+                );
+              })}
+            </div>
+          );
+        })()}
       </div>
     </div>
   );

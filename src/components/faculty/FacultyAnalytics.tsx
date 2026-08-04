@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { BookOpen, Users, Download, ArrowLeft, BarChart3, ChevronRight, Award, GraduationCap, FileSpreadsheet, Clock, Layers } from 'lucide-react';
 import GlassCard from '../GlassCard';
+import AcademicSessionWorkspace from '../AcademicSessionWorkspace';
 import { Subject, FacultyProfile } from '../../types';
-
-import { getStudentsMaster } from '../../data/studentRegistry';
+import { getSemesterTheme } from '../../lib/semesterColors';
+import { useAcademicYear } from '../../context/AcademicYearContext';
+import { getTeachingAssignments } from '../../data/facultyRegistry';
+import { getCurriculumDb } from '../../data/curriculumDb';
+import { getStudentsForAcademicSession } from '../../data/studentRegistry';
 
 interface FacultyAnalyticsProps {
   facultyProfile: FacultyProfile;
@@ -21,20 +25,29 @@ interface StudentPerformance {
   semesterAttainment: number; // out of 3 (OBE scale)
 }
 
-function getSubjectStudentScores(subject?: Subject): StudentPerformance[] {
+function getSubjectStudentScores(subject?: Subject, academicYear?: string): StudentPerformance[] {
   if (!subject) return [];
-  const masterStudents = getStudentsMaster();
-  const enrolled = masterStudents.filter(s => s.programme === subject.programme);
-  const list = enrolled.length > 0 ? enrolled : masterStudents;
+  const sessionKey = academicYear || subject.academicYear || '2026-2027';
+  const masterStudents = getStudentsForAcademicSession(sessionKey);
+  
+  const enrolled = masterStudents.filter(s => {
+    const matchProg = s.programme === subject.programme;
+    const matchReg = !s.regulation || !subject.regulation || s.regulation === subject.regulation;
+    return matchProg && matchReg;
+  });
+
+  const list = enrolled.length > 0 ? enrolled : masterStudents.filter(s => s.programme === subject.programme);
 
   // Try reading saved sessional marks from localStorage
   const codeKey = subject.code.replace(/\s+/g, '');
   let savedMarksMap: Record<string, any> = {};
   try {
-    const raw1 = localStorage.getItem(`sessional_marks_${subject.code}`);
-    const raw2 = localStorage.getItem(`sessional_marks_${codeKey}`);
+    const raw1 = localStorage.getItem(`sessional_marks_${subject.code}_${sessionKey}`);
+    const raw2 = localStorage.getItem(`sessional_marks_${subject.code}`);
+    const raw3 = localStorage.getItem(`sessional_marks_${codeKey}`);
     if (raw1) savedMarksMap = JSON.parse(raw1);
     else if (raw2) savedMarksMap = JSON.parse(raw2);
+    else if (raw3) savedMarksMap = JSON.parse(raw3);
   } catch (e) {
     console.error('Error reading saved marks for faculty analytics:', e);
   }
@@ -65,12 +78,100 @@ export default function FacultyAnalytics({
   facultyProfile,
   subjects,
 }: FacultyAnalyticsProps) {
-  // Only subjects taught by this faculty member
-  const mySubjects = subjects.filter((s) => facultyProfile.subjects.includes(s.id));
+  const {
+    activeAcademicYear,
+    selectedProgramme,
+    selectedRegulation,
+  } = useAcademicYear();
+
   const [selectedSubjectId, setSelectedSubjectId] = useState<string | null>(null);
 
-  const selectedSubject = subjects.find((s) => s.id === selectedSubjectId);
-  const studentScores = getSubjectStudentScores(selectedSubject);
+  // Filter handled subjects according to active Academic Session, Programme, and Regulation
+  const mySubjects = useMemo(() => {
+    // 1. Get all teaching assignments for the logged-in faculty matching workspace filters
+    const allAssignments = getTeachingAssignments();
+    const matchedAssignments = allAssignments.filter(a => {
+      const matchFaculty = (a.facultyId && a.facultyId === facultyProfile.id) || 
+                           (a.facultyName && a.facultyName.trim().toLowerCase() === facultyProfile.name.trim().toLowerCase());
+      const matchYear = a.academicYear === activeAcademicYear;
+      const matchProg = (a.programme || 'B.Pharm') === selectedProgramme;
+      const matchReg = !a.regulation || a.regulation === selectedRegulation;
+      return matchFaculty && matchYear && matchProg && matchReg;
+    });
+
+    const allocatedCourseCodes = new Set(matchedAssignments.map(a => a.courseCode.toUpperCase().trim()));
+
+    const db = getCurriculumDb();
+    const courseInfos = db.courseInformation || [];
+
+    const result: Subject[] = [];
+    const seenCodes = new Set<string>();
+
+    const satisfiesWorkspace = (s: { programme?: string; regulation?: string; academicYear?: string }) => {
+      const p = s.programme || 'B.Pharm';
+      const r = s.regulation || (p === 'Pharm.D' ? 'PCI 2008' : 'PCI 2017');
+      const y = s.academicYear || '2026-2027';
+
+      if (p !== selectedProgramme) return false;
+      if (r !== selectedRegulation) return false;
+      if (y !== activeAcademicYear) return false;
+      return true;
+    };
+
+    // First check subjects passed in props
+    for (const sub of subjects) {
+      const isAllocated = allocatedCourseCodes.has(sub.code.toUpperCase().trim()) ||
+                          (sub.facultyName && sub.facultyName.trim().toLowerCase() === facultyProfile.name.trim().toLowerCase());
+
+      const matchesAll = satisfiesWorkspace(sub) && isAllocated;
+
+      if (matchesAll && !seenCodes.has(sub.code)) {
+        seenCodes.add(sub.code);
+        result.push({
+          ...sub,
+          academicYear: activeAcademicYear,
+          programme: selectedProgramme as any,
+          regulation: selectedRegulation,
+          facultyName: facultyProfile.name,
+        });
+      }
+    }
+
+    // Next check matchedAssignments from teaching registry
+    for (const alloc of matchedAssignments) {
+      if (!seenCodes.has(alloc.courseCode)) {
+        seenCodes.add(alloc.courseCode);
+        const info = courseInfos.find(c => c.subjectCode.toUpperCase().trim() === alloc.courseCode.toUpperCase().trim());
+
+        result.push({
+          id: alloc.courseCode,
+          code: alloc.courseCode,
+          name: alloc.courseName || info?.courseName || alloc.courseCode,
+          programme: selectedProgramme as any,
+          regulation: selectedRegulation,
+          academicYear: activeAcademicYear,
+          semester: alloc.semester || info?.semester || 1,
+          year: info?.year || 1,
+          facultyName: facultyProfile.name,
+          progress: 100,
+          color: 'from-blue-500/20 to-indigo-500/20 border-blue-500/30 text-blue-900',
+          resources: []
+        });
+      }
+    }
+
+    return result;
+  }, [facultyProfile, subjects, activeAcademicYear, selectedProgramme, selectedRegulation]);
+
+  // Reset selected subject if it no longer matches the active workspace filters
+  useEffect(() => {
+    if (selectedSubjectId && !mySubjects.some(s => s.id === selectedSubjectId)) {
+      setSelectedSubjectId(null);
+    }
+  }, [mySubjects, selectedSubjectId]);
+
+  const selectedSubject = mySubjects.find((s) => s.id === selectedSubjectId);
+  const studentScores = getSubjectStudentScores(selectedSubject, activeAcademicYear);
 
   // Downloader for detailed reports as Web-Printable formatted PDFs
   const handleDownloadReport = (sub: Subject, data: StudentPerformance[]) => {
@@ -316,9 +417,9 @@ export default function FacultyAnalytics({
             <div className="w-12 h-12 rounded-2xl bg-[#8B1E3F]/5 border border-[#8B1E3F]/10 flex items-center justify-center text-[#8B1E3F]">
               <BarChart3 className="w-6 h-6" />
             </div>
-            <h3 className="font-display font-bold text-base text-gray-900 mt-1">No OBE Analytics Available</h3>
+            <h3 className="font-display font-bold text-base text-gray-900 mt-1">No student marks available for this course</h3>
             <p className="text-xs text-gray-500 max-w-lg leading-relaxed font-medium">
-              OBE analytics will be generated automatically once CIA, practical, and semester examination marks have been entered and mapped to Course Outcomes (COs).
+              No examination data has been entered for the selected academic session. Analytics will be generated after marks are uploaded.
             </p>
           </div>
         </div>
@@ -435,105 +536,123 @@ export default function FacultyAnalytics({
         <p className="text-xs text-gray-500 mt-1">Select a course to view detailed student evaluation sheets and performance analytics</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-2">
-        {mySubjects.map((sub) => {
-          const scores = getSubjectStudentScores(sub);
-          const credits = (sub.code && sub.code.endsWith('P')) ? 2 : 4;
-          const hours = (sub.code && sub.code.endsWith('P')) ? 30 : 45;
-          const activeAccent = sub.programme === 'B.Pharm' ? 'border-maroon-100 hover:border-[#8B1E3F]/30 hover:shadow-maroon-900/10' : 'border-teal-100 hover:border-[#0F766E]/30 hover:shadow-teal-900/10';
-          const progBadgeStyle = sub.programme === 'B.Pharm' 
-            ? 'bg-maroon-50 text-[#8B1E3F] border-maroon-100/40' 
-            : 'bg-teal-50 text-[#0F766E] border-teal-100/40';
+      {/* OBE ACADEMIC SESSION WORKSPACE */}
+      <AcademicSessionWorkspace
+        moduleName="OBE ACADEMIC SESSION WORKSPACE"
+      />
 
-          return (
-            <GlassCard
-              key={sub.id}
-              hoverLift
-              onClick={() => setSelectedSubjectId(sub.id)}
-              className={`p-6 relative cursor-pointer flex flex-col justify-between border-2 ${activeAccent} hover:shadow-2xl transition-all duration-300 rounded-[32px] overflow-hidden group bg-white`}
-            >
-              {/* Decorative background gradient */}
-              <div className={`absolute top-0 right-0 w-32 h-32 rounded-full blur-3xl opacity-20 -mr-10 -mt-10 transition-colors duration-500 ${
-                sub.programme === 'B.Pharm' ? 'bg-[#8B1E3F]' : 'bg-[#0F766E]'
-              }`} />
+      {mySubjects.length === 0 ? (
+        <GlassCard className="p-12 border border-gray-150 rounded-3xl flex flex-col items-center justify-center text-center gap-3 my-4 shadow-sm bg-white/80">
+          <div className="w-12 h-12 rounded-2xl bg-[#8B1E3F]/5 border border-[#8B1E3F]/10 flex items-center justify-center text-[#8B1E3F]">
+            <BookOpen className="w-6 h-6" />
+          </div>
+          <h3 className="font-display font-bold text-base text-gray-900 mt-1">
+            No Teaching Assignments Found
+          </h3>
+          <p className="text-xs text-gray-500 max-w-lg leading-relaxed font-medium">
+            No teaching assignments found for the selected Academic Session, Programme and Regulation.
+          </p>
+        </GlassCard>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-2">
+          {mySubjects.map((sub) => {
+            const scores = getSubjectStudentScores(sub, activeAcademicYear);
+            const credits = (sub.code && sub.code.endsWith('P')) ? 2 : 4;
+            const hours = (sub.code && sub.code.endsWith('P')) ? 30 : 45;
+            const semNum = sub.programme === 'Pharm.D' ? (sub.year || 1) : (sub.semester || 1);
+            const semTheme = getSemesterTheme(sub.programme, semNum);
 
-              <div>
-                {/* Top Tag Row */}
-                <div className="flex justify-between items-center mb-4">
-                  <div className="flex items-center gap-2">
-                    <span className={`px-2.5 py-1 text-[10px] font-mono font-extrabold tracking-wider rounded-lg ${
-                      sub.programme === 'B.Pharm'
-                        ? 'bg-[#8B1E3F]/5 text-[#8B1E3F]'
-                        : 'bg-[#0F766E]/5 text-[#0F766E]'
-                    }`}>
-                      {sub.code}
-                    </span>
-                    <span className="text-[9px] font-bold uppercase text-gray-400">
-                      {sub.regulation || 'PCI 2017'}
-                    </span>
+            return (
+              <GlassCard
+                key={sub.id}
+                hoverLift
+                onClick={() => setSelectedSubjectId(sub.id)}
+                className={`p-6 relative cursor-pointer flex flex-col justify-between border-2 ${semTheme.cardBorder} hover:shadow-2xl transition-all duration-300 rounded-[32px] overflow-hidden group ${semTheme.cardBg}`}
+              >
+                {/* Top Accent Bar */}
+                <div className={`h-1.5 w-full ${semTheme.accentStrip} absolute top-0 left-0 right-0`} />
+
+                <div>
+                  {/* Top Tag Row */}
+                  <div className="flex justify-between items-center mb-3 mt-1 flex-wrap gap-2">
+                    <div className="flex items-center gap-2">
+                      <span className={`px-2.5 py-1 text-[10px] font-mono font-extrabold tracking-wider rounded-lg border ${semTheme.codeChip}`}>
+                        {sub.code}
+                      </span>
+                      {(sub.academicYear === '2026-2027' || (!sub.academicYear && activeAcademicYear === '2026-2027')) ? (
+                        <span className="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-700 border border-emerald-200/80 font-bold px-2.5 py-0.5 rounded-full text-[10px]">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                          🟢 Current Session
+                        </span>
+                      ) : (
+                        <span className="text-[10px] font-semibold text-gray-500 bg-gray-100 border border-gray-200 px-2 py-0.5 rounded-md font-mono">
+                          AY {sub.academicYear || activeAcademicYear}
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="flex items-center gap-1.5">
+                      <span className={`text-[9px] font-black px-2.5 py-1 rounded-full uppercase border shadow-sm ${semTheme.badge}`}>
+                        {sub.programme} • {sub.programme === 'Pharm.D' ? `Year ${sub.year}` : `Sem ${sub.semester}`}
+                      </span>
+                    </div>
                   </div>
 
-                  <div className="flex items-center gap-1.5">
-                    <span className={`text-[9px] font-black px-2.5 py-1 rounded-full uppercase border ${progBadgeStyle}`}>
-                      {sub.programme} • {sub.semester ? `Sem ${sub.semester}` : `Year ${sub.year}`}
-                    </span>
+                  {/* Subject Title */}
+                  <h3 className="font-display font-black text-xl text-gray-900 leading-snug tracking-tight mb-4 pr-6 transition-colors duration-300 group-hover:text-[#8B1E3F]">
+                    {sub.name}
+                  </h3>
+
+                  {/* Quick Stats Grid */}
+                  <div className="grid grid-cols-3 gap-3 py-3.5 border-y border-gray-100 my-4 text-[10px] font-semibold text-gray-500 bg-gray-50/50 rounded-2xl px-4">
+                    <div className="flex flex-col gap-1 border-r border-gray-150/40 pr-1">
+                      <span className="text-gray-400 text-[8px] uppercase font-black tracking-wider flex items-center gap-1">
+                        <Award className="w-3 h-3 text-amber-500" />
+                        Credits
+                      </span>
+                      <span className="font-extrabold text-gray-800 text-xs">{credits} Credits</span>
+                    </div>
+                    <div className="flex flex-col gap-1 border-r border-gray-150/40 pr-1">
+                      <span className="text-gray-400 text-[8px] uppercase font-black tracking-wider flex items-center gap-1">
+                        <Clock className="w-3 h-3 text-indigo-500" />
+                        Hours
+                      </span>
+                      <span className="font-extrabold text-gray-800 text-xs">{hours} Hrs Required</span>
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <span className="text-gray-400 text-[8px] uppercase font-black tracking-wider flex items-center gap-1">
+                        <Layers className="w-3 h-3 text-rose-500" />
+                        Regulation
+                      </span>
+                      <span className="font-extrabold text-gray-800 text-xs">{sub.regulation || 'PCI 2017'}</span>
+                    </div>
+                  </div>
+
+                  {/* Secondary Metadata Info */}
+                  <div className="space-y-2 text-[10px] font-bold text-gray-500 mt-2 pl-1 bg-gray-50/30 p-3 rounded-2xl border border-gray-100">
+                    <div className="flex justify-between items-center">
+                      <span className="text-gray-400 font-extrabold uppercase text-[8px]">Faculty Assigned:</span>
+                      <span className="text-gray-800 font-black">{sub.facultyName || 'Not Assigned'}</span>
+                    </div>
                   </div>
                 </div>
 
-                {/* Subject Title */}
-                <h3 className="font-display font-black text-xl text-gray-900 leading-snug tracking-tight mb-4 pr-6 transition-colors duration-300 group-hover:text-[#8B1E3F]">
-                  {sub.name}
-                </h3>
-
-                {/* Quick Stats Grid */}
-                <div className="grid grid-cols-3 gap-3 py-3.5 border-y border-gray-100 my-4 text-[10px] font-semibold text-gray-500 bg-gray-50/50 rounded-2xl px-4">
-                  <div className="flex flex-col gap-1 border-r border-gray-150/40 pr-1">
-                    <span className="text-gray-400 text-[8px] uppercase font-black tracking-wider flex items-center gap-1">
-                      <Award className="w-3 h-3 text-amber-500" />
-                      Credits
-                    </span>
-                    <span className="font-extrabold text-gray-800 text-xs">{credits} Credits</span>
-                  </div>
-                  <div className="flex flex-col gap-1 border-r border-gray-150/40 pr-1">
-                    <span className="text-gray-400 text-[8px] uppercase font-black tracking-wider flex items-center gap-1">
-                      <Clock className="w-3 h-3 text-indigo-500" />
-                      Hours
-                    </span>
-                    <span className="font-extrabold text-gray-800 text-xs">{hours} Hrs Required</span>
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <span className="text-gray-400 text-[8px] uppercase font-black tracking-wider flex items-center gap-1">
-                      <Layers className="w-3 h-3 text-rose-500" />
-                      Regulation
-                    </span>
-                    <span className="font-extrabold text-gray-800 text-xs">{sub.regulation || 'PCI 2017'}</span>
-                  </div>
+                {/* Redesigned Card Footer Workspace */}
+                <div className="border-t border-gray-150/40 pt-4 mt-5 flex justify-between items-center">
+                  <span className="text-xs text-gray-500 font-bold flex items-center gap-1.5">
+                    <Users className="w-4 h-4 text-[#8B1E3F]" /> {scores.length} Active Students
+                  </span>
+                  <button
+                    className="text-xs font-bold text-[#8B1E3F] flex items-center gap-0.5 group-hover:underline"
+                  >
+                    View Marks <ChevronRight className="w-4 h-4" />
+                  </button>
                 </div>
-
-                {/* Secondary Metadata Info */}
-                <div className="space-y-2 text-[10px] font-bold text-gray-500 mt-2 pl-1 bg-gray-50/30 p-3 rounded-2xl border border-gray-100">
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-400 font-extrabold uppercase text-[8px]">Faculty Assigned:</span>
-                    <span className="text-gray-800 font-black">{sub.facultyName || 'Not Assigned'}</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Redesigned Card Footer Workspace */}
-              <div className="border-t border-gray-150/40 pt-4 mt-5 flex justify-between items-center">
-                <span className="text-xs text-gray-500 font-bold flex items-center gap-1.5">
-                  <Users className="w-4 h-4 text-[#8B1E3F]" /> {scores.length} Active Students
-                </span>
-                <button
-                  className="text-xs font-bold text-[#8B1E3F] flex items-center gap-0.5 group-hover:underline"
-                >
-                  View Marks <ChevronRight className="w-4 h-4" />
-                </button>
-              </div>
-            </GlassCard>
-          );
-        })}
-      </div>
+              </GlassCard>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }

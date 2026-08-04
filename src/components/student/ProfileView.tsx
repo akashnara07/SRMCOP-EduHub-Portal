@@ -3,7 +3,7 @@ import { User, Mail, Shield, Award, Calendar, BookOpen, ChevronRight, Filter, Bo
 import GlassCard from '../GlassCard';
 import { Subject, FacultyProfile } from '../../types';
 import { getFacultyMaster, saveFacultyMaster } from '../../data/facultyRegistry';
-import { getStudentsMaster } from '../../data/studentRegistry';
+import { getStudentsMaster, getEnrolledCoursesForStudent } from '../../data/studentRegistry';
 
 interface ProfileViewProps {
   role?: 'Student' | 'Faculty' | 'Admin';
@@ -85,13 +85,7 @@ export default function ProfileView({
     // Helper function to download Excel spreadsheet template
     const handleDownloadTemplate = () => {
       const headers = "Name,Register Number,Programme,Attendance (%),GPA\n";
-      const rows = [
-        "Priyesh Sen,SRM2026PH7830,B.Pharm,91.5,8.20\n",
-        "Anjali Rao,SRM2026PH7831,B.Pharm,94.0,8.75\n",
-        "Vignesh Nair,SRM2026PH7832,Pharm.D,86.2,7.90\n",
-      ].join("");
-      
-      const blob = new Blob([headers + rows], { type: 'text/csv;charset=utf-8;' });
+      const blob = new Blob([headers], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.setAttribute("href", url);
@@ -625,33 +619,37 @@ export default function ProfileView({
                   <option value="Year II">Year II</option>
                   <option value="Year III">Year III</option>
                   <option value="Year IV">Year IV</option>
+                  <option value="Year V">Year V</option>
+                  <option value="Year VI">Year VI</option>
                 </select>
               ) : (
                 <span className="text-gray-900 font-bold">{studentYear}</span>
               )}
             </div>
 
-            <div>
-              <span className="font-black text-gray-400 text-[9px] uppercase tracking-wider block mb-1">Current Semester</span>
-              {isEditingStudent ? (
-                <select
-                  value={studentSem}
-                  onChange={(e) => setStudentSem(e.target.value)}
-                  className="w-full bg-white border border-gray-200 p-1.5 rounded-xl text-xs font-bold text-gray-800 focus:outline-none"
-                >
-                  <option value="Semester 1">Semester 1</option>
-                  <option value="Semester 2">Semester 2</option>
-                  <option value="Semester 3">Semester 3</option>
-                  <option value="Semester 4">Semester 4</option>
-                  <option value="Semester 5">Semester 5</option>
-                  <option value="Semester 6">Semester 6</option>
-                  <option value="Semester 7">Semester 7</option>
-                  <option value="Semester 8">Semester 8</option>
-                </select>
-              ) : (
-                <span className="text-gray-900 font-bold">{studentSem}</span>
-              )}
-            </div>
+            {studentCourse !== 'Pharm.D' && (
+              <div>
+                <span className="font-black text-gray-400 text-[9px] uppercase tracking-wider block mb-1">Current Semester</span>
+                {isEditingStudent ? (
+                  <select
+                    value={studentSem}
+                    onChange={(e) => setStudentSem(e.target.value)}
+                    className="w-full bg-white border border-gray-200 p-1.5 rounded-xl text-xs font-bold text-gray-800 focus:outline-none"
+                  >
+                    <option value="Semester 1">Semester 1</option>
+                    <option value="Semester 2">Semester 2</option>
+                    <option value="Semester 3">Semester 3</option>
+                    <option value="Semester 4">Semester 4</option>
+                    <option value="Semester 5">Semester 5</option>
+                    <option value="Semester 6">Semester 6</option>
+                    <option value="Semester 7">Semester 7</option>
+                    <option value="Semester 8">Semester 8</option>
+                  </select>
+                ) : (
+                  <span className="text-gray-900 font-bold">{studentSem}</span>
+                )}
+              </div>
+            )}
 
             <div className="flex justify-between items-center border-t border-gray-100 pt-2.5 mt-1">
               <span className="font-bold text-gray-400">Enrollment Status:</span>
@@ -722,6 +720,63 @@ export default function ProfileView({
 
 
 
+            </div>
+          </GlassCard>
+
+          {/* Enrolled Courses Card */}
+          <GlassCard className="p-6 flex flex-col gap-4">
+            <h3 className="font-display font-bold text-sm text-gray-900 border-b border-gray-100 pb-3 flex items-center justify-between">
+              <span>
+                {studentCourse === 'Pharm.D' 
+                  ? `Enrolled Subjects (${studentYear || 'Year II'})` 
+                  : `Enrolled Subjects (${studentSem || 'Semester III'})`}
+              </span>
+              <span className="text-[10px] font-bold text-[#8B1E3F] bg-pink-50 px-2.5 py-0.5 rounded-full border border-pink-100">
+                {studentCourse} • PCI 2017
+              </span>
+            </h3>
+
+            <div className="divide-y divide-gray-100 text-xs">
+              {(() => {
+                const enrolled = getEnrolledCoursesForStudent({
+                  id: 'std-curr',
+                  name: studentName,
+                  regNo: studentRegNumber,
+                  programme: studentCourse as any,
+                  currentYear: studentYear as any,
+                  semester: studentSem as any,
+                  regulation: 'PCI 2017'
+                });
+
+                if (enrolled && enrolled.length > 0) {
+                  return enrolled.map((c) => (
+                    <div key={c.id} className="py-2.5 flex items-center justify-between hover:bg-gray-50/50 px-2 rounded-xl transition-all">
+                      <div className="flex items-center gap-3">
+                        <span className="font-mono text-xs font-black bg-gray-100 text-gray-900 px-2.5 py-1 rounded-lg border border-gray-200">
+                          {c.courseCode}
+                        </span>
+                        <div>
+                          <div className="font-extrabold text-gray-900">{c.courseName}</div>
+                          <span className="text-[10px] font-bold text-[#8B1E3F]">
+                            {studentCourse === 'Pharm.D' 
+                              ? `${studentYear || 'Year II'} • ${c.type || 'Core'}` 
+                              : `Semester ${c.semester} • ${c.type || 'Core'}`}
+                          </span>
+                        </div>
+                      </div>
+                      <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
+                        Enrolled
+                      </span>
+                    </div>
+                  ));
+                }
+
+                return (
+                  <div className="py-6 text-center text-gray-400 font-medium text-xs">
+                    No subjects allotted for {studentCourse} {studentCourse === 'Pharm.D' ? (studentYear || 'Year II') : studentSem}.
+                  </div>
+                );
+              })()}
             </div>
           </GlassCard>
         </div>

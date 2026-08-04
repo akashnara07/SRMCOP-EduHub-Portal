@@ -768,9 +768,6 @@ export default function CurriculumTabContent({
                       {co.coCode}
                     </span>
                     <p className="text-xs font-semibold text-gray-700 leading-relaxed pr-2 flex-1 pt-0.5">{co.coText}</p>
-                    <span className="text-[10px] font-bold text-gray-400 bg-gray-50 border border-gray-100 px-2 py-0.5 rounded font-mono shrink-0">
-                      Target: {co.attainmentTarget.toFixed(2)}
-                    </span>
                   </div>
                 ))
               ) : (
@@ -853,15 +850,7 @@ export default function CurriculumTabContent({
                         return (
                           <td 
                             key={po} 
-                            onClick={() => {
-                              if (!isEditing) {
-                                if (!readOnly) {
-                                  handleCoPoCellClick(coCode, po);
-                                } else {
-                                  triggerToast("This matrix is read-only when accessed through Courses.");
-                                }
-                                return;
-                              }
+                            onClick={isEditing ? () => {
                               setEditCoPoMapping(prev => {
                                 const currentVal = prev[coCode]?.[po] || 0;
                                 const newVal = (currentVal + 1) % 4;
@@ -873,20 +862,20 @@ export default function CurriculumTabContent({
                                   }
                                 };
                               });
-                            }}
-                            className="py-2 px-1 text-center font-bold font-mono cursor-pointer select-none group"
-                            title={isEditing ? `Click to cycle value` : `Level of alignment`}
+                            } : undefined}
+                            className={`py-2 px-1 text-center font-bold font-mono select-none ${isEditing ? 'cursor-pointer hover:bg-pink-50/20 group' : 'cursor-default'}`}
+                            title={isEditing ? `Click to cycle value` : `${coCode} - ${po}: Level ${value}`}
                           >
                             {value > 0 ? (
-                              <span className={`inline-flex items-center justify-center w-6 h-6 rounded-full text-[10px] transition-all duration-200 group-hover:scale-110 shadow-sm ${
-                                value === 3 ? 'bg-indigo-600 text-white' :
-                                value === 2 ? 'bg-indigo-150 text-indigo-700' :
-                                'bg-indigo-50 text-indigo-600'
+                              <span className={`inline-flex items-center justify-center w-6 h-6 rounded-full text-[11px] font-bold font-mono transition-all duration-200 ${isEditing ? 'group-hover:scale-110' : ''} ${
+                                value === 3 ? 'text-emerald-600 bg-emerald-50 border border-emerald-200' :
+                                value === 2 ? 'text-blue-600 bg-blue-50 border border-blue-200' :
+                                'text-gray-700 bg-gray-100 border border-gray-200'
                               }`}>
                                 {value}
                               </span>
                             ) : (
-                              <span className="text-gray-300 font-extrabold group-hover:text-indigo-400 transition-colors duration-200">-</span>
+                              <span className={`font-extrabold font-mono transition-colors duration-200 ${isEditing ? 'text-gray-300 group-hover:text-gray-400' : 'text-gray-300'}`}>-</span>
                             )}
                           </td>
                         );
@@ -896,6 +885,13 @@ export default function CurriculumTabContent({
                 })}
               </tbody>
             </table>
+            <div className="flex flex-wrap gap-x-4 gap-y-1 text-[10px] font-bold text-gray-400 mt-3 pt-3 border-t border-gray-100 px-1">
+              <span>Correlation Levels:</span>
+              <span className="text-emerald-600 font-bold">3: Substantial (High)</span>
+              <span className="text-blue-600 font-bold">2: Moderate (Medium)</span>
+              <span className="text-gray-700 font-bold">1: Slight (Low)</span>
+              <span className="text-gray-400 font-bold">-: No Correlation</span>
+            </div>
           </div>
         )}
       </div>

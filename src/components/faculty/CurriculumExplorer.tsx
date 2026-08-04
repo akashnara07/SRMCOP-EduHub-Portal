@@ -3,6 +3,7 @@ import {
   Library, ChevronDown, ChevronRight, BookOpen, ShieldCheck, Calendar, Award 
 } from 'lucide-react';
 import { Subject } from '../../types';
+import { getSemesterTheme } from '../../lib/semesterColors';
 
 interface CurriculumExplorerProps {
   programmeFilter: 'B.Pharm' | 'Pharm.D';
@@ -183,6 +184,7 @@ export default function CurriculumExplorer({
                                                    selectedRegulation === 'PCI 2017' && 
                                                    selectedYear === year && 
                                                    selectedSemesterFilter === semNum;
+                                const semTheme = getSemesterTheme('B.Pharm', semNum);
                                 
                                 return (
                                   <div
@@ -196,12 +198,12 @@ export default function CurriculumExplorer({
                                     })}
                                     className={`flex items-center justify-between py-1.5 px-3 rounded-lg text-xs font-bold cursor-pointer transition-all ${
                                       isSelected 
-                                        ? 'bg-pink-50 text-[#8B1E3F]' 
-                                        : 'text-gray-500 hover:bg-gray-50 hover:text-gray-800'
+                                        ? `${semTheme.bg} ${semTheme.text} ${semTheme.border} border` 
+                                        : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                                     }`}
                                   >
                                     <div className="flex items-center gap-2">
-                                      <span className={`w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-[#8B1E3F]' : 'bg-gray-300'}`} />
+                                      <span className={`w-2 h-2 rounded-full ${semTheme.dotBg}`} />
                                       <span>Semester {semNum}</span>
                                     </div>
                                     <span className="text-[10px] opacity-75">({courseCount})</span>
@@ -220,14 +222,28 @@ export default function CurriculumExplorer({
               {/* PCI 2026 Regulation Node */}
               <div>
                 <div
-                  onClick={() => handleToggleExpand('B.Pharm-PCI 2026')}
-                  className="flex items-center justify-between py-1 px-1.5 hover:bg-gray-50 rounded-lg cursor-pointer"
+                  onClick={() => {
+                    handleToggleExpand('B.Pharm-PCI 2026');
+                    onSelectNode({
+                      programme: 'B.Pharm',
+                      regulation: 'PCI 2026',
+                      year: '2026-2027',
+                      semester: 'All',
+                      yearLevel: 'All'
+                    });
+                  }}
+                  className={`flex items-center justify-between py-1 px-1.5 rounded-lg cursor-pointer transition-all ${
+                    programmeFilter === 'B.Pharm' && selectedRegulation === 'PCI 2026'
+                      ? 'bg-pink-50/80 text-[#8B1E3F] font-black border border-pink-100/80'
+                      : 'hover:bg-gray-50 text-gray-700 font-bold'
+                  }`}
                 >
-                  <div className="flex items-center gap-2 text-[11px] font-black text-gray-700">
+                  <div className="flex items-center gap-2 text-[11px]">
                     {expandedNodes['B.Pharm-PCI 2026'] ? <ChevronDown className="w-3.5 h-3.5 text-gray-400" /> : <ChevronRight className="w-3.5 h-3.5 text-gray-400" />}
                     <ShieldCheck className="w-3.5 h-3.5 text-gray-400" />
                     <span>PCI 2026</span>
                   </div>
+                  <span className="text-[10px] font-extrabold text-gray-400 px-1.5 py-0.5 bg-gray-100 rounded-md">Empty</span>
                 </div>
 
                 {expandedNodes['B.Pharm-PCI 2026'] && (
@@ -363,6 +379,7 @@ export default function CurriculumExplorer({
                                                    selectedRegulation === 'PCI 2008' && 
                                                    selectedYear === year && 
                                                    selectedYearLevelFilter === yrNum;
+                                const semTheme = getSemesterTheme('Pharm.D', yrNum);
                                 
                                 return (
                                   <div
@@ -376,12 +393,12 @@ export default function CurriculumExplorer({
                                     })}
                                     className={`flex items-center justify-between py-1.5 px-3 rounded-lg text-xs font-bold cursor-pointer transition-all ${
                                       isSelected 
-                                        ? 'bg-teal-50 text-[#0F766E]' 
-                                        : 'text-gray-500 hover:bg-gray-50 hover:text-gray-800'
+                                        ? `${semTheme.bg} ${semTheme.text} ${semTheme.border} border` 
+                                        : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                                     }`}
                                   >
                                     <div className="flex items-center gap-2">
-                                      <span className={`w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-[#0F766E]' : 'bg-gray-300'}`} />
+                                      <span className={`w-2 h-2 rounded-full ${semTheme.dotBg}`} />
                                       <span>Year {yrNum}</span>
                                     </div>
                                     <span className="text-[10px] opacity-75">({courseCount})</span>

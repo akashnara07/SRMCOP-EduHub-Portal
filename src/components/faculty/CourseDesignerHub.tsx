@@ -21,6 +21,8 @@ import {
   Plus, Search, MoreVertical, Home, ChevronLeft
 } from 'lucide-react';
 import GlassCard from '../GlassCard';
+import AcademicSessionWorkspace from '../AcademicSessionWorkspace';
+import { useAcademicYear } from '../../context/AcademicYearContext';
 import { Subject, FacultyProfile } from '../../types';
 import { resolveFacultyForCourse } from '../../data/facultyRegistry';
 import CurriculumExplorer from './CurriculumExplorer';
@@ -370,12 +372,22 @@ export default function CourseDesignerHub({
   onRefreshSubjects,
   isAdmin = false,
 }: CourseDesignerHubProps) {
-  // Configured Academic Years and Regulation
-  const [academicYears, setAcademicYears] = useState<string[]>(['2024-2025', '2025-2026', '2026-2027', '2027-2028']);
-  const [selectedYear, setSelectedYear] = useState<string>('2025-2026');
-  const [selectedRegulation, setSelectedRegulation] = useState<string>('PCI 2017');
+  // Global Academic Session Context - Master Controller
+  const { 
+    activeAcademicYear: selectedYear, 
+    setActiveAcademicYear: setSelectedYear,
+    selectedProgramme,
+    setSelectedProgramme,
+    selectedRegulation,
+    setSelectedRegulation,
+    getRegulationsForProgramme,
+  } = useAcademicYear();
+
+  const programmeFilter = (selectedProgramme === 'Pharm.D' ? 'Pharm.D' : 'B.Pharm') as 'B.Pharm' | 'Pharm.D';
+  const setProgrammeFilter = (prog: string) => setSelectedProgramme(prog);
+
+  const [academicYears] = useState<string[]>(['2024-2025', '2025-2026', '2026-2027', '2027-2028']);
   const [statusFilter, setStatusFilter] = useState<'All' | 'Published' | 'Draft'>('All');
-  const [programmeFilter, setProgrammeFilter] = useState<'B.Pharm' | 'Pharm.D'>('B.Pharm');
 
   // Semester and Year Level selection filters
   const [selectedSemesterFilter, setSelectedSemesterFilter] = useState<number | 'All'>('All');
@@ -408,11 +420,9 @@ export default function CourseDesignerHub({
   const [activeDropdownRowId, setActiveDropdownRowId] = useState<string | null>(null);
 
   // Active Regulations list based on selected program
-  const regulationsList = programmeFilter === 'B.Pharm'
-    ? ['PCI 2017', 'PCI 2026']
-    : ['PCI 2008'];
+  const regulationsList = getRegulationsForProgramme(programmeFilter);
 
-  // Filter shown academic years: if PCI 2026 regulation is chosen, restrict selector to 2026-2027 alone
+  // Filter shown academic years
   const displayedYears = programmeFilter === 'B.Pharm'
     ? (selectedRegulation === 'PCI 2026' ? ['2026-2027'] : ['2024-2025', '2025-2026', '2026-2027'])
     : ['2024-2025', '2025-2026', '2026-2027'];
@@ -425,31 +435,16 @@ export default function CourseDesignerHub({
 
   // Sync / validate state parameters when program or regulation changes
   useEffect(() => {
-    if (programmeFilter === 'B.Pharm') {
-      if (selectedRegulation !== 'PCI 2017' && selectedRegulation !== 'PCI 2026') {
-        setSelectedRegulation('PCI 2017');
-        setSelectedYear('2025-2026');
-      } else if (selectedRegulation === 'PCI 2017') {
-        if (selectedYear !== '2024-2025' && selectedYear !== '2025-2026' && selectedYear !== '2026-2027') {
-          setSelectedYear('2025-2026');
-        }
-      } else if (selectedRegulation === 'PCI 2026') {
-        if (selectedYear !== '2026-2027') {
-          setSelectedYear('2026-2027');
-        }
-      }
-    } else {
-      // Pharm.D
-      if (selectedRegulation !== 'PCI 2008') {
-        setSelectedRegulation('PCI 2008');
-        setSelectedYear('2025-2026');
-      } else {
-        if (selectedYear !== '2024-2025' && selectedYear !== '2025-2026' && selectedYear !== '2026-2027') {
-          setSelectedYear('2025-2026');
-        }
+    // Reset course selection when switching dataset
+    if (selectedCourseCode) {
+      const isMatch = fetchedCourses.some(c => c.courseCode === selectedCourseCode) ||
+                      mySubjects.some(s => s.code === selectedCourseCode);
+      if (!isMatch) {
+        setSelectedCourseCode('');
+        setActiveSubjectCurriculum(null);
       }
     }
-  }, [programmeFilter, selectedRegulation]);
+  }, [programmeFilter, selectedRegulation, selectedYear]);
 
 
 
@@ -1543,14 +1538,8 @@ export default function CourseDesignerHub({
             triggerToast(`Master Workbook for Academic Year ${matchedYear} imported successfully with ${parsedData.courseInformation.length} courses! All imported courses are refreshed and placed in Draft state. Please review and publish them.`);
           }
 
-          // Auto-switch selectedYear and dynamically append it if new, so that imported courses appear instantly!
+          // Auto-switch selectedYear so that imported courses appear instantly!
           if (matchedYear) {
-            setAcademicYears(prev => {
-              if (!prev.includes(matchedYear)) {
-                return [...prev, matchedYear];
-              }
-              return prev;
-            });
             setSelectedYear(matchedYear);
           }
 
@@ -1602,6 +1591,11 @@ export default function CourseDesignerHub({
             </h1>
           </div>
 
+          {/* CURRICULUM ACADEMIC SESSION WORKSPACE */}
+          <AcademicSessionWorkspace
+            moduleName="CURRICULUM ACADEMIC SESSION WORKSPACE"
+          />
+
           {/* CURRICULUM CONTEXT CARD (Matches Screenshot perfectly, redesigned for perfect spacing) */}
           <div className="bg-white px-4 md:px-5 py-6 rounded-[24px] border border-gray-150/50 shadow-sm flex flex-col gap-6">
             {/* Header */}
@@ -1626,22 +1620,13 @@ export default function CourseDesignerHub({
                   </div>
                   <select
                     value={programmeFilter}
-                    onChange={(e) => {
-                      const prog = e.target.value as 'B.Pharm' | 'Pharm.D';
-                      setProgrammeFilter(prog);
-                      if (prog === 'B.Pharm') {
-                        setSelectedRegulation('PCI 2017');
-                        setSelectedYear('2025-2026');
-                      } else {
-                        setSelectedRegulation('PCI 2008');
-                        setSelectedYear('2025-2026');
-                      }
-                    }}
+                    onChange={(e) => setSelectedProgramme(e.target.value)}
                     title={programmeFilter}
                     className="pl-10 pr-10 w-full h-11 bg-gray-50/60 hover:bg-gray-100/40 hover:border-gray-300 border border-gray-200 rounded-xl text-xs font-bold text-gray-800 appearance-none focus:outline-none focus:ring-1 focus:ring-[#8B1E3F] focus:border-[#8B1E3F] cursor-pointer transition-all leading-normal"
                   >
                     <option value="B.Pharm">B.Pharm</option>
                     <option value="Pharm.D">Pharm.D</option>
+                    <option value="M.Pharm">M.Pharm</option>
                   </select>
                   <div className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 flex items-center justify-center">
                     <ChevronDown className="w-3.5 h-3.5" />
@@ -1660,15 +1645,7 @@ export default function CourseDesignerHub({
                   </div>
                   <select
                     value={selectedRegulation}
-                    onChange={(e) => {
-                      const reg = e.target.value;
-                      setSelectedRegulation(reg);
-                      if (reg === 'PCI 2026') {
-                        setSelectedYear('2026-2027');
-                      } else {
-                        setSelectedYear('2025-2026');
-                      }
-                    }}
+                    onChange={(e) => setSelectedRegulation(e.target.value)}
                     title={selectedRegulation}
                     className="pl-10 pr-10 w-full h-11 bg-gray-50/60 hover:bg-gray-100/40 hover:border-gray-300 border border-gray-200 rounded-xl text-xs font-bold text-gray-800 appearance-none focus:outline-none focus:ring-1 focus:ring-[#8B1E3F] focus:border-[#8B1E3F] cursor-pointer transition-all leading-normal"
                   >
@@ -1794,17 +1771,25 @@ export default function CourseDesignerHub({
                     value={selectedCourseCode}
                     onChange={(e) => handleCourseDropdownChange(e.target.value)}
                     title={(() => {
-                      const current = fetchedCourses.find(c => c.courseCode === selectedCourseCode);
-                      return current ? `${current.courseCode} – ${current.courseName}` : "Select a Course...";
+                      const currentFC = fetchedCourses.find(c => c.courseCode === selectedCourseCode);
+                      if (currentFC) return `${currentFC.courseCode} – ${currentFC.courseName}`;
+                      const currentMS = mySubjects.find(s => s.code === selectedCourseCode);
+                      if (currentMS) return `${currentMS.code} – ${currentMS.name}`;
+                      return "Select a Course...";
                     })()}
                     className="pl-10 pr-10 w-full h-11 bg-gray-50/60 hover:bg-gray-100/40 hover:border-gray-[#8B1E3F]/30 border border-gray-200 rounded-xl text-xs font-bold text-gray-800 appearance-none focus:outline-none focus:ring-1 focus:ring-[#8B1E3F] focus:border-[#8B1E3F] cursor-pointer transition-all leading-normal"
                   >
                     <option value="">Select a Course...</option>
-                    {fetchedCourses.map((c, idx) => (
-                      <option key={`${c.courseCode || 'course'}-${idx}`} value={c.courseCode}>
-                        {c.courseCode} – {c.courseName}
-                      </option>
-                    ))}
+                    {(() => {
+                      const coursesList = fetchedCourses.length > 0 
+                        ? fetchedCourses.map(c => ({ code: c.courseCode, name: c.courseName }))
+                        : mySubjects.map(s => ({ code: s.code, name: s.name }));
+                      return coursesList.map((c, idx) => (
+                        <option key={`${c.code}-${idx}`} value={c.code}>
+                          {c.code} – {c.name}
+                        </option>
+                      ));
+                    })()}
                   </select>
                   <div className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 flex items-center justify-center">
                     <ChevronDown className="w-3.5 h-3.5" />
@@ -2275,9 +2260,9 @@ export default function CourseDesignerHub({
                       <Layers className="w-6 h-6 animate-pulse" />
                     </div>
                     <div>
-                      <h4 className="font-display font-extrabold text-base text-[#8B1E3F]">PCI 2026 Regulation Schema</h4>
-                      <p className="text-xs text-gray-500 max-w-md leading-relaxed mt-2 mx-auto">
-                        This regulation is reserved for future curriculum entry. Existing PCI 2017 course data is not copied or displayed.
+                      <h4 className="font-display font-extrabold text-base text-[#8B1E3F]">B.Pharm – PCI 2026</h4>
+                      <p className="text-xs text-gray-600 max-w-md leading-relaxed mt-2 mx-auto font-medium">
+                        No curriculum has been configured yet for B.Pharm – PCI 2026. Curriculum data will be added later by the administrator.
                       </p>
                       <div className="mt-4 flex flex-col sm:flex-row gap-3 justify-center items-center">
                         <div className="px-4 py-2 bg-pink-50 border border-pink-100/60 rounded-xl text-xs font-bold text-[#8B1E3F]">
@@ -2862,11 +2847,7 @@ export default function CourseDesignerHub({
                               return (
                                 <td 
                                   key={po} 
-                                  onClick={() => {
-                                    if (!isEditing) {
-                                      triggerToast("Please click 'Edit Alignment' to change mapping values.");
-                                      return;
-                                    }
+                                  onClick={isEditing ? () => {
                                     const currentVal = editCoPoMapping[coCode]?.[po] || 0;
                                     const newVal = (currentVal + 1) % 4;
                                     setEditCoPoMapping(prev => ({
@@ -2876,20 +2857,20 @@ export default function CourseDesignerHub({
                                         [po]: newVal
                                       }
                                     }));
-                                  }}
-                                  className={`py-2 px-0.5 text-center font-bold font-mono select-none group ${isEditing ? 'cursor-pointer hover:bg-pink-50/20' : ''}`}
+                                  } : undefined}
+                                  className={`py-2 px-0.5 text-center font-bold font-mono select-none ${isEditing ? 'cursor-pointer hover:bg-pink-50/20 group' : 'cursor-default'}`}
                                   title={isEditing ? `Click to toggle ${coCode} - ${po} alignment index` : `${coCode} - ${po}: Level ${value}`}
                                 >
                                   {value > 0 ? (
-                                    <span className={`inline-flex items-center justify-center w-6 h-6 rounded-md text-[10px] transition-all duration-150 ${isEditing ? 'group-hover:scale-110' : ''} ${
-                                      value === 3 ? 'bg-[#8B1E3F] text-white font-black' :
-                                      value === 2 ? 'bg-pink-200 text-[#8B1E3F]' :
-                                      'bg-pink-50 text-pink-700'
+                                    <span className={`inline-flex items-center justify-center w-6 h-6 rounded-full text-[11px] font-bold font-mono transition-all duration-150 ${isEditing ? 'group-hover:scale-110' : ''} ${
+                                      value === 3 ? 'text-emerald-600 bg-emerald-50 border border-emerald-200' :
+                                      value === 2 ? 'text-blue-600 bg-blue-50 border border-blue-200' :
+                                      'text-gray-700 bg-gray-100 border border-gray-200'
                                     }`}>
                                       {value}
                                     </span>
                                   ) : (
-                                    <span className="text-gray-300 font-extrabold group-hover:text-pink-400 transition-colors duration-200">-</span>
+                                    <span className="text-gray-300 font-extrabold font-mono group-hover:text-gray-400 transition-colors duration-200">-</span>
                                   )}
                                 </td>
                               );

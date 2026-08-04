@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Search, Bell, ShieldCheck, ChevronRight, HelpCircle } from 'lucide-react';
+import { Search, Bell, ShieldCheck, ChevronRight, HelpCircle, Calendar } from 'lucide-react';
 import GlassCard from './GlassCard';
+import { useAcademicYear } from '../context/AcademicYearContext';
 
 interface HeaderProps {
   currentRole: 'Student' | 'Faculty' | 'Admin';
@@ -22,6 +23,7 @@ export default function Header({
   onGoToScreen,
 }: HeaderProps) {
   const [showNotifications, setShowNotifications] = useState(false);
+  const { activeAcademicYear, setActiveAcademicYear, availableAcademicYears } = useAcademicYear();
 
   // Read actual saved announcements from localStorage
   const announcements = (() => {
@@ -96,7 +98,6 @@ export default function Header({
 
 
 
-        {/* Notifications and Utilities */}
         <div className="flex gap-2 items-center relative">
           <GlassCard 
             onClick={() => setShowNotifications(!showNotifications)}

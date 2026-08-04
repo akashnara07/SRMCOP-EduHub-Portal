@@ -152,20 +152,31 @@ export default function ManageFaculty({ onBack }: ManageFacultyProps) {
     }
   };
 
-  // Filtered List
-  const filteredFaculty = faculty.filter(fac => {
-    if (filterDept !== 'All' && fac.dept !== filterDept) return false;
-    if (filterStatus !== 'All' && fac.status !== filterStatus) return false;
-    if (search.trim()) {
-      const q = search.toLowerCase().trim();
-      const nameMatch = fac.name.toLowerCase().includes(q);
-      const empMatch = fac.empId.toLowerCase().includes(q);
-      const emailMatch = fac.email.toLowerCase().includes(q);
-      const deptMatch = fac.dept.toLowerCase().includes(q);
-      if (!nameMatch && !empMatch && !emailMatch && !deptMatch) return false;
-    }
-    return true;
-  });
+  // Filtered & Sorted List (Grouped by Department A-Z, then Name A-Z)
+  const filteredFaculty = React.useMemo(() => {
+    const list = faculty.filter(fac => {
+      if (filterDept !== 'All' && fac.dept !== filterDept) return false;
+      if (filterStatus !== 'All' && fac.status !== filterStatus) return false;
+      if (search.trim()) {
+        const q = search.toLowerCase().trim();
+        const nameMatch = fac.name.toLowerCase().includes(q);
+        const empMatch = fac.empId.toLowerCase().includes(q);
+        const emailMatch = fac.email.toLowerCase().includes(q);
+        const deptMatch = fac.dept.toLowerCase().includes(q);
+        if (!nameMatch && !empMatch && !emailMatch && !deptMatch) return false;
+      }
+      return true;
+    });
+
+    return list.sort((a, b) => {
+      const deptA = (a.dept || '').toLowerCase();
+      const deptB = (b.dept || '').toLowerCase();
+      if (deptA !== deptB) return deptA.localeCompare(deptB);
+      const nameA = (a.name || '').toLowerCase();
+      const nameB = (b.name || '').toLowerCase();
+      return nameA.localeCompare(nameB);
+    });
+  }, [faculty, filterDept, filterStatus, search]);
 
   // Calculate Years of Service
   const calculateYearsOfService = (dateJoinedStr: string): string => {
@@ -284,20 +295,26 @@ export default function ManageFaculty({ onBack }: ManageFacultyProps) {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-gray-100/70 text-[10px] font-black text-gray-400 uppercase tracking-wider border-b border-gray-200">
-                <th className="py-3.5 px-5">Faculty Member</th>
-                <th className="py-3.5 px-4">Employee ID</th>
-                <th className="py-3.5 px-4">Department</th>
-                <th className="py-3.5 px-4">Designation</th>
-                <th className="py-3.5 px-4">Contact Info</th>
-                <th className="py-3.5 px-4">Status</th>
-                <th className="py-3.5 px-4 text-right">Actions</th>
+                <th className="py-3.5 px-3 w-[1%] whitespace-nowrap text-center">S.No</th>
+                <th className="py-3.5 px-5 w-auto">Faculty Name</th>
+                <th className="py-3.5 px-4 w-[1%] whitespace-nowrap">Employee ID</th>
+                <th className="py-3.5 px-4 w-[1%] whitespace-nowrap">Department</th>
+                <th className="py-3.5 px-4 w-[1%] whitespace-nowrap">Designation</th>
+                <th className="py-3.5 px-4 w-[1%] whitespace-nowrap">Contact Information</th>
+                <th className="py-3.5 px-4 w-[1%] whitespace-nowrap">Status</th>
+                <th className="py-3.5 px-5 w-[1%] whitespace-nowrap text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 text-xs font-medium text-gray-700">
-              {filteredFaculty.map((fac) => (
+              {filteredFaculty.map((fac, idx) => (
                 <tr key={fac.id} className="hover:bg-pink-50/30 transition-colors group">
+                  {/* S.No */}
+                  <td className="py-3.5 px-3 text-center font-bold text-gray-400 text-xs w-[1%] whitespace-nowrap">
+                    {idx + 1}
+                  </td>
+
                   {/* Faculty Name */}
-                  <td className="py-4 px-5">
+                  <td className="py-4 px-5 w-auto">
                     <div className="flex items-center gap-3">
                       <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-[#8B1E3F] to-rose-400 text-white font-black text-xs flex items-center justify-center shadow-xs shrink-0">
                         {fac.name.replace('Dr. ', '').replace('Prof. ', '').replace('Mrs. ', '').split(' ').map(p => p[0]).filter(Boolean).join('').substring(0, 2).toUpperCase()}
@@ -314,28 +331,28 @@ export default function ManageFaculty({ onBack }: ManageFacultyProps) {
                   </td>
 
                   {/* Employee ID */}
-                  <td className="py-4 px-4 font-mono font-bold text-gray-800">
+                  <td className="py-4 px-4 font-mono font-bold text-gray-800 w-[1%] whitespace-nowrap">
                     {fac.empId}
                   </td>
 
                   {/* Department */}
-                  <td className="py-4 px-4 text-gray-800 font-semibold max-w-[180px] truncate" title={fac.dept}>
+                  <td className="py-4 px-4 text-gray-800 font-semibold w-[1%] whitespace-nowrap" title={fac.dept}>
                     {fac.dept.replace('Department of ', '')}
                   </td>
 
                   {/* Designation */}
-                  <td className="py-4 px-4 font-bold text-[#8B1E3F]">
+                  <td className="py-4 px-4 font-bold text-[#8B1E3F] w-[1%] whitespace-nowrap">
                     {fac.designation || <span className="text-gray-400 font-normal italic">Not set (Faculty to edit)</span>}
                   </td>
 
                   {/* Official Email & Phone */}
-                  <td className="py-4 px-4">
+                  <td className="py-4 px-4 w-[1%] whitespace-nowrap">
                     <div className="text-gray-800 font-medium">{fac.email}</div>
                     <div className="text-[10px] text-gray-400">{fac.phone}</div>
                   </td>
 
                   {/* Status Badge */}
-                  <td className="py-4 px-4">
+                  <td className="py-4 px-4 w-[1%] whitespace-nowrap">
                     <span className={`text-[9px] font-extrabold uppercase px-2.5 py-1 rounded-full border ${
                       fac.status === 'Active' 
                         ? 'bg-emerald-50 text-emerald-700 border-emerald-200' 
@@ -348,7 +365,7 @@ export default function ManageFaculty({ onBack }: ManageFacultyProps) {
                   </td>
 
                   {/* Action Buttons */}
-                  <td className="py-4 px-5 text-right">
+                  <td className="py-4 px-5 text-right w-[1%] whitespace-nowrap">
                     <div className="flex items-center justify-end gap-1.5">
                       {/* View Profile Button */}
                       <button
@@ -381,6 +398,14 @@ export default function ManageFaculty({ onBack }: ManageFacultyProps) {
                   </td>
                 </tr>
               ))}
+
+              {filteredFaculty.length === 0 && (
+                <tr>
+                  <td colSpan={8} className="py-12 text-center text-gray-400 font-semibold text-xs">
+                    No faculty members found matching your search or filters.
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>

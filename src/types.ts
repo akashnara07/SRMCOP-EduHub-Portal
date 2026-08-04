@@ -15,6 +15,27 @@ export interface Resource {
   grade?: string; // For graded assignments/quizzes
   unit?: string; // e.g. "Unit I", "Unit II", etc.
   topicCode?: string; // Optional topic association
+
+  // Expanded Video / Material Authoring Fields
+  speaker?: string;
+  topic?: string;
+  overview?: string;
+  learningObjectives?: string;
+  learningOutcomes?: string;
+  keyConcepts?: string;
+  prerequisites?: string;
+  suggestedReading?: string;
+  references?: string;
+  beforeWatching?: string;
+  afterWatching?: string;
+  selfAssessment?: string;
+  practiceActivities?: string;
+  pptUrl?: string;
+  pdfNotesUrl?: string;
+  handoutUrl?: string;
+  externalRefUrl?: string;
+  courseOutcomes?: string;
+  difficultyLevel?: 'Beginner' | 'Intermediate' | 'Advanced';
 }
 
 export interface Subject {

@@ -2,24 +2,28 @@ import { useState, useEffect } from 'react';
 import { Award, Clock, TrendingUp, BarChart3, Info } from 'lucide-react';
 import GlassCard from '../GlassCard';
 import { getAppSubjects } from '../../data/curriculumDb';
+import { getSemesterTheme } from '../../lib/semesterColors';
 
 interface StudentProgressProps {
-  selectedProgramme?: 'B.Pharm' | 'Pharm.D';
+  selectedProgramme?: 'B.Pharm' | 'Pharm.D' | 'M.Pharm';
 }
 
 export default function StudentProgress({ selectedProgramme }: StudentProgressProps) {
-  const programme: 'B.Pharm' | 'Pharm.D' = selectedProgramme || 'B.Pharm';
+  const activeProg = selectedProgramme || 'B.Pharm';
   const [selectedSemester, setSelectedSemester] = useState<number>(1);
 
+  const isPharmD = activeProg === 'Pharm.D';
+  const isMPharm = activeProg === 'M.Pharm';
+  const isBPharm = activeProg === 'B.Pharm';
+
+  const maxSemesters = isPharmD ? 6 : isMPharm ? 4 : 8;
+
   useEffect(() => {
-    // Reset to semester 1 if changing programme bounds
-    const maxSem = programme === 'B.Pharm' ? 8 : 6;
-    if (selectedSemester > maxSem) {
+    // Reset to term 1 if out of bounds
+    if (selectedSemester > maxSemesters) {
       setSelectedSemester(1);
     }
-  }, [programme]);
-
-  const isPharmD = programme === 'Pharm.D';
+  }, [activeProg, maxSemesters]);
 
   const getRealMarks = (subCode: string) => {
     const cleanCode = subCode.endsWith('T') ? subCode.slice(0, -1) : subCode;
@@ -88,6 +92,8 @@ export default function StudentProgress({ selectedProgramme }: StudentProgressPr
   const currentSubjects = allSubjects.filter(sub => {
     if (isPharmD) {
       return sub.programme === 'Pharm.D' && sub.year === selectedSemester;
+    } else if (isMPharm) {
+      return sub.programme === 'M.Pharm' && sub.semester === selectedSemester;
     } else {
       return sub.programme === 'B.Pharm' && sub.semester === selectedSemester;
     }
@@ -115,42 +121,44 @@ export default function StudentProgress({ selectedProgramme }: StudentProgressPr
 
   const avgSgpa = avgSemesterPercent !== '-' ? (Number(avgSemesterPercent) / 10).toFixed(2) : '-';
 
-  const maxSemesters = isPharmD ? 6 : 8;
-
   return (
     <div className="flex flex-col gap-8 w-full max-w-5xl mx-auto pb-12">
-      <div className="flex flex-col items-center text-center gap-5">
+      <div className="flex flex-col items-center text-center gap-4">
         <div>
+          <div className="inline-flex items-center gap-2 bg-[#8B1E3F]/10 border border-[#8B1E3F]/20 text-[#8B1E3F] px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider mb-2">
+            <span>{activeProg}</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-[#8B1E3F]" />
+            <span>{isPharmD ? 'Year-wise Progression' : 'Semester Progression'}</span>
+          </div>
           <h1 className="font-display font-extrabold text-2xl text-gray-900 tracking-tight">Academic Progress</h1>
           <p className="text-xs text-gray-500 font-medium mt-1">
-            Official Course & Performance Records
+            Official Course & Performance Records ({activeProg})
           </p>
         </div>
 
-        {/* Programme Badge & Semester Selector */}
-        <div className="flex flex-col sm:flex-row gap-4 items-center justify-between w-full max-w-2xl bg-white p-3 rounded-2xl border border-gray-150 shadow-sm">
-          <div className="flex items-center gap-2 px-3 py-1.5 bg-[#8B1E3F]/5 rounded-xl border border-[#8B1E3F]/10">
-            <span className="text-[10px] font-black uppercase text-gray-400">Programme</span>
-            <span className="text-xs font-black text-[#8B1E3F]">{programme}</span>
-          </div>
+        {/* Color-Coded Term/Semester/Year Selector */}
+        <div className="flex items-center justify-center gap-2 bg-white p-2.5 rounded-2xl border border-gray-150 shadow-sm overflow-x-auto max-w-full">
+          {Array.from({ length: maxSemesters }, (_, i) => i + 1).map((val) => {
+            const semTheme = getSemesterTheme(activeProg, val);
+            const isSelected = selectedSemester === val;
 
-          <div className="flex items-center gap-1 overflow-x-auto max-w-full">
-            {Array.from({ length: maxSemesters }, (_, i) => i + 1).map((val) => (
+            return (
               <button
                 key={val}
                 onClick={() => setSelectedSemester(val)}
                 className={`
-                  px-2.5 py-1.5 rounded-lg text-[10px] font-extrabold transition-all duration-300 whitespace-nowrap
-                  ${selectedSemester === val
-                    ? 'bg-[#8B1E3F] text-white shadow-sm'
-                    : 'text-gray-500 hover:text-gray-800 hover:bg-gray-100'
+                  px-4 py-2 rounded-xl text-xs font-black border transition-all duration-200 whitespace-nowrap shadow-sm cursor-pointer
+                  ${isSelected 
+                    ? `${semTheme.bg} ${semTheme.text} ${semTheme.border} ring-2 ring-offset-1 ring-current shadow-md`
+                    : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50 hover:text-gray-900'
                   }
                 `}
               >
-                {isPharmD ? `Year ${val}` : `Sem ${val}`}
+                <span className={`inline-block w-2.5 h-2.5 rounded-full mr-2 ${semTheme.dotBg}`} />
+                {isPharmD ? `Year ${val}` : `Semester ${val}`}
               </button>
-            ))}
-          </div>
+            );
+          })}
         </div>
       </div>
 
@@ -171,7 +179,7 @@ export default function StudentProgress({ selectedProgramme }: StudentProgressPr
             )}
           </div>
           <p className="text-[10px] text-gray-400 mt-2 font-semibold">
-            {subsWithSessionalMarks.length > 0 ? `${programme} sessional score rating` : 'No sessional marks uploaded yet'}
+            {subsWithSessionalMarks.length > 0 ? `${activeProg} sessional score rating` : 'No sessional marks uploaded yet'}
           </p>
         </GlassCard>
 

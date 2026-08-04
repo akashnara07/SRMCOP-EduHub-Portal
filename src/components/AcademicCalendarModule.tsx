@@ -10,6 +10,7 @@ import * as XLSX from 'xlsx';
 import { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, HeadingLevel, AlignmentType } from 'docx';
 
 import GlassCard from './GlassCard';
+import AcademicSessionWorkspace from './AcademicSessionWorkspace';
 import { 
   saveCalendarEventToFirestore, 
   saveCalendarEventsBatchToFirestore, 
@@ -122,8 +123,8 @@ export const CANONICAL_SCHEDULES: ExamSchedule[] = [
     sessionalIII: { practical: '2027-07-12', theory: '2027-07-20' },
     universityExam: { practical: '2027-08-23', theory: '2027-08-09' }
   },
-  // Pharm.D Years II, III, IV, V
-  ...['Year II', 'Year III', 'Year IV', 'Year V'].map(yr => ({
+  // Pharm.D Years II, III, IV, V, VI
+  ...['Year II', 'Year III', 'Year IV', 'Year V', 'Year VI'].map(yr => ({
     programme: 'Pharm.D' as const,
     semesterOrYear: yr,
     start: '2026-06-15',
@@ -558,7 +559,7 @@ export default function AcademicCalendarModule({ role }: AcademicCalendarModuleP
   const SEM_YEAR_ORDER = [
     'Semester I', 'Semester II', 'Semester III', 'Semester IV',
     'Semester V', 'Semester VI', 'Semester VII', 'Semester VIII',
-    'Year I', 'Year II', 'Year III', 'Year IV', 'Year V'
+    'Year I', 'Year II', 'Year III', 'Year IV', 'Year V', 'Year VI'
   ];
 
   const normalizeSemester = (s: string): string => {
@@ -1368,6 +1369,12 @@ export default function AcademicCalendarModule({ role }: AcademicCalendarModuleP
         </div>
       </div>
 
+      {/* EXAMINATION ACADEMIC SESSION WORKSPACE */}
+      <AcademicSessionWorkspace
+        moduleName="ACADEMIC CALENDAR & EXAMINATION WORKSPACE"
+        hideSessionSelector={true}
+      />
+
       {/* ----------------- Main Workspace (Grid Splitting) ----------------- */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
         
@@ -1802,7 +1809,7 @@ export default function AcademicCalendarModule({ role }: AcademicCalendarModuleP
               ? (selectedRange === 'Jul-Dec-2026'
                 ? ['Semester I', 'Semester III', 'Semester V', 'Semester VII']
                 : ['Semester II', 'Semester IV', 'Semester VI', 'Semester VIII'])
-              : ['Year I', 'Year II', 'Year III', 'Year IV', 'Year V'];
+              : ['Year I', 'Year II', 'Year III', 'Year IV', 'Year V', 'Year VI'];
 
             // Filter current program exams
             const currentProgExams = events.filter(evt => {

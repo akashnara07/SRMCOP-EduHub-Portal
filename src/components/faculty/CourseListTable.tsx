@@ -4,6 +4,7 @@ import {
 } from 'lucide-react';
 import { Subject } from '../../types';
 import { getCurriculumDb } from '../../data/curriculumDb';
+import { getSemesterTheme } from '../../lib/semesterColors';
 import GlassCard from '../GlassCard';
 
 interface CourseListTableProps {
@@ -86,6 +87,24 @@ export default function CourseListTable({
           <p className="text-xs text-gray-500 mt-1">
             Manage and edit course syllabus, learning outcomes, books and compliance tables.
           </p>
+
+          {/* Explicit Academic Session Context Line */}
+          <div className="flex items-center gap-2 mt-2 flex-wrap">
+            <span className="text-[10px] font-black uppercase tracking-wider text-gray-500 bg-gray-100 border border-gray-200 px-2.5 py-0.5 rounded-lg">
+              Academic Session: <span className="text-gray-900 font-mono font-bold">AY {selectedYear}</span>
+            </span>
+            <span className="text-[10px] font-black uppercase tracking-wider text-gray-500 bg-gray-100 border border-gray-200 px-2.5 py-0.5 rounded-lg">
+              Programme: <span className="text-[#8B1E3F] font-bold">{programmeFilter}</span>
+            </span>
+            <span className="text-[10px] font-black uppercase tracking-wider text-gray-500 bg-gray-100 border border-gray-200 px-2.5 py-0.5 rounded-lg">
+              Regulation: <span className="text-gray-900 font-bold">{selectedRegulation}</span>
+            </span>
+            {selectedYear === '2025-2026' && (
+              <span className="text-[10px] font-black uppercase tracking-wider text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-lg">
+                Current Active
+              </span>
+            )}
+          </div>
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
@@ -128,9 +147,9 @@ export default function CourseListTable({
             <Layers className="w-6 h-6 animate-pulse" />
           </div>
           <div>
-            <h4 className="font-display font-extrabold text-base text-[#8B1E3F]">PCI 2026 Regulation Schema</h4>
-            <p className="text-xs text-gray-500 max-w-md leading-relaxed mt-2 mx-auto">
-              This regulation is reserved for future curriculum entry. Existing PCI 2017 course data is not copied or displayed.
+            <h4 className="font-display font-extrabold text-base text-[#8B1E3F]">B.Pharm – PCI 2026</h4>
+            <p className="text-xs text-gray-600 max-w-md leading-relaxed mt-2 mx-auto font-medium">
+              No curriculum has been configured yet for B.Pharm – PCI 2026. Curriculum data will be added later by the administrator.
             </p>
             <div className="mt-4 flex flex-col sm:flex-row gap-3 justify-center items-center">
               <div className="px-4 py-2 bg-pink-50 border border-pink-100/60 rounded-xl text-xs font-bold text-[#8B1E3F]">
@@ -174,10 +193,8 @@ export default function CourseListTable({
                     <tr key={sub.id} className="hover:bg-gray-50/50 transition-colors">
                       {/* Code */}
                       <td className="py-3.5 px-4 font-mono font-black">
-                        <span className={`px-2.5 py-1 rounded-lg text-[11px] font-extrabold ${
-                          programmeFilter === 'B.Pharm'
-                            ? 'bg-pink-50 text-[#8B1E3F]'
-                            : 'bg-teal-50 text-[#0F766E]'
+                        <span className={`px-2.5 py-1 rounded-lg text-[11px] font-extrabold border ${
+                          getSemesterTheme(sub.programme, sub.semester || sub.year).badge
                         }`}>
                           {sub.code}
                         </span>
@@ -186,14 +203,22 @@ export default function CourseListTable({
                       {/* Course Title */}
                       <td className="py-3.5 px-4">
                         <div className="flex flex-col">
-                          <span 
-                            className="font-extrabold text-gray-800 text-sm hover:text-purple-700 hover:underline cursor-pointer" 
-                            onClick={() => onGoToSubject(sub.id)}
-                          >
-                            {sub.name}
-                          </span>
-                          <span className="text-[10px] text-gray-400 font-semibold mt-0.5">
-                            Assigned: {sub.facultyName || 'Not Assigned'} • {sub.regulation}
+                          <div className="flex items-center gap-2">
+                            <span 
+                              className="font-extrabold text-gray-800 text-sm hover:text-purple-700 hover:underline cursor-pointer" 
+                              onClick={() => onGoToSubject(sub.id)}
+                            >
+                              {sub.name}
+                            </span>
+                            {(sub.academicYear === '2026-2027' || (!sub.academicYear && selectedYear === '2026-2027')) && (
+                              <span className="inline-flex items-center gap-1 bg-emerald-50 text-emerald-700 border border-emerald-200/80 font-bold px-2 py-0.5 rounded-full text-[9px] shrink-0">
+                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                                Current Session
+                              </span>
+                            )}
+                          </div>
+                          <span className="text-[10px] text-gray-500 font-medium mt-0.5">
+                            {sub.programme} • {sub.programme === 'Pharm.D' ? `Year ${sub.year}` : `Semester ${sub.semester || sub.year}`} • AY {sub.academicYear || selectedYear} • {sub.regulation || selectedRegulation}
                           </span>
                         </div>
                       </td>

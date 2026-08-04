@@ -15,7 +15,9 @@ import {
   deleteCourseFromDb
 } from '../../data/curriculumDb';
 import { Subject } from '../../types';
-import { resolveFacultyForCourse } from '../../data/facultyRegistry';
+import { resolveFacultyForCourse, getFacultyMaster } from '../../data/facultyRegistry';
+import { getStudentsMaster } from '../../data/studentRegistry';
+import { getSemesterTheme } from '../../lib/semesterColors';
 
 interface AdminDashboardProps {
   onGoToScreen: (screenId: string) => void;
@@ -43,7 +45,7 @@ export default function AdminDashboard({
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState<'code' | 'name' | 'credits' | 'status'>('code');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
-  const [curriculumActiveTab, setCurriculumActiveTab] = useState<'B.Pharm' | 'Pharm.D'>('B.Pharm');
+  const [curriculumActiveTab, setCurriculumActiveTab] = useState<'B.Pharm' | 'Pharm.D' | 'M.Pharm'>('B.Pharm');
   const [adminStatusFilter, setAdminStatusFilter] = useState<'All' | 'Draft' | 'Active' | 'Approved'>('All');
   const [filterRegulation, setFilterRegulation] = useState<string>('All');
   const [expandedYearGroups, setExpandedYearGroups] = useState<Record<string, boolean>>({});
@@ -513,8 +515,8 @@ export default function AdminDashboard({
                   ACTIVE MASTER MATRIX VIEW
                 </span>
                 <h4 className="text-sm font-black text-gray-800">
-                  Program: <span className={curriculumActiveTab === 'B.Pharm' ? 'text-[#8B1E3F]' : 'text-[#0F766E]'}>
-                    {curriculumActiveTab === 'B.Pharm' ? 'Bachelor of Pharmacy (B.Pharm)' : 'Doctor of Pharmacy (Pharm.D)'}
+                  Program: <span className={curriculumActiveTab === 'B.Pharm' ? 'text-[#8B1E3F]' : curriculumActiveTab === 'Pharm.D' ? 'text-[#0F766E]' : 'text-purple-700'}>
+                    {curriculumActiveTab === 'B.Pharm' ? 'Bachelor of Pharmacy (B.Pharm)' : curriculumActiveTab === 'Pharm.D' ? 'Doctor of Pharmacy (Pharm.D)' : 'Master of Pharmacy (M.Pharm)'}
                   </span>
                 </h4>
               </div>
@@ -542,6 +544,17 @@ export default function AdminDashboard({
                     }`}
                   >
                     Pharm.D
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setCurriculumActiveTab('M.Pharm')}
+                    className={`flex-1 sm:flex-initial text-center px-4 py-2 text-xs font-black uppercase tracking-wider rounded-lg transition-all ${
+                      curriculumActiveTab === 'M.Pharm' 
+                        ? 'bg-purple-700 text-white shadow-md shadow-purple-700/15' 
+                        : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'
+                    }`}
+                  >
+                    M.Pharm
                   </button>
                 </div>
 
@@ -572,18 +585,29 @@ export default function AdminDashboard({
             </div>
           </div>
 
-          {/* Grouped Lists (B.Pharm or Pharm.D split years) */}
+          {/* Grouped Lists (Independent Semester Sections) */}
           <div className="flex flex-col gap-6">
             {(curriculumActiveTab === 'B.Pharm' ? [
-              { label: 'B.Pharm - 1st Year (Semester I & II)', year: 1, semesters: [1, 2] },
-              { label: 'B.Pharm - 2nd Year (Semester III & IV)', year: 2, semesters: [3, 4] },
-              { label: 'B.Pharm - 3rd Year (Semester V & VI)', year: 3, semesters: [5, 6] },
-              { label: 'B.Pharm - 4th Year (Semester VII & VIII)', year: 4, semesters: [7, 8] }
+              { label: 'B.Pharm - Semester I', year: 1, semester: 1 },
+              { label: 'B.Pharm - Semester II', year: 1, semester: 2 },
+              { label: 'B.Pharm - Semester III', year: 2, semester: 3 },
+              { label: 'B.Pharm - Semester IV', year: 2, semester: 4 },
+              { label: 'B.Pharm - Semester V', year: 3, semester: 5 },
+              { label: 'B.Pharm - Semester VI', year: 3, semester: 6 },
+              { label: 'B.Pharm - Semester VII', year: 4, semester: 7 },
+              { label: 'B.Pharm - Semester VIII', year: 4, semester: 8 }
+            ] : curriculumActiveTab === 'Pharm.D' ? [
+              { label: 'Pharm.D - Year I', year: 1, semester: 1 },
+              { label: 'Pharm.D - Year II', year: 2, semester: 2 },
+              { label: 'Pharm.D - Year III', year: 3, semester: 3 },
+              { label: 'Pharm.D - Year IV', year: 4, semester: 4 },
+              { label: 'Pharm.D - Year V', year: 5, semester: 5 },
+              { label: 'Pharm.D - Year VI', year: 6, semester: 6 }
             ] : [
-              { label: 'Pharm.D - 1st Year', year: 1 },
-              { label: 'Pharm.D - 2nd Year', year: 2 },
-              { label: 'Pharm.D - 3rd Year', year: 3 },
-              { label: 'Pharm.D - 4th Year', year: 4 }
+              { label: 'M.Pharm - Semester I', year: 1, semester: 1 },
+              { label: 'M.Pharm - Semester II', year: 1, semester: 2 },
+              { label: 'M.Pharm - Semester III', year: 2, semester: 3 },
+              { label: 'M.Pharm - Semester IV', year: 2, semester: 4 }
             ]).map((group) => {
               const matchedCourses = curriculumDb.courseInformation.filter(course => {
                 const matchesAcademicYear = !course.academicYear || course.academicYear === filterAcademicYear;
@@ -599,7 +623,7 @@ export default function AdminDashboard({
                                       resolvedFacultyName.toLowerCase().includes(searchQuery.toLowerCase());
                 const matchesProg = course.programme === curriculumActiveTab;
                 const matchesYear = course.year === group.year;
-                const matchesSem = 'semesters' in group && group.semesters ? group.semesters.includes(course.semester) : true;
+                const matchesSem = group.semester ? course.semester === group.semester : ('semesters' in group && (group as any).semesters ? (group as any).semesters.includes(course.semester) : true);
                 const matchesStatus = adminStatusFilter === 'All' || course.status === adminStatusFilter;
                 const matchesRegulation = filterRegulation === 'All' || (course.regulation || 'PCI 2017') === filterRegulation;
                 return matchesAcademicYear && matchesSearch && matchesProg && matchesYear && matchesSem && matchesStatus && matchesRegulation;
@@ -685,7 +709,9 @@ export default function AdminDashboard({
                                 <td className="px-4 py-3">
                                   <div className="flex flex-col">
                                     <div className="flex items-center gap-1.5 flex-wrap mb-1">
-                                      <span className="font-mono font-bold text-gray-900 bg-gray-100 px-2 py-0.5 rounded text-[10px] w-max">
+                                      <span className={`font-mono font-bold px-2 py-0.5 rounded text-[10px] w-max border ${
+                                        getSemesterTheme(course.programme, course.semester || course.year).badge
+                                      }`}>
                                         {course.subjectCode}
                                       </span>
                                       <span className="text-[10px] font-extrabold text-[#CD4368] bg-[#CD4368]/10 border border-[#CD4368]/20 px-2 py-0.5 rounded">
@@ -816,8 +842,8 @@ export default function AdminDashboard({
 
             <div className="flex flex-col gap-4">
               {[
-                { label: 'Number of Faculty', value: 12, icon: Users, color: 'text-indigo-600 bg-indigo-50' },
-                { label: 'Number of Students', value: 148, icon: GraduationCap, color: 'text-emerald-600 bg-emerald-50' },
+                { label: 'Number of Faculty', value: getFacultyMaster().length, icon: Users, color: 'text-indigo-600 bg-indigo-50' },
+                { label: 'Number of Students', value: getStudentsMaster().length, icon: GraduationCap, color: 'text-emerald-600 bg-emerald-50' },
                 { label: 'Number of Courses', value: curriculumDb.courseInformation.length, icon: Database, color: 'text-[#8B1E3F] bg-red-50' },
                 { label: 'Unpublished (Draft) Courses', value: curriculumDb.courseInformation.filter(c => c.status === 'Draft').length, icon: AlertCircle, color: 'text-amber-600 bg-amber-50' },
               ].map((item, idx) => (
@@ -832,36 +858,6 @@ export default function AdminDashboard({
                 </div>
               ))}
             </div>
-          </GlassCard>
-
-          <GlassCard className="p-6 flex-1 flex flex-col justify-between">
-            <div>
-              <h3 className="font-display font-bold text-sm text-gray-900 border-b border-gray-100 pb-3 mb-4 flex items-center justify-between">
-                <span>Database & Curriculum Compliance</span>
-                <Database className="w-4 h-4 text-[#8B1E3F]" />
-              </h3>
-
-              <div className="flex flex-col gap-3">
-                <div className="p-3 rounded-2xl bg-emerald-50/60 border border-emerald-100/60 flex flex-col gap-1">
-                  <span className="text-xs font-bold text-emerald-900">Database Synchronization</span>
-                  <p className="text-[11px] text-emerald-700">Connected to live Firestore & local database. All assessment records are derived directly from real inputs.</p>
-                </div>
-                <div className="p-3 rounded-2xl bg-gray-50 border border-gray-100 flex flex-col gap-1">
-                  <span className="text-xs font-bold text-gray-800">PCI & Outcome-Based Education</span>
-                  <p className="text-[11px] text-gray-500">OBE analytics are computed automatically from entered CIA & semester exam marks.</p>
-                </div>
-              </div>
-            </div>
-
-            <button 
-              onClick={() => {
-                onGoToScreen('faculty-courses'); // Access overall Course compliance and templates sheet import/export panel
-              }}
-              className="w-full text-center text-[10px] font-black text-[#8B1E3F] hover:underline uppercase tracking-wider border-t border-gray-100 pt-3 mt-4 flex items-center justify-center gap-1 group"
-            >
-              <span>Manage Compliance Templates</span>
-              <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
-            </button>
           </GlassCard>
         </div>
       </div>
